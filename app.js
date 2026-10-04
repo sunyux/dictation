@@ -482,7 +482,7 @@
   function paneVocab(ctx, mode = store.get('vmode', 'list')) {
     const { lecon, pane } = ctx;
     store.set('vmode', mode);
-    const head = modeBar([['list', '浏览'], ['write', '看中文默写'], ['listen', '听音拼写']], mode);
+    const head = modeBar([['list', '浏览'], ['write', '看中文默写'], ['listen', '听音拼写'], ['conj', '动词变位']], mode);
     if (mode === 'list') {
       const groups = [];
       lecon.vocab.forEach(v => { let g = groups.find(x => x.g === v.g); if (!g) groups.push(g = { g: v.g, items: [] }); g.items.push(v); });
@@ -509,6 +509,7 @@
         cleanup = () => stopper && stopper();
       };
     } else {
+      if (mode === 'conj') { pane.innerHTML = head + '<div id="drill"></div>'; bindModes(pane, m => paneVocab(ctx, m)); return conjDrill(ctx, $('#drill', pane)); }
       pane.innerHTML = head + '<div id="drill"></div>';
       wordDrill(ctx, $('#drill', pane), mode, lecon.vocab);
     }
@@ -582,6 +583,112 @@
       const w = wrong.slice();
       $('#again', box).onclick = () => wordDrill(ctx, box, mode, words);
       if (w.length) $('#again-wrong', box).onclick = () => { queue = shuffle(w); i = 0; wrong = []; firstTry = 0; draw(); };
+    };
+    draw();
+  }
+
+  /* ----- verb conjugation (présent) ----- */
+  const IRREG = {
+    'être': 'suis es est sommes êtes sont', 'avoir': 'ai as a avons avez ont',
+    'aller': 'vais vas va allons allez vont', 'faire': 'fais fais fait faisons faites font',
+    'prendre': 'prends prends prend prenons prenez prennent', 'partir': 'pars pars part partons partez partent',
+    'appeler': 'appelle appelles appelle appelons appelez appellent',
+  };
+  const TIPS = {
+    'être': '完全不规则，整串背：je suis · tu es · il est / nous sommes · vous êtes · ils sont。',
+    'avoir': "j'ai · tu as · il a / nous avons · vous avez · ils ont。小心 ils ont（有，s 连读成 z）和 ils sont（是）。",
+    'aller': '单数和 ils 都以 v 开头：vais · vas · va · vont；只有 nous / vous 用词根 all-：allons · allez。',
+    'faire': 'fais · fais · fait（单数发音一样）；vous faites（不是 faisez！），ils font。',
+    'prendre': '单数 prend-（d 不发音）：prends · prends · prend；nous/vous 去掉 d：prenons · prenez；ils 双 n：prennent。',
+    'partir': '单数去掉词根的 t：pars · pars · part；复数把 t 加回来：partons · partez · partent。',
+    'appeler': "词根 appel + er。词尾不发音的 je / tu / il / ils 写双 l：appelle · appelles · appelle · appellent；nous / vous 单 l：appelons · appelez。代词跟着人称变：me · te · se · nous · vous · se，元音前省略成 m' t' s'。",
+  };
+  function verbTip(fr) {
+    const inf = fr.replace(/\s*\(s'\)/, '').trim();
+    if (TIPS[inf]) return TIPS[inf];
+    const root = inf.slice(0, -2);
+    return `<b lang="fr">${esc(root)}</b> + <b lang="fr">er</b>，第一组规则动词。去掉 -er 留下词根 ${esc(root)}-，再加词尾 -e · -es · -e · -ons · -ez · -ent。je / tu / il / ils 四个读音一样（-es、-ent 不发音）。` +
+      (vowel(inf) ? `以元音开头，所以 je 要省略成 <span lang="fr">j'${esc(root)}e</span>。` : '');
+  }
+  const PRON = ['je', 'tu', 'il/elle', 'nous', 'vous', 'ils/elles'];
+  const REFL = ['me', 'te', 'se', 'nous', 'vous', 'se'];
+  const vowel = w => /^[aeiouyhâàéèêîïôûœ]/i.test(w);
+  function conjugate(fr) {
+    const refl = /\(s'\)/.test(fr);
+    const inf = fr.replace(/\s*\(s'\)/, '').trim();
+    const forms = IRREG[inf] ? IRREG[inf].split(' ')
+      : inf.endsWith('er') ? ['e', 'es', 'e', 'ons', 'ez', 'ent'].map(e => inf.slice(0, -2) + e) : null;
+    if (!forms) return null;
+    return forms.map((f, i) => {
+      let pr = PRON[i];
+      if (i === 2 || i === 5) pr = pr.split('/')[Math.random() < .5 ? 0 : 1];
+      let body = f;
+      if (refl) body = (vowel(f) && REFL[i].length === 2 && i !== 3 && i !== 4 ? REFL[i][0] + "'" : REFL[i] + ' ') + f;
+      const text = i === 0 && vowel(body) ? "j'" + body : pr + ' ' + body;
+      return { p: PRON[i], text, form: f };
+    });
+  }
+  function conjDrill(ctx, box) {
+    const { book, lecon } = ctx;
+    const all = book.units.flatMap(u => u.lecons);
+    let wide = store.get('conjwide', false);
+    const pool = l => l.vocab.filter(v => v.pos.startsWith('v') && conjugate(v.fr)).map(v => ({ ...v, n: l.n }));
+    let verbs = pool(lecon);
+    const forced = !verbs.length;
+    if (wide || forced) verbs = all.filter(l => l.n <= lecon.n).flatMap(pool).filter((v, i, a) => a.findIndex(x => x.fr === v.fr) === i);
+    if (!verbs.length) { box.innerHTML = '<p class="notice">到这一课为止还没有动词。</p>'; return; }
+    let see = store.get('conjsee', false);
+    const queue = shuffle(verbs.flatMap(v => conjugate(v.fr).map(c => ({ v, c }))));
+    let i = 0, answered = false, right = 0;
+    const draw = () => {
+      if (i >= queue.length) {
+        box.innerHTML = `<div class="drill summary"><p class="kicker" lang="fr">Bilan</p><div class="score">${right} / ${queue.length}</div>
+          <p>${verbs.map(v => esc(v.fr)).join(' · ')}</p>
+          <div class="drill-actions" style="justify-content:center"><button class="btn" id="again">再来一遍</button></div></div>`;
+        $('#again', box).onclick = () => conjDrill(ctx, box);
+        return;
+      }
+      const { v, c } = queue[i]; answered = false;
+      box.innerHTML = `<div class="drill">
+        <div class="count">${i + 1} / ${queue.length}</div>
+        <div class="bar"><i style="width:${i / queue.length * 100}%"></i></div>
+        <div class="prompt">${see
+          ? `<div class="pzh" lang="fr" style="font-family:var(--serif)">${esc(v.fr.replace(/\s*\(s'\)/, '').replace(/^/, /\(s'\)/.test(v.fr) ? "s'" : ''))} · <b>${esc(c.text.split(' ')[0].replace(/^j'.*/, 'je'))}</b></div><div class="ppos">${esc(v.zh)} · 现在时</div>`
+          : `${playBtn(c.text, 'big')}<div class="ppos">听，然后写下「主语 + 动词」· 现在时</div>`}</div>
+        <input class="answer-in" id="ans" lang="fr" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="例如：nous parlons">
+        <div class="drill-actions">
+          <button class="btn ghost small" id="skip">不会，看答案</button><span class="spacer"></span>
+          <span class="kbd"><kbd>Enter</kbd> 检查 / 下一个</span></div>
+        <div id="fb"></div>
+        <details class="tips-all"><summary>本组动词的记忆提示</summary>${verbs.map(x => `<div class="tip"><span class="tip-lab" lang="fr">${esc(x.fr)}</span>${verbTip(x.fr)}</div>`).join('')}</details>
+        <div class="kbd" style="margin-top:14px;display:flex;gap:16px;flex-wrap:wrap">
+          <label><input type="checkbox" id="see" ${see ? 'checked' : ''}> 看提示写（不听）</label>
+          ${forced ? '<span>这一课没有动词，用的是之前课的动词</span>' : `<label><input type="checkbox" id="wide" ${wide ? 'checked' : ''}> 包含之前各课的动词</label>`}
+        </div></div>`;
+      const inp = $('#ans', box); inp.focus();
+      if (!see) setTimeout(() => TTS.say(c.text), 200);
+      inp.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); answered ? (i++, draw()) : check(); } };
+      $('#skip', box).onclick = () => check(true);
+      $('#see', box).onchange = e => { see = e.target.checked; store.set('conjsee', see); draw(); };
+      const w = $('#wide', box); if (w) w.onchange = e => { store.set('conjwide', e.target.checked); conjDrill(ctx, box); };
+    };
+    const check = (giveUp = false) => {
+      const { v, c } = queue[i], val = $('#ans', box).value;
+      if (!val.trim() && !giveUp) return;
+      answered = true;
+      const a = norm(val), t = norm(c.text);
+      const pronounFree = norm(c.text.replace(/^(je|j'|tu|il|elle|nous|vous|ils|elles)\s*/, ''));
+      let r = giveUp ? 'bad' : (a === t ? 'ok' : strip(a) === strip(t) ? (settings.lenient ? 'ok' : 'accent') : a === pronounFree ? 'pron' : 'bad');
+      const good = r === 'ok';
+      if (good) right++;
+      const it = { book: book.id, n: v.n, kind: 'word', fr: c.text, zh: `${v.fr.replace(/\s*\(s'\)/, '')} · ${c.p}（现在时）`, pos: '变位' };
+      good ? SRS.hit(it) : SRS.miss(it);
+      $('#fb', box).innerHTML = `<div class="feedback ${good ? 'ok' : r === 'bad' ? 'bad' : 'accent'}">
+        <span class="lab">${good ? '正确' : r === 'accent' ? '差一点：注意重音' : r === 'pron' ? '动词对了，记得连主语一起写' : '正确答案'}</span>
+        <div class="ans" lang="fr">${playBtn(c.text)} ${esc(c.text)} <span class="kbd" style="font-family:var(--zh)">${esc(v.fr)} · ${esc(v.zh)}</span></div>
+        <div class="tip"><span class="tip-lab">记忆提示</span>${verbTip(v.fr)}</div></div>`;
+      if (see || !good) TTS.say(c.text);
+      if (good) setTimeout(() => { if (answered && queue[i] && queue[i].c === c) { i++; draw(); } }, 1600);
     };
     draw();
   }
