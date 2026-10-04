@@ -32,7 +32,7 @@
   const SRS = {
     all() { return store.get('srs', {}); },
     save(db) { store.set('srs', db); },
-    id: it => `${it.book}|${it.n}|${it.kind}|${it.fr}|${it.zh}`,
+    id: it => it.kind === 'word' && it.pos !== '变位' ? `${it.book}|${it.n}|word|${it.fr}` : `${it.book}|${it.n}|${it.kind}|${it.fr}|${it.zh}`,
     // item: {book, n, kind: 'word'|'cloze'|'sentence', fr, zh, pos?}
     miss(it) {
       const db = this.all(), id = this.id(it), old = db[id] || { right: 0, wrong: 0, first: dayStr() };
@@ -44,12 +44,32 @@
       if (!e) return;
       e.right++; e.last = dayStr();
       e.box = Math.min(e.box + 1, GAPS.length);
-      if (e.box >= GAPS.length) e.done = true; else e.due = addDays(GAPS[e.box]);
+      if (e.box >= GAPS.length) { e.done = true; if (e.kind === 'word' && e.pos !== '变位') MASTER.word(e.book, e.n, e.fr); }
+      else e.due = addDays(GAPS[e.box]);
       this.save(db);
     },
     remove(id) { const db = this.all(); delete db[id]; this.save(db); },
     due() { const t = dayStr(); return Object.entries(this.all()).filter(([, e]) => !e.done && e.due <= t).map(([id, e]) => ({ id, ...e })); },
   };
+
+  /* ---------- mastery: words passed on the first try, text lines written perfectly ---------- */
+  const MASTER = {
+    key: (book, n) => `master:${book}:${n}`,
+    get(book, n) { return store.get(this.key(book, n), { w: {}, t: {}, test: '' }); },
+    put(book, n, m) { store.set(this.key(book, n), m); },
+    word(book, n, fr, on = true) { const m = this.get(book, n); on ? (m.w[fr] = m.w[fr] || dayStr()) : delete m.w[fr]; this.put(book, n, m); },
+    line(book, n, k) { const m = this.get(book, n); m.t[k] = m.t[k] || dayStr(); this.put(book, n, m); },
+    stats(book, lecon) {
+      const m = this.get(book, lecon.n);
+      const words = lecon.vocab.filter(v => m.w[v.fr]).length;
+      const lines = lecon.text.filter((r, k) => !r.h && m.t[k]).length;
+      const totalLines = lecon.text.filter(r => !r.h).length;
+      return { words, totalWords: lecon.vocab.length, lines, totalLines, test: m.test,
+        vocabDone: words === lecon.vocab.length, textDone: lines === totalLines };
+    },
+  };
+  // a word that is in the mistake book only counts as mastered once its reviews are finished
+  const inReview = (book, n, fr) => { const e = SRS.all()[SRS.id({ book, n, kind: 'word', fr })]; return e && !e.done; };
 
   /* ---------- text helpers ---------- */
   const strip = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '');
@@ -423,6 +443,13 @@
       </section>`;
   }
 
+  function progHTML(book, l, big = false) {
+    const st = MASTER.stats(book.id, l);
+    const bar = (label, a, b, done) => `<div class="pbar ${done ? 'done' : ''}"><span class="pl">${label}</span>
+      <span class="pt"><i style="width:${b ? a / b * 100 : 0}%"></i></span><span class="pn">${done ? '通过' : `${a}/${b}`}</span></div>`;
+    return `<div class="prog ${big ? 'big' : ''}">${bar('词汇', st.words, st.totalWords, st.vocabDone)}${bar('课文', st.lines, st.totalLines, st.textDone)}</div>`;
+  }
+
   function viewBook(book) {
     document.title = book.title + ' · 默写本';
     const PARTS = ['vocab', 'phrases', 'full', 'recite'];
@@ -438,8 +465,7 @@
               <div class="n" lang="fr">Leçon ${l.n}</div>
               <h3 lang="fr">${esc(l.title)}</h3>
               <div class="zh">${esc(l.zh)}</div>
-              <div class="meta">${l.vocab.length} 词 · ${sentences(l).length} 句
-                <span class="marks" title="词汇 · 句子 · 全文 · 背诵">${PARTS.map(k => `<span class="mark"><i style="width:${Math.round((p[k] || 0) * 100)}%"></i></span>`).join('')}</span></div>
+              ${progHTML(book, l)}
             </a>`;
           }).join('')}</div>
         </section>`).join('')}
@@ -458,6 +484,7 @@
         <p class="kicker" lang="fr">Unité ${unit.n} · Leçon ${lecon.n}</p>
         <h1 lang="fr">${esc(lecon.title)}</h1>
         <div class="zh">${esc(lecon.zh)}</div>
+        ${progHTML(book, lecon, true)}
       </header>
       <nav class="tabs" role="tablist">${TABS.map((t, i) => `<button class="tab" role="tab" aria-selected="${t[0] === tab}" data-tab="${t[0]}"><b>${i + 1}</b>${t[1]}</button>`).join('')}</nav>
       <section id="pane"></section>
@@ -483,17 +510,18 @@
   function paneVocab(ctx, mode = store.get('vmode', 'list')) {
     const { lecon, pane } = ctx;
     store.set('vmode', mode);
-    const head = modeBar([['list', '浏览'], ['write', '看中文默写'], ['listen', '听音拼写'], ['conj', '动词变位']], mode);
+    const head = modeBar([['list', '浏览'], ['test', '首测'], ['write', '看中文默写'], ['listen', '听音拼写'], ['conj', '动词变位']], mode);
     if (mode === 'list') {
       const groups = [];
       lecon.vocab.forEach(v => { let g = groups.find(x => x.g === v.g); if (!g) groups.push(g = { g: v.g, items: [] }); g.items.push(v); });
+      const mst = MASTER.get(ctx.book.id, lecon.n);
       const hide = store.get('vhide', false), showTip = store.get('vtip', true);
       pane.innerHTML = head.replace('<span class="spacer"></span>', `<span class="spacer"></span>
           <label class="kbd" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="vhide" ${hide ? 'checked' : ''}> 遮住法语</label>
           <label class="kbd" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="vtip" ${showTip ? 'checked' : ''}> 记忆提示</label>
           <button class="btn ghost small" id="vplay">${ICON.play} 全部朗读</button>`) +
         groups.map(g => `<div class="vgroup"><h3>${esc(g.g || '')}</h3>${g.items.map(v => `
-          <div class="vrow ${hide ? 'hidefr' : ''}" data-say="${esc(forms(v.fr).say)}">
+          <div class="vrow ${hide ? 'hidefr' : ''} ${mst.w[v.fr] ? 'mastered' : ''}" data-say="${esc(forms(v.fr).say)}">
             <span class="play">${ICON.play}</span>
             <span class="vzh">${esc(v.zh)}</span><span class="pos">${esc(v.pos)}</span>
             <span class="vfr" lang="fr">${esc(v.fr)}</span>
@@ -515,7 +543,25 @@
     } else {
       if (mode === 'conj') { pane.innerHTML = head + '<div id="drill"></div>'; bindModes(pane, m => paneVocab(ctx, m)); return conjDrill(ctx, $('#drill', pane)); }
       pane.innerHTML = head + '<div id="drill"></div>';
-      wordDrill(ctx, $('#drill', pane), mode, lecon.vocab);
+      const box = $('#drill', pane);
+      if (mode === 'test') {
+        const st = MASTER.stats(ctx.book.id, lecon);
+        box.innerHTML = `<div class="drill summary"><p class="kicker" lang="fr">Premier test</p>
+          <h2 style="font-size:30px;margin-bottom:10px">本课词汇首测</h2>
+          <p class="hint-text" style="margin:0 0 18px">把这一课 ${lecon.vocab.length} 个词全部默写一遍，不能用提示。<br>写对的直接算掌握，以后不用再复习；写错的<b>不进错题本</b>，之后在「看中文默写」或「听音拼写」里练，第一次就写对也算掌握。</p>
+          ${st.test ? `<p class="kbd">上次首测：${st.test}</p>` : ''}
+          <button class="btn" id="go">${st.test ? '再测一次' : '开始首测'}</button></div>`;
+        $('#go', box).onclick = () => wordDrill(ctx, box, 'test', lecon.vocab);
+      } else {
+        const m = MASTER.get(ctx.book.id, lecon.n);
+        const onlyNew = store.get('vonlynew', true);
+        const rest = lecon.vocab.filter(v => !m.w[v.fr]);
+        const words = onlyNew ? rest : lecon.vocab;
+        box.insertAdjacentHTML('beforebegin', `<label class="kbd" style="display:flex;gap:6px;align-items:center;justify-content:center;margin:0 0 14px"><input type="checkbox" id="onlynew" ${onlyNew ? 'checked' : ''}> 只练还没掌握的词（${rest.length} 个）</label>`);
+        $('#onlynew', pane).onchange = e => { store.set('vonlynew', e.target.checked); paneVocab(ctx, mode); };
+        if (!words.length) box.innerHTML = `<div class="drill summary"><div class="score" style="font-size:44px">通过</div><p>这一课的词汇已经全部掌握。取消上面的勾选可以再全部练一遍。</p></div>`;
+        else wordDrill(ctx, box, mode, words);
+      }
     }
     bindModes(pane, m => paneVocab(ctx, m));
   }
@@ -524,7 +570,7 @@
     const order = store.get('vorder', 'shuffle');
     let queue = order === 'shuffle' ? shuffle(words) : words.slice();
     let i = 0, wrong = [], firstTry = 0, answered = false, hintN = 0;
-    const listen = mode === 'listen';
+    const listen = mode === 'listen', test = mode === 'test';
     const draw = () => {
       if (i >= queue.length) return done();
       const v = queue[i]; answered = false; hintN = 0;
@@ -536,7 +582,7 @@
           : `<div class="pzh">${esc(v.zh)}</div><div class="ppos">${esc(v.pos)}${v.g ? ' · ' + esc(v.g) : ''}</div>`}</div>
         <input class="answer-in" id="ans" lang="fr" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="用法语写…">
         <div class="drill-actions">
-          <button class="btn ghost small" id="hint">提示一个字母</button>
+          ${test ? '' : '<button class="btn ghost small" id="hint">提示一个字母</button>'}
           <button class="btn ghost small" id="skip">不会，看答案</button>
           <span class="spacer"></span>
           <span class="kbd"><kbd>Enter</kbd> 检查 / 下一个</span>
@@ -549,7 +595,7 @@
       inp.focus();
       if (listen) setTimeout(() => TTS.say(forms(v.fr).say), 200);
       inp.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); answered ? (i++, draw()) : check(); } };
-      $('#hint', box).onclick = () => {
+      if (!test) $('#hint', box).onclick = () => {
         const target = forms(v.fr).accept[0];
         hintN = Math.min(hintN + 1, target.length);
         inp.value = target.slice(0, hintN); inp.focus();
@@ -566,7 +612,12 @@
       const good = r === 'ok';
       if (good && !hintN) firstTry++;
       const it = { book: ctx.book.id, n: ctx.lecon.n, kind: 'word', fr: v.fr, zh: v.zh, pos: v.pos };
-      if (!good || hintN) { wrong.push(v); SRS.miss(it); } else SRS.hit(it);
+      const bk = ctx.book.id, ln = ctx.lecon.n;
+      if (!good || hintN) {
+        wrong.push(v);
+        if (!test) { SRS.miss(it); MASTER.word(bk, ln, v.fr, false); }
+      } else if (test || !inReview(bk, ln, v.fr)) MASTER.word(bk, ln, v.fr);
+      else SRS.hit(it);
       fb.innerHTML = `<div class="feedback ${r}">
         <span class="lab">${good ? (hintN ? '对了（用了提示）' : '完全正确') : r === 'accent' ? '差一点：注意重音符号' : giveUp ? '答案' : '不对，正确答案是'}</span>
         <div class="ans" lang="fr">${playBtn(forms(v.fr).say)} ${esc(v.fr)} ${listen ? `<span class="kbd" style="font-family:var(--zh)">${esc(v.zh)}</span>` : ''}</div>
@@ -575,18 +626,21 @@
       if (good && !hintN) setTimeout(() => { if (answered && queue[i] === v) { i++; draw(); } }, wordTip(ctx.lecon.n, v) ? 1800 : 1100);
     };
     const done = () => {
+      if (test) { const m = MASTER.get(ctx.book.id, ctx.lecon.n); m.test = dayStr(); MASTER.put(ctx.book.id, ctx.lecon.n, m); }
+      const st = MASTER.stats(ctx.book.id, ctx.lecon);
       const score = firstTry / queue.length;
       if (queue.length === words.length || score === 1) ctx.save('vocab', score);
       box.innerHTML = `<div class="drill summary">
         <p class="kicker" lang="fr">Bilan</p>
         <div class="score">${Math.round(score * 100)}%</div>
-        <p>${queue.length} 个里一次写对 ${firstTry} 个</p>
+        <p>${queue.length} 个里一次写对 ${firstTry} 个 · 本课词汇已掌握 ${st.words}/${st.totalWords}${st.vocabDone ? ' · <b>词汇通过</b>' : ''}</p>
+        ${test && wrong.length ? '<p class="kbd">写错的词没有进错题本，去「看中文默写」或「听音拼写」练它们。</p>' : ''}
         ${wrong.length ? `<ul>${wrong.map(v => `<li><span lang="fr">${esc(v.fr)}</span><span class="w-zh">${esc(v.zh)}</span></li>`).join('')}</ul>` : '<p>全部正确，很棒。</p>'}
         <div class="drill-actions" style="justify-content:center">
           ${wrong.length ? '<button class="btn" id="again-wrong">只练错的</button>' : ''}
           <button class="btn ghost" id="again">重新开始</button></div></div>`;
       const w = wrong.slice();
-      $('#again', box).onclick = () => wordDrill(ctx, box, mode, words);
+      $('#again', box).onclick = () => route();
       if (w.length) $('#again-wrong', box).onclick = () => { queue = shuffle(w); i = 0; wrong = []; firstTry = 0; draw(); };
     };
     draw();
@@ -850,7 +904,7 @@
       areas.forEach(t => {
         const r = lecon.text[t.dataset.k], d = diff(r.fr, t.value);
         total += d.score;
-        if (t.value.trim()) { const it = { book: book.id, n: lecon.n, kind: 'sentence', fr: r.fr.replace(/^–\s*/, ''), zh: r.zh.replace(/^–\s*/, '') }; d.perfect ? SRS.hit(it) : SRS.miss(it); }
+        if (t.value.trim()) { const it = { book: book.id, n: lecon.n, kind: 'sentence', fr: r.fr.replace(/^–\s*/, ''), zh: r.zh.replace(/^–\s*/, '') }; d.perfect ? SRS.hit(it) : SRS.miss(it); if (d.perfect) MASTER.line(book.id, lecon.n, +t.dataset.k); }
         t.nextElementSibling.innerHTML = d.perfect ? `<span class="w-ok">✓</span>`
           : `<div lang="fr">${marked(r.fr, d.st)}</div>${d.extra.length ? `<div class="yours">多写/拼错：<span class="w-extra">${esc(d.extra.join(' '))}</span></div>` : ''}`;
       });
@@ -932,7 +986,8 @@
         finished = true;
         ctx.save('recite', ok / toks.length);
         rows.forEach(r => { if (r.h) return; const lt = toks.filter(t => t.line === r.k);
-          if (lt.some(t => t.st !== 'ok')) SRS.miss({ book: ctx.book.id, n: ctx.lecon.n, kind: 'sentence', fr: r.fr.replace(/^–\s*/, ''), zh: r.zh.replace(/^–\s*/, '') }); });
+          if (lt.every(t => t.st === 'ok')) MASTER.line(ctx.book.id, ctx.lecon.n, r.k);
+          else SRS.miss({ book: ctx.book.id, n: ctx.lecon.n, kind: 'sentence', fr: r.fr.replace(/^–\s*/, ''), zh: r.zh.replace(/^–\s*/, '') }); });
         $('#heard', pane).innerHTML = `背完了！正确率 ${Math.round(ok / toks.length * 100)}%。红色的词是漏掉或没念清楚的。`;
         stopRec();
       }
