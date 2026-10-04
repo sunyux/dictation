@@ -11,7 +11,7 @@
   /* ---------- storage ---------- */
   const store = {
     get(k, d) { try { const v = localStorage.getItem('nh:' + k); return v == null ? d : JSON.parse(v); } catch { return d; } },
-    set(k, v) { try { localStorage.setItem('nh:' + k, JSON.stringify(v)); } catch { } },
+    set(k, v, quiet) { try { localStorage.setItem('nh:' + k, JSON.stringify(v)); } catch { } if (!quiet) BACKUP.changed(); },
   };
   const settings = Object.assign({ rate: 0.85, lenient: false, voice: '' }, store.get('settings', {}));
   const saveSettings = () => store.set('settings', settings);
@@ -57,8 +57,8 @@
     key: (book, n) => `master:${book}:${n}`,
     get(book, n) { return store.get(this.key(book, n), { w: {}, t: {}, test: '' }); },
     put(book, n, m) { store.set(this.key(book, n), m); },
-    word(book, n, fr, on = true) { const m = this.get(book, n); on ? (m.w[fr] = m.w[fr] || dayStr()) : delete m.w[fr]; this.put(book, n, m); },
-    line(book, n, k) { const m = this.get(book, n); m.t[k] = m.t[k] || dayStr(); this.put(book, n, m); },
+    word(book, n, fr, on = true) { const m = this.get(book, n), was = !!m.w[fr]; on ? (m.w[fr] = m.w[fr] || dayStr()) : delete m.w[fr]; this.put(book, n, m); if (on && !was) { XP.gain(3, '新掌握 ' + fr); checkStamps(book, n); } },
+    line(book, n, k) { const m = this.get(book, n), was = !!m.t[k]; m.t[k] = m.t[k] || dayStr(); this.put(book, n, m); if (!was) { XP.gain(3, '课文掌握一行'); checkStamps(book, n); } },
     stats(book, lecon) {
       const m = this.get(book, lecon.n);
       const words = lecon.vocab.filter(v => m.w[v.fr]).length;
@@ -70,6 +70,246 @@
   };
   // a word that is in the mistake book only counts as mastered once its reviews are finished
   const inReview = (book, n, fr) => { const e = SRS.all()[SRS.id({ book, n, kind: 'word', fr })]; return e && !e.done; };
+
+  /* ---------- rewards: XP, daily goal, streak, stamps ---------- */
+  const STAMPS = {
+    1: ['Paris', 'tower'], 2: ['Genève', 'fountain'], 3: ['Montréal', 'leaf'], 4: ['Dakar', 'baobab'],
+    5: ['Chambre', 'window'], 6: ['Portrait', 'face'], 7: ['Boutique', 'dress'], 8: ['Montmartre', 'easel'],
+    9: ['Appartement', 'house'], 10: ['Louvre', 'pyramid'], 11: ['Martinique', 'palm'], 12: ['Marseille', 'boat'],
+  };
+  const GLYPH = {
+    tower: 'M50 12 L42 88 M50 12 L58 88 M44 62 H56 M46 44 H54 M38 88 Q50 70 62 88 M50 6 V12',
+    fountain: 'M50 88 V30 M50 30 Q40 10 30 40 M50 30 Q60 10 70 40 M50 30 Q46 14 42 48 M50 30 Q54 14 58 48 M28 88 H72 M34 88 Q50 78 66 88',
+    leaf: 'M50 88 V64 M50 64 L30 70 L34 58 L22 50 L32 46 L28 32 L40 38 L44 24 L50 36 L56 24 L60 38 L72 32 L68 46 L78 50 L66 58 L70 70 Z',
+    baobab: 'M42 88 Q44 60 40 44 M58 88 Q56 60 60 44 M40 44 Q30 36 24 40 M40 44 Q38 30 32 24 M60 44 Q70 36 76 40 M60 44 Q62 30 68 24 M50 44 V24 M30 88 H70',
+    window: 'M30 20 H70 V84 H30 Z M50 20 V84 M30 52 H70 M22 20 L30 28 V76 L22 84 Z M78 20 L70 28 V76 L78 84 Z',
+    face: 'M50 22 Q72 22 72 48 Q72 74 50 80 Q28 74 28 48 Q28 22 50 22 M40 46 H44 M56 46 H60 M42 62 Q50 68 58 62 M30 40 Q36 18 64 22 Q72 30 70 40',
+    dress: 'M42 16 L38 30 L42 34 L28 86 H72 L58 34 L62 30 L58 16 Q50 24 42 16',
+    easel: 'M50 14 L34 88 M50 14 L66 88 M50 14 V88 M30 26 H70 V60 H30 Z M38 52 Q46 34 54 46 Q60 38 64 52',
+    house: 'M24 88 V36 L50 16 L76 36 V88 M36 48 H46 V58 H36 Z M54 48 H64 V58 H54 Z M36 66 H46 V76 H36 Z M54 66 H64 V88 H54 Z M16 88 H84',
+    pyramid: 'M50 18 L18 82 H82 Z M50 18 L50 82 M34 50 H66 M26 66 H74 M10 88 H90',
+    palm: 'M52 88 Q48 60 54 32 M54 32 Q38 22 22 30 M54 32 Q44 14 30 12 M54 32 Q62 14 76 14 M54 32 Q70 24 82 36 M54 32 Q66 40 70 54 M14 88 Q50 80 86 88',
+    boat: 'M20 66 H80 L70 80 H30 Z M50 66 V14 M50 18 L76 58 H50 M50 24 L30 58 H50 M10 88 Q20 84 30 88 T50 88 T70 88 T90 88',
+  };
+  const STREAK_BADGES = [3, 7, 14, 30, 60, 100];
+  const XP = {
+    log() { return store.get('log', {}); },
+    goal() { return store.get('goal', 30); },
+    today() { return this.log()[dayStr()] || { xp: 0 }; },
+    gain(n, why) {
+      if (!n) return;
+      const log = this.log(), d = dayStr(), before = (log[d] || { xp: 0 }).xp;
+      log[d] = { xp: before + n };
+      store.set('log', log);
+      toast(`+${n}`, why);
+      const g = this.goal();
+      if (before < g && before + n >= g) celebrate('今日目标完成', `今天已经拿到 ${before + n} 分。连续打卡 ${this.streak()} 天。`, null);
+      const s = this.streak();
+      if (before < g && before + n >= g && STREAK_BADGES.includes(s)) celebrate(`连续 ${s} 天`, '获得一枚打卡印章，在「我的邮册」里查看。', null);
+      renderStatus();
+    },
+    // consecutive days reaching the daily goal, ending today (or yesterday if today isn't done yet)
+    streak() {
+      const log = this.log(), g = this.goal();
+      const d = new Date();
+      if (!((log[dayStr(d)] || {}).xp >= g)) d.setDate(d.getDate() - 1);
+      let n = 0;
+      while ((log[dayStr(d)] || {}).xp >= g) { n++; d.setDate(d.getDate() - 1); }
+      return n;
+    },
+    best() {
+      const log = this.log(), g = this.goal(), days = Object.keys(log).filter(k => log[k].xp >= g).sort();
+      let best = 0, run = 0, prev = null;
+      for (const k of days) {
+        const d = new Date(k + 'T12:00'); 
+        run = prev && (d - prev) / 864e5 < 1.5 ? run + 1 : 1;
+        best = Math.max(best, run); prev = d;
+      }
+      return best;
+    },
+    total() { return Object.values(this.log()).reduce((a, b) => a + b.xp, 0); },
+  };
+  function stampSVG(n, kind, on) {
+    const [city, g] = STAMPS[n] || ['Leçon ' + n, 'house'];
+    return `<svg viewBox="0 0 100 120" class="stamp ${on ? 'on' : ''} ${kind}" aria-label="${esc(city)}">
+      <rect x="3" y="3" width="94" height="114" rx="2" class="st-paper"/>
+      <rect x="9" y="9" width="82" height="102" class="st-frame"/>
+      <g transform="translate(10 6) scale(.8)" class="st-glyph"><path d="${GLYPH[g]}"/></g>
+      <text x="50" y="96" class="st-city">${esc(city)}</text>
+      <text x="50" y="106" class="st-sub">${kind === 'v' ? 'VOCABULAIRE' : 'TEXTE'} · ${n}</text>
+    </svg>`;
+  }
+  // called after mastery changes: award stamps when a part of a leçon is complete
+  function checkStamps(book, n) {
+    const b = findBook(book), f = b && findLecon(b, n);
+    if (!f) return;
+    const st = MASTER.stats(book, f.lecon), got = store.get('stamps', {});
+    const hp = $('.lecon-head .prog'); if (hp && location.hash.includes(`/${n}`)) hp.outerHTML = progHTML(b, f.lecon, true);
+    for (const [k, done, label] of [['v', st.vocabDone, '词汇'], ['t', st.textDone, '课文']]) {
+      const id = `${book}:${n}:${k}`;
+      if (done && !got[id]) {
+        got[id] = dayStr(); store.set('stamps', got);
+        XP.gain(k === 'v' ? 20 : 30, `Leçon ${n} ${label}通过`);
+        celebrate(`Leçon ${n} ${label}通过`, '一枚新邮票贴进了你的邮册。', stampSVG(n, k, true));
+      }
+    }
+  }
+  let toastT;
+  function toast(big, small) {
+    let t = $('#toast');
+    if (!t) { t = document.createElement('div'); t.id = 'toast'; document.body.appendChild(t); }
+    t.innerHTML = `<b>${esc(big)}</b>${small ? `<span>${esc(small)}</span>` : ''}`;
+    t.className = 'show';
+    clearTimeout(toastT); toastT = setTimeout(() => t.className = '', 1400);
+  }
+  const celebQ = [];
+  function celebrate(title, text, art) {
+    celebQ.push({ title, text, art });
+    if (celebQ.length === 1) showCeleb();
+  }
+  function showCeleb() {
+    const c = celebQ[0]; if (!c) return;
+    const m = document.createElement('div');
+    m.className = 'celeb';
+    m.innerHTML = `<div class="celeb-card" role="dialog" aria-modal="true">${c.art ? `<div class="celeb-art">${c.art}</div>` : '<div class="celeb-seal">✦</div>'}
+      <h2>${esc(c.title)}</h2><p>${esc(c.text)}</p><button class="btn">好的</button></div>`;
+    document.body.appendChild(m);
+    const close = () => { m.remove(); celebQ.shift(); showCeleb(); };
+    $('button', m).onclick = close; $('button', m).focus();
+    m.onclick = e => { if (e.target === m) close(); };
+  }
+  function renderStatus() {
+    const el = $('#status'); if (!el) return;
+    const xp = XP.today().xp, g = XP.goal(), s = XP.streak();
+    const pct = Math.min(1, xp / g), C = 2 * Math.PI * 9;
+    el.innerHTML = `<svg viewBox="0 0 24 24" class="ring" aria-hidden="true"><circle cx="12" cy="12" r="9" class="ring-bg"/><circle cx="12" cy="12" r="9" class="ring-fg ${pct >= 1 ? 'full' : ''}" stroke-dasharray="${C * pct} ${C}"/></svg>
+      <span class="st-txt"><b>${s}</b> 天 · ${xp}/${g}</span>`;
+    el.title = `连续 ${s} 天达成目标 · 今日 ${xp}/${g} 分`;
+  }
+
+  /* ---------- backup: full export / import, optional auto-save to a local file ---------- */
+  const BACKUP = {
+    handle: null, timer: null,
+    dump() {
+      const data = {};
+      Object.keys(localStorage).filter(k => k.startsWith('nh:')).forEach(k => { data[k] = localStorage.getItem(k); });
+      return { app: 'nihao-dictation', v: 2, saved: new Date().toISOString(), data };
+    },
+    download() {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([JSON.stringify(this.dump())], { type: 'application/json' }));
+      a.download = `nihao-备份-${dayStr()}.json`; a.click();
+      store.set('lastBackup', dayStr());
+    },
+    merge(obj) {
+      // old format from the mistake-book export
+      if (obj.srs && !obj.data) obj = { data: { 'nh:srs': JSON.stringify(obj.srs), ...Object.fromEntries(Object.entries(obj.progress || {}).map(([k, v]) => [k, JSON.stringify(v)])) } };
+      if (!obj.data) throw new Error('bad file');
+      for (const [k, raw] of Object.entries(obj.data)) {
+        const cur = localStorage.getItem(k);
+        let v = raw;
+        try {
+          const a = JSON.parse(raw), b = cur ? JSON.parse(cur) : null;
+          if (b && k === 'nh:srs') { for (const [id, e] of Object.entries(a)) if (!b[id] || (e.last || '') > (b[id].last || '')) b[id] = e; v = JSON.stringify(b); }
+          else if (b && k.startsWith('nh:master:')) { b.w = { ...a.w, ...b.w }; b.t = { ...a.t, ...b.t }; b.test = b.test || a.test; v = JSON.stringify(b); }
+          else if (b && k === 'nh:log') { for (const [d, e] of Object.entries(a)) if (!b[d] || b[d].xp < e.xp) b[d] = e; v = JSON.stringify(b); }
+          else if (b && k === 'nh:stamps') v = JSON.stringify({ ...a, ...b });
+        } catch { }
+        try { localStorage.setItem(k, v); } catch { }
+      }
+    },
+    async pickFile() {
+      this.handle = await window.showSaveFilePicker({ suggestedName: 'nihao-自动备份.json', types: [{ description: 'JSON', accept: { 'application/json': ['.json'] } }] });
+      await idbSet('handle', this.handle);
+      await this.write();
+    },
+    async resume() {
+      const h = await idbGet('handle');
+      if (!h) return false;
+      if ((await h.requestPermission({ mode: 'readwrite' })) !== 'granted') return false;
+      this.handle = h; await this.write(); return true;
+    },
+    async write() {
+      if (!this.handle) return;
+      try {
+        const w = await this.handle.createWritable();
+        await w.write(JSON.stringify(this.dump())); await w.close();
+        store.set('lastAuto', new Date().toISOString(), true);
+      } catch { this.handle = null; }
+    },
+    changed() { if (this.handle) { clearTimeout(this.timer); this.timer = setTimeout(() => this.write(), 2500); } },
+  };
+  function idb() {
+    return new Promise((res, rej) => { const r = indexedDB.open('nihao', 1); r.onupgradeneeded = () => r.result.createObjectStore('kv'); r.onsuccess = () => res(r.result); r.onerror = rej; });
+  }
+  async function idbSet(k, v) { try { const db = await idb(); db.transaction('kv', 'readwrite').objectStore('kv').put(v, k); } catch { } }
+  async function idbGet(k) { try { const db = await idb(); return await new Promise(r => { const q = db.transaction('kv').objectStore('kv').get(k); q.onsuccess = () => r(q.result); q.onerror = () => r(null); }); } catch { return null; } }
+  if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => { });
+
+  function viewMe() {
+    document.title = '我的 · 打卡与邮册';
+    const log = XP.log(), g = XP.goal(), got = store.get('stamps', {});
+    const book = BOOKS[0], lecons = book.units.flatMap(u => u.lecons);
+    // 12-week calendar
+    const days = []; const d = new Date(); d.setDate(d.getDate() - 83 - ((d.getDay() + 6) % 7 === 6 ? 0 : 0));
+    for (let i = 0; i < 84; i++) { days.push(dayStr(d)); d.setDate(d.getDate() + 1); }
+    const lvl = x => !x ? 0 : x < g / 2 ? 1 : x < g ? 2 : x < g * 2 ? 3 : 4;
+    const s = XP.streak(), stampCount = Object.keys(got).length;
+    const lastB = store.get('lastBackup', ''), lastA = store.get('lastAuto', '');
+    const fsOK = 'showSaveFilePicker' in window;
+    main.innerHTML = `
+      <p class="kicker" lang="fr">Mon carnet</p>
+      <h1 style="font-size:44px">我的打卡与邮册</h1>
+      <div class="review-stats">
+        <div><b>${s}</b><span>连续天数</span></div>
+        <div><b>${XP.best()}</b><span>最长连续</span></div>
+        <div><b>${XP.today().xp}<small>/${g}</small></b><span>今日分数</span></div>
+        <div><b>${XP.total()}</b><span>总分</span></div>
+        <div><b>${stampCount}<small>/${lecons.length * 2}</small></b><span>邮票</span></div>
+      </div>
+      <div class="toolbar"><span class="kbd">每日目标</span>${[20, 30, 50, 80].map(x => `<button class="mode" data-goal="${x}" aria-pressed="${x === g}">${x} 分</button>`).join('')}</div>
+      <p class="hint-text">怎么得分：单词第一次写对 +2，新掌握一个词 +3，句子/课文一行全对 +3，填空每空 +1，复习答对 +3，变位答对 +1；一课词汇通过 +20、课文通过 +30。达到每日目标就算打卡。</p>
+      <section class="unit"><div class="unit-title"><h2>最近 12 周</h2></div>
+        <div class="cal">${days.map(k => `<i class="c${lvl((log[k] || {}).xp)} ${k === dayStr() ? 'today' : ''}" title="${k} · ${(log[k] || {}).xp || 0} 分"></i>`).join('')}</div>
+        <div class="badges">${STREAK_BADGES.map(n => `<div class="badge ${XP.best() >= n ? 'on' : ''}"><b>${n}</b><span>天</span></div>`).join('')}</div>
+      </section>
+      <section class="unit"><div class="unit-title"><h2>邮册</h2><span>每课词汇通过、课文通过各得一枚</span></div>
+        <div class="album">${lecons.map(l => `<div class="album-cell"><div class="pair">${stampSVG(l.n, 'v', got[`${book.id}:${l.n}:v`])}${stampSVG(l.n, 't', got[`${book.id}:${l.n}:t`])}</div><a href="#/${book.id}/${l.n}" lang="fr">Leçon ${l.n}</a></div>`).join('')}</div>
+      </section>
+      <section class="unit" id="backup"><div class="unit-title"><h2>保存与恢复</h2></div>
+        <p class="hint-text" style="margin:0 0 14px">所有进度（掌握的单词、错题本、打卡、邮票）只存在这个浏览器里。清除 Chrome 的 Cookie 和网站数据会把它们一起删掉，所以记得备份。</p>
+        <div class="toolbar">
+          <button class="btn" id="bk-dl">下载完整备份</button>
+          <label class="btn ghost" style="cursor:pointer">从备份恢复<input type="file" id="bk-up" accept=".json" hidden></label>
+          <span class="kbd">${lastB ? `上次下载备份：${lastB}` : '还没有下载过备份'}</span>
+        </div>
+        ${fsOK ? `<div class="toolbar" style="margin-top:8px">
+          <button class="btn ghost" id="bk-auto">${BACKUP.handle ? '自动保存已开启 · 更换文件' : '自动保存到电脑上的文件'}</button>
+          <button class="btn ghost small" id="bk-resume" hidden>继续自动保存到上次的文件</button>
+          <span class="kbd">${BACKUP.handle ? `每次练习后自动写入${lastA ? ' · 最近 ' + lastA.slice(0, 16).replace('T', ' ') : ''}` : '选一个文件后，每次练习都会自动写进去（仅 Chrome / Edge 电脑版）'}</span>
+        </div>` : ''}
+      </section>`;
+    $$('[data-goal]', main).forEach(b => b.onclick = () => { store.set('goal', +b.dataset.goal); renderStatus(); viewMe(); });
+    $('#bk-dl', main).onclick = () => { BACKUP.download(); viewMe(); };
+    $('#bk-up', main).onchange = async e => {
+      try { BACKUP.merge(JSON.parse(await e.target.files[0].text())); toast('已恢复', '备份已合并进来'); renderStatus(); viewMe(); }
+      catch { alert('这个文件读不出来。'); }
+    };
+    if (fsOK) {
+      $('#bk-auto', main).onclick = async () => { try { await BACKUP.pickFile(); toast('已开启', '自动保存'); viewMe(); } catch { } };
+      if (!BACKUP.handle) idbGet('handle').then(h => {
+        const b = $('#bk-resume', main); if (!h || !b) return;
+        b.hidden = false; b.textContent = `继续自动保存到 ${h.name}`;
+        b.onclick = async () => { if (await BACKUP.resume()) { toast('已开启', '自动保存'); viewMe(); } };
+      });
+    }
+  }
+  function backupNag() {
+    const last = store.get('lastBackup', ''), have = Object.keys(localStorage).some(k => k.startsWith('nh:master:') || k === 'nh:srs');
+    if (!have || BACKUP.handle) return '';
+    const days = last ? Math.round((new Date(dayStr()) - new Date(last)) / 864e5) : 99;
+    return days >= 7 ? `<a class="notice" href="#/me" style="display:block;text-decoration:none;color:inherit">${last ? `已经 ${days} 天没备份了` : '你还没有备份过进度'}，点这里下载一份，防止浏览器清除数据后丢失。</a>` : '';
+  }
 
   /* ---------- text helpers ---------- */
   const strip = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '');
@@ -287,6 +527,7 @@
     const crumbs = $('#crumbs');
     window.scrollTo(0, 0);
     if (!parts.length) { crumbs.innerHTML = ''; return viewHome(); }
+    if (parts[0] === 'me') { crumbs.innerHTML = '<span>我的打卡与邮册</span>'; return viewMe(); }
     if (parts[0] === 'review') { crumbs.innerHTML = '<span>错题本 · 每日复习</span>'; return viewReview(parts[1]); }
     const book = findBook(parts[0]);
     if (!book) { location.hash = '#/'; return; }
@@ -355,21 +596,10 @@
       main.innerHTML = '<div class="toolbar"><a class="btn ghost small" href="#/review">‹ 返回错题本</a></div><div id="drill"></div>';
       reviewDrill($('#drill'), shuffle(active));
     };
-    $('#exp', main).onclick = () => {
-      const data = { srs: SRS.all(), progress: Object.fromEntries(Object.keys(localStorage).filter(k => k.startsWith('nh:prog:')).map(k => [k, store.get(k.slice(3), {})])) };
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(new Blob([JSON.stringify(data, null, 1)], { type: 'application/json' }));
-      a.download = `nihao-错题本-${dayStr()}.json`; a.click();
-    };
+    $('#exp', main).onclick = () => BACKUP.download();
     $('#imp', main).onchange = async e => {
-      try {
-        const data = JSON.parse(await e.target.files[0].text());
-        const cur = SRS.all();
-        for (const [id, it] of Object.entries(data.srs || {})) if (!cur[id] || (it.last || '') > (cur[id].last || '')) cur[id] = it;
-        SRS.save(cur);
-        for (const [k, v] of Object.entries(data.progress || {})) store.set(k.slice(3), v);
-        viewReview();
-      } catch { alert('这个文件读不出来。'); }
+      try { BACKUP.merge(JSON.parse(await e.target.files[0].text())); viewReview(); }
+      catch { alert('这个文件读不出来。'); }
     };
   }
 
@@ -411,7 +641,7 @@
         const r = giveUp ? 'bad' : checkWord(val, e.fr);
         good = r === 'ok'; html = esc(e.fr) + (r === 'accent' ? ' <span class="kbd">（注意重音）</span>' : '');
       }
-      good ? (SRS.hit(e), right++) : SRS.miss(e);
+      good ? (SRS.hit(e), right++, XP.gain(3, '复习答对')) : SRS.miss(e);
       const next = good ? GAPS[Math.min((e.box || 0) + 1, GAPS.length - 1)] : 1;
       $('#fb', box).innerHTML = `<div class="feedback ${good ? 'ok' : 'bad'}"><span class="lab">${good ? `答对了 · ${(e.box || 0) + 1 >= GAPS.length ? '已掌握' : next + ' 天后再复习'}` : '明天再来一次'}</span>
         <div class="ans" lang="fr">${playBtn(say)}<span>${html}</span></div>
@@ -438,7 +668,7 @@
             <li><b>4</b><span>背诵 — 对着麦克风说，说对的词会逐个显现</span></li>
           </ol>
           <a class="btn" href="#/${book.id}">打开《${esc(book.title)}》</a>
-          ${reviewBanner()}
+          ${backupNag()}${reviewBanner()}${backupNag()}
         </div>
       </section>`;
   }
@@ -613,6 +843,7 @@
       if (good && !hintN) firstTry++;
       const it = { book: ctx.book.id, n: ctx.lecon.n, kind: 'word', fr: v.fr, zh: v.zh, pos: v.pos };
       const bk = ctx.book.id, ln = ctx.lecon.n;
+      if (good && !hintN) XP.gain(2, '一次写对');
       if (!good || hintN) {
         wrong.push(v);
         if (!test) { SRS.miss(it); MASTER.word(bk, ln, v.fr, false); }
@@ -747,7 +978,7 @@
       const pronounFree = norm(c.text.replace(/^(je|j'|tu|il|elle|nous|vous|ils|elles)\s*/, ''));
       let r = giveUp ? 'bad' : (a === t ? 'ok' : strip(a) === strip(t) ? (settings.lenient ? 'ok' : 'accent') : a === pronounFree ? 'pron' : 'bad');
       const good = r === 'ok';
-      if (good) right++;
+      if (good) { right++; XP.gain(1, '变位正确'); }
       const it = { book: book.id, n: v.n, kind: 'word', fr: c.text, zh: `${v.fr.replace(/\s*\(s'\)/, '')} · ${c.p}（现在时）`, pos: '变位' };
       good ? SRS.hit(it) : SRS.miss(it);
       $('#fb', box).innerHTML = `<div class="feedback ${good ? 'ok' : r === 'bad' ? 'bad' : 'accent'}">
@@ -803,6 +1034,7 @@
         if (r === 'ok') { ok++; SRS.hit(it); }
         else SRS.miss(it), inp.insertAdjacentHTML('afterend', `<span class="cloze-fix">${esc(inp.dataset.a)}</span>`);
       });
+      XP.gain(ok, `填空 ${ok} 个正确`);
       const s = ok / ins.length;
       $('#cscore', body).innerHTML = `<b>${ok}</b> / ${ins.length}`;
       ctx.save('phrases', s);
@@ -845,6 +1077,7 @@
       const d = diff(s.fr, giveUp ? '' : val);
       if (scores[i] == null) {
         scores[i] = d.score;
+        if (d.perfect) XP.gain(3, '句子全对');
         const it = { book: ctx.book.id, n: ctx.lecon.n, kind: 'sentence', fr: s.fr, zh: s.zh };
         d.perfect ? SRS.hit(it) : SRS.miss(it);
       }
@@ -1084,5 +1317,7 @@
     paint();
   }
 
+  renderStatus();
+  idbGet('handle').then(h => { if (h && h.queryPermission) h.queryPermission({ mode: 'readwrite' }).then(p => { if (p === 'granted') { BACKUP.handle = h; BACKUP.write(); } }); });
   route();
 })();
