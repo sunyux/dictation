@@ -15,6 +15,26 @@
   };
   const settings = Object.assign({ rate: 0.85, lenient: false, voice: '' }, store.get('settings', {}));
   const saveSettings = () => store.set('settings', settings);
+  if (!settings.lang) settings.lang = 'zh';
+  // language modes: 'zhen' 中英法 · 'zh' 中法 · 'en' 英法
+  const L = () => settings.lang;
+  const bi = (zh, en) => L() === 'en' ? en : zh;
+  const G = o => {
+    const zh = esc(o.zh || ''), en = esc(o.en || '');
+    if (L() === 'en') return en || zh;
+    if (L() === 'zhen' && en) return `${zh}<span class="en-gloss" lang="en">${en}</span>`;
+    return zh;
+  };
+  const Gt = o => L() === 'en' ? (o.en || o.zh || '') : (o.zh || '');   // plain text
+  const H = r => esc(L() === 'en' ? (r.hen || r.h) : r.h);
+  // attach English glosses to the book data
+  (function () {
+    const EV = window.EN_V || {}, ET = window.EN_T || {};
+    for (const b of BOOKS) for (const u of b.units) for (const l of u.lecons) {
+      l.vocab.forEach(v => { v.en = EV[l.n + ':' + v.fr] || EV[v.fr] || ''; });
+      l.text.forEach((r, k) => { const e = (ET[l.n] || [])[k] || ''; if (r.h) r.hen = e; else r.en = e; });
+    }
+  })();
   const progKey = (book, n) => `prog:${book}:${n}`;
   const getProg = (book, n) => store.get(progKey(book, n), {});
   function setProg(book, n, part, score) {
@@ -498,8 +518,9 @@
       if (r.h) { head = r.h; continue; }
       const zs = r.zh.replace(/^–\s*/, '').split(/(?<=[。！？])(?=.)/);
       const fs = r.fr.replace(/^–\s*/, '').split(/(?<=[.!?])\s+(?=[A-ZÀ-Ý–])/);
-      if (!r.fr.startsWith('–') && zs.length > 1 && zs.length === fs.length) zs.forEach((z, i) => out.push({ zh: z.trim(), fr: fs[i].trim(), head }));
-      else out.push({ zh: r.zh.replace(/^–\s*/, ''), fr: r.fr.replace(/^–\s*/, ''), head });
+      const es = (r.en || '').replace(/^–\s*/, '').split(/(?<=[.!?])\s+(?=[A-Z–])/);
+      if (!r.fr.startsWith('–') && zs.length > 1 && zs.length === fs.length) zs.forEach((z, i) => out.push({ zh: z.trim(), fr: fs[i].trim(), en: (es.length === fs.length ? es[i] : r.en || '').trim(), head }));
+      else out.push({ zh: r.zh.replace(/^–\s*/, ''), fr: r.fr.replace(/^–\s*/, ''), en: (r.en || '').replace(/^–\s*/, ''), head });
     }
     return out;
   }
@@ -585,7 +606,7 @@
         <section class="unit"><div class="unit-title"><h2 lang="fr">Leçon ${n}</h2><span>${list.length} 条</span></div>
         ${list.map(e => `<div class="err-row">
           <span class="err-kind">${KIND[e.kind]}</span>
-          <div class="err-body"><div lang="fr">${playBtn(e.kind === 'word' ? forms(e.fr).say : e.fr)} ${esc(e.fr)}</div><div class="lzh">${esc(e.zh)}${e.pos ? ' · ' + esc(e.pos) : ''}</div></div>
+          <div class="err-body"><div lang="fr">${playBtn(e.kind === 'word' ? forms(e.fr).say : e.fr)} ${esc(e.fr)}</div><div class="lzh">${e.kind === 'cloze' ? esc(e.zh) : G(e)}${e.pos ? ' · ' + esc(e.pos) : ''}</div></div>
           <span class="err-meta">错 ${e.wrong} 次<br>${e.due <= today ? '<b class="w-miss">&nbsp;今天&nbsp;</b>' : e.due.slice(5).replace('-', '/') + ' 复习'}</span>
           <button class="err-del" data-id="${esc(e.id)}" title="移出错题本" aria-label="移出错题本">×</button>
         </div>`).join('')}</section>`).join('')
@@ -619,10 +640,10 @@
         <div class="bar"><i style="width:${i / queue.length * 100}%"></i></div>
         <div class="prompt">${e.kind === 'cloze'
           ? `<div class="pzh long" lang="fr" style="font-family:var(--serif)">${esc(e.zh).replace('____', '<u>&emsp;?&emsp;</u>')}</div><div class="ppos">填出空缺的词</div>`
-          : `<div class="pzh ${e.zh.length > 30 ? 'long' : ''}">${esc(e.zh)}</div><div class="ppos">${esc(e.pos || '')}</div>`}</div>
-        ${word ? '<input class="answer-in" id="ans" lang="fr" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="用法语写…">'
-          : '<textarea class="answer-in" id="ans" lang="fr" rows="2" autocapitalize="off" spellcheck="false" placeholder="写出法语句子…"></textarea>'}
-        <div class="drill-actions"><button class="btn ghost small" id="skip">不会，看答案</button><span class="spacer"></span><span class="kbd"><kbd>Enter</kbd> 检查 / 下一个</span></div>
+          : `<div class="pzh ${e.zh.length > 30 ? 'long' : ''}">${G(e)}</div><div class="ppos">${esc(e.pos || '')}</div>`}</div>
+        ${word ? `<input class="answer-in" id="ans" lang="fr" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${bi('用法语写…', 'Write in French…')}">`
+          : `<textarea class="answer-in" id="ans" lang="fr" rows="2" autocapitalize="off" spellcheck="false" placeholder="${bi('写出法语句子…', 'Write the French sentence…')}"></textarea>`}
+        <div class="drill-actions"><button class="btn ghost small" id="skip">${bi('不会，看答案', 'Show answer')}</button><span class="spacer"></span><span class="kbd"><kbd>Enter</kbd> 检查 / 下一个</span></div>
         <div id="fb"></div></div>`;
       const inp = $('#ans', box); inp.focus();
       inp.onkeydown = ev => { if (ev.key === 'Enter' && !ev.shiftKey) { ev.preventDefault(); answered ? (i++, draw()) : check(); } };
@@ -702,7 +723,7 @@
       <p class="footer-note">进度保存在这台设备的浏览器里。</p>`;
   }
 
-  const TABS = [['vocab', '词汇', 'Vocabulaire'], ['phrases', '句子', 'Phrases'], ['full', '全文默写', 'Dictée'], ['recite', '背诵', 'Réciter']];
+  const TABS = [['vocab', '词汇', 'Vocabulary'], ['phrases', '句子', 'Sentences'], ['full', '全文默写', 'Full dictation'], ['recite', '背诵', 'Recite']];
   function viewLecon(book, unit, lecon, tab) {
     if (!TABS.some(t => t[0] === tab)) tab = 'vocab';
     document.title = `Leçon ${lecon.n} · ${lecon.title}`;
@@ -716,7 +737,7 @@
         <div class="zh">${esc(lecon.zh)}</div>
         ${progHTML(book, lecon, true)}
       </header>
-      <nav class="tabs" role="tablist">${TABS.map((t, i) => `<button class="tab" role="tab" aria-selected="${t[0] === tab}" data-tab="${t[0]}"><b>${i + 1}</b>${t[1]}</button>`).join('')}</nav>
+      <nav class="tabs" role="tablist">${TABS.map((t, i) => `<button class="tab" role="tab" aria-selected="${t[0] === tab}" data-tab="${t[0]}"><b>${i + 1}</b>${bi(t[1], t[2])}</button>`).join('')}</nav>
       <section id="pane"></section>
       <div class="toolbar" style="margin-top:40px">
         ${prev ? `<a class="btn ghost small" href="#/${book.id}/${prev.n}">‹ Leçon ${prev.n}</a>` : ''}
@@ -740,20 +761,20 @@
   function paneVocab(ctx, mode = store.get('vmode', 'list')) {
     const { lecon, pane } = ctx;
     store.set('vmode', mode);
-    const head = modeBar([['list', '浏览'], ['test', '首测'], ['write', '看中文默写'], ['listen', '听音拼写'], ['conj', '动词变位']], mode);
+    const head = modeBar([['list', bi('浏览', 'Browse')], ['test', bi('首测', 'First test')], ['write', bi('看中文默写', 'Meaning → French')], ['listen', bi('听音拼写', 'Listen & spell')], ['conj', bi('动词变位', 'Conjugation')]], mode);
     if (mode === 'list') {
       const groups = [];
       lecon.vocab.forEach(v => { let g = groups.find(x => x.g === v.g); if (!g) groups.push(g = { g: v.g, items: [] }); g.items.push(v); });
       const mst = MASTER.get(ctx.book.id, lecon.n);
       const hide = store.get('vhide', false), showTip = store.get('vtip', true);
       pane.innerHTML = head.replace('<span class="spacer"></span>', `<span class="spacer"></span>
-          <label class="kbd" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="vhide" ${hide ? 'checked' : ''}> 遮住法语</label>
-          <label class="kbd" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="vtip" ${showTip ? 'checked' : ''}> 记忆提示</label>
-          <button class="btn ghost small" id="vplay">${ICON.play} 全部朗读</button>`) +
+          <label class="kbd" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="vhide" ${hide ? 'checked' : ''}> ${bi('遮住法语', 'Hide French')}</label>
+          <label class="kbd" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="vtip" ${showTip ? 'checked' : ''}> ${bi('记忆提示', 'Memory tips')}</label>
+          <button class="btn ghost small" id="vplay">${ICON.play} ${bi('全部朗读', 'Read all')}</button>`) +
         groups.map(g => `<div class="vgroup"><h3>${esc(g.g || '')}</h3>${g.items.map(v => `
           <div class="vrow ${hide ? 'hidefr' : ''} ${mst.w[v.fr] ? 'mastered' : ''}" data-say="${esc(forms(v.fr).say)}">
             <span class="play">${ICON.play}</span>
-            <span class="vzh">${esc(v.zh)}</span><span class="pos">${esc(v.pos)}</span>
+            <span class="vzh">${G(v)}</span><span class="pos">${esc(v.pos)}</span>
             <span class="vfr" lang="fr">${esc(v.fr)}</span>
             ${wordTip(lecon.n, v) ? `<span class="vtip" ${showTip ? '' : 'hidden'}>${wordTip(lecon.n, v)}</span>` : ''}</div>`).join('')}</div>`).join('');
       $('#vtip').onchange = e => { store.set('vtip', e.target.checked); $$('.vtip', pane).forEach(t => t.hidden = !e.target.checked); };
@@ -809,11 +830,11 @@
         <div class="bar"><i style="width:${i / queue.length * 100}%"></i></div>
         <div class="prompt">${listen
           ? `${playBtn(forms(v.fr).say, 'big')}<div class="ppos">${esc(v.pos)}</div>`
-          : `<div class="pzh">${esc(v.zh)}</div><div class="ppos">${esc(v.pos)}${v.g ? ' · ' + esc(v.g) : ''}</div>`}</div>
-        <input class="answer-in" id="ans" lang="fr" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="用法语写…">
+          : `<div class="pzh">${G(v)}</div><div class="ppos">${esc(v.pos)}${v.g ? ' · ' + esc(v.g) : ''}</div>`}</div>
+        <input class="answer-in" id="ans" lang="fr" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${bi('用法语写…', 'Write in French…')}">
         <div class="drill-actions">
           ${test ? '' : '<button class="btn ghost small" id="hint">提示一个字母</button>'}
-          <button class="btn ghost small" id="skip">不会，看答案</button>
+          <button class="btn ghost small" id="skip">${bi('不会，看答案', 'Show answer')}</button>
           <span class="spacer"></span>
           <span class="kbd"><kbd>Enter</kbd> 检查 / 下一个</span>
         </div>
@@ -841,7 +862,7 @@
       const fb = $('#fb', box);
       const good = r === 'ok';
       if (good && !hintN) firstTry++;
-      const it = { book: ctx.book.id, n: ctx.lecon.n, kind: 'word', fr: v.fr, zh: v.zh, pos: v.pos };
+      const it = { book: ctx.book.id, n: ctx.lecon.n, kind: 'word', fr: v.fr, zh: v.zh, en: v.en, pos: v.pos };
       const bk = ctx.book.id, ln = ctx.lecon.n;
       if (good && !hintN) XP.gain(2, '一次写对');
       if (!good || hintN) {
@@ -851,7 +872,7 @@
       else SRS.hit(it);
       fb.innerHTML = `<div class="feedback ${r}">
         <span class="lab">${good ? (hintN ? '对了（用了提示）' : '完全正确') : r === 'accent' ? '差一点：注意重音符号' : giveUp ? '答案' : '不对，正确答案是'}</span>
-        <div class="ans" lang="fr">${playBtn(forms(v.fr).say)} ${esc(v.fr)} ${listen ? `<span class="kbd" style="font-family:var(--zh)">${esc(v.zh)}</span>` : ''}</div>
+        <div class="ans" lang="fr">${playBtn(forms(v.fr).say)} ${esc(v.fr)} ${listen ? `<span class="kbd" style="font-family:var(--zh)">${G(v)}</span>` : ''}</div>
         ${tipBox(wordTip(ctx.lecon.n, v))}</div>`;
       TTS.say(forms(v.fr).say);
       if (good && !hintN) setTimeout(() => { if (answered && queue[i] === v) { i++; draw(); } }, wordTip(ctx.lecon.n, v) ? 1800 : 1100);
@@ -866,7 +887,7 @@
         <div class="score">${Math.round(score * 100)}%</div>
         <p>${queue.length} 个里一次写对 ${firstTry} 个 · 本课词汇已掌握 ${st.words}/${st.totalWords}${st.vocabDone ? ' · <b>词汇通过</b>' : ''}</p>
         ${test && wrong.length ? '<p class="kbd">写错的词没有进错题本，去「看中文默写」或「听音拼写」练它们。</p>' : ''}
-        ${wrong.length ? `<ul>${wrong.map(v => `<li><span lang="fr">${esc(v.fr)}</span><span class="w-zh">${esc(v.zh)}</span></li>`).join('')}</ul>` : '<p>全部正确，很棒。</p>'}
+        ${wrong.length ? `<ul>${wrong.map(v => `<li><span lang="fr">${esc(v.fr)}</span><span class="w-zh">${G(v)}</span></li>`).join('')}</ul>` : '<p>全部正确，很棒。</p>'}
         <div class="drill-actions" style="justify-content:center">
           ${wrong.length ? '<button class="btn" id="again-wrong">只练错的</button>' : ''}
           <button class="btn ghost" id="again">重新开始</button></div></div>`;
@@ -951,11 +972,11 @@
         <div class="count">${i + 1} / ${queue.length}</div>
         <div class="bar"><i style="width:${i / queue.length * 100}%"></i></div>
         <div class="prompt">${see
-          ? `<div class="pzh" lang="fr" style="font-family:var(--serif)">${esc(v.fr.replace(/\s*\(s'\)/, '').replace(/^/, /\(s'\)/.test(v.fr) ? "s'" : ''))} · <b>${esc(c.text.split(' ')[0].replace(/^j'.*/, 'je'))}</b></div><div class="ppos">${esc(v.zh)} · 现在时</div>`
+          ? `<div class="pzh" lang="fr" style="font-family:var(--serif)">${esc(v.fr.replace(/\s*\(s'\)/, '').replace(/^/, /\(s'\)/.test(v.fr) ? "s'" : ''))} · <b>${esc(c.text.split(' ')[0].replace(/^j'.*/, 'je'))}</b></div><div class="ppos">${G(v)} · 现在时</div>`
           : `${playBtn(c.text, 'big')}<div class="ppos">听，然后写下「主语 + 动词」· 现在时</div>`}</div>
         <input class="answer-in" id="ans" lang="fr" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="例如：nous parlons">
         <div class="drill-actions">
-          <button class="btn ghost small" id="skip">不会，看答案</button><span class="spacer"></span>
+          <button class="btn ghost small" id="skip">${bi('不会，看答案', 'Show answer')}</button><span class="spacer"></span>
           <span class="kbd"><kbd>Enter</kbd> 检查 / 下一个</span></div>
         <div id="fb"></div>
         <details class="tips-all"><summary>本组动词的记忆提示</summary>${verbs.map(x => `<div class="tip"><span class="tip-lab" lang="fr">${esc(x.fr)}</span>${verbTip(x.fr)}</div>`).join('')}</details>
@@ -983,7 +1004,7 @@
       good ? SRS.hit(it) : SRS.miss(it);
       $('#fb', box).innerHTML = `<div class="feedback ${good ? 'ok' : r === 'bad' ? 'bad' : 'accent'}">
         <span class="lab">${good ? '正确' : r === 'accent' ? '差一点：注意重音' : r === 'pron' ? '动词对了，记得连主语一起写' : '正确答案'}</span>
-        <div class="ans" lang="fr">${playBtn(c.text)} ${esc(c.text)} <span class="kbd" style="font-family:var(--zh)">${esc(v.fr)} · ${esc(v.zh)}</span></div>
+        <div class="ans" lang="fr">${playBtn(c.text)} ${esc(c.text)} <span class="kbd" style="font-family:var(--zh)">${esc(v.fr)} · ${G(v)}</span></div>
         <div class="tip"><span class="tip-lab">记忆提示</span>${verbTip(v.fr)}</div></div>`;
       if (see || !good) TTS.say(c.text);
       if (good) setTimeout(() => { if (answered && queue[i] && queue[i].c === c) { i++; draw(); } }, 1600);
@@ -995,7 +1016,7 @@
   function panePhrases(ctx, mode = store.get('pmode', 'cloze')) {
     const { lecon, pane } = ctx;
     store.set('pmode', mode);
-    pane.innerHTML = modeBar([['cloze', '课文填空'], ['zh2fr', '逐句中译法'], ['dictee', '逐句听写']], mode) + '<div id="pbody"></div>';
+    pane.innerHTML = modeBar([['cloze', bi('课文填空', 'Fill the gaps')], ['zh2fr', bi('逐句中译法', L() === 'zhen' ? '逐句翻译' : 'Translate')], ['dictee', bi('逐句听写', 'Dictation')]], mode) + '<div id="pbody"></div>';
     bindModes(pane, m => panePhrases(ctx, m));
     const body = $('#pbody', pane);
     if (mode === 'cloze') cloze(ctx, body);
@@ -1016,7 +1037,7 @@
         return `<div class="tline"><div class="row">${playBtn(full)}<div class="body lfr" lang="fr">${row.map(s => typeof s === 'string' ? esc(s)
           : `<input class="cloze-in" data-i="${bi++}" data-a="${esc(s.b)}" size="${Math.max(3, s.b.length + 1)}" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="填空">`).join('')}</div></div></div>`;
       }).join('')}</div>
-      <div class="toolbar" style="margin-top:16px"><button class="btn" id="ccheck">检查</button><button class="btn ghost" id="cshow">显示答案</button><button class="btn ghost" id="cclear">清空</button><span class="spacer"></span><span class="scorebox" id="cscore"></span></div>`;
+      <div class="toolbar" style="margin-top:16px"><button class="btn" id="ccheck">${bi('检查', 'Check')}</button><button class="btn ghost" id="cshow">${bi('显示答案', 'Show answers')}</button><button class="btn ghost" id="cclear">${bi('清空', 'Clear')}</button><span class="spacer"></span><span class="scorebox" id="cscore"></span></div>`;
     const ins = $$('.cloze-in', body);
     ins.forEach((inp, k) => inp.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); (ins[k + 1] || $('#ccheck', body)).focus(); } });
     ins[0] && ins[0].focus();
@@ -1055,8 +1076,8 @@
         <div class="count">${i + 1} / ${list.length}</div>
         <div class="bar"><i style="width:${i / list.length * 100}%"></i></div>
         <div class="prompt">${dictee ? playBtn(s.fr, 'big') + '<div class="ppos">听，然后写下来 · 可反复点播放</div>'
-          : `<div class="pzh ${s.zh.length > 30 ? 'long' : ''}">${esc(s.zh)}</div>`}</div>
-        <textarea class="answer-in" id="ans" lang="fr" rows="2" autocapitalize="off" spellcheck="false" placeholder="写出法语句子…"></textarea>
+          : `<div class="pzh ${s.zh.length > 30 ? 'long' : ''}">${G(s)}</div>`}</div>
+        <textarea class="answer-in" id="ans" lang="fr" rows="2" autocapitalize="off" spellcheck="false" placeholder="${bi('写出法语句子…', 'Write the French sentence…')}"></textarea>
         <div class="drill-actions">
           ${dictee ? '' : playBtn(s.fr)}
           <button class="btn ghost small" id="prev" ${i ? '' : 'disabled'}>上一句</button>
@@ -1078,7 +1099,7 @@
       if (scores[i] == null) {
         scores[i] = d.score;
         if (d.perfect) XP.gain(3, '句子全对');
-        const it = { book: ctx.book.id, n: ctx.lecon.n, kind: 'sentence', fr: s.fr, zh: s.zh };
+        const it = { book: ctx.book.id, n: ctx.lecon.n, kind: 'sentence', fr: s.fr, zh: s.zh, en: s.en };
         d.perfect ? SRS.hit(it) : SRS.miss(it);
       }
       const cls = d.perfect ? 'ok' : d.score > 0.7 ? 'accent' : 'bad';
@@ -1086,7 +1107,7 @@
         <span class="lab">${d.perfect ? '完全正确' : giveUp ? '答案' : `对了 ${Math.round(d.score * 100)}% · 绿色=对 · 波浪线=重音 · 红色=漏写或写错`}</span>
         <div class="ans" lang="fr">${playBtn(s.fr)}<span>${giveUp ? esc(s.fr) : marked(s.fr, d.st)}</span></div>
         ${d.extra.length && !giveUp ? `<span class="lab">多写/拼错的词：<span class="w-extra" lang="fr">${esc(d.extra.join(' '))}</span></span>` : ''}
-        ${dictee ? `<span class="lab" style="font-family:var(--zh);margin-top:6px">${esc(s.zh)}</span>` : ''}</div>`;
+        ${dictee ? `<span class="lab" style="font-family:var(--zh);margin-top:6px">${G(s)}</span>` : ''}</div>`;
       if (!dictee) TTS.say(s.fr);
     };
     const done = () => {
@@ -1111,18 +1132,18 @@
     pane.innerHTML = `
       <p class="hint-text">对照中文，把整篇课文默写出来。写完点「检查全部」。草稿会自动保存。</p>
       <div class="toolbar">
-        <button class="btn ghost small" id="fplay">${ICON.play} 播放全文</button>
-        <label class="kbd" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="fhide" ${hideZh ? 'checked' : ''}> 隐藏中文（纯听写）</label>
+        <button class="btn ghost small" id="fplay">${ICON.play} ${bi('播放全文', 'Play all')}</button>
+        <label class="kbd" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="fhide" ${hideZh ? 'checked' : ''}> ${bi('隐藏中文（纯听写）', 'Hide translation (pure dictation)')}</label>
         <span class="spacer"></span><span class="scorebox" id="fscore"></span>
       </div>
       <div class="textblock" id="flines">${lecon.text.map((r, k) => r.h
-        ? `<div class="tline h" lang="fr">${esc(r.h)}</div>`
+        ? `<div class="tline h" lang="fr">${H(r)}</div>`
         : `<div class="tline" data-k="${k}"><div class="row">${playBtn(r.fr)}<div class="body">
-            <div class="lzh" ${hideZh ? 'hidden' : ''}>${esc(r.zh)}</div>
+            <div class="lzh" ${hideZh ? 'hidden' : ''}>${G(r)}</div>
             <textarea class="answer-in full-in" lang="fr" rows="1" data-k="${k}" autocapitalize="off" spellcheck="false" placeholder="…">${esc(draft[k] || '')}</textarea>
             <div class="full-res"></div></div></div></div>`).join('')}</div>
       <div class="toolbar" style="margin-top:16px">
-        <button class="btn" id="fcheck">检查全部</button><button class="btn ghost" id="fshow">显示答案</button><button class="btn ghost" id="fclear">清空</button>
+        <button class="btn" id="fcheck">${bi('检查全部', 'Check all')}</button><button class="btn ghost" id="fshow">${bi('显示答案', 'Show answers')}</button><button class="btn ghost" id="fclear">${bi('清空', 'Clear')}</button>
       </div>`;
     const areas = $$('.full-in', pane);
     const grow = t => { t.style.height = 'auto'; t.style.height = t.scrollHeight + 'px'; };
@@ -1137,7 +1158,7 @@
       areas.forEach(t => {
         const r = lecon.text[t.dataset.k], d = diff(r.fr, t.value);
         total += d.score;
-        if (t.value.trim()) { const it = { book: book.id, n: lecon.n, kind: 'sentence', fr: r.fr.replace(/^–\s*/, ''), zh: r.zh.replace(/^–\s*/, '') }; d.perfect ? SRS.hit(it) : SRS.miss(it); if (d.perfect) MASTER.line(book.id, lecon.n, +t.dataset.k); }
+        if (t.value.trim()) { const it = { book: book.id, n: lecon.n, kind: 'sentence', fr: r.fr.replace(/^–\s*/, ''), zh: r.zh.replace(/^–\s*/, ''), en: (r.en || '').replace(/^–\s*/, '') }; d.perfect ? SRS.hit(it) : SRS.miss(it); if (d.perfect) MASTER.line(book.id, lecon.n, +t.dataset.k); }
         t.nextElementSibling.innerHTML = d.perfect ? `<span class="w-ok">✓</span>`
           : `<div lang="fr">${marked(r.fr, d.st)}</div>${d.extra.length ? `<div class="yours">多写/拼错：<span class="w-extra">${esc(d.extra.join(' '))}</span></div>` : ''}`;
       });
@@ -1179,20 +1200,20 @@
     let finished = false;
     let base = 0;        // p at start of the current recognition chunk
     const veil = mode !== 'read';
-    pane.innerHTML = modeBar([['read', '看着原文读'], ['zh', '看中文背'], ['blind', '盲背']], mode) + `
+    pane.innerHTML = modeBar([['read', bi('看着原文读', 'Read along')], ['zh', bi('看中文背', 'From the translation')], ['blind', bi('盲背', 'By heart')]], mode) + `
       ${SR ? '' : '<div class="notice">这个浏览器不支持语音识别。请用 Chrome 或 Safari（macOS）打开；也可以在页面底部打字背诵。</div>'}
       <div class="recite-ctrl">
         <button class="mic" id="mic" aria-label="开始背诵" title="开始 / 停止" ${SR ? '' : 'disabled'}>${ICON.mic}</button>
         <div class="heard" id="heard">${SR ? '点麦克风开始说法语。说对的词会逐个显现；卡住了可以点灰色的词看提示。' : ''}</div>
         <span class="scorebox" id="rscore"></span>
-        <button class="btn ghost small" id="rreset">重来</button>
+        <button class="btn ghost small" id="rreset">${bi('重来', 'Restart')}</button>
       </div>
       <div class="textblock ${veil ? 'veil' : ''}" id="rlines">${rows.map(r => r.h
-        ? `<div class="tline h" lang="fr">${esc(r.h)}</div>`
+        ? `<div class="tline h" lang="fr">${H(r)}</div>`
         : `<div class="tline" data-line="${r.k}"><div class="row">${playBtn(r.fr)}<div class="body">
-            ${mode === 'blind' ? '' : mode === 'zh' ? `<div class="lzh">${esc(r.zh)}</div>` : ''}
+            ${mode === 'blind' ? '' : mode === 'zh' ? `<div class="lzh">${G(r)}</div>` : ''}
             <div class="lfr" lang="fr">${markup(r.fr, () => 'rw todo')}</div>
-            ${mode === 'read' ? `<div class="lzh">${esc(r.zh)}</div>` : ''}</div></div></div>`).join('')}</div>
+            ${mode === 'read' ? `<div class="lzh">${G(r)}</div>` : ''}</div></div></div>`).join('')}</div>
       <input class="typed-recite" id="typed" lang="fr" placeholder="没有麦克风？在这里打字背，空格分词，效果相同" autocapitalize="off" spellcheck="false">
       <p class="kbd">点击某一行左侧的空白处，可以从那一行开始背。</p>`;
     bindModes(pane, m => { stopRec(); paneRecite(ctx, m); });
@@ -1220,7 +1241,7 @@
         ctx.save('recite', ok / toks.length);
         rows.forEach(r => { if (r.h) return; const lt = toks.filter(t => t.line === r.k);
           if (lt.every(t => t.st === 'ok')) MASTER.line(ctx.book.id, ctx.lecon.n, r.k);
-          else SRS.miss({ book: ctx.book.id, n: ctx.lecon.n, kind: 'sentence', fr: r.fr.replace(/^–\s*/, ''), zh: r.zh.replace(/^–\s*/, '') }); });
+          else SRS.miss({ book: ctx.book.id, n: ctx.lecon.n, kind: 'sentence', fr: r.fr.replace(/^–\s*/, ''), zh: r.zh.replace(/^–\s*/, ''), en: (r.en || '').replace(/^–\s*/, '') }); });
         $('#heard', pane).innerHTML = `背完了！正确率 ${Math.round(ok / toks.length * 100)}%。红色的词是漏掉或没念清楚的。`;
         stopRec();
       }
@@ -1317,6 +1338,12 @@
     paint();
   }
 
+  function renderLang() {
+    const el = $('#langsw'); if (!el) return;
+    el.innerHTML = [['zhen', '中英法'], ['zh', '中法'], ['en', '英法']].map(([k, t]) => `<button data-lang="${k}" aria-pressed="${L() === k}">${t}</button>`).join('');
+    $$('button', el).forEach(b => b.onclick = () => { settings.lang = b.dataset.lang; saveSettings(); renderLang(); route(); });
+  }
+  renderLang();
   renderStatus();
   idbGet('handle').then(h => { if (h && h.queryPermission) h.queryPermission({ mode: 'readwrite' }).then(p => { if (p === 'granted') { BACKUP.handle = h; BACKUP.write(); } }); });
   route();

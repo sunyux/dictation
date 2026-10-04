@@ -320,3 +320,12 @@ kbd { font: 12px ui-monospace, monospace; border: 1px solid var(--line); border-
 .stamp.on .st-city { fill: #2b2436; }
 .stamp.on .st-sub { fill: #6a6070; }
 @media (max-width: 720px) { .status .st-txt { display: none; } }
+
+/* language modes */
+.langsw { display: flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; flex: none; }
+.langsw button { border: none; background: none; padding: 4px 10px; font: 13px var(--zh); color: var(--ink-2); cursor: pointer; }
+.langsw button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.en-gloss { display: block; font: italic 0.9em/1.45 var(--serif); color: var(--ink-2); }
+.vzh .en-gloss { font-size: 15px; }
+.pzh .en-gloss { font-size: 18px; margin-top: 2px; }
+@media (max-width: 720px) { .langsw button { padding: 4px 7px; } .crumbs { display: none; } }
