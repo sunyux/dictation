@@ -329,3 +329,4 @@ kbd { font: 12px ui-monospace, monospace; border: 1px solid var(--line); border-
 .vzh .en-gloss { font-size: 15px; }
 .pzh .en-gloss { font-size: 18px; margin-top: 2px; }
 @media (max-width: 720px) { .langsw button { padding: 4px 7px; } .crumbs { display: none; } }
+html[data-lang="en"] .lecon-head .zh, html[data-lang="en"] .lecon-card .zh { display: none; }

@@ -27,6 +27,38 @@
   };
   const Gt = o => L() === 'en' ? (o.en || o.zh || '') : (o.zh || '');   // plain text
   const H = r => esc(L() === 'en' ? (r.hen || r.h) : r.h);
+  // 英法 mode: translate the remaining Chinese UI text fragments (see i18n.js)
+  const CJK = /[\u3400-\u9fff\uff08-\uff1f]/;
+  function tr(str) {
+    if (L() !== 'en' || !str || !CJK.test(str)) return str;
+    const t = str.trim();
+    for (const [re, en] of (window.ZH_EN || [])) if (re.test(t)) return str.replace(t, t.replace(re, en));
+    return str;
+  }
+  const SKIP = '.brand, .cover, #langsw, .book-head h1, .crumbs, [lang="fr"]';
+  function translateTree(root) {
+    if (L() !== 'en' || !root) return;
+    if (root.nodeType === 3) { if (!root.parentElement || !root.parentElement.closest(SKIP)) { const v = tr(root.nodeValue); if (v !== root.nodeValue) root.nodeValue = v; } return; }
+    if (root.nodeType !== 1 || root.closest(SKIP)) return;
+    for (const a of ['placeholder', 'title', 'aria-label']) if (root.hasAttribute && root.hasAttribute(a)) { const v = tr(root.getAttribute(a)); if (v !== root.getAttribute(a)) root.setAttribute(a, v); }
+    const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT);
+    let n;
+    while ((n = w.nextNode())) {
+      if (n.nodeType === 1) {
+        if (n.closest(SKIP)) continue;
+        for (const a of ['placeholder', 'title', 'aria-label']) if (n.hasAttribute(a)) { const v = tr(n.getAttribute(a)); if (v !== n.getAttribute(a)) n.setAttribute(a, v); }
+      } else if (CJK.test(n.nodeValue) && !n.parentElement.closest(SKIP)) {
+        const v = tr(n.nodeValue); if (v !== n.nodeValue) n.nodeValue = v;
+      }
+    }
+  }
+  new MutationObserver(ms => {
+    if (L() !== 'en') return;
+    for (const m of ms) {
+      if (m.type === 'characterData') translateTree(m.target);
+      else m.addedNodes.forEach(translateTree);
+    }
+  }).observe(document.body, { childList: true, subtree: true, characterData: true });
   // attach English glosses to the book data
   (function () {
     const EV = window.EN_V || {}, ET = window.EN_T || {};
@@ -313,7 +345,7 @@
     $('#bk-dl', main).onclick = () => { BACKUP.download(); viewMe(); };
     $('#bk-up', main).onchange = async e => {
       try { BACKUP.merge(JSON.parse(await e.target.files[0].text())); toast('已恢复', '备份已合并进来'); renderStatus(); viewMe(); }
-      catch { alert('这个文件读不出来。'); }
+      catch { alert(tr('这个文件读不出来。')); }
     };
     if (fsOK) {
       $('#bk-auto', main).onclick = async () => { try { await BACKUP.pickFile(); toast('已开启', '自动保存'); viewMe(); } catch { } };
@@ -620,7 +652,7 @@
     $('#exp', main).onclick = () => BACKUP.download();
     $('#imp', main).onchange = async e => {
       try { BACKUP.merge(JSON.parse(await e.target.files[0].text())); viewReview(); }
-      catch { alert('这个文件读不出来。'); }
+      catch { alert(tr('这个文件读不出来。')); }
     };
   }
 
@@ -916,8 +948,14 @@
   };
   function verbTip(fr) {
     const inf = fr.replace(/\s*\(s'\)/, '').trim();
-    if (TIPS[inf]) return TIPS[inf];
     const root = inf.slice(0, -2);
+    if (L() === 'en') {
+      const E = window.VERB_TIPS_EN || {};
+      if (E[inf]) return esc(E[inf]);
+      return `<b lang="fr">${esc(root)}</b> + <b lang="fr">er</b> — a regular -er verb. Drop -er to get the stem ${esc(root)}-, then add -e · -es · -e · -ons · -ez · -ent. je / tu / il / ils all sound the same (-es and -ent are silent).` +
+        (vowel(inf) ? ` It starts with a vowel, so je becomes <span lang="fr">j'${esc(root)}e</span>.` : '');
+    }
+    if (TIPS[inf]) return TIPS[inf];
     return `<b lang="fr">${esc(root)}</b> + <b lang="fr">er</b>，第一组规则动词。去掉 -er 留下词根 ${esc(root)}-，再加词尾 -e · -es · -e · -ons · -ez · -ent。je / tu / il / ils 四个读音一样（-es、-ent 不发音）。` +
       (vowel(inf) ? `以元音开头，所以 je 要省略成 <span lang="fr">j'${esc(root)}e</span>。` : '');
   }
@@ -941,7 +979,8 @@
   }
   function wordTip(n, v) {
     const T = window.TIPS || {};
-    const t = T[n + ':' + v.fr] || T[v.fr];
+    const TT = L() === 'en' ? (window.TIPS_EN || {}) : T;
+    const t = TT[n + ':' + v.fr] || TT[v.fr];
     if (t) return esc(t).replace(/\{([^}]+)\}/g, '<b lang="fr">$1</b>');
     return v.pos && v.pos.startsWith('v') && conjugate(v.fr) ? verbTip(v.fr) : '';
   }
@@ -1000,7 +1039,7 @@
       let r = giveUp ? 'bad' : (a === t ? 'ok' : strip(a) === strip(t) ? (settings.lenient ? 'ok' : 'accent') : a === pronounFree ? 'pron' : 'bad');
       const good = r === 'ok';
       if (good) { right++; XP.gain(1, '变位正确'); }
-      const it = { book: book.id, n: v.n, kind: 'word', fr: c.text, zh: `${v.fr.replace(/\s*\(s'\)/, '')} · ${c.p}（现在时）`, pos: '变位' };
+      const it = { book: book.id, n: v.n, kind: 'word', fr: c.text, zh: `${v.fr.replace(/\s*\(s'\)/, '')} · ${c.p}（现在时）`, en: `${v.fr.replace(/\s*\(s'\)/, '')} · ${c.p} (present tense)`, pos: '变位' };
       good ? SRS.hit(it) : SRS.miss(it);
       $('#fb', box).innerHTML = `<div class="feedback ${good ? 'ok' : r === 'bad' ? 'bad' : 'accent'}">
         <span class="lab">${good ? '正确' : r === 'accent' ? '差一点：注意重音' : r === 'pron' ? '动词对了，记得连主语一起写' : '正确答案'}</span>
@@ -1168,7 +1207,7 @@
     };
     $('#fshow', pane).onclick = () => areas.forEach(t => { t.nextElementSibling.innerHTML = `<div lang="fr" class="w-ok">${esc(lecon.text[t.dataset.k].fr)}</div>`; });
     $('#fclear', pane).onclick = () => {
-      if (!confirm('清空这一课的默写草稿？')) return;
+      if (!confirm(tr('清空这一课的默写草稿？'))) return;
       areas.forEach(t => { t.value = ''; grow(t); t.nextElementSibling.innerHTML = ''; });
       store.set(dkey, {}); for (const k in draft) delete draft[k];
       $('#fscore', pane).textContent = '';
@@ -1341,10 +1380,12 @@
   function renderLang() {
     const el = $('#langsw'); if (!el) return;
     el.innerHTML = [['zhen', '中英法'], ['zh', '中法'], ['en', '英法']].map(([k, t]) => `<button data-lang="${k}" aria-pressed="${L() === k}">${t}</button>`).join('');
-    $$('button', el).forEach(b => b.onclick = () => { settings.lang = b.dataset.lang; saveSettings(); renderLang(); route(); });
+    document.documentElement.dataset.lang = L();
+    $$('button', el).forEach(b => b.onclick = () => { settings.lang = b.dataset.lang; saveSettings(); location.reload(); });
   }
   renderLang();
   renderStatus();
+  translateTree(document.body);
   idbGet('handle').then(h => { if (h && h.queryPermission) h.queryPermission({ mode: 'readwrite' }).then(p => { if (p === 'granted') { BACKUP.handle = h; BACKUP.write(); } }); });
   route();
 })();
