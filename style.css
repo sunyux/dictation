@@ -330,3 +330,10 @@ kbd { font: 12px ui-monospace, monospace; border: 1px solid var(--line); border-
 .pzh .en-gloss { font-size: 18px; margin-top: 2px; }
 @media (max-width: 720px) { .langsw button { padding: 4px 7px; } .crumbs { display: none; } }
 html[data-lang="en"] .lecon-head .zh, html[data-lang="en"] .lecon-card .zh { display: none; }
+.en-ui { font: italic 0.88em var(--serif); color: var(--ink-2); margin-left: .4em; }
+.en-ui.block { display: block; margin: 2px 0 0; }
+.btn .en-ui, .mode[aria-pressed="true"] .en-ui, .langsw .en-ui { color: inherit; opacity: .8; }
+.tip-en { display: block; margin-top: 4px; font: italic 15px/1.5 var(--serif); color: var(--ink-2); }
+.tip-en b { font-style: normal; }
+.vtip .tip-en { font-size: 14px; }
+.top .en-ui, .pl .en-ui, .pn .en-ui { display: none; }

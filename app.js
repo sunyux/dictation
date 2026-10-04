@@ -18,7 +18,8 @@
   if (!settings.lang) settings.lang = 'zh';
   // language modes: 'zhen' 中英法 · 'zh' 中法 · 'en' 英法
   const L = () => settings.lang;
-  const bi = (zh, en) => L() === 'en' ? en : zh;
+  const BI = {};
+  const bi = (zh, en) => { BI[zh] = en; return L() === 'en' ? en : zh; };
   const G = o => {
     const zh = esc(o.zh || ''), en = esc(o.en || '');
     if (L() === 'en') return en || zh;
@@ -29,31 +30,45 @@
   const H = r => esc(L() === 'en' ? (r.hen || r.h) : r.h);
   // 英法 mode: translate the remaining Chinese UI text fragments (see i18n.js)
   const CJK = /[\u3400-\u9fff\uff08-\uff1f]/;
-  function tr(str) {
-    if (L() !== 'en' || !str || !CJK.test(str)) return str;
-    const t = str.trim();
-    for (const [re, en] of (window.ZH_EN || [])) if (re.test(t)) return str.replace(t, t.replace(re, en));
-    return str;
+  function enFor(t) {
+    if (BI[t]) return t.replace(t, BI[t]);
+    for (const [re, en] of (window.ZH_EN || [])) if (re.test(t)) return t.replace(re, en);
+    return null;
   }
-  const SKIP = '.brand, .cover, #langsw, .book-head h1, .crumbs, [lang="fr"]';
+  // 英法: Chinese → English.  中英法: Chinese followed by English.
+  function tr(str) {
+    if (L() === 'zh' || !str || !CJK.test(str)) return str;
+    const t = str.trim(), en = enFor(t);
+    if (!en) return str;
+    return L() === 'en' ? str.replace(t, en) : str.replace(t, `${t} · ${en}`);
+  }
+  const SKIP = '.brand, .cover, #langsw, .book-head h1, .crumbs, [lang="fr"], [data-tr]';
+  function fixNode(n) {
+    if (!CJK.test(n.nodeValue) || !n.parentElement || n.parentElement.closest(SKIP)) return;
+    const t = n.nodeValue.trim(), en = enFor(t);
+    if (!en) return;
+    if (L() === 'en') { n.nodeValue = n.nodeValue.replace(t, en); return; }
+    const wrap = document.createElement('span');
+    wrap.dataset.tr = '1';
+    const long = en.length > 36 && !n.parentElement.closest('button, .btn, .mode, .tab, label, .kbd');
+    wrap.innerHTML = `${esc(n.nodeValue)}<span class="en-ui ${long ? 'block' : ''}" lang="en">${esc(en)}</span>`;
+    n.replaceWith(wrap);
+  }
+  function fixAttrs(el) {
+    for (const a of ['placeholder', 'title', 'aria-label']) if (el.hasAttribute(a)) { const v = tr(el.getAttribute(a)); if (v !== el.getAttribute(a)) el.setAttribute(a, v); }
+  }
   function translateTree(root) {
-    if (L() !== 'en' || !root) return;
-    if (root.nodeType === 3) { if (!root.parentElement || !root.parentElement.closest(SKIP)) { const v = tr(root.nodeValue); if (v !== root.nodeValue) root.nodeValue = v; } return; }
+    if (L() === 'zh' || !root) return;
+    if (root.nodeType === 3) return fixNode(root);
     if (root.nodeType !== 1 || root.closest(SKIP)) return;
-    for (const a of ['placeholder', 'title', 'aria-label']) if (root.hasAttribute && root.hasAttribute(a)) { const v = tr(root.getAttribute(a)); if (v !== root.getAttribute(a)) root.setAttribute(a, v); }
-    const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT);
+    fixAttrs(root);
+    const texts = [], w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT);
     let n;
-    while ((n = w.nextNode())) {
-      if (n.nodeType === 1) {
-        if (n.closest(SKIP)) continue;
-        for (const a of ['placeholder', 'title', 'aria-label']) if (n.hasAttribute(a)) { const v = tr(n.getAttribute(a)); if (v !== n.getAttribute(a)) n.setAttribute(a, v); }
-      } else if (CJK.test(n.nodeValue) && !n.parentElement.closest(SKIP)) {
-        const v = tr(n.nodeValue); if (v !== n.nodeValue) n.nodeValue = v;
-      }
-    }
+    while ((n = w.nextNode())) n.nodeType === 1 ? (!n.closest(SKIP) && fixAttrs(n)) : texts.push(n);
+    texts.forEach(fixNode);
   }
   new MutationObserver(ms => {
-    if (L() !== 'en') return;
+    if (L() === 'zh') return;
     for (const m of ms) {
       if (m.type === 'characterData') translateTree(m.target);
       else m.addedNodes.forEach(translateTree);
@@ -345,7 +360,7 @@
     $('#bk-dl', main).onclick = () => { BACKUP.download(); viewMe(); };
     $('#bk-up', main).onchange = async e => {
       try { BACKUP.merge(JSON.parse(await e.target.files[0].text())); toast('已恢复', '备份已合并进来'); renderStatus(); viewMe(); }
-      catch { alert(tr('这个文件读不出来。')); }
+      catch { alert(tr('这个文件读不出来。').replace(' · ', '\n')); }
     };
     if (fsOK) {
       $('#bk-auto', main).onclick = async () => { try { await BACKUP.pickFile(); toast('已开启', '自动保存'); viewMe(); } catch { } };
@@ -652,7 +667,7 @@
     $('#exp', main).onclick = () => BACKUP.download();
     $('#imp', main).onchange = async e => {
       try { BACKUP.merge(JSON.parse(await e.target.files[0].text())); viewReview(); }
-      catch { alert(tr('这个文件读不出来。')); }
+      catch { alert(tr('这个文件读不出来。').replace(' · ', '\n')); }
     };
   }
 
@@ -947,9 +962,13 @@
     'appeler': "词根 appel + er。词尾不发音的 je / tu / il / ils 写双 l：appelle · appelles · appelle · appellent；nous / vous 单 l：appelons · appelez。代词跟着人称变：me · te · se · nous · vous · se，元音前省略成 m' t' s'。",
   };
   function verbTip(fr) {
+    if (L() === 'zhen') return verbTipIn(fr, 'zh') + `<span class="tip-en" lang="en">${verbTipIn(fr, 'en')}</span>`;
+    return verbTipIn(fr, L());
+  }
+  function verbTipIn(fr, lang) {
     const inf = fr.replace(/\s*\(s'\)/, '').trim();
     const root = inf.slice(0, -2);
-    if (L() === 'en') {
+    if (lang === 'en') {
       const E = window.VERB_TIPS_EN || {};
       if (E[inf]) return esc(E[inf]);
       return `<b lang="fr">${esc(root)}</b> + <b lang="fr">er</b> — a regular -er verb. Drop -er to get the stem ${esc(root)}-, then add -e · -es · -e · -ons · -ez · -ent. je / tu / il / ils all sound the same (-es and -ent are silent).` +
@@ -978,10 +997,12 @@
     });
   }
   function wordTip(n, v) {
-    const T = window.TIPS || {};
-    const TT = L() === 'en' ? (window.TIPS_EN || {}) : T;
-    const t = TT[n + ':' + v.fr] || TT[v.fr];
-    if (t) return esc(t).replace(/\{([^}]+)\}/g, '<b lang="fr">$1</b>');
+    const pick = T => T[n + ':' + v.fr] || T[v.fr];
+    const fmt = t => esc(t).replace(/\{([^}]+)\}/g, '<b lang="fr">$1</b>');
+    const zh = pick(window.TIPS || {}), en = pick(window.TIPS_EN || {});
+    if (L() === 'en' && en) return fmt(en);
+    if (L() === 'zhen' && zh && en) return fmt(zh) + `<span class="tip-en" lang="en">${fmt(en)}</span>`;
+    if (zh) return fmt(zh);
     return v.pos && v.pos.startsWith('v') && conjugate(v.fr) ? verbTip(v.fr) : '';
   }
   const tipBox = html => html ? `<div class="tip"><span class="tip-lab">记忆提示</span>${html}</div>` : '';
@@ -1207,7 +1228,7 @@
     };
     $('#fshow', pane).onclick = () => areas.forEach(t => { t.nextElementSibling.innerHTML = `<div lang="fr" class="w-ok">${esc(lecon.text[t.dataset.k].fr)}</div>`; });
     $('#fclear', pane).onclick = () => {
-      if (!confirm(tr('清空这一课的默写草稿？'))) return;
+      if (!confirm(tr('清空这一课的默写草稿？').replace(' · ', '\n'))) return;
       areas.forEach(t => { t.value = ''; grow(t); t.nextElementSibling.innerHTML = ''; });
       store.set(dkey, {}); for (const k in draft) delete draft[k];
       $('#fscore', pane).textContent = '';
