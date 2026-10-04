@@ -394,7 +394,8 @@
       good ? (SRS.hit(e), right++) : SRS.miss(e);
       const next = good ? GAPS[Math.min((e.box || 0) + 1, GAPS.length - 1)] : 1;
       $('#fb', box).innerHTML = `<div class="feedback ${good ? 'ok' : 'bad'}"><span class="lab">${good ? `答对了 · ${(e.box || 0) + 1 >= GAPS.length ? '已掌握' : next + ' 天后再复习'}` : '明天再来一次'}</span>
-        <div class="ans" lang="fr">${playBtn(say)}<span>${html}</span></div></div>`;
+        <div class="ans" lang="fr">${playBtn(say)}<span>${html}</span></div>
+        ${e.kind === 'word' ? tipBox(e.pos === '变位' ? verbTip(e.zh.split(' · ')[0]) : wordTip(e.n, e)) : ''}</div>`;
       TTS.say(say);
     };
     draw();
@@ -486,15 +487,18 @@
     if (mode === 'list') {
       const groups = [];
       lecon.vocab.forEach(v => { let g = groups.find(x => x.g === v.g); if (!g) groups.push(g = { g: v.g, items: [] }); g.items.push(v); });
-      const hide = store.get('vhide', false);
+      const hide = store.get('vhide', false), showTip = store.get('vtip', true);
       pane.innerHTML = head.replace('<span class="spacer"></span>', `<span class="spacer"></span>
           <label class="kbd" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="vhide" ${hide ? 'checked' : ''}> 遮住法语</label>
+          <label class="kbd" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="vtip" ${showTip ? 'checked' : ''}> 记忆提示</label>
           <button class="btn ghost small" id="vplay">${ICON.play} 全部朗读</button>`) +
         groups.map(g => `<div class="vgroup"><h3>${esc(g.g || '')}</h3>${g.items.map(v => `
           <div class="vrow ${hide ? 'hidefr' : ''}" data-say="${esc(forms(v.fr).say)}">
             <span class="play">${ICON.play}</span>
             <span class="vzh">${esc(v.zh)}</span><span class="pos">${esc(v.pos)}</span>
-            <span class="vfr" lang="fr">${esc(v.fr)}</span></div>`).join('')}</div>`).join('');
+            <span class="vfr" lang="fr">${esc(v.fr)}</span>
+            ${wordTip(lecon.n, v) ? `<span class="vtip" ${showTip ? '' : 'hidden'}>${wordTip(lecon.n, v)}</span>` : ''}</div>`).join('')}</div>`).join('');
+      $('#vtip').onchange = e => { store.set('vtip', e.target.checked); $$('.vtip', pane).forEach(t => t.hidden = !e.target.checked); };
       $('#vhide').onchange = e => { store.set('vhide', e.target.checked); $$('.vrow', pane).forEach(r => r.classList.toggle('hidefr', e.target.checked)); };
       let stopper = null;
       $('#vplay').onclick = e => {
@@ -565,9 +569,10 @@
       if (!good || hintN) { wrong.push(v); SRS.miss(it); } else SRS.hit(it);
       fb.innerHTML = `<div class="feedback ${r}">
         <span class="lab">${good ? (hintN ? '对了（用了提示）' : '完全正确') : r === 'accent' ? '差一点：注意重音符号' : giveUp ? '答案' : '不对，正确答案是'}</span>
-        <div class="ans" lang="fr">${playBtn(forms(v.fr).say)} ${esc(v.fr)} ${listen ? `<span class="kbd" style="font-family:var(--zh)">${esc(v.zh)}</span>` : ''}</div></div>`;
+        <div class="ans" lang="fr">${playBtn(forms(v.fr).say)} ${esc(v.fr)} ${listen ? `<span class="kbd" style="font-family:var(--zh)">${esc(v.zh)}</span>` : ''}</div>
+        ${tipBox(wordTip(ctx.lecon.n, v))}</div>`;
       TTS.say(forms(v.fr).say);
-      if (good && !hintN) setTimeout(() => { if (answered && queue[i] === v) { i++; draw(); } }, 1100);
+      if (good && !hintN) setTimeout(() => { if (answered && queue[i] === v) { i++; draw(); } }, wordTip(ctx.lecon.n, v) ? 1800 : 1100);
     };
     const done = () => {
       const score = firstTry / queue.length;
@@ -628,6 +633,14 @@
       return { p: PRON[i], text, form: f };
     });
   }
+  function wordTip(n, v) {
+    const T = window.TIPS || {};
+    const t = T[n + ':' + v.fr] || T[v.fr];
+    if (t) return esc(t).replace(/\{([^}]+)\}/g, '<b lang="fr">$1</b>');
+    return v.pos && v.pos.startsWith('v') && conjugate(v.fr) ? verbTip(v.fr) : '';
+  }
+  const tipBox = html => html ? `<div class="tip"><span class="tip-lab">记忆提示</span>${html}</div>` : '';
+
   function conjDrill(ctx, box) {
     const { book, lecon } = ctx;
     const all = book.units.flatMap(u => u.lecons);
