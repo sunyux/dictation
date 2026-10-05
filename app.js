@@ -143,6 +143,7 @@
     1: ['Paris', 'tower'], 2: ['Genève', 'fountain'], 3: ['Montréal', 'leaf'], 4: ['Dakar', 'baobab'],
     5: ['Chambre', 'window'], 6: ['Portrait', 'face'], 7: ['Boutique', 'dress'], 8: ['Montmartre', 'easel'],
     9: ['Appartement', 'house'], 10: ['Louvre', 'pyramid'], 11: ['Martinique', 'palm'], 12: ['Marseille', 'boat'],
+    13: ['Gare', 'clock'], 14: ['Londres', 'bigben'], 15: ['Dimanche', 'racket'], 16: ['Piscine', 'swim'],
   };
   const GLYPH = {
     tower: 'M50 12 L42 88 M50 12 L58 88 M44 62 H56 M46 44 H54 M38 88 Q50 70 62 88 M50 6 V12',
@@ -156,6 +157,10 @@
     house: 'M24 88 V36 L50 16 L76 36 V88 M36 48 H46 V58 H36 Z M54 48 H64 V58 H54 Z M36 66 H46 V76 H36 Z M54 66 H64 V88 H54 Z M16 88 H84',
     pyramid: 'M50 18 L18 82 H82 Z M50 18 L50 82 M34 50 H66 M26 66 H74 M10 88 H90',
     palm: 'M52 88 Q48 60 54 32 M54 32 Q38 22 22 30 M54 32 Q44 14 30 12 M54 32 Q62 14 76 14 M54 32 Q70 24 82 36 M54 32 Q66 40 70 54 M14 88 Q50 80 86 88',
+    clock: 'M50 22 A28 28 0 1 1 49.9 22 M50 50 V32 M50 50 L64 58 M50 14 V22 M42 10 H58 M50 82 V90 M34 90 H66',
+    bigben: 'M38 88 V34 H62 V88 M38 34 L50 12 L62 34 M44 46 A6 6 0 1 1 43.9 46 M50 52 V48 M50 52 L53 54 M38 64 H62 M38 76 H62 M30 88 H70',
+    racket: 'M44 18 Q24 22 26 44 Q30 62 46 60 Q64 56 62 36 Q58 16 44 18 M34 28 L56 50 M30 40 L50 58 M40 22 L60 44 M50 58 L66 84 M66 84 L70 82 M72 30 A6 6 0 1 1 71.9 30',
+    swim: 'M14 70 Q24 64 34 70 T54 70 T74 70 T90 70 M14 82 Q24 76 34 82 T54 82 T74 82 T90 82 M30 60 Q46 44 66 50 L76 46 M62 34 A6 6 0 1 1 61.9 34 M40 56 L56 40',
     boat: 'M20 66 H80 L70 80 H30 Z M50 66 V14 M50 18 L76 58 H50 M50 24 L30 58 H50 M10 88 Q20 84 30 88 T50 88 T70 88 T90 88',
   };
   const STREAK_BADGES = [3, 7, 14, 30, 60, 100];
@@ -397,9 +402,17 @@
     return base + suf;
   }
   function forms(fr) {
-    const s = fr.replace(/[¹²³*]/g, '').trim();
+    let s = fr.replace(/[¹²³*]/g, '').trim();
     const acc = new Set([s]);
     let say = s, m;
+    if ((m = s.match(/^(.*), pl\.m\. (\S+)$/))) { acc.add(m[2]); s = m[1]; acc.add(s); }
+    if (s.includes('(-)')) { [s.replace('(-)', '-'), s.replace('(-)', ' ')].forEach(x => acc.add(x)); say = s.replace('(-)', ' '); return { accept: [...acc], say }; }
+    if ((m = s.match(/^(.*?)(\S+) \/ (\S+)(.*)$/))) { acc.add(m[1] + m[2] + m[4]); acc.add(m[1] + m[3] + m[4]); return { accept: [...acc], say: m[1] + m[3] + m[4] }; }
+    if ((m = s.match(/^(\S+)\s*\((se|s')\)$/))) {
+      const v = m[1], pro = /^[aeiouyhâéèêî]/i.test(v) ? "s'" : 'se ';
+      [v, pro + v, 'se ' + v, v + ' (' + m[2] + ')'].forEach(x => acc.add(x));
+      return { accept: [...acc], say: pro + v };
+    }
     if ((m = s.match(/^(.*) \(pl\. (.*)\)$/))) { acc.add(m[1]); say = m[1]; }
     else if ((m = s.match(/^(.*) \(s'\)$/))) { acc.add(m[1]); acc.add("s'" + m[1]); acc.add('se ' + m[1]); say = "s'" + m[1]; }
     else if ((m = s.match(/^(.*) \((de)\)$/))) { acc.add(m[1]); acc.add(m[1] + ' de'); say = m[1] + ' de'; }
@@ -713,7 +726,7 @@
       const next = good ? GAPS[Math.min((e.box || 0) + 1, GAPS.length - 1)] : 1;
       $('#fb', box).innerHTML = `<div class="feedback ${good ? 'ok' : 'bad'}"><span class="lab">${good ? `答对了 · ${(e.box || 0) + 1 >= GAPS.length ? '已掌握' : next + ' 天后再复习'}` : '明天再来一次'}</span>
         <div class="ans" lang="fr">${playBtn(say)}<span>${html}</span></div>
-        ${e.kind === 'word' ? tipBox(e.pos === '变位' ? verbTip(e.zh.split(' · ')[0]) : wordTip(e.n, e)) : ''}</div>`;
+        ${e.kind === 'word' ? tipBox(e.pos === '变位' ? verbTip(e.zh.split(' · ')[0].replace(/^(se |s')/, '')) : wordTip(e.n, e)) : ''}</div>`;
       TTS.say(say);
     };
     draw();
@@ -951,6 +964,13 @@
     'aller': 'vais vas va allons allez vont', 'faire': 'fais fais fait faisons faites font',
     'prendre': 'prends prends prend prenons prenez prennent', 'partir': 'pars pars part partons partez partent',
     'appeler': 'appelle appelles appelle appelons appelez appellent',
+    'dormir': 'dors dors dort dormons dormez dorment', 'endormir': 'endors endors endort endormons endormez endorment',
+    'sortir': 'sors sors sort sortons sortez sortent', 'écrire': 'écris écris écrit écrivons écrivez écrivent',
+    'lire': 'lis lis lit lisons lisez lisent', 'voir': 'vois vois voit voyons voyez voient',
+    'reprendre': 'reprends reprends reprend reprenons reprenez reprennent', 'détendre': 'détends détends détend détendons détendez détendent',
+    'lever': 'lève lèves lève levons levez lèvent', 'promener': 'promène promènes promène promenons promenez promènent',
+    'manger': 'mange manges mange mangeons mangez mangent', 'nager': 'nage nages nage nageons nagez nagent',
+    'commencer': 'commence commences commence commençons commencez commencent', 'recommencer': 'recommence recommences recommence recommençons recommencez recommencent',
   };
   const TIPS = {
     'être': '完全不规则，整串背：je suis · tu es · il est / nous sommes · vous êtes · ils sont。',
@@ -959,6 +979,20 @@
     'faire': 'fais · fais · fait（单数发音一样）；vous faites（不是 faisez！），ils font。',
     'prendre': '单数 prend-（d 不发音）：prends · prends · prend；nous/vous 去掉 d：prenons · prenez；ils 双 n：prennent。',
     'partir': '单数去掉词根的 t：pars · pars · part；复数把 t 加回来：partons · partez · partent。',
+    'dormir': '单数去掉 m：dors · dors · dort；复数保留 m：dormons · dormez · dorment。同类：sortir、partir（去掉辅音再加 -s -s -t）。',
+    'endormir': "en + dormir，变位和 dormir 一样：je m'endors · nous nous endormons。",
+    'sortir': '同 partir、dormir：单数去掉 t → sors · sors · sort；复数加回：sortons · sortez · sortent。',
+    'écrire': '单数 écri- + s s t：écris · écris · écrit；复数多一个 v：écrivons · écrivez · écrivent。',
+    'lire': '单数 li- + s s t：lis · lis · lit；复数加 s 读 [z]：lisons · lisez · lisent。',
+    'voir': '单数 voi- + s s t；nous/vous 的 i 变 y：voyons · voyez；ils voient（回到 i）。',
+    'reprendre': 're + prendre，变位完全同 prendre：reprends · reprenons · reprennent。',
+    'détendre': '-re 规则动词：去掉 -re 得词根 détend-，加 -s · -s · （无）· -ons · -ez · -ent：il se détend（d 不发音）。',
+    'lever': '词尾不发音时 e 变 è：lève · lèves · lève · lèvent；nous/vous 不变：levons · levez。同类：promener。',
+    'promener': '同 lever：词尾不发音时 e 变 è：promène · promènent；nous promenons。',
+    'manger': '只有 nous 特殊：mangeons 加 e，让 g 保持 [ʒ] 音；其他按 -er 规则。同类：nager。',
+    'nager': '同 manger：nous nageons 加 e 保持 g 软音。',
+    'commencer': '只有 nous 特殊：commençons 用 ç，让 c 在 o 前保持 [s] 音。同类：recommencer。',
+    'recommencer': 're + commencer：nous recommençons 用 ç。',
     'appeler': "词根 appel + er。词尾不发音的 je / tu / il / ils 写双 l：appelle · appelles · appelle · appellent；nous / vous 单 l：appelons · appelez。代词跟着人称变：me · te · se · nous · vous · se，元音前省略成 m' t' s'。",
   };
   function verbTip(fr) {
@@ -966,7 +1000,7 @@
     return verbTipIn(fr, L());
   }
   function verbTipIn(fr, lang) {
-    const inf = fr.replace(/\s*\(s'\)/, '').trim();
+    const inf = fr.replace(/\s*\((s'|se)\)/, '').trim();
     const root = inf.slice(0, -2);
     if (lang === 'en') {
       const E = window.VERB_TIPS_EN || {};
@@ -982,8 +1016,8 @@
   const REFL = ['me', 'te', 'se', 'nous', 'vous', 'se'];
   const vowel = w => /^[aeiouyhâàéèêîïôûœ]/i.test(w);
   function conjugate(fr) {
-    const refl = /\(s'\)/.test(fr);
-    const inf = fr.replace(/\s*\(s'\)/, '').trim();
+    const refl = /\((s'|se)\)/.test(fr);
+    const inf = fr.replace(/\s*\((s'|se)\)/, '').trim();
     const forms = IRREG[inf] ? IRREG[inf].split(' ')
       : inf.endsWith('er') ? ['e', 'es', 'e', 'ons', 'ez', 'ent'].map(e => inf.slice(0, -2) + e) : null;
     if (!forms) return null;
@@ -1032,7 +1066,7 @@
         <div class="count">${i + 1} / ${queue.length}</div>
         <div class="bar"><i style="width:${i / queue.length * 100}%"></i></div>
         <div class="prompt">${see
-          ? `<div class="pzh" lang="fr" style="font-family:var(--serif)">${esc(v.fr.replace(/\s*\(s'\)/, '').replace(/^/, /\(s'\)/.test(v.fr) ? "s'" : ''))} · <b>${esc(c.text.split(' ')[0].replace(/^j'.*/, 'je'))}</b></div><div class="ppos">${G(v)} · 现在时</div>`
+          ? `<div class="pzh" lang="fr" style="font-family:var(--serif)">${esc(forms(v.fr).say)} · <b>${esc(c.text.split(' ')[0].replace(/^j'.*/, 'je'))}</b></div><div class="ppos">${G(v)} · 现在时</div>`
           : `${playBtn(c.text, 'big')}<div class="ppos">听，然后写下「主语 + 动词」· 现在时</div>`}</div>
         <input class="answer-in" id="ans" lang="fr" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="例如：nous parlons">
         <div class="drill-actions">
@@ -1060,7 +1094,7 @@
       let r = giveUp ? 'bad' : (a === t ? 'ok' : strip(a) === strip(t) ? (settings.lenient ? 'ok' : 'accent') : a === pronounFree ? 'pron' : 'bad');
       const good = r === 'ok';
       if (good) { right++; XP.gain(1, '变位正确'); }
-      const it = { book: book.id, n: v.n, kind: 'word', fr: c.text, zh: `${v.fr.replace(/\s*\(s'\)/, '')} · ${c.p}（现在时）`, en: `${v.fr.replace(/\s*\(s'\)/, '')} · ${c.p} (present tense)`, pos: '变位' };
+      const it = { book: book.id, n: v.n, kind: 'word', fr: c.text, zh: `${forms(v.fr).say} · ${c.p}（现在时）`, en: `${forms(v.fr).say} · ${c.p} (present tense)`, pos: '变位' };
       good ? SRS.hit(it) : SRS.miss(it);
       $('#fb', box).innerHTML = `<div class="feedback ${good ? 'ok' : r === 'bad' ? 'bad' : 'accent'}">
         <span class="lab">${good ? '正确' : r === 'accent' ? '差一点：注意重音' : r === 'pron' ? '动词对了，记得连主语一起写' : '正确答案'}</span>
@@ -1086,7 +1120,7 @@
   function cloze(ctx, body) {
     const { lecon } = ctx;
     if (!lecon.cloze) { body.innerHTML = '<p class="notice">这一课没有填空题。</p>'; return; }
-    let bi = 0;
+    let blank = 0;
     const heads = new Set(lecon.text.filter(r => r.h).map(r => r.h));
     const lineText = row => row.map(s => typeof s === 'string' ? s : s.b).join('');
     body.innerHTML = `<p class="hint-text">根据记忆补全课文里的空。<kbd>Enter</kbd> 跳到下一个空，最后点「检查」。</p>
@@ -1095,7 +1129,7 @@
         const full = lineText(row);
         if (!blanks && heads.has(full.trim())) return `<div class="tline h" lang="fr">${esc(full)}</div>`;
         return `<div class="tline"><div class="row">${playBtn(full)}<div class="body lfr" lang="fr">${row.map(s => typeof s === 'string' ? esc(s)
-          : `<input class="cloze-in" data-i="${bi++}" data-a="${esc(s.b)}" size="${Math.max(3, s.b.length + 1)}" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="填空">`).join('')}</div></div></div>`;
+          : `<input class="cloze-in" data-i="${blank++}" data-a="${esc(s.b)}" size="${Math.max(3, s.b.length + 1)}" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="填空">`).join('')}</div></div></div>`;
       }).join('')}</div>
       <div class="toolbar" style="margin-top:16px"><button class="btn" id="ccheck">${bi('检查', 'Check')}</button><button class="btn ghost" id="cshow">${bi('显示答案', 'Show answers')}</button><button class="btn ghost" id="cclear">${bi('清空', 'Clear')}</button><span class="spacer"></span><span class="scorebox" id="cscore"></span></div>`;
     const ins = $$('.cloze-in', body);

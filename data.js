@@ -4585,6 +4585,1799 @@ window.BOOKS = [{
      ]
     }
    ]
+  },
+  {
+   "n": 4,
+   "lecons": [
+    {
+     "n": 13,
+     "title": "Un aller simple",
+     "zh": "单程车票",
+     "vocab": [
+      {
+       "g": "阳性名词",
+       "zh": "去程（的火车、飞机）票",
+       "pos": "n.m.",
+       "fr": "aller"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "往返票",
+       "pos": "n.m.",
+       "fr": "aller-retour"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "出发",
+       "pos": "n.m.",
+       "fr": "départ"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "周日",
+       "pos": "n.m.",
+       "fr": "dimanche"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "时刻表",
+       "pos": "n.m.",
+       "fr": "horaire"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "周四",
+       "pos": "n.m.",
+       "fr": "jeudi"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "周一",
+       "pos": "n.m.",
+       "fr": "lundi"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "周二",
+       "pos": "n.m.",
+       "fr": "mardi"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "早晨",
+       "pos": "n.m.",
+       "fr": "matin"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "周三",
+       "pos": "n.m.",
+       "fr": "mercredi"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "有关资料，情况，消息",
+       "pos": "n.m.",
+       "fr": "renseignement"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "周六",
+       "pos": "n.m.",
+       "fr": "samedi"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "定价",
+       "pos": "n.m.",
+       "fr": "tarif"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "周五",
+       "pos": "n.m.",
+       "fr": "vendredi"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "等级，级别",
+       "pos": "n.f.",
+       "fr": "classe"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "车站",
+       "pos": "n.f.",
+       "fr": "gare"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "时间；小时",
+       "pos": "n.f.",
+       "fr": "heure"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "挂钟，座钟；钟摆",
+       "pos": "n.f.",
+       "fr": "pendule"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "地方，位置",
+       "pos": "n.f.",
+       "fr": "place"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "道路；车道，轨道",
+       "pos": "n.f.",
+       "fr": "voie"
+      },
+      {
+       "g": "名词",
+       "zh": "下午",
+       "pos": "n.inv.",
+       "fr": "après-midi"
+      },
+      {
+       "g": "名词",
+       "zh": "雇员",
+       "pos": "n.",
+       "fr": "employé(e)"
+      },
+      {
+       "g": "形容词",
+       "zh": "满员的；完全的",
+       "pos": "adj.",
+       "fr": "complet(ète)"
+      },
+      {
+       "g": "形容词",
+       "zh": "感到遗憾的，感到抱歉的",
+       "pos": "adj.",
+       "fr": "désolé(e)"
+      },
+      {
+       "g": "形容词",
+       "zh": "第二的",
+       "pos": "adj.num.ord.",
+       "fr": "deuxième"
+      },
+      {
+       "g": "形容词",
+       "zh": "下一个的",
+       "pos": "adj.",
+       "fr": "prochain(e)"
+      },
+      {
+       "g": "形容词",
+       "zh": "单一的",
+       "pos": "adj.",
+       "fr": "simple"
+      },
+      {
+       "g": "副词",
+       "zh": "什么时候，何时",
+       "pos": "adv.interr.",
+       "fr": "quand"
+      }
+     ],
+     "cloze": [
+      [
+       "– Bonjour, monsieur, je ",
+       {
+        "b": "voudrais"
+       },
+       " un aller Paris-Marseille, s'il ",
+       {
+        "b": "vous"
+       },
+       " plaît."
+      ],
+      [
+       "– Vous ",
+       {
+        "b": "partez"
+       },
+       " quand ?"
+      ],
+      [
+       "– Mardi ",
+       {
+        "b": "prochain"
+       },
+       "."
+      ],
+      [
+       "– Le 15 ?"
+      ],
+      [
+       "– Oui, c'est ça…"
+      ],
+      [
+       "– Le ",
+       {
+        "b": "matin"
+       },
+       " ou l'après-",
+       {
+        "b": "midi"
+       },
+       " ?"
+      ],
+      [
+       "– Le matin."
+      ],
+      [
+       "– Alors… Il y a un ",
+       {
+        "b": "train"
+       },
+       " à 7 h 18… un autre à 8 h 46… à 9 h 22…"
+      ],
+      [
+       "– Le ",
+       {
+        "b": "train"
+       },
+       " de 7 h 18, s'il vous ",
+       {
+        "b": "plaît"
+       },
+       "."
+      ],
+      [
+       "– Ah ! Je suis ",
+       {
+        "b": "désolé"
+       },
+       ", monsieur. Ce ",
+       {
+        "b": "train"
+       },
+       " est ",
+       {
+        "b": "complet"
+       },
+       "."
+      ],
+      [
+       "– Et le train de 8 h 46, il ",
+       {
+        "b": "est"
+       },
+       " complet ",
+       {
+        "b": "aussi"
+       },
+       " ?"
+      ],
+      [
+       "– Non, il y a de la place."
+      ],
+      [
+       "– C'",
+       {
+        "b": "est"
+       },
+       " parfait."
+      ],
+      [
+       "– Un ",
+       {
+        "b": "aller"
+       },
+       " simple ou un ",
+       {
+        "b": "aller"
+       },
+       "-retour ?"
+      ],
+      [
+       "– Un ",
+       {
+        "b": "aller"
+       },
+       " simple. En ",
+       {
+        "b": "deuxième"
+       },
+       " classe."
+      ],
+      [
+       "– Voilà."
+      ],
+      [
+       "– C'",
+       {
+        "b": "est"
+       },
+       " combien ?"
+      ]
+     ],
+     "text": [
+      {
+       "zh": "– 您好，先生，我想买一张去 Paris-Marseille 的票。",
+       "fr": "– Bonjour, monsieur, je voudrais un aller Paris-Marseille, s'il vous plaît."
+      },
+      {
+       "zh": "– 您什么时候出发？",
+       "fr": "– Vous partez quand ?"
+      },
+      {
+       "zh": "– 下周二。",
+       "fr": "– Mardi prochain."
+      },
+      {
+       "zh": "– 15 号吗？",
+       "fr": "– Le 15 ?"
+      },
+      {
+       "zh": "– 是的，没错……",
+       "fr": "– Oui, c'est ça…"
+      },
+      {
+       "zh": "– 上午还是下午？",
+       "fr": "– Le matin ou l'après-midi ?"
+      },
+      {
+       "zh": "– 上午。",
+       "fr": "– Le matin."
+      },
+      {
+       "zh": "– 那么……有一趟 7 点 18 分的火车……另一趟 8 点 46 分的……还有 9 点 22 分的……",
+       "fr": "– Alors… Il y a un train à 7 h 18… un autre à 8 h 46… à 9 h 22…"
+      },
+      {
+       "zh": "– 请给我 7 点 18 分的那趟。",
+       "fr": "– Le train de 7 h 18, s'il vous plaît."
+      },
+      {
+       "zh": "– 啊！不好意思，先生。这趟车满员了。",
+       "fr": "– Ah ! Je suis désolé, monsieur. Ce train est complet."
+      },
+      {
+       "zh": "– 那 8 点 46 分的那趟，也满了吗？",
+       "fr": "– Et le train de 8 h 46, il est complet aussi ?"
+      },
+      {
+       "zh": "– 不，还有座位。",
+       "fr": "– Non, il y a de la place."
+      },
+      {
+       "zh": "– 太好了。",
+       "fr": "– C'est parfait."
+      },
+      {
+       "zh": "– 您要单程票还是往返票？",
+       "fr": "– Un aller simple ou un aller-retour ?"
+      },
+      {
+       "zh": "– 单程票。二等座。",
+       "fr": "– Un aller simple. En deuxième classe."
+      },
+      {
+       "zh": "– 给您。",
+       "fr": "– Voilà."
+      },
+      {
+       "zh": "– 多少钱？",
+       "fr": "– C'est combien ?"
+      }
+     ]
+    },
+    {
+     "n": 14,
+     "title": "À Londres",
+     "zh": "在伦敦",
+     "vocab": [
+      {
+       "g": "阳性名词",
+       "zh": "日程；记事表",
+       "pos": "n.m.",
+       "fr": "agenda"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "事务所",
+       "pos": "n.m.",
+       "fr": "cabinet"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "医生",
+       "pos": "n.m.",
+       "fr": "docteur"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "机构；学院",
+       "pos": "n.m.",
+       "fr": "institut"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "报纸",
+       "pos": "n.m.",
+       "fr": "journal"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "其余部分，其余的人；剩余部分",
+       "pos": "n.m.",
+       "fr": "reste"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "晚上",
+       "pos": "n.m.",
+       "fr": "soir"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "发型",
+       "pos": "n.f.",
+       "fr": "coiffure"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "吉他",
+       "pos": "n.f.",
+       "fr": "guitare"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "会议",
+       "pos": "n.f.",
+       "fr": "réunion"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "星期，周",
+       "pos": "n.f.",
+       "fr": "semaine"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "公司",
+       "pos": "n.f.",
+       "fr": "société"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "惊喜",
+       "pos": "n.f.",
+       "fr": "surprise"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "假期",
+       "pos": "n.f.pl.",
+       "fr": "vacances"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "人生；生活，生活方式",
+       "pos": "n.f.",
+       "fr": "vie"
+      },
+      {
+       "g": "名词",
+       "zh": "演员",
+       "pos": "n.",
+       "fr": "acteur(trice)"
+      },
+      {
+       "g": "名词",
+       "zh": "计算机工程师",
+       "pos": "n.",
+       "fr": "informaticien(ienne)"
+      },
+      {
+       "g": "动词",
+       "zh": "开始",
+       "pos": "v.",
+       "fr": "commencer"
+      },
+      {
+       "g": "动词",
+       "zh": "做，从事",
+       "pos": "v.t.",
+       "fr": "faire"
+      },
+      {
+       "g": "动词",
+       "zh": "回来，回到；回家",
+       "pos": "v.i.",
+       "fr": "rentrer"
+      },
+      {
+       "g": "动词",
+       "zh": "工作",
+       "pos": "v.i.",
+       "fr": "travailler"
+      },
+      {
+       "g": "动词",
+       "zh": "看见",
+       "pos": "v.t.",
+       "fr": "voir"
+      },
+      {
+       "g": "形容词",
+       "zh": "可能的",
+       "pos": "adj.",
+       "fr": "possible"
+      },
+      {
+       "g": "形容词",
+       "zh": "多么，何等",
+       "pos": "adj.exclam.",
+       "fr": "quel(le)"
+      },
+      {
+       "g": "形容词",
+       "zh": "全部的，所有的",
+       "pos": "adj.indéf.pl.",
+       "fr": "tous, toutes"
+      },
+      {
+       "g": "副词",
+       "zh": "这儿，这里",
+       "pos": "adv.",
+       "fr": "là"
+      },
+      {
+       "g": "副词",
+       "zh": "只，仅仅",
+       "pos": "adv.",
+       "fr": "seulement"
+      },
+      {
+       "g": "副词",
+       "zh": "晚",
+       "pos": "adv.",
+       "fr": "tard"
+      },
+      {
+       "g": "副词",
+       "zh": "早",
+       "pos": "adv.",
+       "fr": "tôt"
+      },
+      {
+       "g": "介词、连词",
+       "zh": "嗯，好吧（用来引出被岔开的话题）；因此，所以",
+       "pos": "conj.",
+       "fr": "donc"
+      },
+      {
+       "g": "介词、连词",
+       "zh": "可是，但是，然而；[在某些惊叹句或疑问句中，表示惊讶、怀疑、愤慨等情绪]",
+       "pos": "conj.",
+       "fr": "mais"
+      },
+      {
+       "g": "介词、连词",
+       "zh": "将近，接近（指时间）；朝，向……（指具体方向）",
+       "pos": "prép.",
+       "fr": "vers"
+      },
+      {
+       "g": "冠词、感叹词、短语",
+       "zh": "[回答时表示犹豫的语气词]",
+       "pos": "interj.",
+       "fr": "ben"
+      },
+      {
+       "g": "地名",
+       "zh": "伦敦（英国）",
+       "pos": "",
+       "fr": "Londres"
+      },
+      {
+       "g": "地名",
+       "zh": "旺多姆（法国）",
+       "pos": "",
+       "fr": "Vendôme"
+      }
+     ],
+     "cloze": [
+      [
+       "– Mais c'est Isabelle !… Isabelle, Isabelle !"
+      ],
+      [
+       "– Farid ! Oh ! ",
+       {
+        "b": "mais"
+       },
+       " quelle ",
+       {
+        "b": "surprise"
+       },
+       " ! Comment vas-tu ?"
+      ],
+      [
+       "– Bien. Et ",
+       {
+        "b": "toi"
+       },
+       " ? Mais qu'est-ce ",
+       {
+        "b": "que"
+       },
+       " tu fais là ?"
+      ],
+      [
+       "– Ben, tu ",
+       {
+        "b": "vois"
+       },
+       ", je travaille. Je ",
+       {
+        "b": "suis"
+       },
+       " secrétaire à l'Institut ",
+       {
+        "b": "français"
+       },
+       "… Et toi, ",
+       {
+        "b": "alors"
+       },
+       ", qu'est-ce ",
+       {
+        "b": "que"
+       },
+       " tu fais ",
+       {
+        "b": "dans"
+       },
+       " la vie, ",
+       {
+        "b": "maintenant"
+       },
+       " ?"
+      ],
+      [
+       "– Je suis ",
+       {
+        "b": "informaticien"
+       },
+       "."
+      ],
+      [
+       "– Ah ! oui, et où ",
+       {
+        "b": "est"
+       },
+       "-ce que tu ",
+       {
+        "b": "travailles"
+       },
+       " ? À Londres ?"
+      ],
+      [
+       "– Non, non. Je ",
+       {
+        "b": "travaille"
+       },
+       " à Paris, mais j'",
+       {
+        "b": "habite"
+       },
+       " à Vendôme. Je prends le TGV ",
+       {
+        "b": "pour"
+       },
+       " aller ",
+       {
+        "b": "travailler"
+       },
+       "."
+      ],
+      [
+       "– Ah ? Tous les ",
+       {
+        "b": "jours"
+       },
+       " ?"
+      ],
+      [
+       "– Non, je vais à Paris du ",
+       {
+        "b": "lundi"
+       },
+       " au mercredi ",
+       {
+        "b": "seulement"
+       },
+       ". Le reste de la ",
+       {
+        "b": "semaine"
+       },
+       ", je travaille à la ",
+       {
+        "b": "maison"
+       },
+       "."
+      ],
+      [
+       "– Et tu pars à ",
+       {
+        "b": "quelle"
+       },
+       " heure le ",
+       {
+        "b": "matin"
+       },
+       " ?"
+      ],
+      [
+       "– Très tôt. À 6 h 30. Et je ",
+       {
+        "b": "rentre"
+       },
+       " tard le ",
+       {
+        "b": "soir"
+       },
+       ", vers 21 h, 21 h 30. Mais c'",
+       {
+        "b": "est"
+       },
+       " seulement ",
+       {
+        "b": "trois"
+       },
+       " jours ",
+       {
+        "b": "par"
+       },
+       " semaine, ça va."
+      ],
+      [
+       "– Qu'",
+       {
+        "b": "est"
+       },
+       "-ce que tu ",
+       {
+        "b": "fais"
+       },
+       " à Londres, alors ?"
+      ],
+      [
+       "– Ah ! là, je ",
+       {
+        "b": "suis"
+       },
+       " en vacances."
+      ]
+     ],
+     "text": [
+      {
+       "zh": "– 咦，这不是 Isabelle 吗！……Isabelle，Isabelle！",
+       "fr": "– Mais c'est Isabelle !… Isabelle, Isabelle !"
+      },
+      {
+       "zh": "– Farid！哦！真没想到！你好吗？",
+       "fr": "– Farid ! Oh ! mais quelle surprise ! Comment vas-tu ?"
+      },
+      {
+       "zh": "– 挺好。你呢？你在这儿做什么？",
+       "fr": "– Bien. Et toi ? Mais qu'est-ce que tu fais là ?"
+      },
+      {
+       "zh": "– 嗯，你看，我在工作。我是 Institut français 的秘书……那你呢，你现在做什么工作？",
+       "fr": "– Ben, tu vois, je travaille. Je suis secrétaire à l'Institut français… Et toi, alors, qu'est-ce que tu fais dans la vie, maintenant ?"
+      },
+      {
+       "zh": "– 我是计算机工程师。",
+       "fr": "– Je suis informaticien."
+      },
+      {
+       "zh": "– 啊！对，那你在哪儿工作？在 Londres 吗？",
+       "fr": "– Ah ! oui, et où est-ce que tu travailles ? À Londres ?"
+      },
+      {
+       "zh": "– 不，不。我在 Paris 工作，但我住在 Vendôme。我坐 TGV 去上班。",
+       "fr": "– Non, non. Je travaille à Paris, mais j'habite à Vendôme. Je prends le TGV pour aller travailler."
+      },
+      {
+       "zh": "– 啊？每天都这样吗？",
+       "fr": "– Ah ? Tous les jours ?"
+      },
+      {
+       "zh": "– 不，我只有周一到周三去 Paris。一周剩下的时间，我在家工作。",
+       "fr": "– Non, je vais à Paris du lundi au mercredi seulement. Le reste de la semaine, je travaille à la maison."
+      },
+      {
+       "zh": "– 那你早上几点出门？",
+       "fr": "– Et tu pars à quelle heure le matin ?"
+      },
+      {
+       "zh": "– 很早。6 点半。晚上我回家很晚，大约 21 点，21 点半。不过一周只有三天，还行。",
+       "fr": "– Très tôt. À 6 h 30. Et je rentre tard le soir, vers 21 h, 21 h 30. Mais c'est seulement trois jours par semaine, ça va."
+      },
+      {
+       "zh": "– 那你在 Londres 做什么呢？",
+       "fr": "– Qu'est-ce que tu fais à Londres, alors ?"
+      },
+      {
+       "zh": "– 啊！在这儿，我是在度假。",
+       "fr": "– Ah ! là, je suis en vacances."
+      }
+     ]
+    },
+    {
+     "n": 15,
+     "title": "Le dimanche matin",
+     "zh": "周日的上午",
+     "vocab": [
+      {
+       "g": "阳性名词",
+       "zh": "田径运动",
+       "pos": "n.m.",
+       "fr": "athlétisme"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "午饭",
+       "pos": "n.m.",
+       "fr": "déjeuner"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "孩子",
+       "pos": "n.m.",
+       "fr": "enfant"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "〈俗〉足球（运动）（football的缩写形式）",
+       "pos": "n.m.",
+       "fr": "foot"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "慢跑",
+       "pos": "n.m.",
+       "fr": "footing"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "市场；集市",
+       "pos": "n.m.",
+       "fr": "marché"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "家务",
+       "pos": "n.m.",
+       "fr": "ménage"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "早餐",
+       "pos": "n.m.",
+       "fr": "petit(-)déjeuner"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "滑雪",
+       "pos": "n.m.",
+       "fr": "ski"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "见证，证词",
+       "pos": "n.m.",
+       "fr": "témoignage"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "网球（运动）",
+       "pos": "n.m.",
+       "fr": "tennis"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "盒子；夜总会",
+       "pos": "n.f.",
+       "fr": "boîte"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "乡村",
+       "pos": "n.f.",
+       "fr": "campagne"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "跑，奔跑；〈引〉购物（多用复数）",
+       "pos": "n.f.",
+       "fr": "course"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "体操",
+       "pos": "n.f.",
+       "fr": "gymnastique"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "游泳",
+       "pos": "n.f.",
+       "fr": "natation"
+      },
+      {
+       "g": "动词",
+       "zh": "吃午饭",
+       "pos": "v.i.",
+       "fr": "déjeuner"
+      },
+      {
+       "g": "动词",
+       "zh": "睡觉",
+       "pos": "v.i.",
+       "fr": "dormir"
+      },
+      {
+       "g": "动词",
+       "zh": "听",
+       "pos": "v.t.",
+       "fr": "écouter"
+      },
+      {
+       "g": "动词",
+       "zh": "写",
+       "pos": "v.t.",
+       "fr": "écrire"
+      },
+      {
+       "g": "动词",
+       "zh": "穿衣服",
+       "pos": "v.pr.",
+       "fr": "habiller(s')"
+      },
+      {
+       "g": "动词",
+       "zh": "玩；演奏",
+       "pos": "v.i.",
+       "fr": "jouer"
+      },
+      {
+       "g": "动词",
+       "zh": "洗漱",
+       "pos": "v.pr.",
+       "fr": "laver(se)"
+      },
+      {
+       "g": "动词",
+       "zh": "起床；起身，站起",
+       "pos": "v.pr.",
+       "fr": "lever(se)"
+      },
+      {
+       "g": "动词",
+       "zh": "读",
+       "pos": "v.t.",
+       "fr": "lire"
+      },
+      {
+       "g": "动词",
+       "zh": "吃，喝，服用",
+       "pos": "v.t.",
+       "fr": "prendre"
+      },
+      {
+       "g": "动词",
+       "zh": "（～qn）使……做好准备；（～qch.）准备……",
+       "pos": "v.t.",
+       "fr": "préparer"
+      },
+      {
+       "g": "动词",
+       "zh": "休息",
+       "pos": "v.pr.",
+       "fr": "reposer(se)"
+      },
+      {
+       "g": "形容词",
+       "zh": "一般的，普遍的",
+       "pos": "adj.",
+       "fr": "général(e), pl.m. généraux"
+      },
+      {
+       "g": "副词",
+       "zh": "首先",
+       "pos": "loc.adv.",
+       "fr": "d'abord"
+      },
+      {
+       "g": "副词",
+       "zh": "一般而言；通常",
+       "pos": "loc.adv.",
+       "fr": "en général"
+      },
+      {
+       "g": "冠词、感叹词、短语",
+       "zh": "购物",
+       "pos": "",
+       "fr": "faire des / les courses"
+      },
+      {
+       "g": "冠词、感叹词、短语",
+       "zh": "做清洁，打扫屋子",
+       "pos": "",
+       "fr": "faire le ménage"
+      }
+     ],
+     "cloze": [
+      [
+       "问题"
+      ],
+      [
+       "En général, qu'",
+       {
+        "b": "est"
+       },
+       "-ce que ",
+       {
+        "b": "vous"
+       },
+       " faites le ",
+       {
+        "b": "dimanche"
+       },
+       " matin ?"
+      ],
+      [
+       "见证 1"
+      ],
+      [
+       "Le ",
+       {
+        "b": "dimanche"
+       },
+       " matin ? Je ",
+       {
+        "b": "fais"
+       },
+       " d'abord un ",
+       {
+        "b": "footing"
+       },
+       ". Ensuite, je joue au ",
+       {
+        "b": "foot"
+       },
+       " ou au tennis ",
+       {
+        "b": "avec"
+       },
+       " des ",
+       {
+        "b": "amis"
+       },
+       ". Et l'après-",
+       {
+        "b": "midi"
+       },
+       ", je me repose."
+      ],
+      [
+       "见证 2"
+      ],
+      [
+       "Moi, je ",
+       {
+        "b": "fais"
+       },
+       " les ",
+       {
+        "b": "courses"
+       },
+       ". Et ma femme ",
+       {
+        "b": "prépare"
+       },
+       " les ",
+       {
+        "b": "enfants"
+       },
+       " et elle ",
+       {
+        "b": "joue"
+       },
+       " avec ",
+       {
+        "b": "eux"
+       },
+       ". Ou alors on ",
+       {
+        "b": "part"
+       },
+       " pour la ",
+       {
+        "b": "journée"
+       },
+       ". Et on va souvent à la ",
+       {
+        "b": "campagne"
+       },
+       "."
+      ],
+      [
+       "见证 3"
+      ],
+      [
+       "Le dimanche ",
+       {
+        "b": "matin"
+       },
+       ", je fais le ",
+       {
+        "b": "ménage"
+       },
+       " ; après, je me ",
+       {
+        "b": "lave"
+       },
+       " et je m'habille. Ensuite, j'",
+       {
+        "b": "écoute"
+       },
+       " de la musique, je ",
+       {
+        "b": "lis"
+       },
+       " ou j'écris à ",
+       {
+        "b": "des"
+       },
+       " amis."
+      ],
+      [
+       "见证 4"
+      ],
+      [
+       "Moi, ",
+       {
+        "b": "tous"
+       },
+       " les ",
+       {
+        "b": "samedis"
+       },
+       " soir, je ",
+       {
+        "b": "vais"
+       },
+       " en boîte et je ",
+       {
+        "b": "rentre"
+       },
+       " vers 5 ou 6 ",
+       {
+        "b": "heures"
+       },
+       " du matin. Alors, ",
+       {
+        "b": "moi"
+       },
+       ", le dimanche, je ",
+       {
+        "b": "dors"
+       },
+       " ! Et je me lève à ",
+       {
+        "b": "midi"
+       },
+       "."
+      ],
+      [
+       "见证 5"
+      ],
+      [
+       "Ah ! Ma femme et ",
+       {
+        "b": "moi"
+       },
+       ", nous ",
+       {
+        "b": "prenons"
+       },
+       " le petit ",
+       {
+        "b": "déjeuner"
+       },
+       " vers 9 ",
+       {
+        "b": "heures"
+       },
+       ". Après, on va au marché. À ",
+       {
+        "b": "midi"
+       },
+       ", nous ",
+       {
+        "b": "déjeunons"
+       },
+       " avec ",
+       {
+        "b": "nos"
+       },
+       " enfants, ",
+       {
+        "b": "chez"
+       },
+       " eux ou ",
+       {
+        "b": "chez"
+       },
+       " nous."
+      ]
+     ],
+     "text": [
+      {
+       "h": "问题"
+      },
+      {
+       "zh": "一般来说，你们周日上午做什么？",
+       "fr": "En général, qu'est-ce que vous faites le dimanche matin ?"
+      },
+      {
+       "h": "见证 1"
+      },
+      {
+       "zh": "周日上午？我先去慢跑。然后，我和朋友们一起踢足球或者打网球。下午，我休息。",
+       "fr": "Le dimanche matin ? Je fais d'abord un footing. Ensuite, je joue au foot ou au tennis avec des amis. Et l'après-midi, je me repose."
+      },
+      {
+       "h": "见证 2"
+      },
+      {
+       "zh": "我呢，我去买东西。我妻子帮孩子们做好准备，陪他们玩。或者我们就出门一整天。我们经常去乡下。",
+       "fr": "Moi, je fais les courses. Et ma femme prépare les enfants et elle joue avec eux. Ou alors on part pour la journée. Et on va souvent à la campagne."
+      },
+      {
+       "h": "见证 3"
+      },
+      {
+       "zh": "周日上午，我做家务；然后，我洗漱穿衣。接着，我听音乐、看书，或者给朋友写信。",
+       "fr": "Le dimanche matin, je fais le ménage ; après, je me lave et je m'habille. Ensuite, j'écoute de la musique, je lis ou j'écris à des amis."
+      },
+      {
+       "h": "见证 4"
+      },
+      {
+       "zh": "我呢，每个周六晚上我都去夜总会，早上五六点才回来。所以，周日我睡觉！中午才起床。",
+       "fr": "Moi, tous les samedis soir, je vais en boîte et je rentre vers 5 ou 6 heures du matin. Alors, moi, le dimanche, je dors ! Et je me lève à midi."
+      },
+      {
+       "h": "见证 5"
+      },
+      {
+       "zh": "啊！我和我妻子九点左右吃早饭。然后，我们去市场。中午，我们和孩子们一起吃午饭，在他们家或者我们家。",
+       "fr": "Ah ! Ma femme et moi, nous prenons le petit déjeuner vers 9 heures. Après, on va au marché. À midi, nous déjeunons avec nos enfants, chez eux ou chez nous."
+      }
+     ]
+    },
+    {
+     "n": 16,
+     "title": "Une journée avec Laure Manaudou",
+     "zh": "和 Laure Manaudou 共度的一天",
+     "vocab": [
+      {
+       "g": "阳性名词",
+       "zh": "训练",
+       "pos": "n.m.",
+       "fr": "entraînement"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "水果",
+       "pos": "n.m.",
+       "fr": "fruit"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "一月",
+       "pos": "n.m.",
+       "fr": "janvier"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "果汁",
+       "pos": "n.m.",
+       "fr": "jus"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "比赛",
+       "pos": "n.m.",
+       "fr": "match"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "压力，紧张",
+       "pos": "n.m.",
+       "fr": "stress"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "酸奶",
+       "pos": "n.m.",
+       "fr": "yaourt"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "谷物食品（指麦片、玉米片等）",
+       "pos": "n.f.pl.",
+       "fr": "céréales"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "亲属，家人；家庭",
+       "pos": "n.f.",
+       "fr": "famille"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "肌肉锻炼",
+       "pos": "n.f.",
+       "fr": "musculation"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "梳洗，盥洗；梳妆，打扮",
+       "pos": "n.f.",
+       "fr": "toilette"
+      },
+      {
+       "g": "名词",
+       "zh": "冠军，优胜者，第一名",
+       "pos": "n.",
+       "fr": "champion(ne)"
+      },
+      {
+       "g": "动词",
+       "zh": "躺下；上床，睡觉去",
+       "pos": "v.pr.",
+       "fr": "coucher(se)"
+      },
+      {
+       "g": "动词",
+       "zh": "放松",
+       "pos": "v.pr.",
+       "fr": "détendre(se)"
+      },
+      {
+       "g": "动词",
+       "zh": "睡着",
+       "pos": "v.pr.",
+       "fr": "endormir(s')"
+      },
+      {
+       "g": "动词",
+       "zh": "训练",
+       "pos": "v.pr.",
+       "fr": "entraîner(s')"
+      },
+      {
+       "g": "动词",
+       "zh": "避免",
+       "pos": "v.t.",
+       "fr": "éviter"
+      },
+      {
+       "g": "动词",
+       "zh": "吃",
+       "pos": "v.t.",
+       "fr": "manger"
+      },
+      {
+       "g": "动词",
+       "zh": "游泳",
+       "pos": "v.i.",
+       "fr": "nager"
+      },
+      {
+       "g": "动词",
+       "zh": "散步",
+       "pos": "v.pr.",
+       "fr": "promener(se)"
+      },
+      {
+       "g": "动词",
+       "zh": "重新开始",
+       "pos": "v.",
+       "fr": "recommencer"
+      },
+      {
+       "g": "动词",
+       "zh": "看",
+       "pos": "v.t.",
+       "fr": "regarder"
+      },
+      {
+       "g": "动词",
+       "zh": "重新从事",
+       "pos": "v.t.",
+       "fr": "reprendre"
+      },
+      {
+       "g": "动词",
+       "zh": "返回",
+       "pos": "v.i.",
+       "fr": "retourner"
+      },
+      {
+       "g": "动词",
+       "zh": "出去，出门，出来，外出",
+       "pos": "v.i.",
+       "fr": "sortir"
+      },
+      {
+       "g": "动词",
+       "zh": "结束",
+       "pos": "v.pr.",
+       "fr": "terminer(se)"
+      },
+      {
+       "g": "形容词",
+       "zh": "目前的，现实的，当前的",
+       "pos": "adj.",
+       "fr": "actuel(le)"
+      },
+      {
+       "g": "形容词",
+       "zh": "困难的",
+       "pos": "adj.",
+       "fr": "difficile"
+      },
+      {
+       "g": "形容词",
+       "zh": "习惯的",
+       "pos": "adj.",
+       "fr": "habituel(le)"
+      },
+      {
+       "g": "形容词",
+       "zh": "空闲的",
+       "pos": "adj.",
+       "fr": "libre"
+      },
+      {
+       "g": "形容词",
+       "zh": "长的",
+       "pos": "adj.",
+       "fr": "long(ue)"
+      },
+      {
+       "g": "形容词",
+       "zh": "新的",
+       "pos": "adj.",
+       "fr": "nouveau(nouvelle)"
+      },
+      {
+       "g": "副词",
+       "zh": "少，不多；不大，不太",
+       "pos": "adv.",
+       "fr": "peu"
+      },
+      {
+       "g": "冠词、感叹词、短语",
+       "zh": "〈意〉好！妙！（尤用于向演员等喝彩）",
+       "pos": "interj.",
+       "fr": "bravo"
+      }
+     ],
+     "cloze": [
+      [
+       "文章"
+      ],
+      [
+       "Bravo Laure ! À 22 ans, ",
+       {
+        "b": "elle"
+       },
+       " est ",
+       {
+        "b": "championne"
+       },
+       " de France, d'Europe et du monde de ",
+       {
+        "b": "natation"
+       },
+       ". Mais une ",
+       {
+        "b": "vie"
+       },
+       " de championne ",
+       {
+        "b": "est"
+       },
+       " difficile !"
+      ],
+      [
+       "Elle se ",
+       {
+        "b": "lève"
+       },
+       " tous ",
+       {
+        "b": "les"
+       },
+       " matins ",
+       {
+        "b": "vers"
+       },
+       " 6 heures. Elle ",
+       {
+        "b": "fait"
+       },
+       " sa toilette. Ensuite, ",
+       {
+        "b": "elle"
+       },
+       " s'habille et ",
+       {
+        "b": "elle"
+       },
+       " prend ",
+       {
+        "b": "son"
+       },
+       " petit ",
+       {
+        "b": "déjeuner"
+       },
+       " : fruit, ",
+       {
+        "b": "yaourt"
+       },
+       ", céréales et ",
+       {
+        "b": "jus"
+       },
+       " d'orange. À 7 ",
+       {
+        "b": "heures"
+       },
+       ", elle ",
+       {
+        "b": "est"
+       },
+       " à la piscine. Elle s'",
+       {
+        "b": "entraîne"
+       },
+       " jusqu'à 10 ",
+       {
+        "b": "heures"
+       },
+       ". Puis elle ",
+       {
+        "b": "retourne"
+       },
+       " à son ",
+       {
+        "b": "appartement"
+       },
+       " à côté de la ",
+       {
+        "b": "piscine"
+       },
+       ". Elle reprend l'",
+       {
+        "b": "entraînement"
+       },
+       " l'après-",
+       {
+        "b": "midi"
+       },
+       ", à 15 heures 30. Elle ",
+       {
+        "b": "nage"
+       },
+       " 15 kilomètres ",
+       {
+        "b": "par"
+       },
+       " jour ! Sa ",
+       {
+        "b": "journée"
+       },
+       " se termine ",
+       {
+        "b": "vers"
+       },
+       " 19 heures 30."
+      ],
+      [
+       "Elle ",
+       {
+        "b": "rentre"
+       },
+       " chez ",
+       {
+        "b": "elle"
+       },
+       ". Elle mange, ",
+       {
+        "b": "elle"
+       },
+       " regarde un ",
+       {
+        "b": "peu"
+       },
+       " la télé et ",
+       {
+        "b": "elle"
+       },
+       " téléphone à ",
+       {
+        "b": "des"
+       },
+       " amis. Elle se ",
+       {
+        "b": "couche"
+       },
+       " tôt, ",
+       {
+        "b": "vers"
+       },
+       " 22 heures. Elle ",
+       {
+        "b": "dort"
+       },
+       " huit ",
+       {
+        "b": "heures"
+       },
+       " par ",
+       {
+        "b": "nuit"
+       },
+       "."
+      ],
+      [
+       "Le samedi ",
+       {
+        "b": "soir"
+       },
+       ", elle ",
+       {
+        "b": "est"
+       },
+       " libre. Elle ",
+       {
+        "b": "sort"
+       },
+       ", elle va au ",
+       {
+        "b": "restaurant"
+       },
+       " ou au cinéma ",
+       {
+        "b": "avec"
+       },
+       " des ",
+       {
+        "b": "amis"
+       },
+       ". Le dimanche, ",
+       {
+        "b": "elle"
+       },
+       " dort ",
+       {
+        "b": "jusqu"
+       },
+       "'à midi. Elle ",
+       {
+        "b": "passe"
+       },
+       " l'après-",
+       {
+        "b": "midi"
+       },
+       " avec ",
+       {
+        "b": "des"
+       },
+       " amis ou ",
+       {
+        "b": "avec"
+       },
+       " sa famille."
+      ],
+      [
+       "Et, le ",
+       {
+        "b": "lundi"
+       },
+       ", une ",
+       {
+        "b": "nouvelle"
+       },
+       " semaine ",
+       {
+        "b": "recommence"
+       },
+       "…"
+      ],
+      [
+       "放松一下"
+      ],
+      [
+       "Elle écoute de la ",
+       {
+        "b": "musique"
+       },
+       "."
+      ],
+      [
+       "Elle joue ",
+       {
+        "b": "aux"
+       },
+       " cartes."
+      ],
+      [
+       "Elle ",
+       {
+        "b": "dort"
+       },
+       " beaucoup."
+      ]
+     ],
+     "text": [
+      {
+       "h": "文章"
+      },
+      {
+       "zh": "Bravo Laure ！22 岁的她已是法国、欧洲和世界游泳冠军。但是冠军的生活并不轻松！",
+       "fr": "Bravo Laure ! À 22 ans, elle est championne de France, d'Europe et du monde de natation. Mais une vie de championne est difficile !"
+      },
+      {
+       "zh": "她每天早上 6 点左右起床。她洗漱。然后穿好衣服，吃早饭：水果、酸奶、谷类食品和橙汁。7 点，她到游泳池。她训练到 10 点。然后她回到游泳池旁边的公寓。下午 15 点 30 分，她重新开始训练。她每天游 15 公里！她的一天在 19 点 30 分左右结束。",
+       "fr": "Elle se lève tous les matins vers 6 heures. Elle fait sa toilette. Ensuite, elle s'habille et elle prend son petit déjeuner : fruit, yaourt, céréales et jus d'orange. À 7 heures, elle est à la piscine. Elle s'entraîne jusqu'à 10 heures. Puis elle retourne à son appartement à côté de la piscine. Elle reprend l'entraînement l'après-midi, à 15 heures 30. Elle nage 15 kilomètres par jour ! Sa journée se termine vers 19 heures 30."
+      },
+      {
+       "zh": "她回到家。她吃饭，看一会儿电视，给朋友们打电话。她睡得很早，大约 22 点。她每晚睡八个小时。",
+       "fr": "Elle rentre chez elle. Elle mange, elle regarde un peu la télé et elle téléphone à des amis. Elle se couche tôt, vers 22 heures. Elle dort huit heures par nuit."
+      },
+      {
+       "zh": "周六晚上，她有空。她出门，和朋友们去餐厅或电影院。周日，她睡到中午。她下午和朋友们或家人一起度过。",
+       "fr": "Le samedi soir, elle est libre. Elle sort, elle va au restaurant ou au cinéma avec des amis. Le dimanche, elle dort jusqu'à midi. Elle passe l'après-midi avec des amis ou avec sa famille."
+      },
+      {
+       "zh": "然后，周一，新的一周又开始了……",
+       "fr": "Et, le lundi, une nouvelle semaine recommence…"
+      },
+      {
+       "h": "放松一下"
+      },
+      {
+       "zh": "她听音乐。",
+       "fr": "Elle écoute de la musique."
+      },
+      {
+       "zh": "她玩纸牌。",
+       "fr": "Elle joue aux cartes."
+      },
+      {
+       "zh": "她睡很多觉。",
+       "fr": "Elle dort beaucoup."
+      }
+     ]
+    }
+   ]
   }
  ]
 }];

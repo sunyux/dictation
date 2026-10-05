@@ -5,7 +5,8 @@ SRC = sys.argv[1]  # dir with extracted .txt files
 OUT = os.path.join(os.path.dirname(__file__), '..', 'data.js')
 UNITS = {1: ('你好法语1_Unité1_默写版.txt', '你好法语1_Unité1_全文翻译默写.txt'),
          2: ('你好法语1_Unité2_默写版.txt', '你好法语1_Unité2_全文翻译默写.txt'),
-         3: ('你好法语1_Unité3_默写版_1.txt', '你好法语1_Unité3_全文翻译默写.txt')}
+         3: ('你好法语1_Unité3_默写版_1.txt', '你好法语1_Unité3_全文翻译默写.txt'),
+         4: ('你好法语1_Unité4_默写版.txt', '你好法语1_Unité4_全文翻译默写.txt')}
 # Rows lost at a PDF page break in the answer key
 PATCH = {(1, 15): 'français(e)', (1, 16): 'italien(ne)', (1, 17): 'ma', (1, 18): 'mon'}
 
@@ -14,8 +15,14 @@ LECON = re.compile(r'^Leçon (\d+)　(.+?)(?:　(.+?))?$')
 GROUP = re.compile(r'^(\S.*?)　(\d+)$')
 
 def read(name):
-    lines = open(os.path.join(SRC, name), encoding='utf-8').read().splitlines()
-    return [l for l in lines if not FOOT.match(l)]
+    lines = [l for l in open(os.path.join(SRC, name), encoding='utf-8').read().splitlines() if not FOOT.match(l)]
+    out = []
+    for l in lines:  # a leçon title that wrapped onto the next line
+        if out and out[-1].startswith('Leçon ') and out[-1].endswith(' ') and not LECON.match(l):
+            out[-1] = out[-1] + l
+        else:
+            out.append(l)
+    return out
 
 def cjk(c): return unicodedata.east_asian_width(c) in 'WF'
 def width(s): return sum(2 if cjk(c) else 1 for c in s)
@@ -44,7 +51,7 @@ def split_lecons(lines, start, stop=None):
             res[cur]['lines'].append(l)
     return res
 
-POS = re.compile(r'(?:(?<=\s)|(?<=[^\x00-\x7f]))((?:[a-zé]+\.)+(?:\s*/\s*(?:[a-zé]+\.)+)*|—)$')
+POS = re.compile(r'(?:(?<=\s)|(?<=[^\x00-\x7f])|(?<=\]))((?:[a-zé]+\.)+(?:\s*/\s*(?:[a-zé]+\.)+)*|—)$')
 
 def parse_rows(lines):
     """Yield (group, num, text) rows from a vocab table section."""
@@ -112,8 +119,24 @@ def cloze(q_lines, a_lines):
         out_lines.append(row)
     return out_lines
 
+def sents(t, zh):
+    return len(re.findall(r'[。！？]', t)) if zh else len(re.findall(r'[.!?](?=\s|$)', t))
+
+def align(zh, fr):
+    """Merge Chinese paragraphs that the French keeps as one, matching sentence counts."""
+    out, j = [], 0
+    for f in fr:
+        if j >= len(zh): break
+        cur = zh[j]; j += 1
+        if cur != f:
+            while j < len(zh) and sents(cur, True) < sents(f, False) and zh[j] != fr[min(len(out) + 1, len(fr) - 1)]:
+                cur += zh[j]; j += 1
+        out.append(cur)
+    return out
+
 def texts(zh_lines, fr_lines):
     zh, fr = unwrap(zh_lines), unwrap(fr_lines)
+    if len(zh) > len(fr): zh = align(zh, fr)
     if len(zh) != len(fr):
         print('!! line count', len(zh), len(fr), zh[:1], file=sys.stderr)
         for a, b in zip(zh, fr): print('   ', a, '|', b, file=sys.stderr)
