@@ -920,6 +920,51 @@
     $$('.mode', root).forEach(b => b.onclick = () => onPick(b.dataset.mode));
   }
 
+  /* ----- custom word order (per leçon, within each part-of-speech group) ----- */
+  const orderKey = (book, n) => `order:${book}:${n}`;
+  function orderedVocab(book, lecon) {
+    const saved = store.get(orderKey(book, lecon.n), null);
+    if (!saved) return lecon.vocab.slice();
+    const groups = [];
+    lecon.vocab.forEach(v => { let g = groups.find(x => x.g === v.g); if (!g) groups.push(g = { g: v.g, items: [] }); g.items.push(v); });
+    for (const g of groups) {
+      const want = saved[g.g || ''] || [];
+      const pos = v => { const i = want.indexOf(v.fr); return i < 0 ? 1e6 + g.items.indexOf(v) : i; };
+      g.items.sort((a, b) => pos(a) - pos(b));
+    }
+    return groups.flatMap(g => g.items);
+  }
+  function saveOrder(book, n, pane) {
+    const o = {};
+    $$('.vgroup', pane).forEach(g => { o[g.dataset.g] = $$('.vrow', g).map(r => r.dataset.fr); });
+    store.set(orderKey(book, n), o);
+  }
+  // drag a row by its handle; works with mouse and touch, only inside its own group
+  function enableDrag(pane, onDone) {
+    pane.addEventListener('pointerdown', e => {
+      const h = e.target.closest('.vdrag'); if (!h) return;
+      e.preventDefault(); e.stopPropagation();
+      const row = h.closest('.vrow'), group = row.parentElement;
+      row.classList.add('dragging');
+      h.setPointerCapture(e.pointerId);
+      const move = ev => {
+        const rows = $$('.vrow', group).filter(r => r !== row);
+        let before = null;
+        for (const r of rows) { const b = r.getBoundingClientRect(); if (ev.clientY < b.top + b.height / 2) { before = r; break; } }
+        before ? group.insertBefore(row, before) : group.appendChild(row);
+        const vb = window.innerHeight;
+        if (ev.clientY < 70) window.scrollBy(0, -12); else if (ev.clientY > vb - 50) window.scrollBy(0, 12);
+      };
+      const up = () => {
+        row.classList.remove('dragging');
+        h.removeEventListener('pointermove', move); h.removeEventListener('pointerup', up); h.removeEventListener('pointercancel', up);
+        onDone();
+      };
+      h.addEventListener('pointermove', move); h.addEventListener('pointerup', up); h.addEventListener('pointercancel', up);
+    });
+    pane.addEventListener('click', e => { if (e.target.closest('.vdrag')) e.stopPropagation(); }, true);
+  }
+
   /* ----- 1 · vocabulary ----- */
   function paneVocab(ctx, mode = store.get('vmode', 'list')) {
     const { lecon, pane } = ctx;
@@ -927,19 +972,24 @@
     const head = modeBar([['list', bi('浏览', 'Browse')], ['test', bi('首测', 'First test')], ['write', bi('看中文默写', 'Meaning → French')], ['listen', bi('听音拼写', 'Listen & spell')], ['conj', bi('动词变位', 'Conjugation')]], mode);
     if (mode === 'list') {
       const groups = [];
-      lecon.vocab.forEach(v => { let g = groups.find(x => x.g === v.g); if (!g) groups.push(g = { g: v.g, items: [] }); g.items.push(v); });
+      orderedVocab(ctx.book.id, lecon).forEach(v => { let g = groups.find(x => x.g === v.g); if (!g) groups.push(g = { g: v.g, items: [] }); g.items.push(v); });
+      const custom = !!store.get(orderKey(ctx.book.id, lecon.n), null);
       const mst = MASTER.get(ctx.book.id, lecon.n);
       const hide = store.get('vhide', false), showTip = store.get('vtip', true);
       pane.innerHTML = head.replace('<span class="spacer"></span>', `<span class="spacer"></span>
           <label class="kbd" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="vhide" ${hide ? 'checked' : ''}> ${bi('遮住法语', 'Hide French')}</label>
           <label class="kbd" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="vtip" ${showTip ? 'checked' : ''}> ${bi('记忆提示', 'Memory tips')}</label>
           <button class="btn ghost small" id="vplay">${ICON.play} ${bi('全部朗读', 'Read all')}</button>`) +
-        groups.map(g => `<div class="vgroup"><h3>${esc(g.g || '')}</h3>${g.items.map(v => `
-          <div class="vrow ${hide ? 'hidefr' : ''} ${mst.w[v.fr] ? 'mastered' : ''}" data-say="${esc(forms(v.fr).say)}">
+        `<p class="hint-text">${bi('按住左边的 ⠿ 拖动，可以在同一组里调整单词顺序。', 'Drag ⠿ on the left to reorder words within a group.')}${custom ? ` <a href="#" id="vreset">${bi('恢复课本顺序', 'Restore book order')}</a>` : ''}</p>` +
+        groups.map(g => `<div class="vgroup" data-g="${esc(g.g || '')}"><h3>${esc(g.g || '')}</h3>${g.items.map(v => `
+          <div class="vrow ${hide ? 'hidefr' : ''} ${mst.w[v.fr] ? 'mastered' : ''}" data-say="${esc(forms(v.fr).say)}" data-fr="${esc(v.fr)}">
+            <span class="vdrag" title="${bi('拖动调整顺序', 'Drag to reorder')}" aria-label="${bi('拖动调整顺序', 'Drag to reorder')}">⠿</span>
             <span class="play">${ICON.play}</span>
             <span class="vzh">${G(v)}</span><span class="pos">${esc(v.pos)}</span>
             <span class="vfr" lang="fr">${esc(v.fr)}</span>
             ${wordTip(lecon.n, v) ? `<span class="vtip" ${showTip ? '' : 'hidden'}>${wordTip(lecon.n, v)}</span>` : ''}</div>`).join('')}</div>`).join('');
+      enableDrag(pane, () => { saveOrder(ctx.book.id, lecon.n, pane); if (!$('#vreset', pane)) paneVocab(ctx, 'list'); });
+      const rs = $('#vreset', pane); if (rs) rs.onclick = e => { e.preventDefault(); store.set(orderKey(ctx.book.id, lecon.n), null); paneVocab(ctx, 'list'); };
       $('#vtip').onchange = e => { store.set('vtip', e.target.checked); $$('.vtip', pane).forEach(t => t.hidden = !e.target.checked); };
       $('#vhide').onchange = e => { store.set('vhide', e.target.checked); $$('.vrow', pane).forEach(r => r.classList.toggle('hidefr', e.target.checked)); };
       let stopper = null;
@@ -982,7 +1032,8 @@
 
   function wordDrill(ctx, box, mode, words) {
     const order = store.get('vorder', 'shuffle');
-    let queue = order === 'shuffle' ? shuffle(words) : words.slice();
+    const mine = orderedVocab(ctx.book.id, ctx.lecon);
+    let queue = order === 'shuffle' ? shuffle(words) : words.slice().sort((a, b) => mine.indexOf(a) - mine.indexOf(b));
     let i = 0, wrong = [], firstTry = 0, answered = false, hintN = 0;
     const listen = mode === 'listen', test = mode === 'test';
     const draw = () => {
@@ -1003,7 +1054,7 @@
         </div>
         <div id="fb"></div>
         <div class="kbd" style="margin-top:14px">顺序：
-          <a href="#" id="ord">${order === 'shuffle' ? '随机（点击改为课本顺序）' : '课本顺序（点击改为随机）'}</a></div>
+          <a href="#" id="ord">${order === 'shuffle' ? '随机（点击改为列表顺序）' : '列表顺序（点击改为随机）'}</a></div>
       </div>`;
       const inp = $('#ans', box);
       inp.focus();

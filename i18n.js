@@ -74,7 +74,7 @@ window.ZH_EN = [
   [/^只练还没掌握的词（(\d+) 个）$/, 'Only words not yet learned ($1)'],
   [/^这一课的词汇已经全部掌握.*$/, 'You have learned every word in this leçon. Untick the box above to practise them all again.'],
   [/^提示一个字母$/, 'Hint: one letter'], [/^检查 \/ 下一个$/, 'check / next'], [/^顺序：$/, 'Order:'],
-  [/^随机（点击改为课本顺序）$/, 'random (click for book order)'], [/^课本顺序（点击改为随机）$/, 'book order (click for random)'],
+  [/^随机（点击改为列表顺序）$/, 'random (click for list order)'], [/^列表顺序（点击改为随机）$/, 'list order (click for random)'],
   [/^对了（用了提示）$/, 'Right (with a hint)'], [/^完全正确$/, 'Perfect'], [/^差一点：注意重音符号$/, 'Almost — check the accents'],
   [/^答案$/, 'Answer'], [/^不对，正确答案是$/, 'Not quite — the answer is'],
   [/^(\d+) 个里一次写对 (\d+) 个 · 本课词汇已掌握 (\d+)\/(\d+)( ·)?$/, '$2 of $1 right first time · $3/$4 words learned$5'],
