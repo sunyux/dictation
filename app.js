@@ -309,7 +309,7 @@
         store.set('lastAuto', new Date().toISOString(), true);
       } catch { this.handle = null; }
     },
-    changed() { if (this.handle) { clearTimeout(this.timer); this.timer = setTimeout(() => this.write(), 2500); } },
+    changed() { if (this.handle) { clearTimeout(this.timer); this.timer = setTimeout(() => this.write(), 2500); } CLOUD.changed(); },
   };
   function idb() {
     return new Promise((res, rej) => { const r = indexedDB.open('nihao', 1); r.onupgradeneeded = () => r.result.createObjectStore('kv'); r.onsuccess = () => res(r.result); r.onerror = rej; });
@@ -317,6 +317,93 @@
   async function idbSet(k, v) { try { const db = await idb(); db.transaction('kv', 'readwrite').objectStore('kv').put(v, k); } catch { } }
   async function idbGet(k) { try { const db = await idb(); return await new Promise(r => { const q = db.transaction('kv').objectStore('kv').get(k); q.onsuccess = () => r(q.result); q.onerror = () => r(null); }); } catch { return null; } }
   if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => { });
+
+  /* ---------- cloud sync: Google sign-in + one Firestore document per user ---------- */
+  const NOSYNC = new Set(['nh:settings', 'nh:lastAuto', 'nh:lastBackup', 'nh:lastSync']);
+  const CLOUD = {
+    ready: false, user: null, timer: null, busy: false, applying: false, status: '',
+    on: () => !!(window.FIREBASE_CONFIG && window.firebase),
+    init() {
+      if (!this.on()) return;
+      try {
+        firebase.initializeApp(window.FIREBASE_CONFIG);
+        this.db = firebase.firestore();
+        firebase.auth().getRedirectResult().catch(() => { });
+        firebase.auth().onAuthStateChanged(async u => {
+          this.user = u; this.ready = true;
+          if (u) await this.pull();
+          refreshCloudUI();
+        });
+        document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && this.user) this.pull(); });
+      } catch (e) { this.status = 'error'; }
+    },
+    async signIn() {
+      const p = new firebase.auth.GoogleAuthProvider();
+      try { await firebase.auth().signInWithPopup(p); }
+      catch (e) {
+        if (/popup/.test(e.code || '')) await firebase.auth().signInWithRedirect(p);
+        else alert(tr('登录失败：') + (e.message || e.code));
+      }
+    },
+    signOut() { firebase.auth().signOut(); },
+    doc() { return this.db.collection('users').doc(this.user.uid); },
+    local() {
+      const data = {};
+      Object.keys(localStorage).filter(k => k.startsWith('nh:') && !NOSYNC.has(k)).forEach(k => { data[k] = localStorage.getItem(k); });
+      return data;
+    },
+    // download the cloud copy, merge it into this device, then upload the merged result
+    async pull() {
+      if (!this.user || this.busy) return;
+      this.busy = true; this.status = 'syncing'; refreshCloudUI();
+      try {
+        const snap = await this.doc().get();
+        if (snap.exists && snap.data().data) {
+          this.applying = true;
+          BACKUP.merge({ data: snap.data().data });
+          this.applying = false;
+        }
+        await this.doc().set({ data: this.local(), updated: firebase.firestore.FieldValue.serverTimestamp(), email: this.user.email || '' });
+        store.set('lastSync', new Date().toISOString(), true);
+        this.status = 'ok';
+        renderStatus();
+        if (snap.exists) route();
+      } catch (e) { this.status = 'error'; console.warn('sync', e); }
+      this.busy = false; refreshCloudUI();
+    },
+    async push() {
+      if (!this.user) return;
+      try {
+        await this.doc().set({ data: this.local(), updated: firebase.firestore.FieldValue.serverTimestamp(), email: this.user.email || '' });
+        store.set('lastSync', new Date().toISOString(), true); this.status = 'ok';
+      } catch (e) { this.status = 'error'; }
+      refreshCloudUI();
+    },
+    changed() { if (this.user && !this.applying) { clearTimeout(this.timer); this.timer = setTimeout(() => this.push(), 3000); } },
+  };
+  function cloudHTML() {
+    if (!window.FIREBASE_CONFIG) return `<p class="hint-text" style="margin:0">云同步还没有设置。</p>`;
+    if (!window.firebase) return `<p class="notice">云同步组件没有加载（可能是网络问题），刷新页面再试。</p>`;
+    if (!CLOUD.ready) return `<p class="kbd">正在连接…</p>`;
+    if (!CLOUD.user) return `<p class="hint-text" style="margin:0 0 12px">用 Google 账号登录后，手机和电脑会自动共用同一份进度：掌握的单词、错题本、打卡和邮票。</p>
+      <button class="btn" id="cl-in">用 Google 登录</button>`;
+    const last = store.get('lastSync', '');
+    const st = CLOUD.status === 'syncing' ? '正在同步…' : CLOUD.status === 'error' ? '同步失败，稍后会重试' : last ? `已同步 · ${last.slice(0, 16).replace('T', ' ')}` : '';
+    return `<div class="toolbar"><span>已登录：<b>${esc(CLOUD.user.email || CLOUD.user.displayName || '')}</b></span>
+      <span class="kbd">${st}</span><span class="spacer"></span>
+      <button class="btn ghost small" id="cl-now">立即同步</button><button class="btn ghost small" id="cl-out">退出登录</button></div>
+      <p class="kbd" style="margin:6px 0 0">每次练习后自动上传；打开网站或切回这个页面时自动下载并合并。</p>`;
+  }
+  function refreshCloudUI() {
+    const box = $('#cloud'); if (box) { box.innerHTML = cloudHTML(); bindCloud(box); }
+    const dot = $('#cloud-dot'); if (dot) dot.dataset.state = CLOUD.user ? CLOUD.status || 'ok' : 'off';
+  }
+  function bindCloud(box) {
+    const i = $('#cl-in', box), n = $('#cl-now', box), o = $('#cl-out', box);
+    if (i) i.onclick = () => CLOUD.signIn();
+    if (n) n.onclick = () => CLOUD.pull();
+    if (o) o.onclick = () => CLOUD.signOut();
+  }
 
   function viewMe() {
     document.title = '我的 · 打卡与邮册';
@@ -348,6 +435,7 @@
       <section class="unit"><div class="unit-title"><h2>邮册</h2><span>每课词汇通过、课文通过各得一枚</span></div>
         <div class="album">${lecons.map(l => `<div class="album-cell"><div class="pair">${stampSVG(l.n, 'v', got[`${book.id}:${l.n}:v`])}${stampSVG(l.n, 't', got[`${book.id}:${l.n}:t`])}</div><a href="#/${book.id}/${l.n}" lang="fr">Leçon ${l.n}</a></div>`).join('')}</div>
       </section>
+      <section class="unit"><div class="unit-title"><h2>云同步</h2><span>手机和电脑共用进度</span></div><div id="cloud"></div></section>
       <section class="unit" id="backup"><div class="unit-title"><h2>保存与恢复</h2></div>
         <p class="hint-text" style="margin:0 0 14px">所有进度（掌握的单词、错题本、打卡、邮票）只存在这个浏览器里。清除 Chrome 的 Cookie 和网站数据会把它们一起删掉，所以记得备份。</p>
         <div class="toolbar">
@@ -361,6 +449,7 @@
           <span class="kbd">${BACKUP.handle ? `每次练习后自动写入${lastA ? ' · 最近 ' + lastA.slice(0, 16).replace('T', ' ') : ''}` : '选一个文件后，每次练习都会自动写进去（仅 Chrome / Edge 电脑版）'}</span>
         </div>` : ''}
       </section>`;
+    refreshCloudUI();
     $$('[data-goal]', main).forEach(b => b.onclick = () => { store.set('goal', +b.dataset.goal); renderStatus(); viewMe(); });
     $('#bk-dl', main).onclick = () => { BACKUP.download(); viewMe(); };
     $('#bk-up', main).onchange = async e => {
@@ -1439,6 +1528,7 @@
     $$('button', el).forEach(b => b.onclick = () => { settings.lang = b.dataset.lang; saveSettings(); location.reload(); });
   }
   renderLang();
+  CLOUD.init();
   renderStatus();
   translateTree(document.body);
   idbGet('handle').then(h => { if (h && h.queryPermission) h.queryPermission({ mode: 'readwrite' }).then(p => { if (p === 'granted') { BACKUP.handle = h; BACKUP.write(); } }); });
