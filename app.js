@@ -13,7 +13,7 @@
     get(k, d) { try { const v = localStorage.getItem('nh:' + k); return v == null ? d : JSON.parse(v); } catch { return d; } },
     set(k, v, quiet) { try { localStorage.setItem('nh:' + k, JSON.stringify(v)); } catch { } if (!quiet) BACKUP.changed(); },
   };
-  const settings = Object.assign({ rate: 0.85, lenient: false, voice: '' }, store.get('settings', {}));
+  const settings = Object.assign({ rate: 0.85, volume: 0.7, lenient: false, voice: '' }, store.get('settings', {}));
   const saveSettings = () => store.set('settings', settings);
   if (!settings.lang) settings.lang = 'zh';
   // language modes: 'zhen' 中英法 · 'zh' 中法 · 'en' 英法
@@ -596,6 +596,7 @@
       const u = new SpeechSynthesisUtterance(text.replace(/^–\s*/, '').replace(/…/g, ', ').replace(/[¹²³*]/g, ''));
       u.lang = 'fr-FR'; if (this.voice) u.voice = this.voice;
       u.rate = settings.rate;
+      u.volume = settings.volume;
       let done = false;
       const fin = () => { if (!done) { done = true; onend && onend(); } };
       u.onend = fin; u.onerror = fin;
@@ -642,12 +643,17 @@
     box.innerHTML = `
       <label><span class="lab">朗读语速 · <b id="rate-v">${settings.rate.toFixed(2)}</b></span>
         <input type="range" id="s-rate" min="0.5" max="1.2" step="0.05" value="${settings.rate}"></label>
+      <label><span class="lab">朗读音量 · <b id="vol-v">${Math.round(settings.volume * 100)}%</b></span>
+        <input type="range" id="s-vol" min="0.05" max="1" step="0.05" value="${settings.volume}"></label>
+      ${/iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1) ? '<p class="kbd" style="margin:-8px 0 12px">iPhone / iPad 的浏览器不支持这个设置，请用机身侧面的音量键调。</p>' : ''}
       <label><span class="lab">法语声音</span>
         <select id="s-voice">${vs.length ? vs.map(v => `<option ${TTS.voice && v.name === TTS.voice.name ? 'selected' : ''}>${esc(v.name)}</option>`).join('') : '<option>（系统没有法语声音）</option>'}</select></label>
       <label class="chk"><input type="checkbox" id="s-len" ${settings.lenient ? 'checked' : ''}> 重音写错也算对</label>
       <button class="btn ghost small" data-say="Bonjour ! Je m'appelle Alice. Ça va bien ?">试听</button>
       <p class="kbd" style="margin:12px 0 0">macOS 可在 系统设置 › 辅助功能 › 朗读内容 › 系统声音 下载更自然的法语声音（如 Amélie 高音质）。</p>`;
     $('#s-rate').oninput = e => { settings.rate = +e.target.value; $('#rate-v').textContent = settings.rate.toFixed(2); saveSettings(); };
+    $('#s-vol').oninput = e => { settings.volume = +e.target.value; $('#vol-v').textContent = Math.round(settings.volume * 100) + '%'; saveSettings(); };
+    $('#s-vol').onchange = () => TTS.say('Bonjour !');
     $('#s-voice').onchange = e => { settings.voice = e.target.value; TTS.pick(); saveSettings(); };
     $('#s-len').onchange = e => { settings.lenient = e.target.checked; saveSettings(); };
   }

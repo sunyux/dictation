@@ -2,6 +2,7 @@
 const ZH_GROUPS = { '阳性名词': 'Masculine nouns', '阴性名词': 'Feminine nouns', '名词': 'Nouns (both genders)', '动词': 'Verbs', '形容词': 'Adjectives',
   '代词': 'Pronouns', '副词': 'Adverbs', '介词、连词': 'Prepositions & conjunctions', '冠词、感叹词、短语': 'Articles, interjections & phrases', '地名': 'Place names' };
 window.ZH_EN = [
+  [/^朗读音量 ·$/, 'Volume ·'], [/^iPhone \/ iPad.*$/, 'On iPhone / iPad the browser ignores this setting — use the side buttons instead.'],
   [/^云同步$/, 'Cloud sync'], [/^手机和电脑共用进度$/, 'Share progress between phone and computer'], [/^云同步还没有设置。$/, 'Cloud sync is not set up yet.'],
   [/^云同步组件没有加载.*$/, 'The sync component did not load (network problem?). Refresh and try again.'], [/^正在连接…$/, 'Connecting…'],
   [/^用 Google 账号登录后.*$/, 'Sign in with Google and your phone and computer share the same progress: learned words, mistake book, streak and stamps.'],
