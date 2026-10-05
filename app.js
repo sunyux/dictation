@@ -368,7 +368,7 @@
         this.status = 'ok';
         renderStatus();
         if (snap.exists) route();
-      } catch (e) { this.status = 'error'; console.warn('sync', e); }
+      } catch (e) { this.status = 'error'; this.err = e.code || e.message || String(e); console.warn('sync', e); }
       this.busy = false; refreshCloudUI();
     },
     async push() {
@@ -376,7 +376,7 @@
       try {
         await this.doc().set({ data: this.local(), updated: firebase.firestore.FieldValue.serverTimestamp(), email: this.user.email || '' });
         store.set('lastSync', new Date().toISOString(), true); this.status = 'ok';
-      } catch (e) { this.status = 'error'; }
+      } catch (e) { this.status = 'error'; this.err = e.code || e.message || String(e); }
       refreshCloudUI();
     },
     changed() { if (this.user && !this.applying) { clearTimeout(this.timer); this.timer = setTimeout(() => this.push(), 3000); } },
@@ -388,11 +388,19 @@
     if (!CLOUD.user) return `<p class="hint-text" style="margin:0 0 12px">用 Google 账号登录后，手机和电脑会自动共用同一份进度：掌握的单词、错题本、打卡和邮票。</p>
       <button class="btn" id="cl-in">用 Google 登录</button>`;
     const last = store.get('lastSync', '');
-    const st = CLOUD.status === 'syncing' ? '正在同步…' : CLOUD.status === 'error' ? '同步失败，稍后会重试' : last ? `已同步 · ${last.slice(0, 16).replace('T', ' ')}` : '';
+    const st = CLOUD.status === 'syncing' ? '正在同步…' : CLOUD.status === 'error' ? '同步失败' : last ? `已同步 · ${last.slice(0, 16).replace('T', ' ')}` : '';
     return `<div class="toolbar"><span>已登录：<b>${esc(CLOUD.user.email || CLOUD.user.displayName || '')}</b></span>
       <span class="kbd">${st}</span><span class="spacer"></span>
       <button class="btn ghost small" id="cl-now">立即同步</button><button class="btn ghost small" id="cl-out">退出登录</button></div>
+      ${CLOUD.status === 'error' ? `<p class="notice" style="margin:8px 0 0">${esc(cloudErr(CLOUD.err))}<br><span class="kbd" lang="en">${esc(CLOUD.err || '')}</span></p>` : ''}
       <p class="kbd" style="margin:6px 0 0">每次练习后自动上传；打开网站或切回这个页面时自动下载并合并。</p>`;
+  }
+  function cloudErr(code) {
+    code = String(code || '');
+    if (/permission-denied|insufficient permissions/i.test(code)) return '数据库拒绝访问：请在 Firebase 的 Firestore Database → 规则里粘贴规则并点「发布」。';
+    if (/not-found|does not exist|NOT_FOUND|failed-precondition/i.test(code)) return '找不到数据库：请在 Firebase 里打开 Firestore Database，点「创建数据库」。';
+    if (/unavailable|offline|network/i.test(code)) return '网络连不上 Firebase：检查网络（需要能访问 Google），然后点「立即同步」。';
+    return '同步出错，下面是错误代码，发给 Claude 看看。';
   }
   function refreshCloudUI() {
     const box = $('#cloud'); if (box) { box.innerHTML = cloudHTML(); bindCloud(box); }

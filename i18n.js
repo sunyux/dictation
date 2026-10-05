@@ -5,7 +5,7 @@ window.ZH_EN = [
   [/^云同步$/, 'Cloud sync'], [/^手机和电脑共用进度$/, 'Share progress between phone and computer'], [/^云同步还没有设置。$/, 'Cloud sync is not set up yet.'],
   [/^云同步组件没有加载.*$/, 'The sync component did not load (network problem?). Refresh and try again.'], [/^正在连接…$/, 'Connecting…'],
   [/^用 Google 账号登录后.*$/, 'Sign in with Google and your phone and computer share the same progress: learned words, mistake book, streak and stamps.'],
-  [/^用 Google 登录$/, 'Sign in with Google'], [/^已登录：$/, 'Signed in:'], [/^正在同步…$/, 'Syncing…'], [/^同步失败，稍后会重试$/, 'Sync failed — will retry'],
+  [/^用 Google 登录$/, 'Sign in with Google'], [/^已登录：$/, 'Signed in:'], [/^正在同步…$/, 'Syncing…'], [/^同步失败$/, 'Sync failed'], [/^数据库拒绝访问.*$/, 'Database refused access: paste the rules in Firebase → Firestore Database → Rules and click Publish.'], [/^找不到数据库.*$/, 'Database not found: open Firestore Database in Firebase and click Create database.'], [/^网络连不上 Firebase.*$/, "Can't reach Firebase: check your connection (Google must be reachable), then press Sync now."], [/^同步出错，下面是错误代码.*$/, 'Sync error — send the code below to Claude.'],
   [/^已同步 · (.+)$/, 'Synced · $1'], [/^立即同步$/, 'Sync now'], [/^退出登录$/, 'Sign out'],
   [/^每次练习后自动上传.*$/, 'Uploads after every exercise; downloads and merges whenever you open the site or come back to it.'], [/^登录失败：$/, 'Sign-in failed: '],
   [/^(.*?)(（现在时）)? · 变位$/, (m, a, p) => `${a}${p ? ' (present tense)' : ''} · conjugation`],
