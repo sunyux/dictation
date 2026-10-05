@@ -343,3 +343,6 @@ html[data-lang="en"] .lecon-head .zh, html[data-lang="en"] .lecon-card .zh { dis
 .vrow:hover .vdrag { color: var(--ink-2); }
 .vrow.dragging { background: var(--card); box-shadow: 0 8px 24px -10px rgba(0,0,0,.35); border-radius: 6px; position: relative; z-index: 2; }
 .vrow.dragging .vdrag { cursor: grabbing; color: var(--blue); }
+body.is-dragging { user-select: none; -webkit-user-select: none; overflow: hidden; touch-action: none; }
+@media (pointer: coarse) { .vdrag { font-size: 22px; padding: 10px 4px; color: var(--ink-2); } .vrow { grid-template-columns: 30px 30px 1fr; } }
+@media (pointer: coarse) and (min-width: 721px) { .vrow { grid-template-columns: 30px 30px 1fr auto 1fr; } }

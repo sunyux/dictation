@@ -941,27 +941,45 @@
   }
   // drag a row by its handle; works with mouse and touch, only inside its own group
   function enableDrag(pane, onDone) {
-    pane.addEventListener('pointerdown', e => {
-      const h = e.target.closest('.vdrag'); if (!h) return;
-      e.preventDefault(); e.stopPropagation();
-      const row = h.closest('.vrow'), group = row.parentElement;
+    let drag = null;
+    const pointY = ev => (ev.touches && ev.touches[0] ? ev.touches[0].clientY : ev.clientY);
+    const start = (ev, h) => {
+      const row = h.closest('.vrow');
+      drag = { row, group: row.parentElement };
       row.classList.add('dragging');
-      h.setPointerCapture(e.pointerId);
-      const move = ev => {
-        const rows = $$('.vrow', group).filter(r => r !== row);
-        let before = null;
-        for (const r of rows) { const b = r.getBoundingClientRect(); if (ev.clientY < b.top + b.height / 2) { before = r; break; } }
-        before ? group.insertBefore(row, before) : group.appendChild(row);
-        const vb = window.innerHeight;
-        if (ev.clientY < 70) window.scrollBy(0, -12); else if (ev.clientY > vb - 50) window.scrollBy(0, 12);
-      };
-      const up = () => {
-        row.classList.remove('dragging');
-        h.removeEventListener('pointermove', move); h.removeEventListener('pointerup', up); h.removeEventListener('pointercancel', up);
-        onDone();
-      };
-      h.addEventListener('pointermove', move); h.addEventListener('pointerup', up); h.addEventListener('pointercancel', up);
-    });
+      document.body.classList.add('is-dragging');
+    };
+    const move = ev => {
+      if (!drag) return;
+      if (ev.cancelable) ev.preventDefault();          // keep the page from scrolling while dragging
+      const y = pointY(ev);
+      const rows = $$('.vrow', drag.group).filter(r => r !== drag.row);
+      let before = null;
+      for (const r of rows) { const b = r.getBoundingClientRect(); if (y < b.top + b.height / 2) { before = r; break; } }
+      if (before !== drag.row.nextElementSibling) before ? drag.group.insertBefore(drag.row, before) : drag.group.appendChild(drag.row);
+      if (y < 80) window.scrollBy(0, -10); else if (y > window.innerHeight - 60) window.scrollBy(0, 10);
+    };
+    const end = () => {
+      if (!drag) return;
+      drag.row.classList.remove('dragging');
+      document.body.classList.remove('is-dragging');
+      drag = null;
+      onDone();
+    };
+    // touch (iPhone / iPad): touch events with a non-passive move so we can stop scrolling
+    pane.addEventListener('touchstart', e => { const h = e.target.closest('.vdrag'); if (h) { e.preventDefault(); start(e, h); } }, { passive: false });
+    // mouse / pen
+    pane.addEventListener('pointerdown', e => { if (e.pointerType === 'touch') return; const h = e.target.closest('.vdrag'); if (h) { e.preventDefault(); start(e, h); } });
+    const opts = { passive: false };
+    document.addEventListener('touchmove', move, opts);
+    const pmove = e => { if (e.pointerType !== 'touch') move(e); }, pup = e => { if (e.pointerType !== 'touch') end(); };
+    document.addEventListener('pointermove', pmove); document.addEventListener('pointerup', pup);
+    document.addEventListener('touchend', end); document.addEventListener('touchcancel', end);
+    const off = () => {
+      document.removeEventListener('touchmove', move, opts); document.removeEventListener('pointermove', pmove); document.removeEventListener('pointerup', pup);
+      document.removeEventListener('touchend', end); document.removeEventListener('touchcancel', end);
+    };
+    const prev = cleanup; cleanup = () => { off(); prev && prev(); };
     pane.addEventListener('click', e => { if (e.target.closest('.vdrag')) e.stopPropagation(); }, true);
   }
 
@@ -1002,7 +1020,7 @@
           rows.forEach((r, k) => r.style.background = k === i ? 'var(--wash-blue)' : '');
           if (i >= 0) rows[i].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
         }, () => { stopper = null; btn.innerHTML = ICON.play + ' 全部朗读'; });
-        cleanup = () => stopper && stopper();
+        const prevC = cleanup; cleanup = () => { stopper && stopper(); prevC && prevC(); };
       };
     } else {
       if (mode === 'conj') { pane.innerHTML = head + '<div id="drill"></div>'; bindModes(pane, m => paneVocab(ctx, m)); return conjDrill(ctx, $('#drill', pane)); }
