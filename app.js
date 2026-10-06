@@ -1023,7 +1023,7 @@
         const prevC = cleanup; cleanup = () => { stopper && stopper(); prevC && prevC(); };
       };
     } else {
-      if (mode === 'conj') { pane.innerHTML = head + '<div id="drill"></div>'; bindModes(pane, m => paneVocab(ctx, m)); return conjDrill(ctx, $('#drill', pane)); }
+      if (mode === 'conj') { pane.innerHTML = head + '<div id="drill"></div>'; bindModes(pane, m => paneVocab(ctx, m)); return conjPane(ctx, $('#drill', pane)); }
       pane.innerHTML = head + '<div id="drill"></div>';
       const box = $('#drill', pane);
       if (mode === 'test') {
@@ -1199,7 +1199,7 @@
       let body = f;
       if (refl) body = (vowel(f) && REFL[i].length === 2 && i !== 3 && i !== 4 ? REFL[i][0] + "'" : REFL[i] + ' ') + f;
       const text = i === 0 && vowel(body) ? "j'" + body : pr + ' ' + body;
-      return { p: PRON[i], text, form: f };
+      return { p: PRON[i], text, form: f, body, i };
     });
   }
   function wordTip(n, v) {
@@ -1213,13 +1213,61 @@
   }
   const tipBox = html => html ? `<div class="tip"><span class="tip-lab">记忆提示</span>${html}</div>` : '';
 
-  function conjDrill(ctx, box) {
+  const isSpecial = fr => !!IRREG[fr.replace(/\s*\((s'|se)\)/, '').trim()];
+  const lessonVerbs = lecon => lecon.vocab.filter(v => v.pos.startsWith('v') && conjugate(v.fr)).map(v => ({ ...v, n: lecon.n }))
+    .filter((v, i, a) => a.findIndex(x => x.fr === v.fr) === i);
+
+  // 动词变位: a table to study every form, plus a dictation of the irregular ones only
+  function conjPane(ctx, box, view = store.get('conjview', 'table')) {
+    store.set('conjview', view);
+    const verbs = lessonVerbs(ctx.lecon), special = verbs.filter(v => isSpecial(v.fr));
+    box.innerHTML = `<div class="modes sub">
+        <button class="mode" data-cv="table" aria-pressed="${view === 'table'}">${bi('变位表', 'Conjugation table')}</button>
+        <button class="mode" data-cv="drill" aria-pressed="${view === 'drill'}">${bi('特殊变位听写', 'Irregular verbs dictation')}${special.length ? ` (${special.length})` : ''}</button>
+      </div><div id="cv"></div>`;
+    $$('[data-cv]', box).forEach(b => b.onclick = () => conjPane(ctx, box, b.dataset.cv));
+    const inner = $('#cv', box);
+    if (!verbs.length) { inner.innerHTML = '<p class="notice">这一课没有要变位的动词。</p>'; return; }
+    if (view === 'drill') {
+      if (!special.length) { inner.innerHTML = '<p class="notice">这一课的动词都是规则变化，看变位表记住词尾就好。</p>'; return; }
+      return conjDrill(ctx, inner, special);
+    }
+    conjTable(ctx, inner, verbs);
+  }
+
+  function conjTable(ctx, box, verbs) {
+    const cover = store.get('conjcover', false);
+    const ends = ['e', 'es', 'e', 'ons', 'ez', 'ent'];
+    const row = (v, c) => {
+      const inf = v.fr.replace(/\s*\((s'|se)\)/, '').trim();
+      const reg = inf.endsWith('er') ? inf.slice(0, -2) + ends[c.i] : null;
+      const pron = c.i === 0 && /^j'/.test(c.text) ? "j'" : PRON[c.i];
+      const pre = c.body.slice(0, c.body.length - c.form.length);
+      let verb;
+      if (reg && c.form === reg && !isSpecial(v.fr)) verb = `${esc(pre)}${esc(inf.slice(0, -2))}<b class="ce">${esc(ends[c.i])}</b>`;
+      else if (reg && c.form === reg) verb = `${esc(pre)}${esc(c.form)}`;
+      else verb = `${esc(pre)}<b class="ci">${esc(c.form)}</b>`;
+      const say = (pron === "j'" ? '' : pron.split('/')[0] + ' ') + (pron === "j'" ? c.text : c.body);
+      return `<tr data-say="${esc(say)}"><td class="cp">${esc(pron)}</td><td class="cf" lang="fr">${verb}</td></tr>`;
+    };
+    box.innerHTML = `<div class="toolbar">
+        <label class="kbd" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="ccover" ${cover ? 'checked' : ''}> ${bi('遮住变位（自测）', 'Cover the forms (self-test)')}</label>
+        <span class="spacer"></span><span class="kbd">${bi('蓝色 = 规则词尾 · 红色 = 特殊变化 · 点一行听发音', 'blue = regular ending · red = irregular · tap a row to hear it')}</span></div>
+      <div class="ctables ${cover ? 'covered' : ''}">${verbs.map(v => {
+        const cs = conjugate(v.fr).map((c, i) => ({ ...c, i }));
+        const all = cs.map(c => c.text.replace(/^(il|elle|ils|elles) /, m => m)).join(', ');
+        return `<section class="ctable">
+          <header><span class="cinf" lang="fr">${esc(forms(v.fr).say)}</span>${playBtn(all)}
+            <span class="ctag ${isSpecial(v.fr) ? 'sp' : ''}">${isSpecial(v.fr) ? bi('特殊', 'irregular') : bi('规则', 'regular')}</span>
+            <div class="cmean">${G(v)}</div></header>
+          <table>${cs.map(c => row(v, c)).join('')}</table>
+          ${tipBox(verbTip(v.fr))}</section>`;
+      }).join('')}</div>`;
+    $('#ccover', box).onchange = e => { store.set('conjcover', e.target.checked); $('.ctables', box).classList.toggle('covered', e.target.checked); };
+  }
+
+  function conjDrill(ctx, box, verbs) {
     const { book, lecon } = ctx;
-    const all = book.units.flatMap(u => u.lecons);
-    const pool = l => l.vocab.filter(v => v.pos.startsWith('v') && conjugate(v.fr)).map(v => ({ ...v, n: l.n }));
-    let verbs = pool(lecon);
-    verbs = verbs.filter((v, i, a) => a.findIndex(x => x.fr === v.fr) === i);
-    if (!verbs.length) { box.innerHTML = '<p class="notice">这一课没有要变位的动词。</p>'; return; }
     let see = store.get('conjsee', false);
     const queue = shuffle(verbs.flatMap(v => conjugate(v.fr).map(c => ({ v, c }))));
     let i = 0, answered = false, right = 0;
@@ -1228,7 +1276,7 @@
         box.innerHTML = `<div class="drill summary"><p class="kicker" lang="fr">Bilan</p><div class="score">${right} / ${queue.length}</div>
           <p>${verbs.map(v => esc(v.fr)).join(' · ')}</p>
           <div class="drill-actions" style="justify-content:center"><button class="btn" id="again">再来一遍</button></div></div>`;
-        $('#again', box).onclick = () => conjDrill(ctx, box);
+        $('#again', box).onclick = () => conjDrill(ctx, box, verbs);
         return;
       }
       const { v, c } = queue[i]; answered = false;

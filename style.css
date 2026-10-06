@@ -346,3 +346,24 @@ html[data-lang="en"] .lecon-head .zh, html[data-lang="en"] .lecon-card .zh { dis
 body.is-dragging { user-select: none; -webkit-user-select: none; overflow: hidden; touch-action: none; }
 @media (pointer: coarse) { .vdrag { font-size: 22px; padding: 10px 4px; color: var(--ink-2); } .vrow { grid-template-columns: 30px 30px 1fr; } }
 @media (pointer: coarse) and (min-width: 721px) { .vrow { grid-template-columns: 30px 30px 1fr auto 1fr; } }
+
+/* conjugation table */
+.modes.sub { margin-bottom: 18px; }
+.ctables { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 16px; }
+.ctable { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px 12px; }
+.ctable header { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+.cinf { font: 600 22px var(--display); }
+.ctag { font: 12px var(--zh); border: 1px solid var(--line); border-radius: 4px; padding: 0 6px; color: var(--ink-2); margin-left: auto; }
+.ctag.sp { color: var(--red); border-color: var(--red); }
+.cmean { flex-basis: 100%; font: 14px var(--zh); color: var(--ink-2); }
+.ctable table { width: 100%; border-collapse: collapse; }
+.ctable tr { cursor: pointer; border-top: 1px dashed var(--line); }
+.ctable tr:hover { background: var(--wash-blue); }
+.ctable td { padding: 5px 4px; }
+.cp { width: 4.2em; color: var(--ink-2); font-size: 16px; }
+.cf { font-size: 19px; }
+.cf .ce { color: var(--blue); font-weight: 600; }
+.cf .ci { color: var(--red); font-weight: 600; }
+.ctable .tip { font-size: 14px; }
+.covered .cf { filter: blur(7px); transition: filter .2s; }
+.covered tr:hover .cf, .covered tr:active .cf { filter: none; }
