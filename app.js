@@ -1216,12 +1216,10 @@
   function conjDrill(ctx, box) {
     const { book, lecon } = ctx;
     const all = book.units.flatMap(u => u.lecons);
-    let wide = store.get('conjwide', false);
     const pool = l => l.vocab.filter(v => v.pos.startsWith('v') && conjugate(v.fr)).map(v => ({ ...v, n: l.n }));
     let verbs = pool(lecon);
-    const forced = !verbs.length;
-    if (wide || forced) verbs = all.filter(l => l.n <= lecon.n).flatMap(pool).filter((v, i, a) => a.findIndex(x => x.fr === v.fr) === i);
-    if (!verbs.length) { box.innerHTML = '<p class="notice">到这一课为止还没有动词。</p>'; return; }
+    verbs = verbs.filter((v, i, a) => a.findIndex(x => x.fr === v.fr) === i);
+    if (!verbs.length) { box.innerHTML = '<p class="notice">这一课没有要变位的动词。</p>'; return; }
     let see = store.get('conjsee', false);
     const queue = shuffle(verbs.flatMap(v => conjugate(v.fr).map(c => ({ v, c }))));
     let i = 0, answered = false, right = 0;
@@ -1248,14 +1246,12 @@
         <details class="tips-all"><summary>本组动词的记忆提示</summary>${verbs.map(x => `<div class="tip"><span class="tip-lab" lang="fr">${esc(x.fr)}</span>${verbTip(x.fr)}</div>`).join('')}</details>
         <div class="kbd" style="margin-top:14px;display:flex;gap:16px;flex-wrap:wrap">
           <label><input type="checkbox" id="see" ${see ? 'checked' : ''}> 看提示写（不听）</label>
-          ${forced ? '<span>这一课没有动词，用的是之前课的动词</span>' : `<label><input type="checkbox" id="wide" ${wide ? 'checked' : ''}> 包含之前各课的动词</label>`}
         </div></div>`;
       const inp = $('#ans', box); inp.focus();
       if (!see) setTimeout(() => TTS.say(c.text), 200);
       inp.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); answered ? (i++, draw()) : check(); } };
       $('#skip', box).onclick = () => check(true);
       $('#see', box).onchange = e => { see = e.target.checked; store.set('conjsee', see); draw(); };
-      const w = $('#wide', box); if (w) w.onchange = e => { store.set('conjwide', e.target.checked); conjDrill(ctx, box); };
     };
     const check = (giveUp = false) => {
       const { v, c } = queue[i], val = $('#ans', box).value;
