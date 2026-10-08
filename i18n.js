@@ -2,6 +2,7 @@
 const ZH_GROUPS = { '阳性名词': 'Masculine nouns', '阴性名词': 'Feminine nouns', '名词': 'Nouns (both genders)', '动词': 'Verbs', '形容词': 'Adjectives',
   '代词': 'Pronouns', '副词': 'Adverbs', '介词、连词': 'Prepositions & conjunctions', '冠词、感叹词、短语': 'Articles, interjections & phrases', '地名': 'Place names' };
 window.ZH_EN = [
+  [/^每题自动朗读$/, 'Play each word automatically'],
   [/^这一课的动词都是规则变化.*$/, 'All verbs in this leçon are regular — learn the endings in the table.'],
   [/^特殊变位听写 \((\d+)\)$/, 'Irregular verbs dictation ($1)'], [/^特殊$/, 'irregular'], [/^规则$/, 'regular'],
   [/^这一课没有要变位的动词。$/, 'This leçon has no verbs to conjugate.'],
@@ -26,7 +27,7 @@ window.ZH_EN = [
   // home & book
   [/^跟着课本，一课一课写下来$/, 'Follow the book, one leçon at a time'],
   [/^每一课都按你的默写讲义整理.*$/, 'Every leçon follows your dictation handouts: learn the words first, then practise sentences, then write out the whole text and recite it aloud. Tap any French to hear it.'],
-  [/^词汇 — 看中文写法语，或听音拼写$/, 'Vocabulary — write the French from the meaning, or spell what you hear'],
+  [/^词汇 — 看中文和英文含义写法语，可以点播放听发音$/, 'Vocabulary — write the French from its Chinese and English meaning, with a button to hear it'],
   [/^句子 — 课文填空、逐句中译法、听写$/, 'Sentences — fill the gaps, translate line by line, dictation'],
   [/^全文默写 — 对照中文，整篇写出来$/, 'Full dictation — write out the whole text from the translation'],
   [/^背诵 — 对着麦克风说，说对的词会逐个显现$/, 'Recite — speak into the microphone and each word appears as you get it right'],
@@ -72,7 +73,7 @@ window.ZH_EN = [
   [/^把这一课 (\d+) 个词全部默写一遍，不能用提示。$/, 'Write all $1 words of this leçon, no hints.'],
   [/^写对的直接算掌握，以后不用再复习；写错的$/, 'Words you get right count as learned straight away and never need reviewing; the ones you miss'],
   [/^不进错题本$/, 'do not go into the mistake book'],
-  [/^，之后在「看中文默写」或「听音拼写」里练，第一次就写对也算掌握。$/, '— practise them later in "Meaning → French" or "Listen & spell"; getting one right first time there also counts as learned.'],
+  [/^，之后在「默写」里练，第一次就写对也算掌握。$/, '— practise them later in "Dictation"; getting one right first time there also counts as learned.'],
   [/^上次首测：(.+)$/, 'Last test: $1'], [/^再测一次$/, 'Test again'], [/^开始首测$/, 'Start the test'],
   [/^只练还没掌握的词（(\d+) 个）$/, 'Only words not yet learned ($1)'],
   [/^这一课的词汇已经全部掌握.*$/, 'You have learned every word in this leçon. Untick the box above to practise them all again.'],
@@ -81,7 +82,7 @@ window.ZH_EN = [
   [/^对了（用了提示）$/, 'Right (with a hint)'], [/^完全正确$/, 'Perfect'], [/^差一点：注意重音符号$/, 'Almost — check the accents'],
   [/^答案$/, 'Answer'], [/^不对，正确答案是$/, 'Not quite — the answer is'],
   [/^(\d+) 个里一次写对 (\d+) 个 · 本课词汇已掌握 (\d+)\/(\d+)( ·)?$/, '$2 of $1 right first time · $3/$4 words learned$5'],
-  [/^词汇通过$/, 'vocabulary passed'], [/^写错的词没有进错题本.*$/, 'Missed words did not go into the mistake book — practise them in "Meaning → French" or "Listen & spell".'],
+  [/^词汇通过$/, 'vocabulary passed'], [/^写错的词没有进错题本.*$/, 'Missed words did not go into the mistake book — practise them in "Dictation".'],
   [/^全部正确，很棒。$/, 'All correct — well done.'], [/^只练错的$/, 'Practise the misses'], [/^重新开始$/, 'Start again'],
   // conjugation
   [/^到这一课为止还没有动词。$/, 'No verbs up to this leçon yet.'], [/^再来一遍$/, 'Once more'],

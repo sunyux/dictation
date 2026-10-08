@@ -26,6 +26,7 @@
     if (L() === 'zhen' && en) return `${zh}<span class="en-gloss" lang="en">${en}</span>`;
     return zh;
   };
+  const MEAN = o => `${o.zh ? `<span class="m-zh">${esc(o.zh)}</span>` : ''}${o.en ? `<span class="m-en" lang="en">${esc(o.en)}</span>` : ''}`;
   const Gt = o => L() === 'en' ? (o.en || o.zh || '') : (o.zh || '');   // plain text
   const H = r => esc(L() === 'en' ? (r.hen || r.h) : r.h);
   // 英法 mode: translate the remaining Chinese UI text fragments (see i18n.js)
@@ -787,6 +788,7 @@
     };
   }
 
+  const promptSay = e => e.kind === 'cloze' ? e.zh.replace('____', e.fr).replace(/^–\s*/, '') : e.kind === 'word' && e.pos !== '变位' ? forms(e.fr).say : e.fr;
   function reviewDrill(box, queue) {
     let i = 0, answered = false, right = 0;
     const draw = () => {
@@ -803,12 +805,14 @@
         <div class="bar"><i style="width:${i / queue.length * 100}%"></i></div>
         <div class="prompt">${e.kind === 'cloze'
           ? `<div class="pzh long" lang="fr" style="font-family:var(--serif)">${esc(e.zh).replace('____', '<u>&emsp;?&emsp;</u>')}</div><div class="ppos">填出空缺的词</div>`
-          : `<div class="pzh ${e.zh.length > 30 ? 'long' : ''}">${G(e)}</div><div class="ppos">${esc(e.pos || '')}</div>`}</div>
+          : `<div class="pmean ${e.zh.length > 30 ? 'long' : ''}">${MEAN(e)}</div>`}
+          <div class="ppos">${playBtn(promptSay(e))} ${esc(e.kind === 'cloze' ? '' : e.pos || '')}</div></div>
         ${word ? `<input class="answer-in" id="ans" lang="fr" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${bi('用法语写…', 'Write in French…')}">`
           : `<textarea class="answer-in" id="ans" lang="fr" rows="2" autocapitalize="off" spellcheck="false" placeholder="${bi('写出法语句子…', 'Write the French sentence…')}"></textarea>`}
         <div class="drill-actions"><button class="btn ghost small" id="skip">${bi('不会，看答案', 'Show answer')}</button><span class="spacer"></span><span class="kbd"><kbd>Enter</kbd> 检查 / 下一个</span></div>
         <div id="fb"></div></div>`;
       const inp = $('#ans', box); inp.focus();
+      if (store.get('vauto', false)) setTimeout(() => TTS.say(promptSay(e)), 200);
       inp.onkeydown = ev => { if (ev.key === 'Enter' && !ev.shiftKey) { ev.preventDefault(); answered ? (i++, draw()) : check(); } };
       $('#skip', box).onclick = () => check(true);
     };
@@ -846,7 +850,7 @@
           <h1>跟着课本，一课一课写下来</h1>
           <p>每一课都按你的默写讲义整理：先记单词，再练句子，最后整篇默写、开口背诵。所有法语都可以点一下朗读。</p>
           <ol class="steps-intro">
-            <li><b>1</b><span>词汇 — 看中文写法语，或听音拼写</span></li>
+            <li><b>1</b><span>词汇 — 看中文和英文含义写法语，可以点播放听发音</span></li>
             <li><b>2</b><span>句子 — 课文填空、逐句中译法、听写</span></li>
             <li><b>3</b><span>全文默写 — 对照中文，整篇写出来</span></li>
             <li><b>4</b><span>背诵 — 对着麦克风说，说对的词会逐个显现</span></li>
@@ -985,9 +989,10 @@
 
   /* ----- 1 · vocabulary ----- */
   function paneVocab(ctx, mode = store.get('vmode', 'list')) {
+    if (mode === 'listen') { mode = 'write'; store.set('vauto', true); }
     const { lecon, pane } = ctx;
     store.set('vmode', mode);
-    const head = modeBar([['list', bi('浏览', 'Browse')], ['test', bi('首测', 'First test')], ['write', bi('看中文默写', 'Meaning → French')], ['listen', bi('听音拼写', 'Listen & spell')], ['conj', bi('动词变位', 'Conjugation')]], mode);
+    const head = modeBar([['list', bi('浏览', 'Browse')], ['test', bi('首测', 'First test')], ['write', bi('默写', 'Dictation')], ['conj', bi('动词变位', 'Conjugation')]], mode);
     if (mode === 'list') {
       const groups = [];
       orderedVocab(ctx.book.id, lecon).forEach(v => { let g = groups.find(x => x.g === v.g); if (!g) groups.push(g = { g: v.g, items: [] }); g.items.push(v); });
@@ -1030,7 +1035,7 @@
         const st = MASTER.stats(ctx.book.id, lecon);
         box.innerHTML = `<div class="drill summary"><p class="kicker" lang="fr">Premier test</p>
           <h2 style="font-size:30px;margin-bottom:10px">本课词汇首测</h2>
-          <p class="hint-text" style="margin:0 0 18px">把这一课 ${lecon.vocab.length} 个词全部默写一遍，不能用提示。<br>写对的直接算掌握，以后不用再复习；写错的<b>不进错题本</b>，之后在「看中文默写」或「听音拼写」里练，第一次就写对也算掌握。</p>
+          <p class="hint-text" style="margin:0 0 18px">把这一课 ${lecon.vocab.length} 个词全部默写一遍，不能用提示。<br>写对的直接算掌握，以后不用再复习；写错的<b>不进错题本</b>，之后在「默写」里练，第一次就写对也算掌握。</p>
           ${st.test ? `<p class="kbd">上次首测：${st.test}</p>` : ''}
           <button class="btn" id="go">${st.test ? '再测一次' : '开始首测'}</button></div>`;
         $('#go', box).onclick = () => wordDrill(ctx, box, 'test', lecon.vocab);
@@ -1053,16 +1058,15 @@
     const mine = orderedVocab(ctx.book.id, ctx.lecon);
     let queue = order === 'shuffle' ? shuffle(words) : words.slice().sort((a, b) => mine.indexOf(a) - mine.indexOf(b));
     let i = 0, wrong = [], firstTry = 0, answered = false, hintN = 0;
-    const listen = mode === 'listen', test = mode === 'test';
+    const test = mode === 'test', auto = store.get('vauto', false);
     const draw = () => {
       if (i >= queue.length) return done();
       const v = queue[i]; answered = false; hintN = 0;
       box.innerHTML = `<div class="drill">
         <div class="count">${i + 1} / ${queue.length}</div>
         <div class="bar"><i style="width:${i / queue.length * 100}%"></i></div>
-        <div class="prompt">${listen
-          ? `${playBtn(forms(v.fr).say, 'big')}<div class="ppos">${esc(v.pos)}</div>`
-          : `<div class="pzh">${G(v)}</div><div class="ppos">${esc(v.pos)}${v.g ? ' · ' + esc(v.g) : ''}</div>`}</div>
+        <div class="prompt"><div class="pmean">${MEAN(v)}</div>
+          <div class="ppos">${playBtn(forms(v.fr).say)} ${esc(v.pos)}${v.g ? ' · ' + esc(v.g) : ''}</div></div>
         <input class="answer-in" id="ans" lang="fr" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${bi('用法语写…', 'Write in French…')}">
         <div class="drill-actions">
           ${test ? '' : '<button class="btn ghost small" id="hint">提示一个字母</button>'}
@@ -1071,12 +1075,14 @@
           <span class="kbd"><kbd>Enter</kbd> 检查 / 下一个</span>
         </div>
         <div id="fb"></div>
-        <div class="kbd" style="margin-top:14px">顺序：
-          <a href="#" id="ord">${order === 'shuffle' ? '随机（点击改为列表顺序）' : '列表顺序（点击改为随机）'}</a></div>
+        <div class="kbd" style="margin-top:14px;display:flex;gap:18px;flex-wrap:wrap"><span>顺序：
+          <a href="#" id="ord">${order === 'shuffle' ? '随机（点击改为列表顺序）' : '列表顺序（点击改为随机）'}</a></span>
+          <label><input type="checkbox" id="vauto" ${auto ? 'checked' : ''}> ${bi('每题自动朗读', 'Play each word automatically')}</label></div>
       </div>`;
       const inp = $('#ans', box);
       inp.focus();
-      if (listen) setTimeout(() => TTS.say(forms(v.fr).say), 200);
+      if (auto) setTimeout(() => TTS.say(forms(v.fr).say), 200);
+      $('#vauto', box).onchange = e => { store.set('vauto', e.target.checked); wordDrill(ctx, box, mode, words); };
       inp.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); answered ? (i++, draw()) : check(); } };
       if (!test) $('#hint', box).onclick = () => {
         const target = forms(v.fr).accept[0];
@@ -1104,7 +1110,7 @@
       else SRS.hit(it);
       fb.innerHTML = `<div class="feedback ${r}">
         <span class="lab">${good ? (hintN ? '对了（用了提示）' : '完全正确') : r === 'accent' ? '差一点：注意重音符号' : giveUp ? '答案' : '不对，正确答案是'}</span>
-        <div class="ans" lang="fr">${playBtn(forms(v.fr).say)} ${esc(v.fr)} ${listen ? `<span class="kbd" style="font-family:var(--zh)">${G(v)}</span>` : ''}</div>
+        <div class="ans" lang="fr">${playBtn(forms(v.fr).say)} ${esc(v.fr)}</div>
         ${tipBox(wordTip(ctx.lecon.n, v))}</div>`;
       TTS.say(forms(v.fr).say);
       if (good && !hintN) setTimeout(() => { if (answered && queue[i] === v) { i++; draw(); } }, wordTip(ctx.lecon.n, v) ? 1800 : 1100);
@@ -1118,7 +1124,7 @@
         <p class="kicker" lang="fr">Bilan</p>
         <div class="score">${Math.round(score * 100)}%</div>
         <p>${queue.length} 个里一次写对 ${firstTry} 个 · 本课词汇已掌握 ${st.words}/${st.totalWords}${st.vocabDone ? ' · <b>词汇通过</b>' : ''}</p>
-        ${test && wrong.length ? '<p class="kbd">写错的词没有进错题本，去「看中文默写」或「听音拼写」练它们。</p>' : ''}
+        ${test && wrong.length ? '<p class="kbd">写错的词没有进错题本，去「默写」里练它们。</p>' : ''}
         ${wrong.length ? `<ul>${wrong.map(v => `<li><span lang="fr">${esc(v.fr)}</span><span class="w-zh">${G(v)}</span></li>`).join('')}</ul>` : '<p>全部正确，很棒。</p>'}
         <div class="drill-actions" style="justify-content:center">
           ${wrong.length ? '<button class="btn" id="again-wrong">只练错的</button>' : ''}

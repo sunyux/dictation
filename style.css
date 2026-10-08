@@ -367,3 +367,12 @@ body.is-dragging { user-select: none; -webkit-user-select: none; overflow: hidde
 .ctable .tip { font-size: 14px; }
 .covered .cf { filter: blur(7px); transition: filter .2s; }
 .covered tr:hover .cf, .covered tr:active .cf { filter: none; }
+
+/* meaning prompt: Chinese + English together */
+.pmean { display: flex; flex-direction: column; gap: 2px; align-items: center; }
+.pmean .m-zh { font: 24px/1.45 var(--zh); }
+.pmean .m-en { font: italic 20px/1.4 var(--serif); color: var(--ink-2); }
+.pmean.long { align-items: flex-start; text-align: left; }
+.pmean.long .m-zh { font-size: 19px; }
+.pmean.long .m-en { font-size: 17px; }
+.prompt .ppos { display: flex; gap: 8px; align-items: center; justify-content: center; margin-top: 8px; }
