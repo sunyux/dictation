@@ -808,9 +808,9 @@
     const items = Object.entries(db).map(([id, e]) => ({ id, ...e }));
     const due = SRS.due();
     const active = items.filter(e => !e.done), done = items.filter(e => e.done);
-    if (sub === 'go') {
+    if (sub === 'go' || sub === 'listen' || sub === 'early' || sub === 'early-listen') {
       main.innerHTML = '<div class="toolbar"><a class="btn ghost small" href="#/review">‹ 返回错题本</a></div><div id="drill"></div>';
-      return reviewDrill($('#drill'), shuffle(due));
+      return reviewDrill($('#drill'), shuffle(sub.startsWith('early') ? active : due), sub.endsWith('listen'));
     }
     const byLecon = {};
     active.sort((a, b) => a.n - b.n || a.due.localeCompare(b.due)).forEach(e => (byLecon[e.n] = byLecon[e.n] || []).push(e));
@@ -825,8 +825,10 @@
         <div><b>${done.length}</b><span>已掌握</span></div>
       </div>
       <div class="toolbar">
-        <a class="btn ${due.length ? '' : 'ghost'}" href="#/review/go" ${due.length ? '' : 'aria-disabled="true" onclick="return false"'}>${due.length ? `开始今天的复习（${due.length}）` : '今天没有要复习的'}</a>
-        ${active.length && !due.length ? '<button class="btn ghost" id="early">提前复习全部</button>' : ''}
+        ${due.length ? `<a class="btn" href="#/review/listen">${ICON.play} 听写今天的复习（${due.length}）</a>
+          <a class="btn ghost" href="#/review/go">看意思默写</a>`
+          : `<span class="btn ghost" aria-disabled="true">今天没有要复习的</span>`}
+        ${active.length && !due.length ? '<a class="btn ghost" href="#/review/early-listen">提前听写全部</a><a class="btn ghost small" href="#/review/early">提前看意思默写</a>' : ''}
         <span class="spacer"></span>
         <button class="btn ghost small" id="exp">导出备份</button>
         <label class="btn ghost small" style="cursor:pointer">导入<input type="file" id="imp" accept=".json" hidden></label>
@@ -841,11 +843,6 @@
         </div>`).join('')}</section>`).join('')
         : '<p class="notice">错题本还是空的。去做几课练习吧，写错的会自动出现在这里。</p>'}`;
     $$('.err-del', main).forEach(b => b.onclick = () => { SRS.remove(b.dataset.id); viewReview(); });
-    const early = $('#early', main);
-    if (early) early.onclick = () => {
-      main.innerHTML = '<div class="toolbar"><a class="btn ghost small" href="#/review">‹ 返回错题本</a></div><div id="drill"></div>';
-      reviewDrill($('#drill'), shuffle(active));
-    };
     $('#exp', main).onclick = () => BACKUP.download();
     $('#imp', main).onchange = async e => {
       try { BACKUP.merge(JSON.parse(await e.target.files[0].text())); viewReview(); }
@@ -854,7 +851,9 @@
   }
 
   const promptSay = e => e.kind === 'cloze' ? e.zh.replace('____', e.fr).replace(/^–\s*/, '') : e.kind === 'word' && e.pos !== '变位' ? forms(e.fr).say : e.fr;
-  function reviewDrill(box, queue) {
+  // what to read aloud in a dictation: the word, the conjugated form, the missing word of a gap, or the whole sentence
+  const listenSay = e => e.kind === 'cloze' ? e.fr : e.kind === 'word' && e.pos !== '变位' ? forms(e.fr).say : e.fr;
+  function reviewDrill(box, queue, listen = false) {
     let i = 0, answered = false, right = 0;
     const draw = () => {
       if (i >= queue.length) {
@@ -868,16 +867,20 @@
       box.innerHTML = `<div class="drill">
         <div class="count">${i + 1} / ${queue.length} · Leçon ${e.n}</div>
         <div class="bar"><i style="width:${i / queue.length * 100}%"></i></div>
-        <div class="prompt">${e.kind === 'cloze'
+        <div class="prompt">${listen
+          ? `${playBtn(listenSay(e), 'big')}<div class="ppos">${e.kind === 'sentence' ? '听写整句' : e.kind === 'cloze' ? '听写空缺的词' : '听写'}${e.pos && e.kind !== 'cloze' ? ' · ' + esc(e.pos) : ''}</div>
+             ${e.kind === 'cloze' ? `<div class="pzh long" lang="fr" style="font-family:var(--serif);margin-top:10px">${esc(e.zh).replace('____', '<u>&emsp;?&emsp;</u>')}</div>` : ''}`
+          : e.kind === 'cloze'
           ? `<div class="pzh long" lang="fr" style="font-family:var(--serif)">${esc(e.zh).replace('____', '<u>&emsp;?&emsp;</u>')}</div><div class="ppos">填出空缺的词</div>`
           : `<div class="pmean ${e.zh.length > 30 ? 'long' : ''}">${MEAN(e)}</div>`}
-          <div class="ppos">${playBtn(promptSay(e))} ${esc(e.kind === 'cloze' ? '' : e.pos || '')}</div></div>
+          ${listen ? '' : `<div class="ppos">${playBtn(promptSay(e))} ${esc(e.kind === 'cloze' ? '' : e.pos || '')}</div>`}</div>
         ${word ? `<input class="answer-in" id="ans" lang="fr" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${bi('用法语写…', 'Write in French…')}">`
           : `<textarea class="answer-in" id="ans" lang="fr" rows="2" autocapitalize="off" spellcheck="false" placeholder="${bi('写出法语句子…', 'Write the French sentence…')}"></textarea>`}
         <div class="drill-actions"><button class="btn ghost small" id="skip">${bi('不会，看答案', 'Show answer')}</button><span class="spacer"></span><span class="kbd"><kbd>Enter</kbd> 检查 / 下一个</span></div>
         <div id="fb"></div></div>`;
       const inp = $('#ans', box); inp.focus();
-      if (store.get('vauto', false)) setTimeout(() => TTS.say(promptSay(e)), 200);
+      if (listen) setTimeout(() => TTS.say(listenSay(e)), 250);
+      else if (store.get('vauto', false)) setTimeout(() => TTS.say(promptSay(e)), 200);
       inp.onkeydown = ev => { if (ev.key === 'Enter' && !ev.shiftKey) { ev.preventDefault(); answered ? (i++, draw()) : check(); } };
       $('#skip', box).onclick = () => check(true);
     };
@@ -898,6 +901,7 @@
       const next = good ? GAPS[Math.min((e.box || 0) + 1, GAPS.length - 1)] : 1;
       $('#fb', box).innerHTML = `<div class="feedback ${good ? 'ok' : 'bad'}"><span class="lab">${good ? `答对了 · ${(e.box || 0) + 1 >= GAPS.length ? '已掌握' : next + ' 天后再复习'}` : '明天再来一次'}</span>
         <div class="ans" lang="fr">${playBtn(say)}<span>${html}</span></div>
+        ${listen && e.kind !== 'cloze' ? `<div class="pmean long" style="margin-top:6px">${MEAN(e)}</div>` : ''}
         ${e.kind === 'word' ? tipBox(e.pos === '变位' ? verbTip(e.zh.split(' · ')[0].replace(/^(se |s')/, '')) : wordTip(e.n, e)) : ''}</div>`;
       TTS.say(say);
     };
