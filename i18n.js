@@ -2,6 +2,7 @@
 const ZH_GROUPS = { '阳性名词': 'Masculine nouns', '阴性名词': 'Feminine nouns', '名词': 'Nouns (both genders)', '动词': 'Verbs', '形容词': 'Adjectives',
   '代词': 'Pronouns', '副词': 'Adverbs', '介词、连词': 'Prepositions & conjunctions', '冠词、感叹词、短语': 'Articles, interjections & phrases', '地名': 'Place names' };
 window.ZH_EN = [
+  [/^动词词典$/, 'Verbs'], [/^复合过去时助动词$/, 'Past-tense helper'],
   [/^每题自动朗读$/, 'Play each word automatically'],
   [/^这一课的动词都是规则变化.*$/, 'All verbs in this leçon are regular — learn the endings in the table.'],
   [/^特殊变位听写 \((\d+)\)$/, 'Irregular verbs dictation ($1)'], [/^特殊$/, 'irregular'], [/^规则$/, 'regular'],

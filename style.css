@@ -376,3 +376,50 @@ body.is-dragging { user-select: none; -webkit-user-select: none; overflow: hidde
 .pmean.long .m-zh { font-size: 19px; }
 .pmean.long .m-en { font-size: 17px; }
 .prompt .ppos { display: flex; gap: 8px; align-items: center; justify-content: center; margin-top: 8px; }
+
+/* verb dictionary */
+.verb-page { display: grid; grid-template-columns: 290px 1fr; gap: 24px; align-items: start; margin-top: 18px; }
+.verb-list { position: sticky; top: 76px; max-height: calc(100vh - 96px); display: flex; flex-direction: column; }
+.verb-list ul { list-style: none; margin: 0; padding: 0; overflow-y: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--card); }
+.verb-list li button { width: 100%; text-align: left; background: none; border: none; border-bottom: 1px dashed var(--line); padding: 8px 12px; cursor: pointer; display: block; }
+.verb-list li button:hover { background: var(--wash-blue); }
+.verb-list li button.on { background: var(--wash-amber); }
+.verb-list li button small { display: block; font: 13px var(--zh); color: var(--ink-2); }
+.vl-name { display: flex; gap: 6px; align-items: center; font-size: 18px; }
+.v-tag { font: 11px var(--zh); border: 1px solid var(--line); border-radius: 4px; padding: 0 5px; color: var(--ink-2); }
+.v-tag.irr { color: var(--red); border-color: var(--red); }
+.v-tag.spell { color: var(--amber); border-color: var(--amber); }
+.v-tag.book { color: var(--blue); border-color: var(--blue); font-family: var(--serif); }
+.verb-detail { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 20px 22px; min-width: 0; }
+.conj-head { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.conj-head h3 { font-size: 34px; }
+.conj-mean { font: 16px var(--zh); color: var(--ink-2); }
+.conj-group { font: 13px var(--zh); border: 1px solid var(--line); border-radius: 999px; padding: 1px 10px; color: var(--ink-2); }
+.conj-group.is-special { color: var(--red); border-color: var(--red); }
+.aux-note { flex-basis: 100%; font: 14px var(--zh); color: var(--ink-2); }
+.conj-legend { display: flex; gap: 16px; flex-wrap: wrap; font: 13px var(--zh); color: var(--ink-2); margin: 10px 0 14px; }
+.conj-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; }
+.conj-block { border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; background: var(--paper); }
+.conj-tense { display: flex; align-items: center; gap: 8px; font: 600 19px var(--display); }
+.conj-tense small { font: 13px var(--zh); color: var(--ink-2); font-weight: 400; }
+.conj-tense .play { margin-left: auto; }
+.conj-rule { font: 13px/1.5 var(--zh); color: var(--ink-2); margin: 6px 0 8px; }
+.rule-flag { color: var(--red); white-space: nowrap; }
+.rule-ok { color: var(--green); white-space: nowrap; }
+table.conj { width: 100%; border-collapse: collapse; }
+table.conj tr { border-top: 1px dashed var(--line); }
+table.conj td { padding: 4px 2px; font-size: 17px; }
+table.conj td:last-child { width: 30px; text-align: right; }
+.end { color: var(--blue); font-weight: 600; }
+mark.irr { background: none; color: var(--red); font-weight: 600; }
+mark.aux { background: var(--wash-amber); color: inherit; border-radius: 3px; padding: 0 2px; }
+.play.tiny { width: 24px; height: 24px; }
+.play.tiny svg { width: 11px; height: 11px; }
+@media (max-width: 800px) {
+  .verb-page { grid-template-columns: 1fr; }
+  .verb-list { position: static; max-height: none; }
+  .verb-list ul { max-height: 280px; }
+  .top .nav-verbs { padding: 5px 9px; }
+}
+.top .btn { white-space: nowrap; }
+@media (max-width: 720px) { .top .btn.small { padding: 4px 8px; font-size: 14px; } .top { gap: 6px; } .brand-zh { font-size: 17px; } }

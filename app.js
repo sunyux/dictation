@@ -20,6 +20,7 @@
   const L = () => settings.lang;
   const BI = {};
   const bi = (zh, en) => { BI[zh] = en; return L() === 'en' ? en : zh; };
+  window.NH_BI = (zh, en) => bi(zh, en);
   const G = o => {
     const zh = esc(o.zh || ''), en = esc(o.en || '');
     if (L() === 'en') return en || zh;
@@ -414,6 +415,69 @@
     if (o) o.onclick = () => CLOUD.signOut();
   }
 
+  /* ---------- verb dictionary (from the Mon Français site + the textbook verbs) ---------- */
+  function viewVerbs(sel) {
+    const D = window.VERBDICT;
+    if (!D) { main.innerHTML = '<p class="notice">动词词典没有加载。</p>'; return; }
+    document.title = bi('动词词典', 'Verb dictionary') + ' · 你好法语';
+    const strip2 = v => v.replace(/^se |^s'/, '');
+    const list = D.list().sort((a, b) => strip2(a).localeCompare(strip2(b), 'fr'));
+    // which leçon of the book each verb comes from
+    const inBook = {};
+    for (const u of BOOKS[0].units) for (const l of u.lecons) for (const v of l.vocab) if (v.pos.startsWith('v')) {
+      const m = v.fr.match(/^(\S+)\s*\((se|s')\)$/);
+      const k = m ? (/^[aeiouyhâéèêî]/i.test(m[1]) ? "s'" : 'se ') + m[1] : v.fr;
+      if (!inBook[k]) inBook[k] = l.n;
+    }
+    const kindOf = v => { const c = D.get(v), n = c.special.present + c.special.pc + c.special.imparfait + c.special.futur; return c.group === 3 && n ? 'irr' : n ? 'spell' : 'reg'; };
+    const TAG = { irr: bi('不规则', 'irregular'), spell: bi('拼写变化', 'spelling') };
+    const counts = { irr: 0, spell: 0, reg: 0 };
+    list.forEach(v => counts[kindOf(v)]++);
+    const filter = store.get('vdfilter', 'all');
+    main.innerHTML = `
+      <p class="kicker" lang="fr">Les verbes</p>
+      <h1 style="font-size:44px">${bi('动词词典', 'Verb dictionary')}</h1>
+      <p class="hint-text" style="margin-top:8px">${bi('现在时、复合过去时、未完成过去时、简单将来时。蓝色是规则词尾，红色是特殊变化；点任意一行听发音。', 'Present, passé composé, imparfait and futur simple. Blue = regular ending, red = special form; tap any line to hear it.')}</p>
+      <div class="verb-page">
+        <aside class="verb-list">
+          <input type="search" class="verb-search typed-recite" placeholder="${bi('搜索动词 / 中文 / 英文', 'Search verb / meaning')}" style="margin:0 0 10px">
+          <div class="modes" style="margin-bottom:10px">
+            <button class="mode" data-kind="all" aria-pressed="${filter === 'all'}">${bi('全部', 'All')} ${list.length}</button>
+            <button class="mode" data-kind="irr" aria-pressed="${filter === 'irr'}">${bi('不规则', 'Irregular')} ${counts.irr}</button>
+            <button class="mode" data-kind="book" aria-pressed="${filter === 'book'}">${bi('课本里的', 'In the book')} ${list.filter(v => inBook[v]).length}</button>
+          </div>
+          <ul>${list.map(v => {
+            const k = kindOf(v), c = D.get(v);
+            return `<li data-kind="${k}" data-book="${inBook[v] ? 1 : ''}" data-search="${esc(loose(v + ' ' + c.zh + ' ' + c.en))}"><button type="button" data-verb="${esc(v)}">
+              <span class="vl-name"><span lang="fr">${esc(v)}</span>${TAG[k] ? `<span class="v-tag ${k}">${TAG[k]}</span>` : ''}${inBook[v] ? `<span class="v-tag book">L${inBook[v]}</span>` : ''}</span>
+              <small>${G(c)}</small></button></li>`;
+          }).join('')}</ul>
+        </aside>
+        <div class="verb-detail"></div>
+      </div>`;
+    const detail = $('.verb-detail', main);
+    const show = (v, scroll) => {
+      if (!D.get(v)) v = list.includes('être') ? 'être' : list[0];
+      detail.innerHTML = D.tableHTML(v);
+      $$('[data-verb]', main).forEach(b => b.classList.toggle('on', b.dataset.verb === v));
+      history.replaceState(null, '', '#/verbes/' + encodeURIComponent(v));
+      if (scroll && window.innerWidth < 800) detail.scrollIntoView({ behavior: 'smooth' });
+    };
+    $('.verb-list ul', main).addEventListener('click', e => { const b = e.target.closest('[data-verb]'); if (b) show(b.dataset.verb, true); });
+    let kind = filter;
+    const apply = () => {
+      const q = loose($('.verb-search', main).value || '');
+      $$('.verb-list li', main).forEach(li => {
+        const ok = kind === 'all' || (kind === 'irr' ? li.dataset.kind === 'irr' : !!li.dataset.book);
+        li.hidden = !ok || (q && !li.dataset.search.includes(q));
+      });
+    };
+    $('.verb-search', main).addEventListener('input', apply);
+    $$('[data-kind]', main).forEach(b => b.onclick = () => { kind = b.dataset.kind; store.set('vdfilter', kind); $$('[data-kind]', main).forEach(x => x.setAttribute('aria-pressed', x === b)); apply(); });
+    apply();
+    show(sel);
+  }
+
   function viewMe() {
     document.title = '我的 · 打卡与邮册';
     const log = XP.log(), g = XP.goal(), got = store.get('stamps', {});
@@ -712,6 +776,7 @@
     const crumbs = $('#crumbs');
     window.scrollTo(0, 0);
     if (!parts.length) { crumbs.innerHTML = ''; return viewHome(); }
+    if (parts[0] === 'verbes') { crumbs.innerHTML = `<span>${bi('动词词典', 'Verb dictionary')}</span>`; return viewVerbs(decodeURIComponent(parts[1] || '')); }
     if (parts[0] === 'me') { crumbs.innerHTML = '<span>我的打卡与邮册</span>'; return viewMe(); }
     if (parts[0] === 'review') { crumbs.innerHTML = '<span>错题本 · 每日复习</span>'; return viewReview(parts[1]); }
     const book = findBook(parts[0]);
