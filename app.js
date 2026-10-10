@@ -288,6 +288,8 @@
           else if (b && k.startsWith('nh:master:')) { b.w = { ...a.w, ...b.w }; b.t = { ...a.t, ...b.t }; b.test = b.test || a.test; v = JSON.stringify(b); }
           else if (b && k === 'nh:log') { for (const [d, e] of Object.entries(a)) if (!b[d] || b[d].xp < e.xp) b[d] = e; v = JSON.stringify(b); }
           else if (b && k === 'nh:stamps') v = JSON.stringify({ ...a, ...b });
+          else if (b && k === 'nh:errs') { const seen = new Set(b.map(e => JSON.stringify(e))); v = JSON.stringify([...b, ...a.filter(e => !seen.has(JSON.stringify(e)))].slice(-400)); }
+          else if (b && k.startsWith('nh:sons:')) v = JSON.stringify({ quiz: Math.max(a.quiz || 0, b.quiz || 0), dict: Math.max(a.dict || 0, b.dict || 0) });
         } catch { }
         try { localStorage.setItem(k, v); } catch { }
       }
@@ -476,6 +478,339 @@
     $$('[data-kind]', main).forEach(b => b.onclick = () => { kind = b.dataset.kind; store.set('vdfilter', kind); $$('[data-kind]', main).forEach(x => x.setAttribute('aria-pressed', x === b)); apply(); });
     apply();
     show(sel);
+  }
+
+  /* ---------- 《法语发音》: the pronunciation book ---------- */
+  const SB = () => window.SOUNDS;
+  const sLessons = () => SB().units.flatMap(u => u.lessons.map(l => ({ ...l, unit: u })));
+  const sFind = id => sLessons().find(l => l.id === id);
+  const gloss = s => { const [w, zh, en] = String(s).split('|'); return { w, zh: zh || '', en: en || '' }; };
+  const sProg = id => store.get('sons:' + id, {});
+  function sSave(id, part, score) { const p = sProg(id); p[part] = Math.max(p[part] || 0, Math.round(score * 100) / 100); store.set('sons:' + id, p); }
+  const tl = o => esc(L() === 'en' ? (o.te || o.t) : o.t);
+  const txt = (zh, en) => G({ zh, en });
+  // every word a lesson uses, with the answer it belongs to
+  function sItems(l) {
+    if (l.quiz.type === 'spell') return l.spell.flatMap(r => r.ex.map(e => ({ ...gloss(e), a: r.sp })));
+    if (l.quiz.type === 'pair') return l.quiz.items.map(([e, a]) => ({ ...gloss(e), a }));
+    return [];
+  }
+  const sOptions = l => l.quiz.type === 'spell' ? l.spell.map(r => ({ k: r.sp, label: r.sp + (r.say ? ' ' + r.say : '') })) : (l.options || []);
+  const partnerOf = (l, w) => { for (const p of l.pairs || []) { if (p[0] === w) return p[1]; if (p[1] === w) return p[0]; } return null; };
+
+  function soundCover(tag = 'a') {
+    return `<${tag} class="cover sons" ${tag === 'a' ? 'href="#/sons"' : ''} aria-label="${esc(SB().title)}">
+      <div class="c-zh">法语<br>发音</div><div class="c-fr" lang="fr">${esc(SB().fr)}</div><div class="c-num" lang="fr">ɛ̃</div>
+      <svg viewBox="0 0 200 90" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" aria-hidden="true">
+        <path d="M20 70 Q40 20 60 70 T100 70 T140 70 T180 70" /><path d="M20 80 Q50 50 80 80 T140 80 T200 80" stroke-width=".7"/>
+        <path d="M150 20 q8 -8 16 0 q-8 10 -16 0z M170 34 q6 -6 12 0 q-6 8 -12 0z" stroke-width=".8"/>
+      </svg></${tag}>`;
+  }
+
+  function viewSounds() {
+    const B = SB();
+    document.title = B.title + ' · ' + B.fr;
+    main.innerHTML = `
+      <div class="book-head">${soundCover('div')}<div><p class="kicker" lang="fr">${esc(B.fr)}</p><h1>${esc(B.title)}</h1>
+        <p class="hint-text" style="margin:6px 0 0">${bi('字母、元音、鼻化元音、半元音、辅音、不发音字母与连读，以及最容易混的几组音。每课有口腔图、例词、辨音练习和听写。', 'Letters, vowels, nasals, semi-vowels, consonants, silent letters and liaison, and the pairs people mix up. Each lesson has a mouth diagram, example words, a listening quiz and a dictation.')}</p></div></div>
+      ${B.units.map(u => `
+        <section class="unit">
+          <div class="unit-title"><h2>${tl(u)}</h2><span lang="fr">Partie ${u.n}</span></div>
+          <div class="lecons">${u.lessons.map(l => {
+            const p = sProg(l.id);
+            const bar = (label, v) => `<div class="pbar ${v >= 0.999 ? 'done' : ''}"><span class="pl">${label}</span><span class="pt"><i style="width:${Math.round((v || 0) * 100)}%"></i></span><span class="pn">${v ? Math.round(v * 100) + '%' : '—'}</span></div>`;
+            return `<a class="lecon-card" href="#/sons/${l.id}">
+              <div class="n" lang="fr">${esc(l.ipa)}</div><h3 lang="fr">${tl(l)}</h3>
+              <div class="prog">${bar(bi('辨音', 'Quiz'), p.quiz)}${bar(bi('听写', 'Dictée'), p.dict)}</div></a>`;
+          }).join('')}</div>
+        </section>`).join('')}`;
+  }
+
+  function viewSoundLesson(id, tab = 'learn') {
+    const l = sFind(id);
+    if (!l) { location.hash = '#/sons'; return; }
+    const all = sLessons(), idx = all.findIndex(x => x.id === id), prev = all[idx - 1], next = all[idx + 1];
+    document.title = `${l.ipa} · ${SB().title}`;
+    const hasDict = l.quiz.type !== 'letter';
+    main.innerHTML = `
+      <header class="lecon-head"><p class="kicker">${tl(l.unit)}</p><h1 lang="fr">${esc(l.ipa)} <span class="sons-title">${tl(l)}</span></h1></header>
+      <nav class="tabs" role="tablist">
+        <button class="tab" data-st="learn" aria-selected="${tab === 'learn'}"><b>1</b>${bi('讲解', 'Learn')}</button>
+        <button class="tab" data-st="quiz" aria-selected="${tab === 'quiz'}"><b>2</b>${l.quiz.type === 'letter' ? bi('听字母', 'Letters') : bi('辨音练习', 'Listening quiz')}</button>
+        ${hasDict ? `<button class="tab" data-st="dict" aria-selected="${tab === 'dict'}"><b>3</b>${bi('听写', 'Dictation')}</button>` : ''}
+      </nav>
+      <section id="pane"></section>
+      <div class="toolbar" style="margin-top:40px">
+        ${prev ? `<a class="btn ghost small" href="#/sons/${prev.id}">‹ <span lang="fr">${esc(prev.ipa)}</span></a>` : ''}<span class="spacer"></span>
+        ${next ? `<a class="btn ghost small" href="#/sons/${next.id}"><span lang="fr">${esc(next.ipa)}</span> ›</a>` : ''}
+      </div>`;
+    $$('[data-st]', main).forEach(b => b.onclick = () => { history.replaceState(null, '', `#/sons/${id}/${b.dataset.st}`); route(); });
+    const pane = $('#pane');
+    if (tab === 'quiz') sQuiz(l, pane);
+    else if (tab === 'dict' && hasDict) sDict(l, pane);
+    else sLearn(l, pane);
+  }
+
+  const chip = g => `<button class="wchip" data-say="${esc(g.w)}"><span lang="fr">${esc(g.w)}</span><small>${G(g)}</small></button>`;
+  function sLearn(l, pane) {
+    const mouths = (window.LESSON_MOUTH || {})[l.id] || [];
+    let h = '';
+    if (mouths.length && window.MOUTH_SVG) h += `<div class="mouths">${mouths.map(k => window.MOUTH_SVG(k, L())).join('')}</div>`;
+    h += `<div class="sons-how">${txt(l.how, l.howEn)}</div>`;
+    if (l.letters) h += `<div class="letters">${l.letters.map(([L1, name, ipa]) => `<button class="letter" data-say="${esc(name)}"><b lang="fr">${L1}</b><span lang="fr">${esc(name)}</span>${ipa ? `<small>${ipa}</small>` : ''}</button>`).join('')}</div>`;
+    if (l.spell) h += `<div class="spell-table">${l.spell.map(r => `<div class="spell-row"><div class="sp" lang="fr">${esc(r.sp)}${r.say ? `<small>${esc(r.say)}</small>` : ''}</div>
+      <div class="chips">${r.ex.map(e => chip(gloss(e))).join('')}</div></div>`).join('')}</div>`;
+    if (l.options && l.quiz.items) {
+      const items = sItems(l);
+      h += `<div class="opt-cols">${l.options.map(o => `<div class="opt-col"><h3 lang="fr">${esc(L() === 'en' ? o.labelEn || o.label : o.label)}</h3>
+        <div class="chips">${items.filter(it => it.a === o.k).map(chip).join('')}</div></div>`).join('')}</div>`;
+    }
+    if (l.pairs) h += `<h3 class="pairs-h">${bi('成对对比：两个词只差这一个音', 'Minimal pairs: the two words differ only in this sound')}</h3>
+      <div class="pairs">${l.pairs.map(([a, b]) => `<div class="pair"><button class="wchip" data-say="${esc(a)}"><span lang="fr">${esc(a)}</span></button><span class="vs">↔</span>
+        <button class="wchip" data-say="${esc(b)}"><span lang="fr">${esc(b)}</span></button>
+        <button class="play" data-pair="${esc(a)}|${esc(b)}" title="${bi('连着听两个', 'Hear both')}">${ICON.play}</button></div>`).join('')}</div>`;
+    h += `<div class="toolbar" style="margin-top:22px"><a class="btn" href="#/sons/${l.id}/quiz">${bi('开始辨音练习 ›', 'Start the quiz ›')}</a></div>`;
+    pane.innerHTML = h;
+    $$('[data-pair]', pane).forEach(b => b.onclick = e => { e.stopPropagation(); const [a, c] = b.dataset.pair.split('|'); speakSeq([a, c], () => { }); });
+  }
+
+  function sQuiz(l, pane) {
+    if (l.quiz.type === 'letter') return sLetters(l, pane);
+    const opts = sOptions(l);
+    const queue = shuffle(sItems(l)).slice(0, 20);
+    let i = 0, right = 0, answered = false;
+    const draw = () => {
+      if (i >= queue.length) {
+        const sc = right / queue.length; sSave(l.id, 'quiz', sc);
+        pane.innerHTML = `<div class="drill summary"><p class="kicker" lang="fr">Bilan</p><div class="score">${right} / ${queue.length}</div>
+          <p>${sc >= 0.9 ? bi('耳朵已经分得很清楚了！', 'Your ear can tell them apart!') : bi('答错的那几组可以回「讲解」里成对多听几遍。', 'Go back to Learn and replay the pairs you missed.')}</p>
+          <div class="drill-actions" style="justify-content:center"><button class="btn" id="again">${bi('再来一轮', 'Another round')}</button><a class="btn ghost" href="#/sons/${l.id}/dict">${bi('去听写 ›', 'Dictation ›')}</a></div></div>`;
+        $('#again', pane).onclick = () => sQuiz(l, pane);
+        return;
+      }
+      const it = queue[i]; answered = false;
+      pane.innerHTML = `<div class="drill">
+        <div class="count">${i + 1} / ${queue.length}</div><div class="bar"><i style="width:${i / queue.length * 100}%"></i></div>
+        <div class="prompt">${playBtn(it.w, 'big')}
+          <div class="ppos">${l.quiz.type === 'spell' ? `${bi('这个词用的是哪种写法？', 'Which spelling does this word use?')} · ${G(it)}` : bi('你听到的是哪个音？', 'Which sound do you hear?')}</div></div>
+        <div class="choices">${opts.map((o, k) => `<button class="choice" data-k="${esc(o.k)}"><kbd>${k + 1}</kbd> <span lang="fr">${esc(L() === 'en' ? o.labelEn || o.label : o.label)}</span></button>`).join('')}</div>
+        <div id="fb"></div>
+        <p class="kbd" style="margin-top:12px">${bi('数字键选择 · 空格再听一次 · Enter 下一题', 'Number keys to choose · Space to replay · Enter for next')}</p></div>`;
+      setTimeout(() => TTS.say(it.w), 250);
+      $$('.choice', pane).forEach(b => b.onclick = () => answer(b.dataset.k));
+    };
+    const answer = k => {
+      if (answered) return;
+      answered = true;
+      const it = queue[i], ok = k === it.a;
+      if (ok) { right++; XP.gain(1, bi('辨音正确', 'Heard it right')); }
+      else ERRS.quiz(l.id, it.w, k);
+      $$('.choice', pane).forEach(b => { b.disabled = true; if (b.dataset.k === it.a) b.classList.add('ok'); else if (b.dataset.k === k) b.classList.add('bad'); });
+      const p = partnerOf(l, it.w);
+      $('#fb', pane).innerHTML = `<div class="feedback ${ok ? 'ok' : 'bad'}"><span class="lab">${ok ? bi('对了', 'Right') : bi('听错了，对比一下', 'Not quite — compare them')}</span>
+        <div class="ans">${playBtn(it.w)} <span lang="fr">${esc(it.w)}</span> <span class="kbd">${G(it)}</span>
+        ${p ? `<span class="vs">↔</span>${playBtn(p)} <span lang="fr">${esc(p)}</span>` : ''}</div></div>`;
+      if (!ok && p) setTimeout(() => speakSeq([it.w, p], () => { }), 300);
+    };
+    const onKey = e => {
+      if (!document.body.contains(pane) || !$('.choice', pane) && !$('.summary', pane)) return;
+      if (e.target.matches('input, textarea')) return;
+      const n = +e.key;
+      if (n >= 1 && n <= opts.length && !answered) { e.preventDefault(); answer(opts[n - 1].k); }
+      else if (e.key === ' ') { e.preventDefault(); if (queue[i]) TTS.say(queue[i].w); }
+      else if (e.key === 'Enter' && answered) { e.preventDefault(); i++; draw(); }
+    };
+    document.addEventListener('keydown', onKey);
+    const prevC = cleanup; cleanup = () => { document.removeEventListener('keydown', onKey); prevC && prevC(); };
+    pane.addEventListener('click', e => { if (answered && e.target.closest('.feedback') === null && e.target.closest('.choices') && false) { } });
+    draw();
+    // tapping anywhere below the feedback moves on (handy on phones)
+    pane.addEventListener('click', e => { if (answered && e.target.closest('#fb') && !e.target.closest('[data-say]')) { i++; draw(); } });
+  }
+
+  function sLetters(l, pane) {
+    const queue = shuffle(l.letters);
+    let i = 0, right = 0, answered = false;
+    const draw = () => {
+      if (i >= queue.length) {
+        sSave(l.id, 'quiz', right / queue.length);
+        pane.innerHTML = `<div class="drill summary"><p class="kicker" lang="fr">Bilan</p><div class="score">${right} / ${queue.length}</div>
+          <div class="drill-actions" style="justify-content:center"><button class="btn" id="again">${bi('再来一轮', 'Another round')}</button></div></div>`;
+        $('#again', pane).onclick = () => sLetters(l, pane);
+        return;
+      }
+      const [Lt, name] = queue[i]; answered = false;
+      pane.innerHTML = `<div class="drill"><div class="count">${i + 1} / ${queue.length}</div><div class="bar"><i style="width:${i / queue.length * 100}%"></i></div>
+        <div class="prompt">${playBtn(name, 'big')}<div class="ppos">${bi('听字母的读音，写出这个字母', 'Hear the letter name and type the letter')}</div></div>
+        <input class="answer-in" id="ans" maxlength="2" autocomplete="off" autocapitalize="characters" spellcheck="false" style="text-align:center;font-size:34px">
+        <div id="fb"></div></div>`;
+      const inp = $('#ans', pane); inp.focus();
+      setTimeout(() => TTS.say(name), 250);
+      inp.onkeydown = e => {
+        if (e.key !== 'Enter') return;
+        e.preventDefault();
+        if (answered) { i++; draw(); return; }
+        if (!inp.value.trim()) return;
+        answered = true;
+        const ok = inp.value.trim().toUpperCase() === Lt;
+        if (ok) { right++; XP.gain(1, bi('字母正确', 'Letter right')); } else ERRS.quiz(l.id, Lt, inp.value.trim().toUpperCase());
+        $('#fb', pane).innerHTML = `<div class="feedback ${ok ? 'ok' : 'bad'}"><span class="lab">${ok ? bi('对了', 'Right') : bi('正确答案', 'Answer')}</span>
+          <div class="ans">${playBtn(name)} <b style="font-size:28px">${Lt}</b> <span lang="fr">« ${esc(name)} »</span></div></div>`;
+      };
+    };
+    draw();
+  }
+
+  function sDict(l, pane) {
+    const seen = new Set();
+    const words = shuffle(sItems(l).filter(it => !seen.has(it.w) && seen.add(it.w))).slice(0, 15);
+    let i = 0, right = 0, answered = false;
+    const draw = () => {
+      if (i >= words.length) {
+        sSave(l.id, 'dict', right / words.length);
+        pane.innerHTML = `<div class="drill summary"><p class="kicker" lang="fr">Bilan</p><div class="score">${right} / ${words.length}</div>
+          <div class="drill-actions" style="justify-content:center"><button class="btn" id="again">${bi('再来一轮', 'Another round')}</button></div></div>`;
+        $('#again', pane).onclick = () => sDict(l, pane);
+        return;
+      }
+      const it = words[i]; answered = false;
+      pane.innerHTML = `<div class="drill"><div class="count">${i + 1} / ${words.length}</div><div class="bar"><i style="width:${i / words.length * 100}%"></i></div>
+        <div class="prompt">${playBtn(it.w, 'big')}<div class="ppos">${bi('听写这个词', 'Write the word you hear')}</div></div>
+        <input class="answer-in" id="ans" lang="fr" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${bi('用法语写…', 'Write in French…')}">
+        <div class="drill-actions"><button class="btn ghost small" id="skip">${bi('不会，看答案', 'Show answer')}</button><span class="spacer"></span><span class="kbd"><kbd>Enter</kbd> ${bi('检查 / 下一个', 'check / next')}</span></div>
+        <div id="fb"></div></div>`;
+      const inp = $('#ans', pane); inp.focus();
+      setTimeout(() => TTS.say(it.w), 250);
+      const check = give => {
+        if (!inp.value.trim() && !give) return;
+        answered = true;
+        const r = give ? 'bad' : checkWord(inp.value, it.w), ok = r === 'ok';
+        if (ok) { right++; XP.gain(2, bi('听写正确', 'Dictation right')); } else if (!give) ERRS.typed(it.w, inp.value);
+        $('#fb', pane).innerHTML = `<div class="feedback ${ok ? 'ok' : r === 'accent' ? 'accent' : 'bad'}"><span class="lab">${ok ? bi('完全正确', 'Perfect') : r === 'accent' ? bi('差一点：注意重音', 'Almost — check the accents') : bi('正确答案', 'Answer')}</span>
+          <div class="ans">${playBtn(it.w)} <span lang="fr">${esc(it.w)}</span> <span class="kbd">${G(it)}</span></div></div>`;
+      };
+      inp.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); answered ? (i++, draw()) : check(false); } };
+      $('#skip', pane).onclick = () => check(true);
+    };
+    draw();
+  }
+
+  /* ---------- error analysis: what kind of spelling mix-up each mistake is ---------- */
+  const EXTRA_CLS = {
+    accent: { t: '重音符号（é è ê à ç…）', te: 'Accents (é è ê à ç…)', lesson: 'accents' },
+    muettes: { t: '漏写不发音的字母', te: 'Missing silent letters', lesson: 'muettes' },
+    double: { t: '双写辅音（ll / ss / tt / nn…）', te: 'Double consonants (ll / ss / tt / nn…)', lesson: null },
+    h: { t: '漏写 h', te: 'Missing h', lesson: 'h' },
+    e_muet: { t: '漏写或多写 e', te: 'Missing or extra e', lesson: 'e_muet' },
+    other: { t: '其他拼写错误', te: 'Other spelling mistakes', lesson: null },
+  };
+  const closest = (fr, val) => (forms(fr).accept.filter(x => !/[(/]/.test(x)).length ? forms(fr).accept.filter(x => !/[(/]/.test(x)) : forms(fr).accept).slice().sort((a, b) => levAny(norm(a), norm(val)) - levAny(norm(b), norm(val)))[0];
+  const ERRS = {
+    all() { return store.get('errs', []); },
+    push(e) { const a = this.all(); a.push({ ...e, d: dayStr() }); store.set('errs', a.slice(-400)); },
+    typed(correct, typed) {
+      const c = norm(correct), t = norm(typed);
+      if (!t || c === t || t.length > c.length + 6) return;
+      this.push({ c: correct, t: typed.trim() });
+    },
+    quiz(lesson, word, chosen) { this.push({ q: lesson, c: word, t: chosen }); },
+    // pair up missing and extra words of a sentence attempt and log the close ones
+    sentence(target, input) {
+      const d = diff(target, input), T = tokens(target);
+      const miss = T.filter((_, k) => d.st[k] === 'miss');
+      d.extra.forEach((x, k) => { const m = miss[k]; if (m && levAny(loose(m), loose(x)) <= Math.max(2, m.length / 2)) this.typed(m, x); });
+    },
+  };
+  function levAny(a, b) {
+    const d = Array.from({ length: b.length + 1 }, (_, i) => i);
+    for (let i = 1; i <= a.length; i++) { let p = d[0]; d[0] = i; for (let j = 1; j <= b.length; j++) { const t = d[j]; d[j] = Math.min(d[j] + 1, d[j - 1] + 1, p + (a[i - 1] === b[j - 1] ? 0 : 1)); p = t; } }
+    return d[b.length];
+  }
+  let RULES = null;
+  function rules() {
+    if (RULES) return RULES;
+    RULES = [];
+    for (const c of window.CONFUSIONS || []) {
+      const add = (x, y) => { if (x !== y) RULES.push([x, y, c.id]); };
+      if (c.group) for (const x of c.group) for (const y of c.group) add(x, y);
+      if (c.a) for (const x of c.a) for (const y of c.b) { add(x, y); add(y, x); }
+      if (c.pairs) for (const [x, y] of c.pairs) { add(x, y); add(y, x); }
+    }
+    return RULES;
+  }
+  function edits(s) {
+    const out = [];
+    for (const [x, y, id] of rules()) {
+      let p = s.indexOf(x);
+      while (p >= 0) { out.push([s.slice(0, p) + y + s.slice(p + x.length), id]); p = s.indexOf(x, p + 1); }
+    }
+    const m = s.match(/(ent|es|[estdxzp])$/);
+    if (m) out.push([s.slice(0, -m[0].length), 'muettes']);
+    if (s.startsWith('h')) out.push([s.slice(1), 'h']);
+    for (let p = 0; p < s.length; p++) {
+      if (s[p] === s[p + 1] && /[bcdfglmnprst]/.test(s[p])) out.push([s.slice(0, p) + s.slice(p + 1), 'double']);
+      if (/[bcdfglmnprst]/.test(s[p]) && s[p] !== s[p + 1] && s[p] !== s[p - 1] && p > 0) out.push([s.slice(0, p) + s[p] + s.slice(p), 'double']);
+      if (s[p] === 'e') out.push([s.slice(0, p) + s.slice(p + 1), 'e_muet']);
+    }
+    return out;
+  }
+  const DETECT = {};
+  function detect(correct, typed) {
+    const c = norm(correct), t = norm(typed), key = c + '|' + t;
+    if (DETECT[key]) return DETECT[key];
+    let res = [];
+    if (c === t) res = [];
+    else if (strip(c) === strip(t)) res = ['accent'];
+    else {
+      const goal = s => s === t || strip(s) === strip(t);
+      const accentToo = s => s !== t ? ['accent'] : [];
+      const d0 = levAny(c, t);
+      let found = null;
+      for (const [s1, id1] of edits(c)) {
+        if (goal(s1)) { found = [id1, ...accentToo(s1)]; break; }
+      }
+      if (!found) {
+        outer: for (const [s1, id1] of edits(c)) {
+          if (levAny(s1, t) >= d0) continue;
+          for (const [s2, id2] of edits(s1)) if (goal(s2)) { found = [...new Set([id1, id2, ...accentToo(s2)])]; break outer; }
+        }
+      }
+      res = found || ['other'];
+    }
+    return (DETECT[key] = res);
+  }
+  function analyseErrors() {
+    const conf = Object.fromEntries((window.CONFUSIONS || []).map(c => [c.id, c]));
+    const byQuizLesson = {};
+    const tally = {};
+    const add = (id, ex) => { const e = tally[id] = tally[id] || { id, n: 0, ex: [] }; e.n++; if (ex && e.ex.length < 5 && !e.ex.some(x => x.c === ex.c && x.t === ex.t)) e.ex.push(ex); };
+    for (const e of ERRS.all()) {
+      if (e.q) {
+        const c = (window.CONFUSIONS || []).find(x => x.lesson === e.q);
+        add(c ? c.id : 'q:' + e.q, { c: e.c, t: e.t, quiz: true });
+        byQuizLesson[e.q] = true;
+      } else detect(e.c, e.t).forEach(id => add(id, { c: e.c, t: e.t }));
+    }
+    return Object.values(tally).map(x => {
+      let meta;
+      if (x.id.startsWith('q:')) { const l = sFind(x.id.slice(2)); meta = { t: l ? l.t : x.id, te: l ? l.te : x.id, lesson: l && l.id }; }
+      else meta = conf[x.id] || EXTRA_CLS[x.id] || EXTRA_CLS.other;
+      return { ...x, ...meta };
+    }).sort((a, b) => (a.id === 'other') - (b.id === 'other') || b.n - a.n);
+  }
+  function errorAnalysisHTML() {
+    const rows = analyseErrors();
+    if (!rows.length) return `<section class="unit"><div class="unit-title"><h2>${bi('易错分析', 'Mistake patterns')}</h2></div>
+      <p class="hint-text" style="margin:0">${bi('写错的单词会在这里按类型统计，比如「au 写成 eu」，并链接到《法语发音》里对应的练习。多做几次默写就会出现。', 'Your misspellings will be grouped here by type — e.g. "au written as eu" — with a link to the matching lesson in the pronunciation book. Do a few dictations and they will appear.')}</p></section>`;
+    const max = rows[0].n;
+    return `<section class="unit"><div class="unit-title"><h2>${bi('易错分析', 'Mistake patterns')}</h2><span>${bi('你最常把什么写成什么', 'What you most often write instead')}</span></div>
+      <div class="err-ana">${rows.map(r => `<div class="ea-row">
+        <div class="ea-head"><b lang="fr">${tl(r)}</b><span class="ea-n">${r.n} ${bi('次', 'times')}</span>
+          ${r.lesson ? `<a class="btn ghost small" href="#/sons/${r.lesson}/quiz">${bi('去练习 ›', 'Practise ›')}</a>` : ''}</div>
+        <div class="ea-bar"><i style="width:${Math.max(6, r.n / max * 100)}%"></i></div>
+        <div class="ea-ex">${r.ex.map(x => x.quiz ? `<span lang="fr">${esc(x.c)} <small>${bi('选了', 'chose')} ${esc(x.t)}</small></span>`
+          : `<span lang="fr"><s>${esc(x.t)}</s> → ${esc(x.c)}</span>`).join('')}</div>
+      </div>`).join('')}</div></section>`;
   }
 
   function viewMe() {
@@ -776,6 +1111,10 @@
     const crumbs = $('#crumbs');
     window.scrollTo(0, 0);
     if (!parts.length) { crumbs.innerHTML = ''; return viewHome(); }
+    if (parts[0] === 'sons') {
+      crumbs.innerHTML = `<a href="#/sons">${esc(SB().title)}</a>`;
+      return parts[1] ? viewSoundLesson(parts[1], parts[2] || 'learn') : viewSounds();
+    }
     if (parts[0] === 'verbes') { crumbs.innerHTML = `<span>${bi('动词词典', 'Verb dictionary')}</span>`; return viewVerbs(decodeURIComponent(parts[1] || '')); }
     if (parts[0] === 'me') { crumbs.innerHTML = '<span>我的打卡与邮册</span>'; return viewMe(); }
     if (parts[0] === 'review') { crumbs.innerHTML = '<span>错题本 · 每日复习</span>'; return viewReview(parts[1]); }
@@ -833,6 +1172,7 @@
         <button class="btn ghost small" id="exp">导出备份</button>
         <label class="btn ghost small" style="cursor:pointer">导入<input type="file" id="imp" accept=".json" hidden></label>
       </div>
+      ${errorAnalysisHTML()}
       ${Object.keys(byLecon).length ? Object.entries(byLecon).map(([n, list]) => `
         <section class="unit"><div class="unit-title"><h2 lang="fr">Leçon ${n}</h2><span>${list.length} 条</span></div>
         ${list.map(e => `<div class="err-row">
@@ -893,8 +1233,10 @@
       if (e.kind === 'sentence') {
         const d = diff(e.fr, giveUp ? '' : val);
         good = d.perfect; html = giveUp ? esc(e.fr) : marked(e.fr, d.st);
+        if (!good && !giveUp) ERRS.sentence(e.fr, val);
       } else {
         const r = giveUp ? 'bad' : checkWord(val, e.fr);
+        if (r !== 'ok' && !giveUp) ERRS.typed(e.kind === 'word' && e.pos !== '变位' ? closest(e.fr, val) : e.fr, val);
         good = r === 'ok'; html = esc(e.fr) + (r === 'accent' ? ' <span class="kbd">（注意重音）</span>' : '');
       }
       good ? (SRS.hit(e), right++, XP.gain(3, '复习答对')) : SRS.miss(e);
@@ -913,7 +1255,7 @@
     document.title = '你好法语 · 默写本';
     main.innerHTML = `
       <section class="home">
-        ${coverHTML(book)}
+        <div class="shelf">${coverHTML(book)}${soundCover()}</div>
         <div class="home-text">
           <p class="kicker" lang="fr">Cahier de dictée</p>
           <h1>跟着课本，一课一课写下来</h1>
@@ -924,8 +1266,8 @@
             <li><b>3</b><span>全文默写 — 对照中文，整篇写出来</span></li>
             <li><b>4</b><span>背诵 — 对着麦克风说，说对的词会逐个显现</span></li>
           </ol>
-          <a class="btn" href="#/${book.id}">打开《${esc(book.title)}》</a>
-          ${backupNag()}${reviewBanner()}${backupNag()}
+          <div class="toolbar"><a class="btn" href="#/${book.id}">打开《${esc(book.title)}》</a><a class="btn ghost" href="#/sons">打开《${esc(SB().title)}》</a></div>
+          ${backupNag()}${reviewBanner()}
         </div>
       </section>`;
   }
@@ -1172,6 +1514,7 @@
       const it = { book: ctx.book.id, n: ctx.lecon.n, kind: 'word', fr: v.fr, zh: v.zh, en: v.en, pos: v.pos };
       const bk = ctx.book.id, ln = ctx.lecon.n;
       if (good && !hintN) XP.gain(2, '一次写对');
+      if (!good && !giveUp && inp.value.trim()) ERRS.typed(closest(v.fr, inp.value), inp.value);
       if (!good || hintN) {
         wrong.push(v);
         if (!test) { SRS.miss(it); MASTER.word(bk, ln, v.fr, false); }
@@ -1384,6 +1727,7 @@
       const pronounFree = norm(c.text.replace(/^(je|j'|tu|il|elle|nous|vous|ils|elles)\s*/, ''));
       let r = giveUp ? 'bad' : (a === t ? 'ok' : strip(a) === strip(t) ? (settings.lenient ? 'ok' : 'accent') : a === pronounFree ? 'pron' : 'bad');
       const good = r === 'ok';
+      if (!good && !giveUp && r !== 'pron') ERRS.typed(c.text, val);
       if (good) { right++; XP.gain(1, '变位正确'); }
       const it = { book: book.id, n: v.n, kind: 'word', fr: c.text, zh: `${forms(v.fr).say} · ${c.p}（现在时）`, en: `${forms(v.fr).say} · ${c.p} (present tense)`, pos: '变位' };
       good ? SRS.hit(it) : SRS.miss(it);
@@ -1438,7 +1782,7 @@
         const ctxLine = [...row.childNodes].map(nd => nd === inp ? '____' : nd.nodeType === 3 ? nd.textContent : nd.tagName === 'INPUT' ? nd.dataset.a : '').join('');
         const it = { book: ctx.book.id, n: ctx.lecon.n, kind: 'cloze', fr: inp.dataset.a, zh: ctxLine.trim() };
         if (r === 'ok') { ok++; SRS.hit(it); }
-        else SRS.miss(it), inp.insertAdjacentHTML('afterend', `<span class="cloze-fix">${esc(inp.dataset.a)}</span>`);
+        else SRS.miss(it), inp.value.trim() && ERRS.typed(inp.dataset.a, inp.value), inp.insertAdjacentHTML('afterend', `<span class="cloze-fix">${esc(inp.dataset.a)}</span>`);
       });
       XP.gain(ok, `填空 ${ok} 个正确`);
       const s = ok / ins.length;
@@ -1486,6 +1830,7 @@
         if (d.perfect) XP.gain(3, '句子全对');
         const it = { book: ctx.book.id, n: ctx.lecon.n, kind: 'sentence', fr: s.fr, zh: s.zh, en: s.en };
         d.perfect ? SRS.hit(it) : SRS.miss(it);
+        if (!d.perfect && !giveUp) ERRS.sentence(s.fr, val);
       }
       const cls = d.perfect ? 'ok' : d.score > 0.7 ? 'accent' : 'bad';
       $('#fb', body).innerHTML = `<div class="feedback ${cls}">
@@ -1543,6 +1888,7 @@
       areas.forEach(t => {
         const r = lecon.text[t.dataset.k], d = diff(r.fr, t.value);
         total += d.score;
+        if (t.value.trim() && !d.perfect && t.dataset.logged !== t.value) { t.dataset.logged = t.value; ERRS.sentence(r.fr, t.value); }
         if (t.value.trim()) { const it = { book: book.id, n: lecon.n, kind: 'sentence', fr: r.fr.replace(/^–\s*/, ''), zh: r.zh.replace(/^–\s*/, ''), en: (r.en || '').replace(/^–\s*/, '') }; d.perfect ? SRS.hit(it) : SRS.miss(it); if (d.perfect) MASTER.line(book.id, lecon.n, +t.dataset.k); }
         t.nextElementSibling.innerHTML = d.perfect ? `<span class="w-ok">✓</span>`
           : `<div lang="fr">${marked(r.fr, d.st)}</div>${d.extra.length ? `<div class="yours">多写/拼错：<span class="w-extra">${esc(d.extra.join(' '))}</span></div>` : ''}`;

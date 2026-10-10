@@ -423,3 +423,82 @@ mark.aux { background: var(--wash-amber); color: inherit; border-radius: 3px; pa
 }
 .top .btn { white-space: nowrap; }
 @media (max-width: 720px) { .top .btn.small { padding: 4px 8px; font-size: 14px; } .top { gap: 6px; } .brand-zh { font-size: 17px; } }
+
+/* bookshelf + pronunciation book */
+.shelf { display: flex; gap: 22px; justify-content: center; }
+.home { grid-template-columns: 400px 1fr; }
+.shelf .cover { width: 180px; padding: 26px 18px 18px 28px; }
+.shelf .cover .c-zh { font-size: 30px; }
+.shelf .cover .c-fr { font-size: 16px; }
+.shelf .cover .c-num { font-size: 40px; }
+.cover.sons { background: linear-gradient(100deg, #2f4a3c 0 6%, #3d5f4c 6% 100%); box-shadow: inset 6px 0 0 #c08a2e, inset 9px 0 0 rgba(0,0,0,.15), 0 22px 40px -18px rgba(20,35,25,.55); }
+.sons-title { font: 500 26px var(--zh); color: var(--ink-2); margin-left: 8px; }
+.sons-how { font: 17px/1.75 var(--zh); background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 14px 18px; margin: 0 0 20px; }
+.sons-how .en-gloss { font-size: 16px; margin-top: 6px; }
+.mouths { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 18px; }
+.mouth { margin: 0; flex: 1 1 260px; max-width: 360px; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px 12px; }
+.mouth-svg { width: 100%; height: auto; display: block; }
+.mouth figcaption { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.mouth figcaption span { font: 13px var(--zh); background: var(--paper-2); border-radius: 999px; padding: 2px 9px; color: var(--ink); }
+.mouth-svg path, .mouth-svg ellipse { fill: none; stroke: var(--ink-2); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.mouth-svg .cavity { stroke: var(--line); stroke-dasharray: 3 4; }
+.mouth-svg .face, .mouth-svg .wall { stroke: var(--ink-2); }
+.mouth-svg .lip { stroke: var(--red); stroke-width: 2.4; }
+.mouth-svg .tooth { fill: var(--card); stroke: var(--ink-2); stroke-width: 1.2; }
+.mouth-svg .palate { stroke: var(--ink); stroke-width: 2; }
+.mouth-svg .velum { stroke: var(--ink); stroke-width: 3.2; }
+.mouth-svg .velum.down { stroke: var(--amber); }
+.mouth-svg .tongue { fill: rgba(200, 89, 75, .28); stroke: var(--red); stroke-width: 1.8; }
+.mouth-svg .air { stroke: var(--blue); stroke-width: 1.6; stroke-dasharray: 4 4; marker-end: none; animation: flow 1.2s linear infinite; }
+.mouth-svg .air.nose { stroke: var(--amber); }
+.mouth-svg .voice { stroke: var(--green); stroke-width: 2; }
+.mouth-svg .contact { fill: var(--red); stroke: none; }
+.mouth-svg .lipfront { stroke: var(--red); stroke-width: 2.2; }
+.mouth-svg .mouthfront { fill: var(--ink); stroke: none; opacity: .75; }
+.mouth-svg .ipa { font: 600 18px var(--serif); fill: var(--ink); }
+@keyframes flow { to { stroke-dashoffset: -16; } }
+.letters { display: grid; grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)); gap: 10px; margin-bottom: 20px; }
+.letter { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 8px 4px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.letter:hover { border-color: var(--blue); background: var(--wash-blue); }
+.letter b { font: 600 28px var(--display); }
+.letter span { font-size: 15px; }
+.letter small { font-size: 12px; color: var(--red); }
+.spell-table { display: grid; gap: 10px; margin-bottom: 20px; }
+.spell-row { display: grid; grid-template-columns: 110px 1fr; gap: 12px; align-items: start; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+.spell-row .sp { font: 600 24px var(--display); color: var(--red); }
+.spell-row .sp small { display: block; font: 13px var(--zh); color: var(--ink-2); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.wchip { border: 1px solid var(--line); background: var(--paper); border-radius: 8px; padding: 4px 10px; cursor: pointer; display: inline-flex; flex-direction: column; align-items: flex-start; line-height: 1.3; }
+.wchip:hover { border-color: var(--blue); background: var(--wash-blue); }
+.wchip span { font-size: 18px; }
+.wchip small { font: 12px var(--zh); color: var(--ink-2); }
+.wchip small .en-gloss { font-size: 12px; }
+.opt-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 20px; }
+.opt-col { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+.opt-col h3 { font: 600 19px var(--display); margin-bottom: 8px; color: var(--red); }
+.pairs-h { font: 600 17px var(--zh); margin: 4px 0 10px; }
+.pairs { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 8px; }
+.pair { display: flex; align-items: center; gap: 8px; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 6px 10px; }
+.pair .play { margin-left: auto; }
+.vs { color: var(--ink-2); }
+.choices { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin-top: 8px; }
+.choice { border: 1.5px solid var(--line); background: var(--paper); border-radius: 10px; padding: 12px 10px; font-size: 19px; cursor: pointer; text-align: left; }
+.choice:hover:not(:disabled) { border-color: var(--blue); background: var(--wash-blue); }
+.choice kbd { margin-right: 6px; }
+.choice.ok { border-color: var(--green); background: var(--wash-green); }
+.choice.bad { border-color: var(--red); background: var(--wash-red); }
+.choice:disabled { cursor: default; }
+.err-ana { display: grid; gap: 12px; }
+.ea-row { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; }
+.ea-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.ea-head b { font-size: 18px; }
+.ea-n { font: 14px var(--zh); color: var(--red); }
+.ea-head .btn { margin-left: auto; }
+.ea-bar { height: 5px; background: var(--paper-2); border-radius: 3px; margin: 8px 0; overflow: hidden; }
+.ea-bar i { display: block; height: 100%; background: var(--red); }
+.ea-ex { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 16px; }
+.ea-ex s { color: var(--red); }
+.ea-ex small { color: var(--ink-2); font-size: 13px; }
+@media (max-width: 900px) { .home { grid-template-columns: 1fr; } }
+@media (max-width: 720px) { .shelf .cover { width: 140px; padding: 18px 12px 12px 20px; } .shelf .cover .c-zh { font-size: 22px; } .shelf .cover svg { display: none; } .spell-row { grid-template-columns: 1fr; } }
+.mouth-svg .peak { fill: var(--red); stroke: var(--card); stroke-width: 1.5; }
