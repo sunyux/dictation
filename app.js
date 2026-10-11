@@ -1149,7 +1149,7 @@
     const active = items.filter(e => !e.done), done = items.filter(e => e.done);
     if (sub === 'go' || sub === 'listen' || sub === 'early' || sub === 'early-listen') {
       main.innerHTML = '<div class="toolbar"><a class="btn ghost small" href="#/review">‹ 返回错题本</a></div><div id="drill"></div>';
-      return reviewDrill($('#drill'), shuffle(sub.startsWith('early') ? active : due), sub.endsWith('listen'));
+      return reviewDrill($('#drill'), shuffle(sub.startsWith('early') ? active : due));
     }
     const byLecon = {};
     active.sort((a, b) => a.n - b.n || a.due.localeCompare(b.due)).forEach(e => (byLecon[e.n] = byLecon[e.n] || []).push(e));
@@ -1164,10 +1164,9 @@
         <div><b>${done.length}</b><span>已掌握</span></div>
       </div>
       <div class="toolbar">
-        ${due.length ? `<a class="btn" href="#/review/listen">${ICON.play} 听写今天的复习（${due.length}）</a>
-          <a class="btn ghost" href="#/review/go">看意思默写</a>`
+        ${due.length ? `<a class="btn" href="#/review/go">开始今天的复习（${due.length}）</a>`
           : `<span class="btn ghost" aria-disabled="true">今天没有要复习的</span>`}
-        ${active.length && !due.length ? '<a class="btn ghost" href="#/review/early-listen">提前听写全部</a><a class="btn ghost small" href="#/review/early">提前看意思默写</a>' : ''}
+        ${active.length && !due.length ? '<a class="btn ghost" href="#/review/early">提前复习全部</a>' : ''}
         <span class="spacer"></span>
         <button class="btn ghost small" id="exp">导出备份</button>
         <label class="btn ghost small" style="cursor:pointer">导入<input type="file" id="imp" accept=".json" hidden></label>
@@ -1191,36 +1190,41 @@
   }
 
   const promptSay = e => e.kind === 'cloze' ? e.zh.replace('____', e.fr).replace(/^–\s*/, '') : e.kind === 'word' && e.pos !== '变位' ? forms(e.fr).say : e.fr;
-  // what to read aloud in a dictation: the word, the conjugated form, the missing word of a gap, or the whole sentence
-  const listenSay = e => e.kind === 'cloze' ? e.fr : e.kind === 'word' && e.pos !== '变位' ? forms(e.fr).say : e.fr;
-  function reviewDrill(box, queue, listen = false) {
+  // round 1 is the real review (updates the schedule); later rounds practise the misses until all are right
+  function reviewDrill(box, queue, round = 1) {
+    const practice = round > 1;
     let i = 0, answered = false, right = 0;
+    const wrong = [];
     const draw = () => {
       if (i >= queue.length) {
-        box.innerHTML = `<div class="drill summary"><p class="kicker" lang="fr">Bilan</p><div class="score">${right} / ${queue.length}</div>
-          <p>${right === queue.length ? '全部答对！' : '答错的明天会再出现。'}</p>
-          <div class="drill-actions" style="justify-content:center"><a class="btn" href="#/review">回到错题本</a></div></div>`;
+        const allRight = !wrong.length;
+        box.innerHTML = `<div class="drill summary"><p class="kicker" lang="fr">${practice ? bi(`第 ${round - 1} 轮练习`, `Practice round ${round - 1}`) : 'Bilan'}</p>
+          <div class="score">${right} / ${queue.length}</div>
+          <p>${allRight ? (practice ? bi('全部答对了！今天的错题都练会了。', 'All right! You have learned today\'s misses.') : bi('全部答对！', 'All correct!'))
+            : practice ? bi(`还有 ${wrong.length} 个没写对，再来一轮。`, `${wrong.length} still wrong — one more round.`)
+            : bi('答错的明天会再出现。现在可以先把它们练对。', 'The ones you missed come back tomorrow. Practise them now until they are right.')}</p>
+          ${wrong.length ? `<ul>${wrong.map(e => `<li><span lang="fr">${esc(e.fr)}</span><span class="w-zh">${e.kind === 'cloze' ? esc(e.zh) : G(e)}</span></li>`).join('')}</ul>` : ''}
+          <div class="drill-actions" style="justify-content:center">
+            ${wrong.length ? `<button class="btn" id="again-wrong">${bi(`练习答错的（${wrong.length}）`, `Practise the misses (${wrong.length})`)}</button>` : ''}
+            <a class="btn ${wrong.length ? 'ghost' : ''}" href="#/review">${bi('回到错题本', 'Back to mistake book')}</a></div></div>`;
+        if (wrong.length) $('#again-wrong', box).onclick = () => reviewDrill(box, shuffle(wrong), round + 1);
         return;
       }
       const e = queue[i]; answered = false;
       const word = e.kind !== 'sentence';
       box.innerHTML = `<div class="drill">
-        <div class="count">${i + 1} / ${queue.length} · Leçon ${e.n}</div>
+        <div class="count">${practice ? bi(`练习 ${round - 1} · `, `Practice ${round - 1} · `) : ''}${i + 1} / ${queue.length} · Leçon ${e.n}</div>
         <div class="bar"><i style="width:${i / queue.length * 100}%"></i></div>
-        <div class="prompt">${listen
-          ? `${playBtn(listenSay(e), 'big')}<div class="ppos">${e.kind === 'sentence' ? '听写整句' : e.kind === 'cloze' ? '听写空缺的词' : '听写'}${e.pos && e.kind !== 'cloze' ? ' · ' + esc(e.pos) : ''}</div>
-             ${e.kind === 'cloze' ? `<div class="pzh long" lang="fr" style="font-family:var(--serif);margin-top:10px">${esc(e.zh).replace('____', '<u>&emsp;?&emsp;</u>')}</div>` : ''}`
-          : e.kind === 'cloze'
+        <div class="prompt">${e.kind === 'cloze'
           ? `<div class="pzh long" lang="fr" style="font-family:var(--serif)">${esc(e.zh).replace('____', '<u>&emsp;?&emsp;</u>')}</div><div class="ppos">填出空缺的词</div>`
           : `<div class="pmean ${e.zh.length > 30 ? 'long' : ''}">${MEAN(e)}</div>`}
-          ${listen ? '' : `<div class="ppos">${playBtn(promptSay(e))} ${esc(e.kind === 'cloze' ? '' : e.pos || '')}</div>`}</div>
+          <div class="ppos">${playBtn(promptSay(e))} ${esc(e.kind === 'cloze' ? '' : e.pos || '')}</div></div>
         ${word ? `<input class="answer-in" id="ans" lang="fr" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${bi('用法语写…', 'Write in French…')}">`
           : `<textarea class="answer-in" id="ans" lang="fr" rows="2" autocapitalize="off" spellcheck="false" placeholder="${bi('写出法语句子…', 'Write the French sentence…')}"></textarea>`}
         <div class="drill-actions"><button class="btn ghost small" id="skip">${bi('不会，看答案', 'Show answer')}</button><span class="spacer"></span><span class="kbd"><kbd>Enter</kbd> 检查 / 下一个</span></div>
         <div id="fb"></div></div>`;
       const inp = $('#ans', box); inp.focus();
-      if (listen) setTimeout(() => TTS.say(listenSay(e)), 250);
-      else if (store.get('vauto', false)) setTimeout(() => TTS.say(promptSay(e)), 200);
+      if (store.get('vauto', false)) setTimeout(() => TTS.say(promptSay(e)), 200);
       inp.onkeydown = ev => { if (ev.key === 'Enter' && !ev.shiftKey) { ev.preventDefault(); answered ? (i++, draw()) : check(); } };
       $('#skip', box).onclick = () => check(true);
     };
@@ -1239,11 +1243,18 @@
         if (r !== 'ok' && !giveUp) ERRS.typed(e.kind === 'word' && e.pos !== '变位' ? closest(e.fr, val) : e.fr, val);
         good = r === 'ok'; html = esc(e.fr) + (r === 'accent' ? ' <span class="kbd">（注意重音）</span>' : '');
       }
-      good ? (SRS.hit(e), right++, XP.gain(3, '复习答对')) : SRS.miss(e);
-      const next = good ? GAPS[Math.min((e.box || 0) + 1, GAPS.length - 1)] : 1;
-      $('#fb', box).innerHTML = `<div class="feedback ${good ? 'ok' : 'bad'}"><span class="lab">${good ? `答对了 · ${(e.box || 0) + 1 >= GAPS.length ? '已掌握' : next + ' 天后再复习'}` : '明天再来一次'}</span>
+      if (good) right++; else wrong.push(e);
+      let lab;
+      if (practice) {
+        if (good) XP.gain(1, bi('练习答对', 'Practice right'));
+        lab = good ? bi('对了', 'Right') : bi('还没对，等下再来', 'Not yet — it will come back');
+      } else {
+        good ? (SRS.hit(e), XP.gain(3, '复习答对')) : SRS.miss(e);
+        const next = good ? GAPS[Math.min((e.box || 0) + 1, GAPS.length - 1)] : 1;
+        lab = good ? `答对了 · ${(e.box || 0) + 1 >= GAPS.length ? '已掌握' : next + ' 天后再复习'}` : '明天再来一次';
+      }
+      $('#fb', box).innerHTML = `<div class="feedback ${good ? 'ok' : 'bad'}"><span class="lab">${lab}</span>
         <div class="ans" lang="fr">${playBtn(say)}<span>${html}</span></div>
-        ${listen && e.kind !== 'cloze' ? `<div class="pmean long" style="margin-top:6px">${MEAN(e)}</div>` : ''}
         ${e.kind === 'word' ? tipBox(e.pos === '变位' ? verbTip(e.zh.split(' · ')[0].replace(/^(se |s')/, '')) : wordTip(e.n, e)) : ''}</div>`;
       TTS.say(say);
     };
