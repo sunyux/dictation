@@ -502,3 +502,27 @@ mark.aux { background: var(--wash-amber); color: inherit; border-radius: 3px; pa
 @media (max-width: 900px) { .home { grid-template-columns: 1fr; } }
 @media (max-width: 720px) { .shelf .cover { width: 140px; padding: 18px 12px 12px 20px; } .shelf .cover .c-zh { font-size: 22px; } .shelf .cover svg { display: none; } .spell-row { grid-template-columns: 1fr; } }
 .mouth-svg .peak { fill: var(--red); stroke: var(--card); stroke-width: 1.5; }
+
+/* quick lookup + translate */
+.lookup { position: fixed; inset: 0; background: rgba(28,33,49,.35); z-index: 40; display: flex; justify-content: center; align-items: flex-start; padding: 70px 14px 14px; }
+.lookup[hidden] { display: none; }
+.lk-box { width: min(640px, 100%); max-height: calc(100vh - 90px); overflow-y: auto; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px; box-shadow: 0 24px 60px -20px rgba(0,0,0,.45); }
+.lk-bar { display: flex; gap: 8px; align-items: center; position: sticky; top: -14px; background: var(--card); padding: 2px 0 10px; }
+.lk-bar input { flex: 1; font-size: 20px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--paper); }
+.lk-item { border-top: 1px dashed var(--line); padding: 10px 2px; }
+.lk-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.lk-head b { font-size: 21px; }
+.lk-head .pos { font: italic 14px var(--serif); color: var(--ink-2); }
+.lk-head .v-tag { text-decoration: none; }
+.lk-mean { font: 15px var(--zh); margin: 4px 0 0 38px; }
+.lk-tip { font: 13px/1.55 var(--zh); color: var(--ink-2); margin: 4px 0 0 38px; }
+.lk-tip b { color: var(--red); }
+.lk-conj { display: grid; gap: 6px; margin-bottom: 8px; }
+.lk-conj-row { display: flex; gap: 8px; align-items: baseline; padding: 8px 12px; border-radius: 8px; background: var(--wash-amber); text-decoration: none; color: var(--ink); font-size: 18px; }
+.lk-conj-row small { font: 13px var(--zh); color: var(--ink-2); }
+.lk-more { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; padding-top: 10px; border-top: 1px solid var(--line); }
+.tr-box select { padding: 6px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); font-size: 16px; }
+.tr-box textarea { resize: vertical; font-size: 19px; }
+.tr-out { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; margin-top: 10px; }
+.tr-res { font-size: 20px; line-height: 1.6; white-space: pre-wrap; }
+@media (max-width: 720px) { .top .nav-tools { display: none; } }

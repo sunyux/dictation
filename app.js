@@ -814,6 +814,135 @@
       </div>`).join('')}</div></section>`;
   }
 
+  /* ---------- tools: quick lookup (overlay) and translation ---------- */
+  let LOOKUP = null;
+  function lookupIndex() {
+    if (LOOKUP) return LOOKUP;
+    const items = [], forms2inf = {};
+    for (const b of BOOKS) for (const u of b.units) for (const l of u.lecons) for (const v of l.vocab)
+      items.push({ fr: v.fr, zh: v.zh, en: v.en, pos: v.pos, src: 'book', book: b.id, n: l.n, v });
+    if (window.SOUNDS) for (const l of sLessons()) for (const it of sItems(l)) if (!items.some(x => x.fr === it.w)) items.push({ fr: it.w, zh: it.zh, en: it.en, src: 'sons', lesson: l.id });
+    const D = window.VERBDICT;
+    if (D) for (const k of D.list()) {
+      const c = D.get(k);
+      if (!items.some(x => x.fr.replace(/\s*\((se|s')\)/, '') === c.base && x.src === 'book')) items.push({ fr: k, zh: c.zh, en: c.en, pos: 'v.', src: 'verb', verb: k });
+      for (const t of ['present', 'imparfait', 'futur']) c.forms[t].forEach((f, i) => { const key = loose(f); (forms2inf[key] = forms2inf[key] || []).push({ verb: k, t, i }); });
+      (forms2inf[loose(c.pp)] = forms2inf[loose(c.pp)] || []).push({ verb: k, t: 'pp' });
+    }
+    items.forEach(x => { x.kfr = loose(x.fr.replace(/[¹²³*]/g, '')); x.kmean = loose((x.zh || '') + ' ' + (x.en || '')); });
+    return (LOOKUP = { items, forms2inf });
+  }
+  const TENSE_NAME = { present: ['现在时', 'present'], imparfait: ['未完成过去时', 'imperfect'], futur: ['简单将来时', 'future'], pp: ['过去分词', 'past participle'] };
+  const PERSON = ['je', 'tu', 'il/elle', 'nous', 'vous', 'ils/elles'];
+  function lookupHTML(q) {
+    const raw = q.trim(); if (!raw) return `<p class="hint-text" style="margin:8px 2px">${bi('输入法语、中文或英文都可以，比如 chapeau、帽子、hat、prennent。', 'Type French, Chinese or English — e.g. chapeau, 帽子, hat, prennent.')}</p>`;
+    const k = loose(raw), { items, forms2inf } = lookupIndex();
+    const word = new RegExp('(^|[^a-z])' + k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '([^a-z]|$)');
+    const score = x => x.kfr === k ? 0 : x.kfr.startsWith(k) ? 1 : word.test(x.kmean) ? 1.5 : x.kfr.includes(k) ? 2 : x.kmean.includes(k) ? 3 : 9;
+    const hits = items.map(x => [score(x), x]).filter(([s]) => s < 9).sort((a, b) => a[0] - b[0] || a[1].fr.length - b[1].fr.length).slice(0, 12).map(([, x]) => x);
+    const conj = (forms2inf[k] || []).filter((c, i, a) => a.findIndex(y => y.verb === c.verb && y.t === c.t) === i);
+    let h = '';
+    if (conj.length) h += `<div class="lk-conj">${conj.map(c => `<a href="#/verbes/${encodeURIComponent(c.verb)}" class="lk-conj-row"><span lang="fr">${esc(raw)}</span> → <b lang="fr">${esc(c.verb)}</b>
+      <small>${bi(TENSE_NAME[c.t][0], TENSE_NAME[c.t][1])}${c.i != null ? ' · ' + PERSON[c.i] : ''}</small></a>`).join('')}</div>`;
+    h += hits.map(x => {
+      const tag = x.src === 'book' ? `<a class="v-tag book" href="#/${x.book}/${x.n}/vocab">L${x.n}</a>` : x.src === 'sons' ? `<a class="v-tag" href="#/sons/${x.lesson}">${bi('发音书', 'Sounds')}</a>` : `<a class="v-tag" href="#/verbes/${encodeURIComponent(x.verb)}">${bi('动词词典', 'Verbs')}</a>`;
+      const tip = x.v ? wordTip(x.n, x.v) : '';
+      const verbLink = x.pos && x.pos.startsWith('v') && window.VERBDICT ? (() => { const m = x.fr.match(/^(\S+)\s*\((se|s')\)$/); const key = m ? (/^[aeiouyhâéèêî]/i.test(m[1]) ? "s'" : 'se ') + m[1] : x.fr; return window.VERBDICT.get(key) && x.src !== 'verb' ? `<a class="v-tag" href="#/verbes/${encodeURIComponent(key)}">${bi('变位', 'conjugate')}</a>` : ''; })() : '';
+      return `<div class="lk-item"><div class="lk-head">${playBtn(forms(x.fr).say)}<b lang="fr">${esc(x.fr)}</b>${x.pos ? `<span class="pos">${esc(x.pos)}</span>` : ''}${tag}${verbLink}</div>
+        <div class="lk-mean">${G(x)}</div>${tip ? `<div class="lk-tip">${tip}</div>` : ''}</div>`;
+    }).join('');
+    if (!hits.length && !conj.length) h += `<p class="hint-text" style="margin:8px 2px">${bi('网站的词库里没有找到。', 'Not in the site\'s word lists.')}</p>`;
+    h += `<div class="lk-more"><a href="#/tools/translate?q=${encodeURIComponent(raw)}" class="btn ghost small">${bi('翻译', 'Translate')} « ${esc(raw.slice(0, 20))} »</a>
+      <a class="btn ghost small" target="_blank" rel="noopener" href="https://www.wordreference.com/fren/${encodeURIComponent(raw)}">WordReference ↗</a>
+      <a class="btn ghost small" target="_blank" rel="noopener" href="https://www.larousse.fr/dictionnaires/francais/${encodeURIComponent(raw)}">Larousse ↗</a></div>`;
+    return h;
+  }
+  function openLookup(q = '') {
+    let ov = $('#lookup');
+    if (!ov) {
+      ov = document.createElement('div'); ov.id = 'lookup'; ov.className = 'lookup';
+      ov.innerHTML = `<div class="lk-box" role="dialog" aria-modal="true"><div class="lk-bar">
+          <input type="search" id="lk-in" lang="fr" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${bi('随手查：法语 / 中文 / English', 'Look up: French / 中文 / English')}">
+          <button class="btn ghost small" id="lk-x">${bi('关闭', 'Close')}</button></div><div id="lk-res"></div></div>`;
+      document.body.appendChild(ov);
+      const inp = $('#lk-in', ov), res = $('#lk-res', ov);
+      inp.oninput = () => { res.innerHTML = lookupHTML(inp.value); };
+      $('#lk-x', ov).onclick = () => ov.hidden = true;
+      ov.addEventListener('click', e => { if (e.target === ov || e.target.closest('a[href^="#"]')) ov.hidden = true; });
+    }
+    ov.hidden = false;
+    const inp = $('#lk-in', ov); inp.value = q; $('#lk-res', ov).innerHTML = lookupHTML(q);
+    setTimeout(() => inp.focus(), 30);
+  }
+  document.addEventListener('keydown', e => {
+    if (e.key === '/' && !(e.target.matches && e.target.matches('input, textarea, [contenteditable]'))) { e.preventDefault(); openLookup(); }
+    if (e.key === 'Escape' && $('#lookup') && !$('#lookup').hidden) $('#lookup').hidden = true;
+  });
+
+  const LANGS = { fr: ['法语', 'French'], 'zh-CN': ['中文', 'Chinese'], en: ['英语', 'English'] };
+  function viewTools(tab, q) {
+    document.title = bi('工具', 'Tools') + ' · 你好法语';
+    const pair = store.get('trpair', 'fr|zh-CN');
+    main.innerHTML = `
+      <p class="kicker" lang="fr">Outils</p><h1 style="font-size:44px">${bi('工具', 'Tools')}</h1>
+      <nav class="tabs" role="tablist">
+        <button class="tab" data-tt="lookup" aria-selected="${tab !== 'translate'}"><b>1</b>${bi('随手查', 'Look up')}</button>
+        <button class="tab" data-tt="translate" aria-selected="${tab === 'translate'}"><b>2</b>${bi('翻译', 'Translate')}</button>
+      </nav><section id="tpane"></section>`;
+    $$('[data-tt]', main).forEach(b => b.onclick = () => { location.hash = '#/tools/' + b.dataset.tt; });
+    const pane = $('#tpane');
+    if (tab !== 'translate') {
+      pane.innerHTML = `<input type="search" class="typed-recite" id="tl-in" lang="fr" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${bi('输入法语、中文或英文', 'Type French, Chinese or English')}" value="${esc(q || '')}">
+        <p class="kbd" style="margin:6px 2px 10px">${bi('在任何页面按 / 键，或点右上角的放大镜，都能随时打开随手查。', 'Press / on any page, or tap the magnifier at the top, to look something up anytime.')}</p><div id="tl-res"></div>`;
+      const inp = $('#tl-in', pane), res = $('#tl-res', pane);
+      inp.oninput = () => { res.innerHTML = lookupHTML(inp.value); };
+      res.innerHTML = lookupHTML(inp.value); inp.focus();
+      return;
+    }
+    const [from, to] = pair.split('|');
+    pane.innerHTML = `<div class="tr-box">
+        <div class="toolbar"><select id="tr-from">${Object.entries(LANGS).map(([k, n]) => `<option value="${k}" ${k === from ? 'selected' : ''}>${bi(...n)}</option>`).join('')}</select>
+          <button class="btn ghost small" id="tr-swap" title="${bi('交换', 'Swap')}">⇄</button>
+          <select id="tr-to">${Object.entries(LANGS).map(([k, n]) => `<option value="${k}" ${k === to ? 'selected' : ''}>${bi(...n)}</option>`).join('')}</select></div>
+        <textarea id="tr-in" class="typed-recite" rows="4" placeholder="${bi('输入要翻译的文字…', 'Text to translate…')}">${esc(q || '')}</textarea>
+        <div class="toolbar"><button class="btn" id="tr-go">${bi('翻译', 'Translate')}</button><button class="btn ghost small" id="tr-say">${ICON.play} ${bi('朗读原文', 'Read the original')}</button>
+          <span class="spacer"></span><span class="kbd" id="tr-n"></span></div>
+        <div id="tr-out" class="tr-out" hidden></div>
+        <p class="kbd" style="margin-top:14px">${bi('翻译由免费的 MyMemory 服务提供：文字会发送给这个服务，每天大约可翻译 5000 字，长句可能不够准确。也可以在 DeepL 或 Google 翻译里打开：', 'Translations come from the free MyMemory service: your text is sent to it, about 5,000 characters a day, and long sentences may be rough. You can also open the text in DeepL or Google Translate:')}
+          <a href="#" id="tr-deepl">DeepL ↗</a> · <a href="#" id="tr-google">Google ↗</a></p></div>`;
+    const $f = $('#tr-from', pane), $t = $('#tr-to', pane), $in = $('#tr-in', pane), out = $('#tr-out', pane);
+    const savePair = () => store.set('trpair', $f.value + '|' + $t.value);
+    $f.onchange = $t.onchange = savePair;
+    $('#tr-swap', pane).onclick = () => { [$f.value, $t.value] = [$t.value, $f.value]; savePair(); };
+    $in.oninput = () => { $('#tr-n', pane).textContent = $in.value.length ? $in.value.length + ' / 500' : ''; };
+    $('#tr-say', pane).onclick = () => { if ($f.value === 'fr' && $in.value.trim()) TTS.say($in.value); };
+    const go = async () => {
+      const text = $in.value.trim().slice(0, 500);
+      if (!text) return;
+      if ($f.value === $t.value) { out.hidden = false; out.innerHTML = esc(text); return; }
+      out.hidden = false; out.innerHTML = `<span class="kbd">${bi('翻译中…', 'Translating…')}</span>`;
+      try {
+        const r = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${$f.value}|${$t.value}`);
+        const j = await r.json();
+        const t = j && j.responseData && j.responseData.translatedText;
+        if (!t || j.responseStatus !== 200) throw new Error(j && j.responseDetails || 'error');
+        const div = document.createElement('div'); div.innerHTML = t; const plain = div.textContent;
+        out.innerHTML = `<div class="tr-res" lang="${$t.value === 'fr' ? 'fr' : $t.value === 'en' ? 'en' : 'zh'}">${esc(plain)}</div>
+          <div class="toolbar" style="margin:8px 0 0">${$t.value === 'fr' ? `<button class="btn ghost small" data-say="${esc(plain)}">${ICON.play} ${bi('朗读', 'Read')}</button>` : ''}
+          <button class="btn ghost small" id="tr-copy">${bi('复制', 'Copy')}</button></div>`;
+        const c = $('#tr-copy', out); if (c) c.onclick = () => { navigator.clipboard && navigator.clipboard.writeText(plain); c.textContent = bi('已复制', 'Copied'); };
+      } catch (e) {
+        out.innerHTML = `<p class="notice" style="margin:0">${bi('翻译服务暂时连不上（可能是今天的免费额度用完了，或网络问题）。可以点下面的 DeepL / Google 链接。', 'The translation service is not reachable (the free daily quota may be used up, or the network is down). Try the DeepL / Google links below.')}</p>`;
+      }
+    };
+    $('#tr-go', pane).onclick = go;
+    $in.addEventListener('keydown', e => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) go(); });
+    const gl = l => l === 'zh-CN' ? 'zh' : l;
+    $('#tr-deepl', pane).onclick = e => { e.preventDefault(); window.open(`https://www.deepl.com/translator#${gl($f.value)}/${gl($t.value)}/${encodeURIComponent($in.value)}`, '_blank', 'noopener'); };
+    $('#tr-google', pane).onclick = e => { e.preventDefault(); window.open(`https://translate.google.com/?sl=${$f.value}&tl=${$t.value}&text=${encodeURIComponent($in.value)}`, '_blank', 'noopener'); };
+    $in.oninput(); if (q) go(); else $in.focus();
+  }
+
   function viewMe() {
     document.title = '我的 · 打卡与邮册';
     const log = XP.log(), g = XP.goal(), got = store.get('stamps', {});
@@ -1112,6 +1241,11 @@
     const crumbs = $('#crumbs');
     window.scrollTo(0, 0);
     if (!parts.length) { crumbs.innerHTML = ''; return viewHome(); }
+    if (parts[0] === 'tools') {
+      crumbs.innerHTML = `<span>${bi('工具', 'Tools')}</span>`;
+      const [t, qs] = (parts[1] || 'lookup').split('?');
+      return viewTools(t, qs ? decodeURIComponent((qs.match(/q=([^&]*)/) || [])[1] || '') : '');
+    }
     if (parts[0] === 'sons') {
       crumbs.innerHTML = `<a href="#/sons">${esc(SB().title)}</a>`;
       return parts[1] ? viewSoundLesson(parts[1], parts[2] || 'learn') : viewSounds();
@@ -2097,6 +2231,7 @@
     $$('button', el).forEach(b => b.onclick = () => { settings.lang = b.dataset.lang; saveSettings(); location.reload(); });
   }
   renderLang();
+  const qsb = $('#qs-btn'); if (qsb) qsb.onclick = () => openLookup();
   CLOUD.init();
   renderStatus();
   translateTree(document.body);
