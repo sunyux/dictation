@@ -546,3 +546,9 @@ mark.aux { background: var(--wash-amber); color: inherit; border-radius: 3px; pa
 .rw2 { cursor: pointer; border-radius: 3px; transition: background .12s; }
 .rw2:hover { text-decoration: underline dotted; }
 .rw2.on { background: var(--wash-amber); box-shadow: 0 0 0 2px var(--wash-amber); }
+
+/* numbers & time */
+.nm-card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 12px 16px; margin-bottom: 10px; }
+.nm-fr { display: flex; gap: 10px; align-items: center; font-size: 23px; margin-top: 4px; }
+.nm-logic { font: 14px/1.6 var(--zh); color: var(--blue); margin-top: 6px; }
+.nm-note { font: 14px/1.6 var(--zh); color: var(--ink-2); margin-top: 6px; }

@@ -1018,20 +1018,88 @@
     const prevC = cleanup; cleanup = () => { document.removeEventListener('keydown', onKey); stop(); prevC && prevC(); };
   }
 
+  /* ---------- 数字时间: numbers, times, dates spelled out + listening practice ---------- */
+  const halves = s => { const [zh, en] = String(s).split(' | '); return L() === 'en' ? (en || zh) : L() === 'zhen' && en ? `${zh}<span class="en-gloss" lang="en">${esc(en)}</span>` : zh; };
+  function numbersTool(pane, q) {
+    const N = window.FRNUM;
+    const EX = ['97', '71', '80', '1998', '2026', '21:45', '9h15', '15/03', '1er', '21e', '2,50 €', '06 12 34 56 78', '3,14'];
+    const KINDS = [['n100', bi('数字 0–99', 'Numbers 0–99')], ['n10k', bi('数字 100–9999', 'Numbers 100–9999')], ['year', bi('年份', 'Years')], ['time', bi('时间', 'Times')], ['date', bi('日期', 'Dates')], ['price', bi('价格', 'Prices')], ['phone', bi('电话号码', 'Phone numbers')]];
+    pane.innerHTML = `
+      <input id="nm-in" class="typed-recite" inputmode="text" autocomplete="off" placeholder="${bi('输入数字、时间、日期、价格……比如 97、21:45、15/03/2026、2,50 €', 'Type a number, time, date, price… e.g. 97, 21:45, 15/03/2026, 2,50 €')}" value="${esc(q || store.get('nmlast', '97'))}">
+      <div class="chips" style="margin:8px 0 14px">${EX.map(x => `<button class="wchip nm-ex" data-x="${esc(x)}"><span>${esc(x)}</span></button>`).join('')}</div>
+      <div id="nm-out"></div>
+      <section class="unit" style="margin-top:30px"><div class="unit-title"><h2>${bi('听力练习', 'Listening practice')}</h2><span>${bi('听法语，写出数字', 'Hear it in French, write the digits')}</span></div>
+        <div class="modes">${KINDS.map(([k, t]) => `<button class="mode" data-nk="${k}" aria-pressed="${k === store.get('nmkind', 'n100')}">${t}</button>`).join('')}</div>
+        <div id="nm-quiz"></div></section>`;
+    const inp = $('#nm-in', pane), out = $('#nm-out', pane);
+    const show = () => {
+      store.set('nmlast', inp.value);
+      const res = N.read(inp.value);
+      out.innerHTML = !inp.value.trim() ? '' : !res.length ? `<p class="notice">${bi('没认出来。支持：整数、小数（3,14）、时间（21:45 或 9h15）、日期（15/03/2026）、序数（1er、21e）、价格（2,50 €）、电话（06 12 34 56 78）。', 'Not recognised. Try: whole numbers, decimals (3,14), times (21:45 or 9h15), dates (15/03/2026), ordinals (1er, 21e), prices (2,50 €), phone numbers (06 12 34 56 78).')}</p>`
+        : res.map(r => `<div class="nm-card"><span class="lab">${bi(r.label, r.labelEn)}</span>
+          <div class="nm-fr">${playBtn(r.fr)}<span lang="fr">${esc(r.fr)}</span></div>
+          ${(r.logic || []).map(x => `<div class="nm-logic">${halves(x)}</div>`).join('')}
+          ${r.note ? `<div class="nm-note">${halves(r.note)}</div>` : ''}</div>`).join('');
+    };
+    inp.oninput = show;
+    inp.onkeydown = e => { if (e.key === 'Enter') { const r = N.read(inp.value); if (r[0]) TTS.say(r[0].fr); } };
+    $$('.nm-ex', pane).forEach(b => b.onclick = () => { inp.value = b.dataset.x; show(); const r = N.read(inp.value); if (r[0]) TTS.say(r[0].fr); });
+    show();
+    const quiz = kind => {
+      store.set('nmkind', kind);
+      $$('[data-nk]', pane).forEach(b => b.setAttribute('aria-pressed', b.dataset.nk === kind));
+      const box = $('#nm-quiz', pane);
+      const items = Array.from({ length: 10 }, () => N.random(kind));
+      let i = 0, right = 0, answered = false;
+      const canon = s => s.replace(/\s/g, '').replace(/[h.]/gi, m => m === '.' ? ',' : ':').replace(/€|euros?/gi, '').replace(/^0(\d):/, '$1:').replace(/,00$/, '').replace(/\/0(\d)/, '/$1').replace(/^0(\d)\//, '$1/');
+      const draw = () => {
+        if (i >= items.length) {
+          box.innerHTML = `<div class="drill summary"><div class="score">${right} / ${items.length}</div>
+            <div class="drill-actions" style="justify-content:center"><button class="btn" id="nm-again">${bi('再来 10 题', '10 more')}</button></div></div>`;
+          $('#nm-again', box).onclick = () => quiz(kind);
+          return;
+        }
+        const it = items[i]; answered = false;
+        box.innerHTML = `<div class="drill"><div class="count">${i + 1} / ${items.length}</div><div class="bar"><i style="width:${i / items.length * 100}%"></i></div>
+          <div class="prompt">${playBtn(it.fr, 'big')}<div class="ppos">${bi('写出你听到的', 'Write what you hear')} · ${kind === 'time' ? '21:45' : kind === 'date' ? '15/3' : kind === 'price' ? '2,50' : kind === 'phone' ? '0612345678' : '97'}</div></div>
+          <input class="answer-in" id="nm-a" inputmode="${kind === 'time' || kind === 'date' ? 'text' : 'decimal'}" autocomplete="off" style="text-align:center;font-size:28px">
+          <div class="drill-actions"><button class="btn ghost small" id="nm-skip">${bi('看答案', 'Show answer')}</button><span class="spacer"></span><span class="kbd"><kbd>Enter</kbd> ${bi('检查 / 下一题', 'check / next')}</span></div>
+          <div id="nm-fb"></div></div>`;
+        const a = $('#nm-a', box); a.focus();
+        setTimeout(() => TTS.say(it.fr), 250);
+        const check = give => {
+          if (!a.value.trim() && !give) return;
+          answered = true;
+          const ok = !give && canon(a.value) === canon(it.answer);
+          if (ok) { right++; XP.gain(1, bi('数字听对了', 'Number right')); }
+          $('#nm-fb', box).innerHTML = `<div class="feedback ${ok ? 'ok' : 'bad'}"><span class="lab">${ok ? bi('对了', 'Right') : bi('正确答案', 'Answer')}</span>
+            <div class="ans">${playBtn(it.fr)} <b>${esc(it.answer)}</b> <span lang="fr" class="kbd">${esc(it.fr)}</span></div></div>`;
+        };
+        a.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); answered ? (i++, draw()) : check(false); } };
+        $('#nm-skip', box).onclick = () => check(true);
+      };
+      draw();
+    };
+    $$('[data-nk]', pane).forEach(b => b.onclick = () => quiz(b.dataset.nk));
+    quiz(store.get('nmkind', 'n100'));
+  }
+
   function viewTools(tab, q) {
     document.title = bi('工具', 'Tools') + ' · 你好法语';
     const pair = store.get('trpair', 'fr|zh-CN');
     main.innerHTML = `
       <p class="kicker" lang="fr">Outils</p><h1 style="font-size:44px">${bi('工具', 'Tools')}</h1>
       <nav class="tabs" role="tablist">
-        <button class="tab" data-tt="lookup" aria-selected="${tab !== 'translate' && tab !== 'reader'}"><b>1</b>${bi('随手查', 'Look up')}</button>
+        <button class="tab" data-tt="lookup" aria-selected="${!['translate', 'reader', 'numbers'].includes(tab)}"><b>1</b>${bi('随手查', 'Look up')}</button>
         <button class="tab" data-tt="translate" aria-selected="${tab === 'translate'}"><b>2</b>${bi('翻译', 'Translate')}</button>
         <button class="tab" data-tt="reader" aria-selected="${tab === 'reader'}"><b>3</b>${bi('朗读器', 'Reader')}</button>
-        <a class="tab" href="#/mine" style="text-decoration:none"><b>4</b>${bi('生词本', 'My words')}</a>
+        <button class="tab" data-tt="numbers" aria-selected="${tab === 'numbers'}"><b>4</b>${bi('数字时间', 'Numbers & time')}</button>
+        <a class="tab" href="#/mine" style="text-decoration:none"><b>5</b>${bi('生词本', 'My words')}</a>
       </nav><section id="tpane"></section>`;
     $$('[data-tt]', main).forEach(b => b.onclick = () => { location.hash = '#/tools/' + b.dataset.tt; });
     const pane = $('#tpane');
     if (tab === 'reader') return readerTool(pane);
+    if (tab === 'numbers') return numbersTool(pane, q);
     if (tab !== 'translate') {
       pane.innerHTML = `<input type="search" class="typed-recite" id="tl-in" lang="fr" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${bi('输入法语、中文或英文', 'Type French, Chinese or English')}" value="${esc(q || '')}">
         <p class="kbd" style="margin:6px 2px 10px">${bi('在任何页面按 / 键，或点右上角的放大镜，都能随时打开随手查。', 'Press / on any page, or tap the magnifier at the top, to look something up anytime.')}</p><div id="tl-res"></div>`;
