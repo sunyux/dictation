@@ -289,6 +289,7 @@
           else if (b && k === 'nh:log') { for (const [d, e] of Object.entries(a)) if (!b[d] || b[d].xp < e.xp) b[d] = e; v = JSON.stringify(b); }
           else if (b && k === 'nh:stamps') v = JSON.stringify({ ...a, ...b });
           else if (b && k === 'nh:errs') { const seen = new Set(b.map(e => JSON.stringify(e))); v = JSON.stringify([...b, ...a.filter(e => !seen.has(JSON.stringify(e)))].slice(-400)); }
+          else if (b && k === 'nh:mywords') { const have = new Set(b.map(w => w.fr)); v = JSON.stringify([...b, ...a.filter(w => !have.has(w.fr))]); }
           else if (b && k.startsWith('nh:testmiss:')) { for (const [w, n] of Object.entries(a)) b[w] = Math.max(b[w] || 0, n); v = JSON.stringify(b); }
           else if (b && k.startsWith('nh:sons:')) v = JSON.stringify({ quiz: Math.max(a.quiz || 0, b.quiz || 0), dict: Math.max(a.dict || 0, b.dict || 0) });
         } catch { }
@@ -848,7 +849,7 @@
       const tag = x.src === 'book' ? `<a class="v-tag book" href="#/${x.book}/${x.n}/vocab">L${x.n}</a>` : x.src === 'sons' ? `<a class="v-tag" href="#/sons/${x.lesson}">${bi('发音书', 'Sounds')}</a>` : `<a class="v-tag" href="#/verbes/${encodeURIComponent(x.verb)}">${bi('动词词典', 'Verbs')}</a>`;
       const tip = x.v ? wordTip(x.n, x.v) : '';
       const verbLink = x.pos && x.pos.startsWith('v') && window.VERBDICT ? (() => { const m = x.fr.match(/^(\S+)\s*\((se|s')\)$/); const key = m ? (/^[aeiouyhâéèêî]/i.test(m[1]) ? "s'" : 'se ') + m[1] : x.fr; return window.VERBDICT.get(key) && x.src !== 'verb' ? `<a class="v-tag" href="#/verbes/${encodeURIComponent(key)}">${bi('变位', 'conjugate')}</a>` : ''; })() : '';
-      return `<div class="lk-item"><div class="lk-head">${playBtn(forms(x.fr).say)}<b lang="fr">${esc(x.fr)}</b>${x.pos ? `<span class="pos">${esc(x.pos)}</span>` : ''}${tag}${verbLink}</div>
+      return `<div class="lk-item"><div class="lk-head">${playBtn(forms(x.fr).say)}<b lang="fr">${esc(x.fr)}</b>${favBtn({ fr: x.fr, zh: x.zh, en: x.en, pos: x.pos, from: x.src === 'book' ? 'L' + x.n : x.src })}${x.pos ? `<span class="pos">${esc(x.pos)}</span>` : ''}${tag}${verbLink}</div>
         <div class="lk-mean">${G(x)}</div>${tip ? `<div class="lk-tip">${tip}</div>` : ''}</div>`;
     }).join('');
     if (!hits.length && !conj.length) h += `<p class="hint-text" style="margin:8px 2px">${bi('网站的词库里没有找到。', 'Not in the site\'s word lists.')}</p>`;
@@ -880,17 +881,157 @@
   });
 
   const LANGS = { fr: ['法语', 'French'], 'zh-CN': ['中文', 'Chinese'], en: ['英语', 'English'] };
+  /* ---------- 生词本: my own word list, practised like a leçon ---------- */
+  const MINE = {
+    all() { return store.get('mywords', []); },
+    has(fr) { return this.all().some(w => w.fr === fr); },
+    add(w) { if (this.has(w.fr)) return; const a = this.all(); a.push({ fr: w.fr, zh: w.zh || '', en: w.en || '', pos: w.pos || '', from: w.from || '', added: dayStr() }); store.set('mywords', a); },
+    remove(fr) { store.set('mywords', this.all().filter(w => w.fr !== fr)); },
+    toggle(w) { this.has(w.fr) ? this.remove(w.fr) : this.add(w); return this.has(w.fr); },
+  };
+  const mineBook = () => {
+    const lec = { n: 0, title: 'Mon carnet', zh: '生词本', vocab: MINE.all().map(w => ({ ...w, g: bi('我的生词', 'My words') })), text: [], cloze: null };
+    return { book: { id: 'mine', title: bi('生词本', 'My words'), units: [{ n: 0, lecons: [lec] }] }, lecon: lec };
+  };
+  const leconName = n => n === 0 ? bi('生词本', 'My words') : 'Leçon ' + n;
+  const favBtn = w => `<button class="fav ${MINE.has(w.fr) ? 'on' : ''}" data-fav="${esc(JSON.stringify({ fr: w.fr, zh: w.zh || '', en: w.en || '', pos: w.pos || '', from: w.from || '' }))}" title="${bi('收藏到生词本', 'Save to my words')}" aria-label="${bi('收藏到生词本', 'Save to my words')}">${MINE.has(w.fr) ? '★' : '☆'}</button>`;
+  document.addEventListener('click', e => {
+    const b = e.target.closest('[data-fav]');
+    if (!b) return;
+    e.stopPropagation(); e.preventDefault();
+    const on = MINE.toggle(JSON.parse(b.dataset.fav));
+    b.classList.toggle('on', on); b.textContent = on ? '★' : '☆';
+    toast(on ? '★' : '☆', on ? bi('已加入生词本', 'Saved to my words') : bi('已从生词本移除', 'Removed from my words'));
+  }, true);
+
+  function viewMine(mode) {
+    document.title = bi('生词本', 'My words') + ' · 你好法语';
+    const words = MINE.all();
+    main.innerHTML = `
+      <header class="lecon-head"><p class="kicker" lang="fr">Mon carnet</p><h1>${bi('生词本', 'My words')}</h1>
+        <div class="zh">${bi(`${words.length} 个词 · 在随手查里点 ☆ 收藏，或者在下面手动添加`, `${words.length} words · tap ☆ in Look up, or add one below`)}</div></header>
+      <details class="mine-add" ${words.length ? '' : 'open'}><summary>${bi('＋ 手动添加一个词', '＋ Add a word yourself')}</summary>
+        <div class="mine-form">
+          <input id="mw-fr" lang="fr" class="typed-recite" placeholder="${bi('法语，例如 la montagne', 'French, e.g. la montagne')}" autocapitalize="off" spellcheck="false">
+          <input id="mw-zh" class="typed-recite" placeholder="${bi('中文意思（可留空，点「自动翻译」）', 'Chinese meaning (optional — try Auto-translate)')}">
+          <input id="mw-en" class="typed-recite" placeholder="${bi('英文意思（可留空）', 'English meaning (optional)')}">
+          <div class="toolbar"><button class="btn" id="mw-add">${bi('加入生词本', 'Add')}</button><button class="btn ghost small" id="mw-tr">${bi('自动翻译', 'Auto-translate')}</button><span class="kbd" id="mw-msg"></span></div>
+        </div></details>
+      ${words.length ? `<details class="mine-add"><summary>${bi('管理生词', 'Manage words')}</summary><div class="mine-list">${words.map(w => `<div class="mine-row">${playBtn(forms(w.fr).say)}<b lang="fr">${esc(w.fr)}</b><span>${G(w)}</span>
+          <button class="err-del" data-del="${esc(w.fr)}" title="${bi('删除', 'Delete')}">×</button></div>`).join('')}</div></details>` : ''}
+      <section id="pane"></section>`;
+    const msg = $('#mw-msg', main);
+    $('#mw-tr', main).onclick = async () => {
+      const fr = $('#mw-fr', main).value.trim(); if (!fr) return;
+      msg.textContent = bi('翻译中…', 'Translating…');
+      const get = async to => { try { const r = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(fr)}&langpair=fr|${to}`); const j = await r.json(); const d = document.createElement('div'); d.innerHTML = j.responseData.translatedText; return d.textContent; } catch { return ''; } };
+      const [zh, en] = await Promise.all([get('zh-CN'), get('en')]);
+      if (zh && !$('#mw-zh', main).value) $('#mw-zh', main).value = zh;
+      if (en && !$('#mw-en', main).value) $('#mw-en', main).value = en;
+      msg.textContent = zh || en ? bi('看一下翻译对不对，再加入', 'Check the translation, then add') : bi('翻译服务连不上，请手动填写', 'Translation unavailable — please type it');
+    };
+    $('#mw-add', main).onclick = () => {
+      const fr = $('#mw-fr', main).value.trim(); if (!fr) return;
+      if (MINE.has(fr)) { msg.textContent = bi('已经在生词本里了', 'Already in your words'); return; }
+      MINE.add({ fr, zh: $('#mw-zh', main).value.trim(), en: $('#mw-en', main).value.trim(), from: 'manual' });
+      viewMine(mode);
+    };
+    $$('[data-del]', main).forEach(b => b.onclick = () => { if (confirm(tr('从生词本删除这个词？').replace(' · ', '\n'))) { MINE.remove(b.dataset.del); viewMine(mode); } });
+    const pane = $('#pane');
+    if (!words.length) { pane.innerHTML = `<p class="notice">${bi('生词本还是空的。在任何页面点放大镜查词，点结果旁边的 ☆ 就能收藏。', 'Your list is empty. Look a word up (magnifier at the top) and tap ☆ next to it.')}</p>`; return; }
+    const { book, lecon } = mineBook();
+    paneVocab({ book, lecon, pane, save: () => { } }, mode);
+  }
+
+  /* ---------- 朗读器: read any French text aloud, word by word, sentence by sentence ---------- */
+  function readerTool(pane) {
+    const text = store.get('readertext', '');
+    pane.innerHTML = `
+      <textarea id="rd-in" class="typed-recite" rows="5" lang="fr" placeholder="${bi('把任何法语贴在这里：歌词、新闻、老师发的材料……', 'Paste any French here: lyrics, news, class handouts…')}">${esc(text)}</textarea>
+      <div class="toolbar">
+        <button class="btn" id="rd-play">${ICON.play} ${bi('整段朗读', 'Read it all')}</button>
+        <label class="kbd" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="rd-shadow" ${store.get('rdshadow', false) ? 'checked' : ''}> ${bi('跟读模式（每句后停下）', 'Shadowing (pause after each sentence)')}</label>
+        <span class="spacer"></span>
+        <label class="kbd" style="display:flex;gap:6px;align-items:center">${bi('语速', 'Speed')} <input type="range" id="rd-rate" min="0.5" max="1.2" step="0.05" value="${settings.rate}"> <b id="rd-rv">${settings.rate.toFixed(2)}</b></label>
+      </div>
+      <div id="rd-ctrl" class="toolbar" hidden><button class="btn small" id="rd-next">${bi('下一句 ▶', 'Next ▶')}</button><button class="btn ghost small" id="rd-again">${bi('再听一遍', 'Again')}</button><button class="btn ghost small" id="rd-stop">${bi('停止', 'Stop')}</button><span class="kbd">${bi('空格 = 下一句', 'Space = next')}</span></div>
+      <div id="rd-text" class="rd-text"></div>
+      <p class="kbd">${bi('点句子左边的 ▶ 单独听这一句；点任何一个词可以查它、收藏到生词本。', 'Tap ▶ beside a sentence to hear just that one; tap any word to look it up and save it.')}</p>`;
+    const inp = $('#rd-in', pane), view = $('#rd-text', pane), ctrl = $('#rd-ctrl', pane);
+    let sents = [], cur = -1, playing = false, token = 0;
+    const render = () => {
+      store.set('readertext', inp.value);
+      sents = inp.value.replace(/\r/g, '').split(/(?<=[.!?…])\s+|\n+/).map(x => x.trim()).filter(Boolean);
+      view.innerHTML = sents.map((s, k) => {
+        let html = '', last = 0;
+        for (const m of s.matchAll(TOKEN)) { html += esc(s.slice(last, m.index)) + `<span class="rw2" data-a="${m.index}" data-b="${m.index + m[0].length}">${esc(m[0])}</span>`; last = m.index + m[0].length; }
+        return `<div class="rd-s" data-k="${k}"><button class="play rd-one" data-k="${k}" aria-label="${bi('朗读这一句', 'Read this sentence')}">${ICON.play}</button><span lang="fr">${html + esc(s.slice(last))}</span></div>`;
+      }).join('');
+    };
+    const mark = (k, ci) => {
+      $$('.rd-s', view).forEach(el => el.classList.toggle('cur', +el.dataset.k === k));
+      $$('.rw2.on', view).forEach(el => el.classList.remove('on'));
+      if (k < 0 || ci == null) return;
+      const w = $$(`.rd-s[data-k="${k}"] .rw2`, view).find(el => ci >= +el.dataset.a && ci < +el.dataset.b);
+      if (w) w.classList.add('on');
+    };
+    const sayOne = (k, then) => {
+      const my = ++token;
+      if (!TTS.ok) return;
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(sents[k].replace(/…/g, ',').replace(/[–—]/g, ' '));
+      u.lang = 'fr-FR'; if (TTS.voice) u.voice = TTS.voice; u.rate = settings.rate; u.volume = settings.volume;
+      u.onboundary = e => { if (my === token && e.name !== 'sentence') mark(k, e.charIndex); };
+      u.onend = u.onerror = () => { if (my !== token) return; mark(k, null); then && then(); };
+      cur = k; mark(k, 0);
+      $(`.rd-s[data-k="${k}"]`, view)?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      speechSynthesis.speak(u);
+    };
+    const stop = () => { token++; playing = false; TTS.stop(); mark(-1); ctrl.hidden = true; };
+    const step = k => {
+      if (!playing || k >= sents.length) { stop(); return; }
+      sayOne(k, () => {
+        if (!playing) return;
+        if ($('#rd-shadow', pane).checked) { ctrl.hidden = false; cur = k; }
+        else setTimeout(() => step(k + 1), 300);
+      });
+    };
+    inp.oninput = render;
+    render();
+    $('#rd-play', pane).onclick = () => { render(); if (!sents.length) return; playing = true; step(0); };
+    $('#rd-shadow', pane).onchange = e => store.set('rdshadow', e.target.checked);
+    $('#rd-rate', pane).oninput = e => { settings.rate = +e.target.value; $('#rd-rv', pane).textContent = settings.rate.toFixed(2); saveSettings(); };
+    $('#rd-next', pane).onclick = () => { ctrl.hidden = true; step(cur + 1); };
+    $('#rd-again', pane).onclick = () => { sayOne(cur, () => { if (playing && $('#rd-shadow', pane).checked) ctrl.hidden = false; }); };
+    $('#rd-stop', pane).onclick = stop;
+    view.addEventListener('click', e => {
+      const one = e.target.closest('.rd-one');
+      if (one) { e.stopPropagation(); playing = false; ctrl.hidden = true; sayOne(+one.dataset.k); return; }
+      const w = e.target.closest('.rw2');
+      if (w) { TTS.say(w.textContent); openLookup(w.textContent.replace(/'$/, '')); }
+    });
+    const onKey = e => {
+      if (!document.body.contains(pane) || e.target.matches && e.target.matches('input, textarea')) return;
+      if (e.key === ' ' && !ctrl.hidden) { e.preventDefault(); ctrl.hidden = true; step(cur + 1); }
+    };
+    document.addEventListener('keydown', onKey);
+    const prevC = cleanup; cleanup = () => { document.removeEventListener('keydown', onKey); stop(); prevC && prevC(); };
+  }
+
   function viewTools(tab, q) {
     document.title = bi('工具', 'Tools') + ' · 你好法语';
     const pair = store.get('trpair', 'fr|zh-CN');
     main.innerHTML = `
       <p class="kicker" lang="fr">Outils</p><h1 style="font-size:44px">${bi('工具', 'Tools')}</h1>
       <nav class="tabs" role="tablist">
-        <button class="tab" data-tt="lookup" aria-selected="${tab !== 'translate'}"><b>1</b>${bi('随手查', 'Look up')}</button>
+        <button class="tab" data-tt="lookup" aria-selected="${tab !== 'translate' && tab !== 'reader'}"><b>1</b>${bi('随手查', 'Look up')}</button>
         <button class="tab" data-tt="translate" aria-selected="${tab === 'translate'}"><b>2</b>${bi('翻译', 'Translate')}</button>
+        <button class="tab" data-tt="reader" aria-selected="${tab === 'reader'}"><b>3</b>${bi('朗读器', 'Reader')}</button>
+        <a class="tab" href="#/mine" style="text-decoration:none"><b>4</b>${bi('生词本', 'My words')}</a>
       </nav><section id="tpane"></section>`;
     $$('[data-tt]', main).forEach(b => b.onclick = () => { location.hash = '#/tools/' + b.dataset.tt; });
     const pane = $('#tpane');
+    if (tab === 'reader') return readerTool(pane);
     if (tab !== 'translate') {
       pane.innerHTML = `<input type="search" class="typed-recite" id="tl-in" lang="fr" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${bi('输入法语、中文或英文', 'Type French, Chinese or English')}" value="${esc(q || '')}">
         <p class="kbd" style="margin:6px 2px 10px">${bi('在任何页面按 / 键，或点右上角的放大镜，都能随时打开随手查。', 'Press / on any page, or tap the magnifier at the top, to look something up anytime.')}</p><div id="tl-res"></div>`;
@@ -1241,6 +1382,7 @@
     const crumbs = $('#crumbs');
     window.scrollTo(0, 0);
     if (!parts.length) { crumbs.innerHTML = ''; return viewHome(); }
+    if (parts[0] === 'mine') { crumbs.innerHTML = `<span>${bi('生词本', 'My words')}</span>`; return viewMine(parts[1]); }
     if (parts[0] === 'tools') {
       crumbs.innerHTML = `<span>${bi('工具', 'Tools')}</span>`;
       const [t, qs] = (parts[1] || 'lookup').split('?');
@@ -1308,7 +1450,7 @@
       </div>
       ${errorAnalysisHTML()}
       ${Object.keys(byLecon).length ? Object.entries(byLecon).map(([n, list]) => `
-        <section class="unit"><div class="unit-title"><h2 lang="fr">Leçon ${n}</h2><span>${list.length} 条</span></div>
+        <section class="unit"><div class="unit-title"><h2 lang="fr">${leconName(+n)}</h2><span>${list.length} 条</span></div>
         ${list.map(e => `<div class="err-row">
           <span class="err-kind">${KIND[e.kind]}</span>
           <div class="err-body"><div lang="fr">${playBtn(e.kind === 'word' ? forms(e.fr).say : e.fr)} ${esc(e.fr)}</div><div class="lzh">${e.kind === 'cloze' ? esc(e.zh) : G(e)}${e.pos ? ' · ' + esc(e.pos) : ''}</div></div>
@@ -1348,7 +1490,7 @@
       const e = queue[i]; answered = false;
       const word = e.kind !== 'sentence';
       box.innerHTML = `<div class="drill">
-        <div class="count">${practice ? bi(`练习 ${round - 1} · `, `Practice ${round - 1} · `) : ''}${i + 1} / ${queue.length} · Leçon ${e.n}</div>
+        <div class="count">${practice ? bi(`练习 ${round - 1} · `, `Practice ${round - 1} · `) : ''}${i + 1} / ${queue.length} · ${leconName(e.n)}</div>
         <div class="bar"><i style="width:${i / queue.length * 100}%"></i></div>
         <div class="prompt">${e.kind === 'cloze'
           ? `<div class="pzh long" lang="fr" style="font-family:var(--serif)">${esc(e.zh).replace('____', '<u>&emsp;?&emsp;</u>')}</div><div class="ppos">填出空缺的词</div>`
