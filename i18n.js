@@ -78,7 +78,7 @@ window.ZH_EN = [
   [/^把这一课 (\d+) 个词全部默写一遍，不能用提示。$/, 'Write all $1 words of this leçon, no hints.'],
   [/^写对的直接算掌握，以后不用再复习；写错的$/, 'Words you get right count as learned straight away and never need reviewing; the ones you miss'],
   [/^不进错题本$/, 'do not go into the mistake book'],
-  [/^，之后在「默写」里练，第一次就写对也算掌握。$/, '— practise them later in "Dictation"; getting one right first time there also counts as learned.'],
+  [/^，之后在「默写」里练，第一次就写对也算掌握。同一个词在首测里累计错满 3 次，会自动加入错题本。$/, '— practise them later in "Dictation"; getting one right first time there also counts as learned. A word missed 3 times in first tests goes into the mistake book.'],
   [/^上次首测：(.+)$/, 'Last test: $1'], [/^再测一次$/, 'Test again'], [/^开始首测$/, 'Start the test'],
   [/^只练还没掌握的词（(\d+) 个）$/, 'Only words not yet learned ($1)'],
   [/^这一课的词汇已经全部掌握.*$/, 'You have learned every word in this leçon. Untick the box above to practise them all again.'],

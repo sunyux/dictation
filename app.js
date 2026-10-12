@@ -289,6 +289,7 @@
           else if (b && k === 'nh:log') { for (const [d, e] of Object.entries(a)) if (!b[d] || b[d].xp < e.xp) b[d] = e; v = JSON.stringify(b); }
           else if (b && k === 'nh:stamps') v = JSON.stringify({ ...a, ...b });
           else if (b && k === 'nh:errs') { const seen = new Set(b.map(e => JSON.stringify(e))); v = JSON.stringify([...b, ...a.filter(e => !seen.has(JSON.stringify(e)))].slice(-400)); }
+          else if (b && k.startsWith('nh:testmiss:')) { for (const [w, n] of Object.entries(a)) b[w] = Math.max(b[w] || 0, n); v = JSON.stringify(b); }
           else if (b && k.startsWith('nh:sons:')) v = JSON.stringify({ quiz: Math.max(a.quiz || 0, b.quiz || 0), dict: Math.max(a.dict || 0, b.dict || 0) });
         } catch { }
         try { localStorage.setItem(k, v); } catch { }
@@ -1457,7 +1458,7 @@
         const st = MASTER.stats(ctx.book.id, lecon);
         box.innerHTML = `<div class="drill summary"><p class="kicker" lang="fr">Premier test</p>
           <h2 style="font-size:30px;margin-bottom:10px">本课词汇首测</h2>
-          <p class="hint-text" style="margin:0 0 18px">把这一课 ${lecon.vocab.length} 个词全部默写一遍，不能用提示。<br>写对的直接算掌握，以后不用再复习；写错的<b>不进错题本</b>，之后在「默写」里练，第一次就写对也算掌握。</p>
+          <p class="hint-text" style="margin:0 0 18px">把这一课 ${lecon.vocab.length} 个词全部默写一遍，不能用提示。<br>写对的直接算掌握，以后不用再复习；写错的<b>不进错题本</b>，之后在「默写」里练，第一次就写对也算掌握。同一个词在首测里累计错满 3 次，会自动加入错题本。</p>
           ${st.test ? `<p class="kbd">上次首测：${st.test}</p>` : ''}
           <button class="btn" id="go">${st.test ? '再测一次' : '开始首测'}</button></div>`;
         $('#go', box).onclick = () => wordDrill(ctx, box, 'test', lecon.vocab);
@@ -1526,14 +1527,23 @@
       const bk = ctx.book.id, ln = ctx.lecon.n;
       if (good && !hintN) XP.gain(2, '一次写对');
       if (!good && !giveUp && inp.value.trim()) ERRS.typed(closest(v.fr, inp.value), inp.value);
+      let toBook = false, missN = 0;
       if (!good || hintN) {
         wrong.push(v);
         if (!test) { SRS.miss(it); MASTER.word(bk, ln, v.fr, false); }
+        else {
+          // the first test keeps misses out of the mistake book — unless the same word is missed 3 times
+          const tk = `testmiss:${bk}:${ln}`, tm = store.get(tk, {});
+          tm[v.fr] = (tm[v.fr] || 0) + 1; store.set(tk, tm);
+          if (tm[v.fr] >= 3 && !inReview(bk, ln, v.fr)) { SRS.miss(it); toBook = true; }
+          missN = tm[v.fr];
+        }
       } else if (test || !inReview(bk, ln, v.fr)) MASTER.word(bk, ln, v.fr);
       else SRS.hit(it);
       fb.innerHTML = `<div class="feedback ${r}">
         <span class="lab">${good ? (hintN ? '对了（用了提示）' : '完全正确') : r === 'accent' ? '差一点：注意重音符号' : giveUp ? '答案' : '不对，正确答案是'}</span>
         <div class="ans" lang="fr">${playBtn(forms(v.fr).say)} ${esc(v.fr)}</div>
+        ${test && missN ? `<span class="lab">${toBook ? bi(`首测已经错了 ${missN} 次，加入错题本了`, `Missed ${missN} times in first tests — added to the mistake book`) : missN >= 3 ? bi('已经在错题本里了', 'Already in the mistake book') : bi(`首测错了 ${missN} 次（错满 3 次会进错题本）`, `Missed ${missN} times in first tests (3 puts it in the mistake book)`)}</span>` : ''}
         ${tipBox(wordTip(ctx.lecon.n, v))}</div>`;
       TTS.say(forms(v.fr).say);
       if (good && !hintN) setTimeout(() => { if (answered && queue[i] === v) { i++; draw(); } }, wordTip(ctx.lecon.n, v) ? 1800 : 1100);
