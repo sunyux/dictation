@@ -296,3 +296,61 @@ main { background: var(--hatch), var(--paper); box-shadow: 0 0 0 1px var(--frame
 .stamp.on.v .st-glyph path { stroke: #4f6577; }
 .stamp.on.t .st-glyph path { stroke: #8c4c4a; }
 .badge.on { border-color: var(--red); color: var(--red); }
+
+/* ===================================================================
+   Aged paper, sky drawings on the cards, engraved capitals with flourishes
+   =================================================================== */
+:root {
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .32  0 0 0 0 .27  0 0 0 0 .2  0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --foxing:
+    radial-gradient(ellipse 7% 5% at 8% 14%, rgba(150, 110, 60, .16), transparent 70%),
+    radial-gradient(ellipse 4% 3% at 12% 17%, rgba(150, 110, 60, .14), transparent 70%),
+    radial-gradient(ellipse 9% 6% at 91% 9%, rgba(140, 100, 55, .12), transparent 70%),
+    radial-gradient(ellipse 5% 4% at 86% 52%, rgba(150, 110, 60, .13), transparent 70%),
+    radial-gradient(ellipse 3% 2% at 22% 63%, rgba(130, 95, 50, .15), transparent 70%),
+    radial-gradient(ellipse 8% 5% at 70% 88%, rgba(150, 110, 60, .12), transparent 70%),
+    radial-gradient(ellipse 2.5% 2% at 48% 34%, rgba(130, 95, 50, .1), transparent 70%),
+    radial-gradient(ellipse 6% 4% at 6% 92%, rgba(140, 100, 55, .15), transparent 70%);
+  --flourish: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 22' fill='none' stroke='%232b2925' stroke-width='1' stroke-linecap='round'%3E%3Cpath d='M120 11c-8-8-20-8-24 0s8 10 12 4M120 11c8-8 20-8 24 0s-8 10-12 4'/%3E%3Cpath d='M96 11C80 4 64 18 46 11S16 6 4 11M144 11c16-7 32 7 50 0s30-5 42 0'/%3E%3Cpath d='M58 11c4-5 10-5 12 0M182 11c-4-5-10-5-12 0' stroke-width='.7'/%3E%3Ccircle cx='120' cy='11' r='2' fill='%232b2925'/%3E%3Ccircle cx='4' cy='11' r='1.4' fill='%232b2925'/%3E%3Ccircle cx='236' cy='11' r='1.4' fill='%232b2925'/%3E%3C/svg%3E");
+  --sprig: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 14' fill='none' stroke='%232b2925' stroke-width='.9' stroke-linecap='round'%3E%3Cpath d='M2 7h22M24 7c4-5 10-5 12 0c-2 5-8 5-12 0z'/%3E%3Cpath d='M10 7c2-3 5-3 6 0M16 7c1 3-2 4-4 2' stroke-width='.6'/%3E%3C/svg%3E");
+}
+/* old paper: grain, foxing spots, darker worn edges */
+main {
+  background: var(--foxing), var(--grain), var(--hatch), var(--paper);
+  background-size: 100% 100%, 220px 220px, auto, auto;
+}
+main > #main { position: relative; z-index: 1; }
+.drape { z-index: 2; }
+main .wear {
+  position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  box-shadow: inset 0 0 70px rgba(110, 85, 50, .28), inset 0 0 14px rgba(90, 70, 40, .35);
+}
+.drill, .textblock, .verb-detail, .tr-out, .nm-card, .sons-how { background-image: var(--grain), var(--hatch); background-size: 220px 220px, auto; }
+
+/* the sky drawings inside the star cards */
+.lecon-card .sky-art { position: absolute; right: 14px; top: 46px; width: 54%; max-width: 170px; color: #cfc8b9; opacity: .62; z-index: 0; pointer-events: none; }
+.lecon-card:hover .sky-art { opacity: .9; }
+.lecon-card .n, .lecon-card h3, .lecon-card .zh { text-shadow: 0 1px 2px #2f2e2b, 0 0 8px #2f2e2b; }
+
+/* engraved capitals with flourishes */
+h1 { text-transform: uppercase; letter-spacing: .09em; line-height: 1.1; }
+.lecon-head, .book-head > div, .home-text { position: relative; }
+.lecon-head h1::after, .book-head h1::after, .home-text h1::after,
+main > #main > h1::after {
+  content: ""; display: block; width: min(300px, 80%); height: 22px; margin: 10px 0 2px;
+  background: var(--flourish) left center / contain no-repeat; opacity: .8;
+}
+.lecon-head h1::before, .book-head h1::before {
+  content: ""; display: block; width: 140px; height: 1px; margin-bottom: 10px;
+  border-top: 1px solid var(--frame-ink); border-bottom: 1px solid var(--frame-ink); padding-top: 2px;
+}
+.unit-title h2 { text-transform: uppercase; letter-spacing: .12em; padding-left: 46px; position: relative; }
+.unit-title h2::before { content: ""; position: absolute; left: 0; top: 50%; width: 38px; height: 14px; transform: translateY(-50%); background: var(--sprig) center / contain no-repeat; opacity: .8; }
+.lecon-card h3 { text-transform: uppercase; letter-spacing: .07em; font-size: 22px; }
+.sons-title { text-transform: none; letter-spacing: 0; }
+.kicker { letter-spacing: .04em; }
+.tab { letter-spacing: .04em; }
+@media (max-width: 720px) { h1 { letter-spacing: .05em; } .lecon-card .sky-art { width: 46%; } }
+.lecon-card h3 { font-size: 20px; overflow-wrap: anywhere; hyphens: auto; }
+.lecon-card .sky-art { top: auto; bottom: 66px; right: 16px; width: 44%; max-width: 150px; }
+.lecon-card { min-height: 230px; }

@@ -521,7 +521,7 @@
           <div class="lecons">${u.lessons.map(l => {
             const p = sProg(l.id);
             const bar = (label, v) => `<div class="pbar ${v >= 0.999 ? 'done' : ''}"><span class="pl">${label}</span><span class="pt"><i style="width:${Math.round((v || 0) * 100)}%"></i></span><span class="pn">${v ? Math.round(v * 100) + '%' : '—'}</span></div>`;
-            return `<a class="lecon-card" href="#/sons/${l.id}">
+            return `<a class="lecon-card" href="#/sons/${l.id}">${window.SKY_ART ? window.SKY_ART(sLessons().findIndex(x => x.id === l.id) + 5) : ''}
               <div class="n" lang="fr">${esc(l.ipa)}</div><h3 lang="fr">${tl(l)}</h3>
               <div class="prog">${bar(bi('辨音', 'Quiz'), p.quiz)}${bar(bi('听写', 'Dictée'), p.dict)}</div></a>`;
           }).join('')}</div>
@@ -1648,7 +1648,7 @@
           <div class="unit-title"><h2 lang="fr">Unité ${u.n}</h2><span>Leçon ${u.lecons[0].n}–${u.lecons[u.lecons.length - 1].n}</span></div>
           <div class="lecons">${u.lecons.map(l => {
             const p = getProg(book.id, l.n);
-            return `<a class="lecon-card" href="#/${book.id}/${l.n}">
+            return `<a class="lecon-card" href="#/${book.id}/${l.n}">${window.SKY_ART ? window.SKY_ART(l.n - 1) : ''}
               <div class="n" lang="fr">Leçon ${l.n}</div>
               <h3 lang="fr">${esc(l.title)}</h3>
               <div class="zh">${esc(l.zh)}</div>
