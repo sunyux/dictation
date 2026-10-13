@@ -2,6 +2,7 @@
 const ZH_GROUPS = { '阳性名词': 'Masculine nouns', '阴性名词': 'Feminine nouns', '名词': 'Nouns (both genders)', '动词': 'Verbs', '形容词': 'Adjectives',
   '代词': 'Pronouns', '副词': 'Adverbs', '介词、连词': 'Prepositions & conjunctions', '冠词、感叹词、短语': 'Articles, interjections & phrases', '地名': 'Place names' };
 window.ZH_EN = [
+  [/^丝网印刷质感$/, 'Screen-print texture'],
   [/^PDF 生成失败.*$/, 'Could not make the PDF (network problem?). Use Print → Save as PDF instead.'],
   [/^写今天的法语日记$/, "Write today's journal"], [/^法语日记$/, 'Journal'],
   [/^外观$/, 'Look'], [/^彩色$/, 'Colour'], [/^黑白$/, 'Black & white'],

@@ -1,0 +1,47 @@
+/* riso.css — a screen-printed / risograph feel. Decorations get halftone dots, rough edges and ink grain;
+   headings get a slight two-colour misregistration; reading text stays crisp. Off with <html class="no-riso">. */
+:root {
+  --ink-a: rgba(165, 74, 68, .38);   /* red ink, offset layer */
+  --ink-b: rgba(61, 106, 140, .32);  /* blue ink, offset layer */
+  --dots: radial-gradient(circle at 50% 50%, rgba(0, 0, 0, .16) 0 .9px, transparent 1.1px) 0 0 / 4px 4px;
+  --dots-light: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, .13) 0 .8px, transparent 1px) 0 0 / 4px 4px;
+  --speckle: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='s'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.6' numOctaves='1' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -9 4.6'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23s)' opacity='.5'/%3E%3C/svg%3E");
+}
+html.mono { --ink-a: rgba(0, 0, 0, .22); --ink-b: rgba(0, 0, 0, .14); }
+
+/* a faint layer of ink grain over the whole page */
+html:not(.no-riso) body::after {
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 90;
+  background: var(--speckle) 0 0 / 300px 300px;
+  mix-blend-mode: multiply; opacity: .14;
+}
+
+/* halftone dots on printed colour areas */
+html:not(.no-riso) .drape, html:not(.no-riso) .lecon-card::before, html:not(.no-riso) .cover::before {
+  background-image: var(--dots), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E");
+}
+html:not(.no-riso) .drape { background: var(--dots), repeating-linear-gradient(90deg, rgba(43, 41, 37, .14) 0 1px, transparent 1px 7px), var(--drape); }
+html:not(.no-riso) .lecon-card::before { background: var(--dots), repeating-linear-gradient(90deg, rgba(43, 41, 37, .14) 0 1px, transparent 1px 6px), var(--c-drape, var(--drape)); }
+html:not(.no-riso) .cover::before { background: var(--dots), repeating-linear-gradient(90deg, rgba(43, 41, 37, .14) 0 1px, transparent 1px 6px), var(--c-drape, var(--drape)); }
+html:not(.no-riso) .lecon-card, html:not(.no-riso) .cover, html:not(.no-riso) .cover.sons {
+  background-image: var(--dots-light), var(--stars), var(--engrave, none);
+  background-size: 4px 4px, 180px 180px, auto;
+}
+html:not(.no-riso) .top { background-image: var(--dots-light); background-size: 4px 4px; }
+html:not(.no-riso) .btn:not(.ghost), html:not(.no-riso) .mode[aria-pressed="true"] {
+  background-image: var(--dots-light); background-size: 4px 4px;
+  box-shadow: 2px 2px 0 var(--ink-a);
+}
+html:not(.no-riso) .lecon-card .prog, html:not(.no-riso) .review-stats div, html:not(.no-riso) .feedback { background-image: var(--dots); background-size: 4px 4px; }
+
+/* rough, slightly uneven ink edges on the decorations only */
+html:not(.no-riso) .drape, html:not(.no-riso) .lecon-card::before, html:not(.no-riso) .cover::before,
+html:not(.no-riso) .sky-art, html:not(.no-riso) .stamp, html:not(.no-riso) .unit-title h2::before,
+html:not(.no-riso) .lecon-head h1::after, html:not(.no-riso) .book-head h1::after, html:not(.no-riso) .home-text h1::after { filter: url(#riso-rough); }
+
+/* two-colour misregistration on headings (reading text is left alone) */
+html:not(.no-riso) h1 { text-shadow: 2px 1.5px 0 var(--ink-a), -1px -.5px 0 var(--ink-b); }
+html:not(.no-riso) .unit-title h2, html:not(.no-riso) .lecon-card h3, html:not(.no-riso) .score { text-shadow: 1.5px 1px 0 var(--ink-a); }
+html:not(.no-riso) .lecon-card h3 { text-shadow: 1.5px 1px 0 rgba(165, 74, 68, .55), 0 1px 2px #2f2e2b; }
+html:not(.no-riso) .brand-zh { text-shadow: 1.5px 1px 0 rgba(165, 74, 68, .6); }
+html:not(.no-riso) .cover .c-zh { text-shadow: 2px 1.5px 0 rgba(165, 74, 68, .7), 0 1px 0 #000; }

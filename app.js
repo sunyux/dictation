@@ -17,6 +17,7 @@
   const saveSettings = () => store.set('settings', settings);
   if (!settings.lang) settings.lang = 'zh';
   document.documentElement.classList.toggle('mono', settings.look === 'mono');
+  document.documentElement.classList.toggle('no-riso', settings.riso === false);
   // language modes: 'zhen' 中英法 · 'zh' 中法 · 'en' 英法
   const L = () => settings.lang;
   const BI = {};
@@ -1664,6 +1665,7 @@
         <select id="s-voice">${vs.length ? vs.map(v => `<option ${TTS.voice && v.name === TTS.voice.name ? 'selected' : ''}>${esc(v.name)}</option>`).join('') : '<option>（系统没有法语声音）</option>'}</select></label>
  <div class="lab" style="margin-bottom:4px">${bi('外观', 'Look')}</div>
       <div class="modes" style="margin-bottom:14px"><button class="mode" data-look="color" aria-pressed="${settings.look !== 'mono'}">${bi('彩色', 'Colour')}</button><button class="mode" data-look="mono" aria-pressed="${settings.look === 'mono'}">${bi('黑白', 'Black & white')}</button></div>
+      <label class="chk"><input type="checkbox" id="s-riso" ${settings.riso !== false ? 'checked' : ''}> ${bi('丝网印刷质感', 'Screen-print texture')}</label>
       <label class="chk"><input type="checkbox" id="s-tw" ${settings.typewriter ? 'checked' : ''}> ${bi('打字机模式（打字声 + 打字机字体）', 'Typewriter mode (key sounds + typewriter font)')}</label>
       <label class="chk"><input type="checkbox" id="s-len" ${settings.lenient ? 'checked' : ''}> 重音写错也算对</label>
       <button class="btn ghost small" data-say="Bonjour ! Je m'appelle Alice. Ça va bien ?">试听</button>
@@ -1677,6 +1679,7 @@
       document.documentElement.classList.toggle('mono', settings.look === 'mono');
       $$('[data-look]', box).forEach(x => x.setAttribute('aria-pressed', x === b));
     });
+    $('#s-riso').onchange = e => { settings.riso = e.target.checked; saveSettings(); document.documentElement.classList.toggle('no-riso', !settings.riso); };
     $('#s-tw').onchange = e => { settings.typewriter = e.target.checked; saveSettings(); document.documentElement.classList.toggle('tw', settings.typewriter); if (settings.typewriter && window.TYPEWRITER) TYPEWRITER.ret(); };
     $('#s-len').onchange = e => { settings.lenient = e.target.checked; saveSettings(); };
   }
