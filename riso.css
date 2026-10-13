@@ -89,3 +89,28 @@ html.mono .drape, html.mono .lecon-card::before, html.mono .cover::before { filt
 @media (max-width: 720px) { html .drape { height: 70px; } main { padding-top: 80px; } }
 main { padding-top: 134px; }
 @media (max-width: 720px) { main { padding-top: 92px; } }
+
+/* ===================================================================
+   Real 1825 engraving fragments (Sidney Hall, Urania's Mirror — public domain):
+   genuine parchment grain, and the mitred double-rule corner, instead of CSS-drawn ones
+   =================================================================== */
+main {
+  background-image: var(--foxing), url(img/parchment-tile.webp), var(--paper);
+  background-size: 100% 100%, 520px 520px, auto;
+  background-blend-mode: normal, multiply, normal;
+}
+.lecon-card, .cover, .cover.sons {
+  background-color: #2f2e2b;
+  background-image:
+    url(img/corner-s-tl.webp), url(img/corner-s-tr.webp), url(img/corner-s-bl.webp), url(img/corner-s-br.webp),
+    var(--stars), url(img/parchment-tile.webp), var(--engrave, none);
+  background-size: 26px 26px, 26px 26px, 26px 26px, 26px 26px, 180px 180px, 300px 300px, auto;
+  background-position: top 1px left 1px, top 1px right 1px, bottom 1px left 1px, bottom 1px right 1px, 0 0, 0 0, 0 0;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, repeat, repeat, repeat;
+  background-blend-mode: normal, normal, normal, normal, normal, overlay, normal;
+}
+main .corner { position: absolute; width: 90px; height: 90px; background: url(img/corner.webp) center / contain no-repeat; pointer-events: none; z-index: 3; opacity: .9; }
+main .corner.tl, main .corner.tr { display: none; }
+main .corner.bl { bottom: 2px; left: 2px; transform: scaleY(-1); }
+main .corner.br { bottom: 2px; right: 2px; transform: scale(-1, -1); }
+@media (max-width: 720px) { main .corner { width: 56px; height: 56px; } }
