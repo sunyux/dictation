@@ -49,20 +49,36 @@ html.tw .answer-in:focus, html.tw .full-in:focus { caret-color: #a54a44; }
   body.printing-slip .paper-wrap { margin: 0; overflow: visible; }
   body.printing-sheet > *:not(#print-area) { display: none !important; }
   body.printing-sheet #print-area { display: block; color: #000; font: 12pt/1.6 "EB Garamond", "Noto Serif SC", serif; }
-  .pw-page { page-break-after: always; }
-  .pw-page:last-child { page-break-after: auto; }
-  .pw-page h1 { font: 20pt "IM Fell English SC", serif; margin: 0 0 4pt; letter-spacing: .05em; }
-  .pw-page h2 { font: 14pt "IM Fell English SC", serif; margin: 14pt 0 8pt; border-bottom: 1px solid #000; padding-bottom: 3pt; }
-  .pw-sub { font-size: 10pt; color: #333; margin: 0 0 10pt; }
-  .pw-table { width: 100%; border-collapse: collapse; font-size: 11pt; }
-  .pw-table td { border-bottom: 1px solid #bbb; padding: 5pt 4pt; vertical-align: bottom; }
-  .pw-table td:first-child { width: 18pt; color: #666; }
-  .pw-table td:nth-child(3) { width: 60pt; font-style: italic; color: #555; }
-  .pw-line { width: 45%; }
-  .pw-cloze { font-size: 12pt; line-height: 2.2; }
-  .pw-blank { letter-spacing: 1px; }
-  .pw-zh { margin: 10pt 0 2pt; font-size: 11pt; }
-  .pw-write { height: 30pt; border-bottom: 1px solid #999; background: repeating-linear-gradient(transparent 0 14pt, #ddd 14pt 15pt); }
-  .pw-ans { columns: 2; font-size: 10.5pt; }
-  .pw-fr { font-size: 11pt; margin: 4pt 0; }
 }
+
+/* worksheet look, shared by printing and PDF export */
+#print-area { color: #000; font: 12pt/1.6 "EB Garamond", "Noto Serif SC", serif; }
+#print-area .pw-page { page-break-after: always; }
+#print-area .pw-page:last-child { page-break-after: auto; }
+#print-area .pw-page h1 { font: 20pt "IM Fell English SC", serif; margin: 0 0 4pt; letter-spacing: .05em; }
+#print-area .pw-page h2 { font: 14pt "IM Fell English SC", serif; margin: 14pt 0 8pt; border-bottom: 1px solid #000; padding-bottom: 3pt; }
+#print-area .pw-sub { font-size: 10pt; color: #333; margin: 0 0 10pt; }
+#print-area .pw-table { width: 100%; border-collapse: collapse; font-size: 11pt; }
+#print-area .pw-table td { border-bottom: 1px solid #bbb; padding: 5pt 4pt; vertical-align: bottom; }
+#print-area .pw-table td:first-child { width: 18pt; color: #666; }
+#print-area .pw-table td:nth-child(3) { width: 60pt; font-style: italic; color: #555; }
+#print-area .pw-line { width: 45%; }
+#print-area .pw-cloze { font-size: 12pt; line-height: 2.2; }
+#print-area .pw-blank { letter-spacing: 1px; }
+#print-area .pw-zh { margin: 10pt 0 2pt; font-size: 11pt; }
+#print-area .pw-write { height: 30pt; border-bottom: 1px solid #999; background: repeating-linear-gradient(transparent 0 14pt, #ddd 14pt 15pt); }
+#print-area .pw-ans { columns: 2; font-size: 10.5pt; }
+#print-area .pw-fr { font-size: 11pt; margin: 4pt 0; }
+#print-area .pw-page:last-child { page-break-after: auto; }
+.pdf-render { display: block !important; width: 186mm; background: #fff; color: #000; }
+#print-area.pdf-render .pw-page { page-break-after: auto; }
+.paper-pdf { width: 80mm; animation: none; box-shadow: none; -webkit-mask: none; mask: none; }
+.j-pdf { padding: 4mm; font: 13pt/1.8 "EB Garamond", "Noto Serif SC", serif; }
+.j-pdf h1 { font: 22pt "IM Fell English SC", serif; margin: 0 0 10pt; border-bottom: 1px solid #000; padding-bottom: 6pt; }
+.j-pdf-date { font: 11pt "Special Elite", monospace; color: #444; margin: 0 0 4pt; }
+.j-pdf-text { font: 14pt/2 "IM Fell English", serif; background: repeating-linear-gradient(transparent 0 27pt, #cfd8e0 27pt 28pt); }
+.j-pdf-foot { margin-top: 18pt; font-size: 10pt; color: #666; }
+
+/* the PDF is drawn from this hidden layer (behind the page, inside the viewport) */
+.pdf-host { position: absolute; left: 0; z-index: -10; width: 186mm; pointer-events: none; background: #fff; }
+.pdf-host .pdf-render { display: block !important; }

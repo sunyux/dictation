@@ -296,6 +296,7 @@
           else if (b && k === 'nh:log') { for (const [d, e] of Object.entries(a)) if (!b[d] || b[d].xp < e.xp) b[d] = e; v = JSON.stringify(b); }
           else if (b && k === 'nh:stamps') v = JSON.stringify({ ...a, ...b });
           else if (b && k === 'nh:errs') { const seen = new Set(b.map(e => JSON.stringify(e))); v = JSON.stringify([...b, ...a.filter(e => !seen.has(JSON.stringify(e)))].slice(-400)); }
+          else if (b && k === 'nh:journal') { for (const [dd, e] of Object.entries(a)) if (!b[dd] || (e.updated || '') > (b[dd].updated || '')) b[dd] = e; v = JSON.stringify(b); }
           else if (b && k === 'nh:mywords') { const have = new Set(b.map(w => w.fr)); v = JSON.stringify([...b, ...a.filter(w => !have.has(w.fr))]); }
           else if (b && k.startsWith('nh:testmiss:')) { for (const [w, n] of Object.entries(a)) b[w] = Math.max(b[w] || 0, n); v = JSON.stringify(b); }
           else if (b && k.startsWith('nh:sons:')) v = JSON.stringify({ quiz: Math.max(a.quiz || 0, b.quiz || 0), dict: Math.max(a.dict || 0, b.dict || 0) });
@@ -354,7 +355,7 @@
     const all = ['*** CAHIER DE DICTÉE ***', stamp, '', title, '-'.repeat(26), ...lines, '-'.repeat(26), bi('继续加油！', 'Continue comme ça !'), '', '  · · ·'];
     ov.innerHTML = `<div class="printer"><div class="printer-body"><span class="printer-led"></span><span class="printer-name">IMPRIMERIE</span></div><div class="printer-slot"></div>
         <div class="paper-wrap"><div class="paper"><pre class="paper-text"></pre></div></div></div>
-      <div class="slip-actions"><button class="btn small" id="slip-print">${bi('用打印机打出来', 'Print on paper')}</button><button class="btn ghost small" id="slip-close">${bi('收起', 'Close')}</button></div>`;
+      <div class="slip-actions"><button class="btn small" id="slip-print">${bi('用打印机打出来', 'Print on paper')}</button><button class="btn small" id="slip-pdf">${bi('下载 PDF', 'Download PDF')}</button><button class="btn ghost small" id="slip-close">${bi('收起', 'Close')}</button></div>`;
     document.body.appendChild(ov);
     const pre = $('.paper-text', ov);
     let li = 0, ci = 0, stopped = false;
@@ -370,14 +371,59 @@
     const close = () => { stopped = true; ov.remove(); };
     $('#slip-close', ov).onclick = close;
     ov.addEventListener('click', e => { if (e.target === ov) close(); });
+    $('#slip-pdf', ov).onclick = async () => {
+      stopped = true; pre.textContent = all.join('\n');
+      const paper = $('.paper', ov), clone = paper.cloneNode(true);
+      clone.classList.add('pdf-render', 'paper-pdf');
+      const h = Math.ceil(paper.getBoundingClientRect().height * 25.4 / 96) + 12;
+      await savePdf(clone.outerHTML, `slip-${dayStr()}.pdf`, { margin: 4, format: [88, Math.max(120, h)] });
+    };
     $('#slip-print', ov).onclick = () => { stopped = true; pre.textContent = all.join('\n'); document.body.classList.add('printing-slip'); window.print(); document.body.classList.remove('printing-slip'); };
   }
   const slipBtn = id => `<button class="btn ghost" id="${id}"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M6 9V3h12v6M6 18H4v-7h16v7h-2M7 14h10v7H7z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg> ${bi('打印小票', 'Print a slip')}</button>`;
   const vw = t => [...String(t)].reduce((n, c) => n + (/[\u2E80-\uFFEF]/.test(c) ? 2 : 1), 0);
   const pad = (a, b, w = 26) => { a = String(a); b = String(b); return a + ' '.repeat(Math.max(1, w - vw(a) - vw(b))) + b; };
 
-  // a printable worksheet for one leçon: words, gap-fill, full text, then the answers
-  function printWorksheet(book, lecon) {
+  // PDF export: html2canvas draws each block, jsPDF lays the images out on pages (loaded only when needed)
+  let pdfLib = null;
+  const loadJs = src => new Promise((ok, bad) => { const sc = document.createElement('script'); sc.src = src; sc.onload = ok; sc.onerror = bad; document.head.appendChild(sc); });
+  function loadPdf() {
+    if (window.html2canvas && window.jspdf) return Promise.resolve();
+    return pdfLib = pdfLib || Promise.all([loadJs('https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js'), loadJs('https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js')]);
+  }
+  // html: markup to render; blocks inside matching opt.split each start on a new page
+  async function savePdf(html, filename, opt = {}) {
+    toast('PDF', bi('正在生成 PDF…', 'Making the PDF…'));
+    const host = document.createElement('div');
+    host.className = 'pdf-host';
+    host.style.top = window.scrollY + 'px';
+    host.innerHTML = html;
+    document.body.appendChild(host);
+    try {
+      await loadPdf();
+      await document.fonts.ready;
+      const fmt = opt.format || [210, 297], margin = opt.margin ?? 12;
+      const pdf = new window.jspdf.jsPDF({ unit: 'mm', format: fmt, orientation: 'portrait' });
+      const W = fmt[0] - margin * 2, H = fmt[1] - margin * 2;
+      const blocks = opt.split ? [...host.querySelectorAll(opt.split)] : [host.firstElementChild];
+      let first = true;
+      for (const block of blocks) {
+        const canvas = await window.html2canvas(block, { scale: 2, backgroundColor: '#ffffff', useCORS: true });
+        const pxPerMm = canvas.width / W, pageH = Math.floor(H * pxPerMm);
+        for (let y = 0; y < canvas.height; y += pageH) {
+          const h = Math.min(pageH, canvas.height - y);
+          const part = document.createElement('canvas'); part.width = canvas.width; part.height = h;
+          part.getContext('2d').drawImage(canvas, 0, y, canvas.width, h, 0, 0, canvas.width, h);
+          if (!first) pdf.addPage(fmt, 'portrait');
+          first = false;
+          pdf.addImage(part.toDataURL('image/jpeg', 0.92), 'JPEG', margin, margin, W, h / pxPerMm);
+        }
+      }
+      pdf.save(filename);
+    } catch (e) { console.warn(e); alert(tr('PDF 生成失败（可能是网络连不上）。可以用「打印」里的「存储为 PDF」。').replace(' · ', '\n')); }
+    host.remove();
+  }
+  function worksheetEl(book, lecon) {
     const area = document.createElement('div');
     area.id = 'print-area';
     const blanks = n => '_'.repeat(Math.max(6, Math.min(18, n + 2)));
@@ -387,11 +433,21 @@
       <section class="pw-page"><h1>Leçon ${lecon.n} · ${esc(lecon.title)}</h1><p class="pw-sub">${esc(book.title)} · ${esc(lecon.zh)} · ${bi('姓名', 'Name')} ________ ${bi('日期', 'Date')} ________</p>
         <h2>${bi('一、词汇默写', 'I. Vocabulary')}</h2>
         <table class="pw-table">${lecon.vocab.map((v, k) => `<tr><td>${k + 1}</td><td>${esc(v.zh)}</td><td>${esc(v.pos)}</td><td class="pw-line"></td></tr>`).join('')}</table></section>
-      ${cloze ? `<section class="pw-page"><h2>${bi('二、课文填空', 'II. Fill the gaps')}</h2><div class="pw-cloze">${cloze}</div></section>` : ''}
-      <section class="pw-page"><h2>${bi('三、全文默写', 'III. Full dictation')}</h2>${lines.map(r => `<p class="pw-zh">${esc(r.zh)}</p><div class="pw-write"></div>`).join('')}</section>
-      <section class="pw-page"><h2>${bi('答案', 'Answers')}</h2>
+      ${cloze ? `<section class="pw-page pw-break"><h2>${bi('二、课文填空', 'II. Fill the gaps')}</h2><div class="pw-cloze">${cloze}</div></section>` : ''}
+      <section class="pw-page pw-break"><h2>${bi('三、全文默写', 'III. Full dictation')}</h2>${lines.map(r => `<p class="pw-zh">${esc(r.zh)}</p><div class="pw-write"></div>`).join('')}</section>
+      <section class="pw-page pw-break"><h2>${bi('答案', 'Answers')}</h2>
         <ol class="pw-ans">${lecon.vocab.map(v => `<li><b>${esc(v.fr)}</b> — ${esc(v.zh)}</li>`).join('')}</ol>
         ${lines.map(r => `<p class="pw-fr">${esc(r.fr)}</p>`).join('')}</section>`;
+    return area;
+  }
+  async function worksheetPdf(book, lecon) {
+    const area = worksheetEl(book, lecon);
+    area.classList.add('pdf-render');
+    await savePdf(area.outerHTML, `Lecon-${lecon.n}-dictee.pdf`, { split: '.pw-page' });
+  }
+  // a printable worksheet for one leçon: words, gap-fill, full text, then the answers
+  function printWorksheet(book, lecon) {
+    const area = worksheetEl(book, lecon);
     document.body.appendChild(area);
     document.body.classList.add('printing-sheet');
     setTimeout(() => { window.print(); document.body.classList.remove('printing-sheet'); area.remove(); }, 50);
@@ -997,7 +1053,7 @@
     $('#mw-tr', main).onclick = async () => {
       const fr = $('#mw-fr', main).value.trim(); if (!fr) return;
       msg.textContent = bi('翻译中…', 'Translating…');
-      const get = async to => { try { const r = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(fr)}&langpair=fr|${to}`); const j = await r.json(); const d = document.createElement('div'); d.innerHTML = j.responseData.translatedText; return d.textContent; } catch { return ''; } };
+      const get = async to => { try { const r = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(fr)}&langpair=fr|${to}`); const j = await r.json(); const d = document.createElement('div'); d.innerHTML = j.responseData.translatedText; return d.textContent.replace(/^[\s\-–—]+|[\s\-–—]+$/g, ''); } catch { return ''; } };
       const [zh, en] = await Promise.all([get('zh-CN'), get('en')]);
       if (zh && !$('#mw-zh', main).value) $('#mw-zh', main).value = zh;
       if (en && !$('#mw-en', main).value) $('#mw-en', main).value = en;
@@ -1157,6 +1213,151 @@
     quiz(store.get('nmkind', 'n100'));
   }
 
+  /* ---------- 法语日记: a small French journal with hints and a checker ---------- */
+  const JR = {
+    all() { return store.get('journal', {}); },
+    get(d) { return this.all()[d] || null; },
+    put(d, e) { const a = this.all(); a[d] = { ...e, updated: new Date().toISOString() }; store.set('journal', a); },
+  };
+  const P2 = a => Array.isArray(a) ? (L() === 'en' ? a[1] : L() === 'zhen' ? `${a[0]}<span class="en-gloss" lang="en">${esc(a[1])}</span>` : a[0]) : a;
+  const promptOf = id => (window.JOURNAL_PROMPTS || []).find(p => p.id === id);
+  function todaysPrompt() {
+    const ps = window.JOURNAL_PROMPTS || [], d = new Date();
+    const n = Math.floor((d - new Date(d.getFullYear(), 0, 0)) / 864e5);
+    return ps[n % (ps.length - 1)];
+  }
+  // words the site knows, to flag possible misspellings
+  let KNOWN = null;
+  function knownWords() {
+    if (KNOWN) return KNOWN;
+    KNOWN = new Set();
+    const add = w => tokens(w).forEach(t => KNOWN.add(loose(t).replace(/'$/, '')));
+    const { items, forms2inf } = lookupIndex();
+    items.forEach(x => { add(x.fr.replace(/\(.*?\)/g, ' ')); forms(x.fr).accept.forEach(add); });
+    Object.keys(forms2inf).forEach(k => KNOWN.add(k));
+    for (const b of BOOKS) for (const u of b.units) for (const l of u.lecons) l.text.forEach(r => add(r.fr || r.h || ''));
+    ('le la les l un une des du de d au aux à a et ou mais donc je j tu il elle on nous vous ils elles me m te t se s ce c ces cet cette mon ma mes ton ta tes son sa ses notre nos votre vos leur leurs '
+      + 'qui que qu quoi où quand comment pourquoi combien ne n pas plus jamais rien très bien aussi encore déjà toujours souvent parfois avec sans pour par sur sous dans en chez entre vers après avant '
+      + 'oui non si y est suis es sommes êtes sont ai as avons avez ont vais vas va allons allez vont fais fait faisons faites font aujourd hui demain hier matin soir midi ici là beaucoup peu trop '
+      + 'il fait beau froid chaud pleut parce que alors puis enfin tout tous toute toutes autre même cela ça voilà voici bonjour salut merci').split(' ').forEach(w => KNOWN.add(loose(w)));
+    return KNOWN;
+  }
+  const RULES_J = [
+    [/\bje (ai|aime|habite|appelle|arrive|écoute|étudie|entre|adore|y)\b/gi, m => m.replace(/^je /i, "j'"), ['元音前 je 要省略成 j\'', 'je becomes j\' before a vowel']],
+    [/\b(le|la) ([aeiouéèêh]\w*)/gi, m => m.replace(/^(le|la) /i, "l'"), ['元音前 le / la 要省略成 l\'（嘘音 h 例外）', 'le / la become l\' before a vowel (except aspirated h)']],
+    [/\bde le\b/gi, () => 'du', ['de + le 要合成 du', 'de + le must become du']],
+    [/\bde les\b/gi, () => 'des', ['de + les 要合成 des', 'de + les must become des']],
+    [/(?<!\p{L})à le(?!\p{L})/giu, () => 'au', ['à + le 要合成 au', 'à + le must become au']],
+    [/(?<!\p{L})à les(?!\p{L})/giu, () => 'aux', ['à + les 要合成 aux', 'à + les must become aux']],
+    [/\bsi il(s?)\b/gi, m => "s'il" + (m.endsWith('s') ? 's' : ''), ['si + il 要写成 s\'il', 'si + il must be written s\'il']],
+    [/\b(ne|me|te|se|de|que|ce) ([aeiouéèêh]\w*)/gi, m => m.replace(/^(\w)e /i, "$1'"), ['元音前 ne / me / te / se / de / que 要省略', 'ne / me / te / se / de / que drop their e before a vowel']],
+    [/\bje suis (\d+) ans\b/gi, m => m.replace(/je suis/i, "j'ai"), ['年龄用 avoir：j\'ai … ans', 'Age takes avoir: j\'ai … ans']],
+    [/\bje ne (\w+)(?! pas| plus| jamais| rien)\b/gi, null, ['否定要两部分：ne … pas', 'Negation has two parts: ne … pas']],
+  ];
+  function checkJournal(text) {
+    const out = [];
+    for (const [re, fix, why] of RULES_J) for (const m of text.matchAll(re)) {
+      if (!fix && /pas|plus|jamais|rien/.test(text.slice(m.index, m.index + m[0].length + 20))) continue;
+      out.push({ kind: 'rule', at: m[0], fix: fix ? fix(m[0]) : null, why });
+    }
+    const K = knownWords(), seen = new Set();
+    const first = new Set([...text.matchAll(/(^|[.!?]\s+)(\p{L}+)/gu)].map(m => m[2]));
+    for (const t of tokens(text)) {
+      const k = loose(t).replace(/'$/, '');
+      if (!k || /\d/.test(k) || K.has(k) || seen.has(k) || k.length < 2) continue;
+      if (/^\p{Lu}/u.test(t) && !first.has(t)) continue;           // names
+      if (K.has(k.replace(/s$/, '')) || K.has(k.replace(/es$/, '')) || K.has(k.replace(/e$/, '')) || K.has(k.replace(/(ent|ons|ez)$/, 'er'))) continue;
+      seen.add(k);
+      out.push({ kind: 'word', at: t });
+    }
+    return out;
+  }
+  async function mymemory(text, from, to) {
+    const r = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text.slice(0, 480))}&langpair=${from}|${to}`);
+    const j = await r.json(); const d = document.createElement('div'); d.innerHTML = j.responseData.translatedText; return d.textContent;
+  }
+
+  function viewJournal(day) {
+    const today = dayStr(), d = day || today, entry = JR.get(d) || {};
+    let pid = entry.prompt || (d === today ? store.get('jprompt:' + today, '') : '') || todaysPrompt().id;
+    const p = () => promptOf(pid) || todaysPrompt();
+    document.title = bi('法语日记', 'Journal') + ' · ' + d;
+    const all = JR.all(), days = Object.keys(all).sort().reverse();
+    const words = s => tokens(s || '').length;
+    main.innerHTML = `
+      <p class="kicker" lang="fr">Mon journal</p><h1>${bi('法语日记', 'French journal')}</h1>
+      <div class="journal">
+        <div class="j-page">
+          <div class="j-date"><span lang="fr">${esc(d)}</span>${d !== today ? `<a href="#/journal" class="btn ghost small">${bi('回到今天', 'Today')}</a>` : ''}</div>
+          <div class="j-prompt"><b lang="fr">${esc(p().fr)}</b><span>${P2(p().t)}</span>
+            <select id="j-pick">${(window.JOURNAL_PROMPTS || []).map(x => `<option value="${x.id}" ${x.id === p().id ? 'selected' : ''}>${esc(x.fr)}</option>`).join('')}</select></div>
+          <textarea id="j-text" lang="fr" spellcheck="false" autocapitalize="sentences" placeholder="${bi('用法语写几句……点右边的句子开头可以直接插入。', 'Write a few sentences in French… tap a starter on the right to insert it.')}">${esc(entry.text || '')}</textarea>
+          <div class="toolbar"><span class="kbd" id="j-count"></span><span class="spacer"></span>
+            <button class="btn ghost small" id="j-read">${ICON.play} ${bi('朗读', 'Read aloud')}</button>
+            <button class="btn ghost small" id="j-back">${bi('回译成中文', 'Translate back')}</button>
+            <button class="btn ghost small" id="j-pdf">PDF</button>
+            <button class="btn" id="j-check">${bi('检查', 'Check')}</button></div>
+          <div id="j-res"></div>
+        </div>
+        <aside class="j-hints">
+          <section><h3>${bi('句子开头', 'Starters')}</h3><div class="chips" id="j-starters">${p().starters.map(s => `<button class="wchip j-ins" data-ins="${esc(s.replace(/…/g, '').trim())}"><span lang="fr">${esc(s)}</span></button>`).join('')}</div></section>
+          ${p().lecons.length ? `<section><h3>${bi('可以用的词', 'Useful words')} <small>L${p().lecons.join(', L')}</small></h3><div class="chips j-words">${p().lecons.flatMap(n => (findLecon(BOOKS[0], n) || { lecon: { vocab: [] } }).lecon.vocab).filter(v => !/^\p{Lu}/u.test(v.fr)).slice(0, 36).map(v => `<button class="wchip j-ins" data-ins="${esc(forms(v.fr).accept.filter(x => !/[(/]/.test(x))[0] || v.fr)}" title="${esc(v.zh)}"><span lang="fr">${esc(v.fr)}</span><small>${G(v)}</small></button>`).join('')}</div></section>` : ''}
+          <section><h3>${bi('语法提示', 'Grammar tip')}</h3><p class="j-tip">${P2(p().tip)}</p></section>
+          <section><details><summary>${bi('看一段例文', 'See an example')}</summary><p lang="fr" class="j-ex">${esc(p().example)} ${playBtn(p().example)}</p></details></section>
+          <section><h3>${bi('怎么说？', 'How do I say…?')}</h3><div class="j-how"><input id="j-q" class="typed-recite" placeholder="${bi('输入中文或英文', 'Chinese or English')}"><button class="btn small" id="j-qgo">→ FR</button></div><div id="j-qres" class="j-qres"></div></section>
+        </aside>
+      </div>
+      ${days.length ? `<section class="unit"><div class="unit-title"><h2>${bi('以前的日记', 'Past entries')}</h2><span>${days.length}</span></div>
+        <div class="j-list">${days.map(k => `<a href="#/journal/${k}" class="j-item ${k === d ? 'on' : ''}"><b>${k}</b><span lang="fr">${esc((promptOf(all[k].prompt) || {}).fr || '')}</span><small>${words(all[k].text)} ${bi('词', 'words')}</small></a>`).join('')}</div></section>` : ''}`;
+    const ta = $('#j-text', main), count = $('#j-count', main), res = $('#j-res', main);
+    const save = () => {
+      JR.put(d, { prompt: p().id, text: ta.value });
+      const n = words(ta.value);
+      count.textContent = bi(`${n} 个词`, `${n} words`) + (n >= 20 ? ' ✓' : bi(' · 写满 20 个词算一篇', ' · 20 words make an entry'));
+      if (n >= 20 && d === today && !store.get('jxp:' + today)) { store.set('jxp:' + today, 1); XP.gain(10, bi('写了一篇日记', 'Journal entry')); }
+    };
+    let t; ta.oninput = () => { clearTimeout(t); t = setTimeout(save, 500); };
+    save();
+    $('#j-pick', main).onchange = e => { pid = e.target.value; if (d === today) store.set('jprompt:' + today, pid); JR.put(d, { prompt: pid, text: ta.value }); viewJournal(day); };
+    $('.journal', main).addEventListener('click', e => {
+      const b = e.target.closest('.j-ins'); if (!b) return;
+      const s = b.dataset.ins, pos = ta.selectionStart ?? ta.value.length, before = ta.value.slice(0, pos), after = ta.value.slice(pos);
+      const sep = before && !/\s$/.test(before) ? ' ' : '';
+      ta.value = before + sep + s + (/[.!?]$/.test(s) ? ' ' : ' ') + after;
+      ta.focus(); ta.selectionStart = ta.selectionEnd = (before + sep + s + ' ').length; save();
+      TTS.say(s);
+    });
+    $('#j-pdf', main).onclick = async () => {
+      const el = document.createElement('div'); el.className = 'pdf-render j-pdf';
+      el.innerHTML = `<p class="j-pdf-date">${esc(d)}</p><h1>${esc(p().fr)}</h1><div class="j-pdf-text">${esc(ta.value).replace(/\n/g, '<br>')}</div><p class="j-pdf-foot">Mon journal · ${esc(words(ta.value))} mots</p>`;
+      await savePdf(el.outerHTML, `journal-${d}.pdf`, { margin: 16 });
+    };
+    $('#j-read', main).onclick = () => { if (ta.value.trim()) speakSeq(ta.value.split(/(?<=[.!?])\s+/).filter(Boolean), () => { }); };
+    $('#j-check', main).onclick = () => {
+      const found = checkJournal(ta.value);
+      res.innerHTML = !ta.value.trim() ? '' : !found.length ? `<div class="feedback ok"><span class="lab">${bi('没发现常见错误', 'No common mistakes found')}</span>${bi('（只能检查拼写和几种常见语法；意思对不对可以点「回译成中文」看看）', '(only spelling and a few common rules are checked; use "Translate back" to see if it says what you mean)')}</div>`
+        : `<div class="feedback accent"><span class="lab">${bi('可以再看看这些地方', 'Have another look at these')}</span>
+          <ul class="j-issues">${found.map(f => f.kind === 'rule'
+            ? `<li><s lang="fr">${esc(f.at)}</s>${f.fix ? ` → <b lang="fr">${esc(f.fix)}</b>` : ''} <span>${P2(f.why)}</span></li>`
+            : `<li><b lang="fr">${esc(f.at)}</b> <span>${bi('网站词库里没有这个词，检查一下拼写？', 'Not in the site\'s word lists — check the spelling?')}</span> <a href="#" data-look="${esc(f.at)}">${bi('查一查', 'Look up')}</a></li>`).join('')}</ul></div>`;
+      $$('[data-look]', res).forEach(a => a.onclick = e => { e.preventDefault(); openLookup(a.dataset.look); });
+    };
+    $('#j-back', main).onclick = async () => {
+      if (!ta.value.trim()) return;
+      res.innerHTML = `<p class="kbd">${bi('翻译中…', 'Translating…')}</p>`;
+      try { const zh = await mymemory(ta.value, 'fr', L() === 'en' ? 'en' : 'zh-CN'); res.innerHTML = `<div class="feedback ok"><span class="lab">${bi('机器回译（看看意思是不是你想说的）', 'Machine back-translation (does it say what you meant?)')}</span><div class="j-backtext">${esc(zh)}</div></div>`; }
+      catch { res.innerHTML = `<p class="notice">${bi('翻译服务连不上，稍后再试。', 'Translation service unavailable, try later.')}</p>`; }
+    };
+    const qgo = async () => {
+      const q = $('#j-q', main).value.trim(); if (!q) return;
+      const out = $('#j-qres', main); out.textContent = bi('翻译中…', 'Translating…');
+      try { const fr = await mymemory(q, /[㐀-鿿]/.test(q) ? 'zh-CN' : 'en', 'fr'); out.innerHTML = `${playBtn(fr)} <span lang="fr">${esc(fr)}</span> <button class="btn ghost small j-ins" data-ins="${esc(fr)}">${bi('插入', 'Insert')}</button>`; }
+      catch { out.textContent = bi('翻译服务连不上', 'Translation unavailable'); }
+    };
+    $('#j-qgo', main).onclick = qgo;
+    $('#j-q', main).onkeydown = e => { if (e.key === 'Enter') qgo(); };
+  }
+
   function viewTools(tab, q) {
     document.title = bi('工具', 'Tools') + ' · 你好法语';
     const pair = store.get('trpair', 'fr|zh-CN');
@@ -1168,6 +1369,7 @@
         <button class="tab" data-tt="reader" aria-selected="${tab === 'reader'}"><b>3</b>${bi('朗读器', 'Reader')}</button>
         <button class="tab" data-tt="numbers" aria-selected="${tab === 'numbers'}"><b>4</b>${bi('数字时间', 'Numbers & time')}</button>
         <a class="tab" href="#/mine" style="text-decoration:none"><b>5</b>${bi('生词本', 'My words')}</a>
+        <a class="tab" href="#/journal" style="text-decoration:none"><b>6</b>${bi('法语日记', 'Journal')}</a>
       </nav><section id="tpane"></section>`;
     $$('[data-tt]', main).forEach(b => b.onclick = () => { location.hash = '#/tools/' + b.dataset.tt; });
     const pane = $('#tpane');
@@ -1531,9 +1733,10 @@
     const parts = location.hash.replace(/^#\/?/, '').split('/').filter(Boolean);
     const crumbs = $('#crumbs');
     // curtain colour of the reading plate, by section
-    document.body.dataset.drape = { sons: 'blue', review: 'red', tools: 'cream', mine: 'green', verbes: 'blue', me: 'red' }[parts[0]] || 'yellow';
+    document.body.dataset.drape = { journal: 'green', sons: 'blue', review: 'red', tools: 'cream', mine: 'green', verbes: 'blue', me: 'red' }[parts[0]] || 'yellow';
     window.scrollTo(0, 0);
     if (!parts.length) { crumbs.innerHTML = ''; return viewHome(); }
+    if (parts[0] === 'journal') { crumbs.innerHTML = `<span>${bi('法语日记', 'Journal')}</span>`; return viewJournal(parts[1]); }
     if (parts[0] === 'mine') { crumbs.innerHTML = `<span>${bi('生词本', 'My words')}</span>`; return viewMine(parts[1]); }
     if (parts[0] === 'tools') {
       crumbs.innerHTML = `<span>${bi('工具', 'Tools')}</span>`;
@@ -1709,7 +1912,7 @@
             <li><b>3</b><span>全文默写 — 对照中文，整篇写出来</span></li>
             <li><b>4</b><span>背诵 — 对着麦克风说，说对的词会逐个显现</span></li>
           </ol>
-          <div class="toolbar"><a class="btn" href="#/${book.id}">打开《${esc(book.title)}》</a><a class="btn ghost" href="#/sons">打开《${esc(SB().title)}》</a></div>
+          <div class="toolbar"><a class="btn" href="#/${book.id}">打开《${esc(book.title)}》</a><a class="btn ghost" href="#/sons">打开《${esc(SB().title)}》</a><a class="btn ghost" href="#/journal">写今天的法语日记</a></div>
           ${backupNag()}${reviewBanner()}
         </div>
       </section>`;
@@ -1765,8 +1968,10 @@
         <span class="spacer"></span>
         ${next ? `<a class="btn ghost small" href="#/${book.id}/${next.n}">Leçon ${next.n} ›</a>` : ''}
       </div>
-      <div class="toolbar" style="justify-content:center"><button class="btn ghost small" id="worksheet">${bi('打印这一课的默写纸', 'Print a worksheet for this leçon')}</button></div>`;
+      <div class="toolbar" style="justify-content:center"><button class="btn ghost small" id="worksheet">${bi('打印这一课的默写纸', 'Print a worksheet for this leçon')}</button>
+        <button class="btn ghost small" id="worksheet-pdf">${bi('下载默写纸 PDF', 'Download the worksheet as PDF')}</button></div>`;
     $('#worksheet', main).onclick = () => printWorksheet(book, lecon);
+    $('#worksheet-pdf', main).onclick = () => worksheetPdf(book, lecon);
     $$('.tab', main).forEach(b => b.onclick = () => { history.replaceState(null, '', `#/${book.id}/${lecon.n}/${b.dataset.tab}`); route(); });
     const pane = $('#pane');
     const ctx = { book, lecon, pane, save: (part, s) => setProg(book.id, lecon.n, part, s) };
