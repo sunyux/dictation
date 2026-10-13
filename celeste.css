@@ -354,3 +354,4 @@ main > #main > h1::after {
 .lecon-card h3 { font-size: 20px; overflow-wrap: anywhere; hyphens: auto; }
 .lecon-card .sky-art { top: auto; bottom: 66px; right: 16px; width: 44%; max-width: 150px; }
 .lecon-card { min-height: 230px; }
+.lecon-card .stamp-art { width: 34%; max-width: 104px; bottom: 60px; right: 20px; opacity: .7; }

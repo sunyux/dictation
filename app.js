@@ -203,6 +203,12 @@
     },
     total() { return Object.values(this.log()).reduce((a, b) => a + b.xp, 0); },
   };
+  // the stamp's line drawing, used as the picture on each leçon card
+  function lessonArt(n) {
+    const g = STAMPS[n] && GLYPH[STAMPS[n][1]];
+    if (!g) return window.SKY_ART ? window.SKY_ART(n - 1) : '';
+    return `<svg class="sky-art stamp-art" viewBox="0 0 100 96" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${g}"/></svg>`;
+  }
   function stampSVG(n, kind, on) {
     const [city, g] = STAMPS[n] || ['Leçon ' + n, 'house'];
     return `<svg viewBox="0 0 100 120" class="stamp ${on ? 'on' : ''} ${kind}" aria-label="${esc(city)}">
@@ -1648,7 +1654,7 @@
           <div class="unit-title"><h2 lang="fr">Unité ${u.n}</h2><span>Leçon ${u.lecons[0].n}–${u.lecons[u.lecons.length - 1].n}</span></div>
           <div class="lecons">${u.lecons.map(l => {
             const p = getProg(book.id, l.n);
-            return `<a class="lecon-card" href="#/${book.id}/${l.n}">${window.SKY_ART ? window.SKY_ART(l.n - 1) : ''}
+            return `<a class="lecon-card" href="#/${book.id}/${l.n}">${lessonArt(l.n)}
               <div class="n" lang="fr">Leçon ${l.n}</div>
               <h3 lang="fr">${esc(l.title)}</h3>
               <div class="zh">${esc(l.zh)}</div>
