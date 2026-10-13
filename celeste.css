@@ -357,100 +357,46 @@ main > #main > h1::after {
 .lecon-card .stamp-art { width: 34%; max-width: 104px; bottom: 60px; right: 20px; opacity: .7; }
 
 /* ===================================================================
-   Black, white and grey only — higher contrast
+   Readability: brighter warm paper, lighter grain, livelier faded colours
    =================================================================== */
 :root, :root:not([data-theme="light"]), :root[data-theme="dark"] {
-  --night: #1b1b1b;
-  --paper: #f3f2ef;
-  --paper-2: #e2e1dd;
-  --card: #fafaf8;
-  --ink: #111111;
-  --ink-2: #4a4a4a;
-  --line: #a8a8a8;
-  --frame: #cfcfcc;
-  --frame-ink: #3a3a3a;
-  --blue: #2a2a2a;
-  --red: #111111;
-  --green: #3c3c3c;
-  --amber: #5a5a5a;
-  --wash-blue: rgba(0, 0, 0, .06);
-  --wash-red: rgba(0, 0, 0, .1);
-  --wash-green: rgba(0, 0, 0, .05);
-  --wash-amber: rgba(0, 0, 0, .08);
-  --drape: #9a9a9a;
-  --hatch: repeating-linear-gradient(0deg, rgba(0, 0, 0, .035) 0 1px, transparent 1px 3px);
-  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .28 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  --foxing: linear-gradient(transparent, transparent);
-  --flute: repeating-linear-gradient(90deg, #7d7d7d 0 1px, #e6e6e3 1px 3px, #b2b2b0 3px 4px, #e6e6e3 4px 5px);
-  --zh: "Noto Serif SC", "Songti SC", serif;
+  --paper: #f3eee4;
+  --paper-2: #e4ddcf;
+  --card: #faf7f0;
+  --ink: #1f1c18;
+  --ink-2: #554e45;
+  --line: #b9af9c;
+  --frame: #d3cab8;
+  --frame-ink: #5c5447;
+  --blue: #3d6a8c;
+  --red: #a54a44;
+  --green: #4f7a46;
+  --amber: #a98a3f;
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='1' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35  0 0 0 0 .28  0 0 0 0 .18  0 0 0 .1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --hatch: repeating-linear-gradient(0deg, rgba(60, 48, 30, .025) 0 1px, transparent 1px 4px);
 }
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) { --paper: #f3f2ef; --paper-2: #e2e1dd; --card: #fafaf8; --ink: #111111; --ink-2: #4a4a4a; --line: #a8a8a8;
-    --blue: #2a2a2a; --red: #111111; --green: #3c3c3c; --amber: #5a5a5a; }
+  :root:not([data-theme="light"]) { --paper: #f3eee4; --paper-2: #e4ddcf; --card: #faf7f0; --ink: #1f1c18; --ink-2: #554e45; --line: #b9af9c;
+    --blue: #3d6a8c; --red: #a54a44; --green: #4f7a46; --amber: #a98a3f; }
 }
-body, body[data-drape] { --drape: #9a9a9a; }
-body[data-drape="blue"], body[data-drape="red"] { --drape: #7c7c7c; }
-body[data-drape="cream"], body[data-drape="green"] { --drape: #b8b8b6; }
-.unit:nth-of-type(4n+1) .lecon-card { --c-drape: #a6a6a4; }
-.unit:nth-of-type(4n+2) .lecon-card { --c-drape: #7f7f7f; }
-.unit:nth-of-type(4n+3) .lecon-card { --c-drape: #929292; }
-.unit:nth-of-type(4n+4) .lecon-card { --c-drape: #bdbdbb; }
-.cover::before, .cover.sons::before { --c-drape: #8a8a8a; }
-
-body { color: var(--ink); }
-main .wear { box-shadow: inset 0 0 60px rgba(0, 0, 0, .12), inset 0 0 10px rgba(0, 0, 0, .18); }
-.hint-text, .kbd, .lzh, .vrow .pos, .ppos, .lecon-head .zh { color: var(--ink-2); }
-.lecon-card, .cover, .cover.sons { background: var(--stars), var(--engrave), #222222; background-size: 180px 180px, auto, auto; }
-.lecon-card .n { color: #d6d6d6; }
-.lecon-card .zh { color: #b4b4b4; }
-.lecon-card .sky-art, .cover svg, .cover .c-num { color: #e2e2e2; }
-.lecon-card .prog { background: var(--hatch), #efefec; }
-.status b, .nav-mine { color: #ffffff !important; }
-
-/* right / wrong without colour */
-.w-ok { color: var(--ink); }
-.w-accent { color: var(--ink); text-decoration: underline wavy #777; text-underline-offset: 4px; }
-.w-miss { color: #fff; background: #111; border-radius: 2px; padding: 0 2px; }
-.w-extra { color: #6a6a6a; text-decoration: line-through; }
-.feedback.ok { background: var(--hatch), #ededea; border-left: 3px solid #111; }
-.feedback.bad { background: repeating-linear-gradient(45deg, rgba(0, 0, 0, .05) 0 2px, transparent 2px 6px), #e4e4e1; border-left: 3px dashed #111; }
-.feedback.accent { background: var(--hatch), #e8e8e5; border-left: 3px double #111; }
-.cloze-in.ok { background: #ededea; border-bottom-color: #111; }
-.cloze-in.bad { background: #111; color: #fff; border-bottom-color: #111; }
-.cloze-in.accent { background: #dcdcd8; border-bottom-style: dotted; }
-.cloze-fix { color: #111; text-decoration: underline; }
-.choice.ok { background: #111; color: #fff; border-color: #111; }
-.choice.bad { background: repeating-linear-gradient(45deg, rgba(0, 0, 0, .08) 0 2px, transparent 2px 6px); border-style: dashed; border-color: #111; }
-.rw.ok { color: var(--ink); }
-.rw.miss { color: #fff; background: #333; }
-.rw.hinted { color: #777; }
-.vrow.mastered .vfr::after, .pbar.done .pn, .rule-ok { color: var(--ink); }
-.pt i, .pbar.done .pt i, .ea-bar i, .drill .bar i, .mark i { background: #333; }
-.cf .ce, .end { color: #111; text-decoration: underline; text-underline-offset: 3px; font-weight: 600; }
-.cf .ci, mark.irr { color: #fff; background: #222; border-radius: 2px; padding: 0 2px; font-weight: 600; }
-mark.aux { background: #dcdcd8; }
-.tip-lab, .ctag.sp, .v-tag.irr, .v-tag.spell, .v-tag.book, .conj-group.is-special, .ea-n, .rule-flag { color: #111; border-color: #111; }
-.tip b, .vtip b, .lk-tip b { color: #111; text-decoration: underline; text-underline-offset: 3px; }
-.mouth-svg .lip, .mouth-svg .lipfront, .mouth-svg .velum.down, .mouth-svg .air, .mouth-svg .air.nose, .mouth-svg .voice { stroke: #111; }
-.mouth-svg .peak, .mouth-svg .contact, .mouth-svg .mouthfront { fill: #111; }
-.mouth-svg .tongue { fill: rgba(0, 0, 0, .1); stroke: #111; }
-.stamp.on .st-frame, .stamp.on.v .st-glyph path, .stamp.on.t .st-glyph path { stroke: #111; }
-.stamp.on .st-paper { fill: #f3f2ef; stroke: #777; }
-.badge.on { border-color: #111; color: #111; box-shadow: inset 0 0 0 3px var(--card), inset 0 0 0 4px #111; }
-.cal i.c1 { background: #d2d2cf; } .cal i.c2 { background: #a5a5a2; } .cal i.c3 { background: #6b6b69; } .cal i.c4 { background: #222; }
-.ring-fg, .ring-fg.full { stroke: #fff; }
-.mic { background: #111; box-shadow: 0 6px 16px -6px #111; }
-.err-ana s, .ea-ex s { color: #6a6a6a; }
-.rb-n, .review-stats b, .score, .spell-row .sp, .opt-col h3, .letter small, .steps-intro b { color: var(--ink); }
-.v-tag.irr { background: #111; color: #fff; }
-.tab b { color: #777; }
-.lk-conj-row { background: #ececea; }
-#toast b { color: #fff; }
-:root, :root:not([data-theme="light"]), :root[data-theme="dark"] {
-  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='1' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  --hatch: repeating-linear-gradient(0deg, rgba(0, 0, 0, .02) 0 1px, transparent 1px 4px);
-}
-main { background: var(--grain), var(--paper); background-size: 220px 220px, auto; }
+body[data-drape="yellow"] { --drape: #c9ad62; }
+body[data-drape="blue"] { --drape: #7f9db5; }
+body[data-drape="red"] { --drape: #bc7f77; }
+body[data-drape="cream"] { --drape: #d6cdb9; }
+body[data-drape="green"] { --drape: #93ab84; }
+.unit:nth-of-type(4n+1) .lecon-card { --c-drape: #c9ad62; }
+.unit:nth-of-type(4n+2) .lecon-card { --c-drape: #7f9db5; }
+.unit:nth-of-type(4n+3) .lecon-card { --c-drape: #bc7f77; }
+.unit:nth-of-type(4n+4) .lecon-card { --c-drape: #d6cdb9; }
+.cover::before { --c-drape: #bc7f77; }
+.cover.sons::before { --c-drape: #7f9db5; }
+main { background: var(--foxing), var(--grain), var(--paper); background-size: 100% 100%, 220px 220px, auto; }
+main .wear { box-shadow: inset 0 0 60px rgba(110, 85, 50, .16), inset 0 0 10px rgba(90, 70, 40, .22); }
 .drill, .textblock, .verb-detail, .tr-out, .nm-card, .sons-how { background: var(--card); }
-.pt, .lecon-card .pt, .ea-bar, .mark, .drill .bar { background: #dcdcd9; }
-.lecon-card .pbar { color: #333; }
+.pt, .lecon-card .pt { background: #ddd5c4; }
+.pt i, .lecon-card .pt i { background: var(--blue); }
+.pbar.done .pt i { background: var(--green); }
+.lecon-card .prog { background: var(--hatch), #f1ebdf; }
+.drill .bar i { background: var(--red); }
+.tab[aria-selected="true"] { border-bottom-color: var(--red); }
+.tab b { color: var(--red); }
