@@ -45,3 +45,47 @@ html:not(.no-riso) .unit-title h2, html:not(.no-riso) .lecon-card h3, html:not(.
 html:not(.no-riso) .lecon-card h3 { text-shadow: 1.5px 1px 0 rgba(165, 74, 68, .55), 0 1px 2px #2f2e2b; }
 html:not(.no-riso) .brand-zh { text-shadow: 1.5px 1px 0 rgba(165, 74, 68, .6); }
 html:not(.no-riso) .cover .c-zh { text-shadow: 2px 1.5px 0 rgba(165, 74, 68, .7), 0 1px 0 #000; }
+
+/* ===================================================================
+   Curtains: engraved, hand-tinted images (img/drape-*.webp) instead of drawn shapes
+   =================================================================== */
+body { --drape-img: url(img/drape-yellow.webp); }
+body[data-drape="blue"] { --drape-img: url(img/drape-blue.webp); }
+body[data-drape="red"] { --drape-img: url(img/drape-red.webp); }
+body[data-drape="cream"] { --drape-img: url(img/drape-cream.webp); }
+body[data-drape="green"] { --drape-img: url(img/drape-green.webp); }
+.unit:nth-of-type(4n+1) .lecon-card { --card-drape: url(img/drape-yellow-s.webp); }
+.unit:nth-of-type(4n+2) .lecon-card { --card-drape: url(img/drape-blue-s.webp); }
+.unit:nth-of-type(4n+3) .lecon-card { --card-drape: url(img/drape-red-s.webp); }
+.unit:nth-of-type(4n+4) .lecon-card { --card-drape: url(img/drape-cream-s.webp); }
+.lecon-card { --card-drape: url(img/drape-yellow-s.webp); }
+
+html .drape, html:not(.no-riso) .drape {
+  -webkit-mask: none; mask: none;
+  top: -4px; left: 6px; right: 6px; height: 104px;
+  background: var(--drape-img) center top / 100% 100% no-repeat;
+  filter: drop-shadow(0 4px 3px rgba(0, 0, 0, .28));
+}
+html .lecon-card::before, html:not(.no-riso) .lecon-card::before {
+  -webkit-mask: none; mask: none;
+  top: -4px; left: -4px; right: -4px; height: 58px; z-index: 1;
+  background: var(--card-drape) center top / 100% 100% no-repeat;
+  filter: drop-shadow(0 3px 2px rgba(0, 0, 0, .4));
+}
+html .cover::before, html:not(.no-riso) .cover::before {
+  -webkit-mask: none; mask: none;
+  top: -4px; left: -4px; right: -4px; height: 62px;
+  background: url(img/drape-red-s.webp) center top / 100% 100% no-repeat;
+  filter: drop-shadow(0 3px 2px rgba(0, 0, 0, .4));
+}
+html .cover.sons::before, html:not(.no-riso) .cover.sons::before { background-image: url(img/drape-blue-s.webp); }
+main { padding-top: 110px; }
+.lecon-card { padding-top: 54px; }
+.lecon-card::after { top: 40px; }
+/* a light screen-print dot layer over the curtain images */
+html:not(.no-riso) .drape::after { content: ""; position: absolute; inset: 0; background: var(--dots); mix-blend-mode: multiply; opacity: .6; }
+/* black & white look: grey curtains */
+html.mono .drape, html.mono .lecon-card::before, html.mono .cover::before { filter: grayscale(1) contrast(1.05) drop-shadow(0 3px 2px rgba(0, 0, 0, .35)); }
+@media (max-width: 720px) { html .drape { height: 70px; } main { padding-top: 80px; } }
+main { padding-top: 134px; }
+@media (max-width: 720px) { main { padding-top: 92px; } }
