@@ -1,0 +1,96 @@
+/* mono.css — the black, white and grey look, switched on with <html class="mono"> */
+/* ===================================================================
+   Black, white and grey only — higher contrast
+   =================================================================== */
+:root.mono:not([data-mono-off]) {
+  --night: #1b1b1b;
+  --paper: #f3f2ef;
+  --paper-2: #e2e1dd;
+  --card: #fafaf8;
+  --ink: #111111;
+  --ink-2: #4a4a4a;
+  --line: #a8a8a8;
+  --frame: #cfcfcc;
+  --frame-ink: #3a3a3a;
+  --blue: #2a2a2a;
+  --red: #111111;
+  --green: #3c3c3c;
+  --amber: #5a5a5a;
+  --wash-blue: rgba(0, 0, 0, .06);
+  --wash-red: rgba(0, 0, 0, .1);
+  --wash-green: rgba(0, 0, 0, .05);
+  --wash-amber: rgba(0, 0, 0, .08);
+  --drape: #9a9a9a;
+  --hatch: repeating-linear-gradient(0deg, rgba(0, 0, 0, .035) 0 1px, transparent 1px 3px);
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .28 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --foxing: linear-gradient(transparent, transparent);
+  --flute: repeating-linear-gradient(90deg, #7d7d7d 0 1px, #e6e6e3 1px 3px, #b2b2b0 3px 4px, #e6e6e3 4px 5px);
+  --zh: "Noto Serif SC", "Songti SC", serif;
+}
+html.mono body, html.mono body[data-drape] { --drape: #9a9a9a; }
+html.mono body[data-drape="blue"], html.mono body[data-drape="red"] { --drape: #7c7c7c; }
+html.mono body[data-drape="cream"], html.mono body[data-drape="green"] { --drape: #b8b8b6; }
+html.mono .unit:nth-of-type(4n+1) .lecon-card { --c-drape: #a6a6a4; }
+html.mono .unit:nth-of-type(4n+2) .lecon-card { --c-drape: #7f7f7f; }
+html.mono .unit:nth-of-type(4n+3) .lecon-card { --c-drape: #929292; }
+html.mono .unit:nth-of-type(4n+4) .lecon-card { --c-drape: #bdbdbb; }
+html.mono .cover::before, html.mono .cover.sons::before { --c-drape: #8a8a8a; }
+html.mono body { color: var(--ink); }
+html.mono main .wear { box-shadow: inset 0 0 60px rgba(0, 0, 0, .12), inset 0 0 10px rgba(0, 0, 0, .18); }
+html.mono .hint-text, html.mono .kbd, html.mono .lzh, html.mono .vrow .pos, html.mono .ppos, html.mono .lecon-head .zh { color: var(--ink-2); }
+html.mono .lecon-card, html.mono .cover, html.mono .cover.sons { background: var(--stars), var(--engrave), #222222; background-size: 180px 180px, auto, auto; }
+html.mono .lecon-card .n { color: #d6d6d6; }
+html.mono .lecon-card .zh { color: #b4b4b4; }
+html.mono .lecon-card .sky-art, html.mono .cover svg, html.mono .cover .c-num { color: #e2e2e2; }
+html.mono .lecon-card .prog { background: var(--hatch), #efefec; }
+html.mono .status b, html.mono .nav-mine { color: #ffffff !important; }
+/* right / wrong without colour */
+html.mono .w-ok { color: var(--ink); }
+html.mono .w-accent { color: var(--ink); text-decoration: underline wavy #777; text-underline-offset: 4px; }
+html.mono .w-miss { color: #fff; background: #111; border-radius: 2px; padding: 0 2px; }
+html.mono .w-extra { color: #6a6a6a; text-decoration: line-through; }
+html.mono .feedback.ok { background: var(--hatch), #ededea; border-left: 3px solid #111; }
+html.mono .feedback.bad { background: repeating-linear-gradient(45deg, rgba(0, 0, 0, .05) 0 2px, transparent 2px 6px), #e4e4e1; border-left: 3px dashed #111; }
+html.mono .feedback.accent { background: var(--hatch), #e8e8e5; border-left: 3px double #111; }
+html.mono .cloze-in.ok { background: #ededea; border-bottom-color: #111; }
+html.mono .cloze-in.bad { background: #111; color: #fff; border-bottom-color: #111; }
+html.mono .cloze-in.accent { background: #dcdcd8; border-bottom-style: dotted; }
+html.mono .cloze-fix { color: #111; text-decoration: underline; }
+html.mono .choice.ok { background: #111; color: #fff; border-color: #111; }
+html.mono .choice.bad { background: repeating-linear-gradient(45deg, rgba(0, 0, 0, .08) 0 2px, transparent 2px 6px); border-style: dashed; border-color: #111; }
+html.mono .rw.ok { color: var(--ink); }
+html.mono .rw.miss { color: #fff; background: #333; }
+html.mono .rw.hinted { color: #777; }
+html.mono .vrow.mastered .vfr::after, html.mono .pbar.done .pn, html.mono .rule-ok { color: var(--ink); }
+html.mono .pt i, html.mono .pbar.done .pt i, html.mono .ea-bar i, html.mono .drill .bar i, html.mono .mark i { background: #333; }
+html.mono .cf .ce, html.mono .end { color: #111; text-decoration: underline; text-underline-offset: 3px; font-weight: 600; }
+html.mono .cf .ci, html.mono mark.irr { color: #fff; background: #222; border-radius: 2px; padding: 0 2px; font-weight: 600; }
+html.mono mark.aux { background: #dcdcd8; }
+html.mono .tip-lab, html.mono .ctag.sp, html.mono .v-tag.irr, html.mono .v-tag.spell, html.mono .v-tag.book, html.mono .conj-group.is-special, html.mono .ea-n, html.mono .rule-flag { color: #111; border-color: #111; }
+html.mono .tip b, html.mono .vtip b, html.mono .lk-tip b { color: #111; text-decoration: underline; text-underline-offset: 3px; }
+html.mono .mouth-svg .lip, html.mono .mouth-svg .lipfront, html.mono .mouth-svg .velum.down, html.mono .mouth-svg .air, html.mono .mouth-svg .air.nose, html.mono .mouth-svg .voice { stroke: #111; }
+html.mono .mouth-svg .peak, html.mono .mouth-svg .contact, html.mono .mouth-svg .mouthfront { fill: #111; }
+html.mono .mouth-svg .tongue { fill: rgba(0, 0, 0, .1); stroke: #111; }
+html.mono .stamp.on .st-frame, html.mono .stamp.on.v .st-glyph path, html.mono .stamp.on.t .st-glyph path { stroke: #111; }
+html.mono .stamp.on .st-paper { fill: #f3f2ef; stroke: #777; }
+html.mono .badge.on { border-color: #111; color: #111; box-shadow: inset 0 0 0 3px var(--card), inset 0 0 0 4px #111; }
+html.mono .cal i.c1 { background: #d2d2cf; }
+html.mono .cal i.c2 { background: #a5a5a2; }
+html.mono .cal i.c3 { background: #6b6b69; }
+html.mono .cal i.c4 { background: #222; }
+html.mono .ring-fg, html.mono .ring-fg.full { stroke: #fff; }
+html.mono .mic { background: #111; box-shadow: 0 6px 16px -6px #111; }
+html.mono .err-ana s, html.mono .ea-ex s { color: #6a6a6a; }
+html.mono .rb-n, html.mono .review-stats b, html.mono .score, html.mono .spell-row .sp, html.mono .opt-col h3, html.mono .letter small, html.mono .steps-intro b { color: var(--ink); }
+html.mono .v-tag.irr { background: #111; color: #fff; }
+html.mono .tab b { color: #777; }
+html.mono .lk-conj-row { background: #ececea; }
+html.mono #toast b { color: #fff; }
+:root.mono:not([data-mono-off]) {
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='1' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --hatch: repeating-linear-gradient(0deg, rgba(0, 0, 0, .02) 0 1px, transparent 1px 4px);
+}
+html.mono main { background: var(--grain), var(--paper); background-size: 220px 220px, auto; }
+html.mono .drill, html.mono .textblock, html.mono .verb-detail, html.mono .tr-out, html.mono .nm-card, html.mono .sons-how { background: var(--card); }
+html.mono .pt, html.mono .lecon-card .pt, html.mono .ea-bar, html.mono .mark, html.mono .drill .bar { background: #dcdcd9; }
+html.mono .lecon-card .pbar { color: #333; }

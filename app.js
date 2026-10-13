@@ -16,6 +16,7 @@
   const settings = Object.assign({ rate: 0.85, volume: 0.7, lenient: false, voice: '' }, store.get('settings', {}));
   const saveSettings = () => store.set('settings', settings);
   if (!settings.lang) settings.lang = 'zh';
+  document.documentElement.classList.toggle('mono', settings.look === 'mono');
   // language modes: 'zhen' 中英法 · 'zh' 中法 · 'en' 英法
   const L = () => settings.lang;
   const BI = {};
@@ -1393,6 +1394,8 @@
       ${/iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1) ? '<p class="kbd" style="margin:-8px 0 12px">iPhone / iPad 的浏览器不支持这个设置，请用机身侧面的音量键调。</p>' : ''}
       <label><span class="lab">法语声音</span>
         <select id="s-voice">${vs.length ? vs.map(v => `<option ${TTS.voice && v.name === TTS.voice.name ? 'selected' : ''}>${esc(v.name)}</option>`).join('') : '<option>（系统没有法语声音）</option>'}</select></label>
+ <div class="lab" style="margin-bottom:4px">${bi('外观', 'Look')}</div>
+      <div class="modes" style="margin-bottom:14px"><button class="mode" data-look="color" aria-pressed="${settings.look !== 'mono'}">${bi('彩色', 'Colour')}</button><button class="mode" data-look="mono" aria-pressed="${settings.look === 'mono'}">${bi('黑白', 'Black & white')}</button></div>
       <label class="chk"><input type="checkbox" id="s-len" ${settings.lenient ? 'checked' : ''}> 重音写错也算对</label>
       <button class="btn ghost small" data-say="Bonjour ! Je m'appelle Alice. Ça va bien ?">试听</button>
       <p class="kbd" style="margin:12px 0 0">macOS 可在 系统设置 › 辅助功能 › 朗读内容 › 系统声音 下载更自然的法语声音（如 Amélie 高音质）。</p>`;
@@ -1400,6 +1403,11 @@
     $('#s-vol').oninput = e => { settings.volume = +e.target.value; $('#vol-v').textContent = Math.round(settings.volume * 100) + '%'; saveSettings(); };
     $('#s-vol').onchange = () => TTS.say('Bonjour !');
     $('#s-voice').onchange = e => { settings.voice = e.target.value; TTS.pick(); saveSettings(); };
+    $$('[data-look]', box).forEach(b => b.onclick = () => {
+      settings.look = b.dataset.look; saveSettings();
+      document.documentElement.classList.toggle('mono', settings.look === 'mono');
+      $$('[data-look]', box).forEach(x => x.setAttribute('aria-pressed', x === b));
+    });
     $('#s-len').onchange = e => { settings.lenient = e.target.checked; saveSettings(); };
   }
   $('#settings-btn').onclick = () => {
