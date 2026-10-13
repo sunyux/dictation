@@ -1,0 +1,181 @@
+/* celeste.css — "Urania's Mirror" look: hand-tinted 19th-century astronomy cards.
+   Night sky outside, an engraved parchment plate for reading, star cards with drapery and columns. */
+
+:root, :root:not([data-theme="light"]), :root[data-theme="dark"] {
+  --night: #12110f;
+  --paper: #e6dece;
+  --paper-2: #d6ccb6;
+  --card: #eee7d8;
+  --ink: #1f1b16;
+  --ink-2: #5b5246;
+  --line: #b6aa90;
+  --frame: #cbc0a8;
+  --frame-ink: #6b604f;
+  --blue: #2e5d84;
+  --red: #a3313a;
+  --green: #4a693a;
+  --amber: #b4862a;
+  --wash-blue: rgba(46, 93, 132, .13);
+  --wash-red: rgba(163, 49, 58, .12);
+  --wash-green: rgba(74, 105, 58, .15);
+  --wash-amber: rgba(180, 134, 42, .18);
+  --drape: #c9a23a;
+  --display: "IM Fell English SC", "Cormorant Garamond", "Noto Serif SC", Georgia, serif;
+  --serif: "IM Fell English", "EB Garamond", "Noto Serif SC", Georgia, serif;
+  --stars:
+    radial-gradient(1.2px 1.2px at 12% 18%, #fff 60%, transparent 62%),
+    radial-gradient(1px 1px at 33% 72%, #f4ecd8 60%, transparent 62%),
+    radial-gradient(1.6px 1.6px at 58% 30%, #fff 60%, transparent 62%),
+    radial-gradient(1px 1px at 77% 64%, #efe6d0 60%, transparent 62%),
+    radial-gradient(1.3px 1.3px at 88% 12%, #fff 60%, transparent 62%),
+    radial-gradient(.9px .9px at 45% 92%, #fff 60%, transparent 62%),
+    radial-gradient(1.1px 1.1px at 22% 48%, #f1e8d4 60%, transparent 62%),
+    radial-gradient(.8px .8px at 66% 84%, #fff 60%, transparent 62%);
+  --hatch: repeating-linear-gradient(0deg, rgba(60, 50, 35, .07) 0 1px, transparent 1px 3px);
+  --flute: repeating-linear-gradient(90deg, #b9ad94 0 2px, #ddd3be 2px 4px, #a89c83 4px 5px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --paper: #e6dece; --paper-2: #d6ccb6; --card: #eee7d8; --ink: #1f1b16; --ink-2: #5b5246; --line: #b6aa90;
+    --blue: #2e5d84; --red: #a3313a; --green: #4a693a; --amber: #b4862a; }
+}
+body[data-drape="blue"] { --drape: #3f7fa8; }
+body[data-drape="red"] { --drape: #b8414a; }
+body[data-drape="cream"] { --drape: #d9d0b8; }
+body[data-drape="green"] { --drape: #5f8a5a; }
+
+body {
+  background-color: var(--night);
+  background-image: var(--stars), var(--stars);
+  background-size: 260px 260px, 410px 410px;
+  background-position: 0 0, 90px 140px;
+  background-attachment: fixed;
+  color: var(--ink);
+}
+
+/* ---- header: a strip of night with engraved lettering ---- */
+.top { background: rgba(14, 13, 12, .92); border-bottom: 1px solid #3b362e; color: #e9e0cc; }
+.top .brand { color: #efe6d2; }
+.brand-zh { font-family: var(--zh); letter-spacing: .14em; }
+.brand-fr { font-family: "IM Fell English", serif; color: #b9ad94; }
+.crumbs, .crumbs a { color: #b9ad94; }
+.crumbs a:hover { color: #efe6d2; }
+.top .btn.ghost, .top .settings-btn, .langsw { color: #e9e0cc; border-color: #5a5246; background: transparent; }
+.top .btn.ghost:hover, .top .settings-btn:hover { border-color: #cbc0a8; }
+.langsw button { color: #b9ad94; }
+.langsw button[aria-pressed="true"] { background: #e9e0cc; color: #1a1815; }
+.status { color: #b9ad94; }
+.status b { color: #e2b664; }
+.ring-bg { stroke: #3b362e; }
+.nav-mine { color: #e2b664 !important; }
+
+/* ---- the reading plate: engraved frame, fluted columns, a curtain across the top ---- */
+main {
+  position: relative;
+  max-width: 1000px;
+  margin: 34px auto 60px;
+  padding: 92px 64px 70px;
+  background: var(--hatch), var(--paper);
+  box-shadow: 0 0 0 1px var(--frame-ink), 0 0 0 11px var(--frame), 0 0 0 12px var(--frame-ink), 0 30px 70px -20px rgba(0, 0, 0, .8);
+}
+main::before, main::after {
+  content: ""; position: absolute; top: 46px; bottom: 18px; width: 16px;
+  background: var(--flute);
+  border-left: 1px solid var(--frame-ink); border-right: 1px solid var(--frame-ink);
+  box-shadow: 0 -6px 0 -1px var(--frame), 0 6px 0 -1px var(--frame);
+}
+main::before { left: 18px; }
+main::after { right: 18px; }
+.drape {
+  position: absolute; left: 10px; right: 10px; top: 0; height: 74px; pointer-events: none; z-index: 1;
+  background: repeating-linear-gradient(90deg, rgba(0, 0, 0, .16) 0 3px, rgba(255, 255, 255, .08) 3px 6px, transparent 6px 17px), var(--drape);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 74' preserveAspectRatio='none'%3E%3Cpath d='M0 0H400V70Q392 74 384 58Q364 30 330 36Q300 60 262 40Q236 26 200 46Q164 26 138 40Q100 60 70 36Q36 30 16 58Q8 74 0 70Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 74' preserveAspectRatio='none'%3E%3Cpath d='M0 0H400V70Q392 74 384 58Q364 30 330 36Q300 60 262 40Q236 26 200 46Q164 26 138 40Q100 60 70 36Q36 30 16 58Q8 74 0 70Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+  filter: drop-shadow(0 3px 2px rgba(0, 0, 0, .25));
+}
+h1, h2, h3 { font-family: var(--display); font-weight: 400; letter-spacing: .02em; }
+.kicker { font-family: "IM Fell English", serif; font-style: italic; color: var(--ink-2); }
+.unit-title { border-bottom: none; position: relative; padding-bottom: 12px; }
+.unit-title::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 5px; border-top: 1px solid var(--frame-ink); border-bottom: 1px solid var(--frame-ink); }
+.unit-title h2 { text-transform: none; }
+.btn { border-radius: 2px; letter-spacing: .03em; }
+.btn:not(.ghost) { background: #221d17; border-color: #221d17; color: #efe6d2; }
+.btn.ghost { border-color: var(--frame-ink); }
+.mode { border-radius: 2px; }
+.mode[aria-pressed="true"] { background: #221d17; border-color: #221d17; color: #efe6d2; }
+.tabs { border-bottom: 1px solid var(--frame-ink); }
+.tab[aria-selected="true"] { border-bottom-color: var(--red); }
+.drill, .textblock, .verb-detail, .tr-out, .nm-card, .sons-how, .ea-row, .mouth, .ctable, .spell-row, .opt-col, .pair, .mine-add, .review-stats div, .settings, .lk-box, .celeb-card {
+  border-radius: 3px; border-color: var(--frame-ink);
+  box-shadow: inset 0 0 0 3px var(--card), inset 0 0 0 4px var(--line);
+}
+.drill { background: var(--hatch), var(--card); }
+.feedback { border-radius: 2px; }
+
+/* ---- star cards: the leçon cards and book covers ---- */
+.lecon-card {
+  --c-drape: var(--drape);
+  position: relative; overflow: hidden; border-radius: 1px;
+  background: var(--stars), #191816;
+  background-size: 180px 180px, auto;
+  border: 7px solid var(--frame);
+  box-shadow: 0 0 0 1px var(--frame-ink), inset 0 0 0 1px var(--frame-ink), 0 14px 24px -14px rgba(0, 0, 0, .7);
+  padding: 46px 30px 0; min-height: 210px; display: flex; flex-direction: column; color: #efe6d2;
+}
+.lecon-card::before {
+  content: ""; position: absolute; left: -2px; right: -2px; top: -2px; height: 46px;
+  background: repeating-linear-gradient(90deg, rgba(0, 0, 0, .2) 0 2px, rgba(255, 255, 255, .1) 2px 4px, transparent 4px 12px), var(--c-drape);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 46' preserveAspectRatio='none'%3E%3Cpath d='M0 0H200V44Q194 46 190 36Q182 18 166 22Q150 36 130 26Q116 18 100 30Q84 18 70 26Q50 36 34 22Q18 18 10 36Q6 46 0 44Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 46' preserveAspectRatio='none'%3E%3Cpath d='M0 0H200V44Q194 46 190 36Q182 18 166 22Q150 36 130 26Q116 18 100 30Q84 18 70 26Q50 36 34 22Q18 18 10 36Q6 46 0 44Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+}
+.lecon-card::after {
+  content: ""; position: absolute; top: 30px; bottom: 34px; left: 6px; right: 6px; pointer-events: none;
+  background: linear-gradient(90deg, transparent 0 0), var(--flute) left / 9px 100% no-repeat, var(--flute) right / 9px 100% no-repeat;
+  opacity: .85;
+}
+.lecon-card:hover { transform: translateY(-3px); border-color: var(--frame); box-shadow: 0 0 0 1px var(--frame-ink), 0 0 0 4px rgba(226, 182, 100, .25), 0 18px 28px -14px rgba(0, 0, 0, .8); }
+.lecon-card .n { color: #d8c79c; font-family: "IM Fell English", serif; position: relative; z-index: 1; }
+.lecon-card h3 { color: #f3ead6; font-size: 25px; position: relative; z-index: 1; }
+.lecon-card .zh { color: #b9ad94; position: relative; z-index: 1; }
+.lecon-card .prog { margin: auto -30px 0; padding: 8px 18px 7px; background: var(--hatch), #e9e1cf; border-top: 3px solid var(--c-drape); position: relative; z-index: 1; }
+.lecon-card .pbar { color: #4a4238; }
+.lecon-card .pt { background: #cfc5ae; }
+.unit:nth-of-type(4n+1) .lecon-card { --c-drape: #c9a23a; }
+.unit:nth-of-type(4n+2) .lecon-card { --c-drape: #3f7fa8; }
+.unit:nth-of-type(4n+3) .lecon-card { --c-drape: #b8414a; }
+.unit:nth-of-type(4n+4) .lecon-card { --c-drape: #d9d0b8; }
+
+.cover, .cover.sons {
+  background: var(--stars), #191816; background-size: 160px 160px, auto;
+  border: 8px solid var(--frame); border-radius: 1px;
+  box-shadow: 0 0 0 1px var(--frame-ink), inset 0 0 0 1px var(--frame-ink), 0 22px 36px -16px rgba(0, 0, 0, .8);
+  color: #efe6d2; padding-top: 56px; position: relative;
+}
+.cover::before {
+  content: ""; position: absolute; left: -2px; right: -2px; top: -2px; height: 52px; z-index: 1;
+  background: repeating-linear-gradient(90deg, rgba(0, 0, 0, .2) 0 2px, rgba(255, 255, 255, .1) 2px 4px, transparent 4px 12px), #b8414a;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 46' preserveAspectRatio='none'%3E%3Cpath d='M0 0H200V44Q194 46 190 36Q182 18 166 22Q150 36 130 26Q116 18 100 30Q84 18 70 26Q50 36 34 22Q18 18 10 36Q6 46 0 44Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 46' preserveAspectRatio='none'%3E%3Cpath d='M0 0H200V44Q194 46 190 36Q182 18 166 22Q150 36 130 26Q116 18 100 30Q84 18 70 26Q50 36 34 22Q18 18 10 36Q6 46 0 44Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+}
+.cover.sons::before { background: repeating-linear-gradient(90deg, rgba(0, 0, 0, .2) 0 2px, rgba(255, 255, 255, .1) 2px 4px, transparent 4px 12px), #3f7fa8; }
+.cover::after { background: var(--flute) left / 8px 100% no-repeat, var(--flute) right / 8px 100% no-repeat; top: 40px; bottom: 0; left: 4px; right: 4px; opacity: .8; }
+.cover .c-zh, .cover .c-fr { position: relative; z-index: 2; text-shadow: 0 1px 0 #000; }
+.cover .c-num { z-index: 2; top: auto; bottom: 14px; right: 22px; color: #d8c79c; text-shadow: 0 1px 0 #000; }
+.cover .c-fr { font-family: "IM Fell English", serif; }
+.cover svg { color: #d8c79c; opacity: .7; }
+.cover:hover { transform: translateY(-4px); }
+
+/* small stars and labels feel engraved */
+.v-tag, .ctag, .conj-group, .err-kind, .tip-lab { border-radius: 1px; }
+.score { font-family: var(--display); }
+.stamp .st-paper { fill: #e9e1cf; }
+.review-banner { border-radius: 2px; box-shadow: inset 0 0 0 3px var(--card), inset 0 0 0 4px var(--line); }
+
+@media (max-width: 720px) {
+  main { margin: 18px 10px 40px; padding: 72px 30px 46px; }
+  main::before { left: 8px; width: 10px; }
+  main::after { right: 8px; width: 10px; }
+  .drape { height: 56px; }
+}
+
+.top { flex-wrap: wrap; row-gap: 8px; }
+@media (max-width: 900px) { .top .crumbs { display: none; } .top .spacer-auto { flex: 1; } .top .brand { margin-right: auto; } }

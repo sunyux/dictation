@@ -1448,6 +1448,8 @@
     TTS.stop(); seqToken++;
     const parts = location.hash.replace(/^#\/?/, '').split('/').filter(Boolean);
     const crumbs = $('#crumbs');
+    // curtain colour of the reading plate, by section
+    document.body.dataset.drape = { sons: 'blue', review: 'red', tools: 'cream', mine: 'green', verbes: 'blue', me: 'red' }[parts[0]] || 'yellow';
     window.scrollTo(0, 0);
     if (!parts.length) { crumbs.innerHTML = ''; return viewHome(); }
     if (parts[0] === 'mine') { crumbs.innerHTML = `<span>${bi('生词本', 'My words')}</span>`; return viewMine(parts[1]); }
