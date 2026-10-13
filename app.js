@@ -1947,7 +1947,8 @@
             </a>`;
           }).join('')}</div>
         </section>`).join('')}
-      <p class="footer-note">进度保存在这台设备的浏览器里。</p>`;
+      <p class="footer-note">进度保存在这台设备的浏览器里。</p>
+      <p class="credit">${bi('图片来源', 'Image credits')}：<a href="https://commons.wikimedia.org/wiki/File:ARCHITECTURE_ORDERS_Greeks_Etruscan_Roman_(Doric_Ionic_Corinthian_Tuscan_Composite)_by_Paolo_Villa_ENG_edition.pdf" target="_blank" rel="noopener">柱式 Paolo Villa, CC BY-SA 4.0</a> · <a href="https://commons.wikimedia.org/wiki/Category:Urania%27s_Mirror" target="_blank" rel="noopener">Urania's Mirror, Sidney Hall 1825（公有领域）</a></p>`;
   }
 
   const TABS = [['vocab', '词汇', 'Vocabulary'], ['phrases', '句子', 'Sentences'], ['full', '全文默写', 'Full dictation'], ['recite', '背诵', 'Recite']];

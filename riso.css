@@ -114,3 +114,18 @@ main .corner.tl, main .corner.tr { display: none; }
 main .corner.bl { bottom: 2px; left: 2px; transform: scaleY(-1); }
 main .corner.br { bottom: 2px; right: 2px; transform: scale(-1, -1); }
 @media (max-width: 720px) { main .corner { width: 56px; height: 56px; } }
+
+/* real engraved columns on the leçon cards and covers (capital + repeating shaft + base, both sides) */
+.lecon-card::after, .cover::after {
+  background-image: url(img/col-capital.webp), url(img/col-capital.webp), url(img/col-base.webp), url(img/col-base.webp), url(img/col-shaft.webp), url(img/col-shaft.webp);
+  background-position: left top, right top, left bottom, right bottom, left top, right top;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, repeat-y, repeat-y;
+  background-size: 12px auto;
+  opacity: .9;
+  filter: invert(.88) sepia(.25);
+}
+/* no more grain / noise dots */
+html:not(.no-riso) body::after { display: none; }
+html:not(.no-riso) .drape::after { display: none; }
+.credit { font-size: 12px; color: var(--ink-2); text-align: center; margin: 30px 0 0; }
+.credit a { color: inherit; }
