@@ -179,3 +179,120 @@ h1, h2, h3 { font-family: var(--display); font-weight: 400; letter-spacing: .02e
 
 .top { flex-wrap: wrap; row-gap: 8px; }
 @media (max-width: 900px) { .top .crumbs { display: none; } .top .spacer-auto { flex: 1; } .top .brand { margin-right: auto; } }
+
+/* ===================================================================
+   Line-engraving pass: greyer, faded, drawn with ink lines instead of flat colour
+   =================================================================== */
+:root, :root:not([data-theme="light"]), :root[data-theme="dark"] {
+  --night: #2a2927;
+  --paper: #dedad1;
+  --paper-2: #cdc8bd;
+  --card: #e7e3da;
+  --ink: #2b2925;
+  --ink-2: #66625a;
+  --line: #a9a397;
+  --frame: #c4bfb3;
+  --frame-ink: #57534b;
+  --blue: #4f6577;
+  --red: #8c4c4a;
+  --green: #5b6b4e;
+  --amber: #9a8150;
+  --wash-blue: rgba(79, 101, 119, .12);
+  --wash-red: rgba(140, 76, 74, .11);
+  --wash-green: rgba(91, 107, 78, .14);
+  --wash-amber: rgba(154, 129, 80, .16);
+  --drape: #b9a77c;
+  --engrave: repeating-linear-gradient(0deg, rgba(255, 255, 255, .055) 0 1px, transparent 1px 3px);
+  --hatch: repeating-linear-gradient(0deg, rgba(43, 41, 37, .06) 0 1px, transparent 1px 3px);
+  --xhatch: repeating-linear-gradient(45deg, rgba(43, 41, 37, .16) 0 1px, transparent 1px 4px), repeating-linear-gradient(-45deg, rgba(43, 41, 37, .12) 0 1px, transparent 1px 5px);
+  --flute: repeating-linear-gradient(90deg, #8f8a80 0 1px, #d6d1c6 1px 3px, #b3ada1 3px 4px, #d6d1c6 4px 5px);
+  --stars:
+    radial-gradient(.9px .9px at 12% 18%, #e8e4dc 60%, transparent 64%),
+    radial-gradient(.7px .7px at 33% 72%, #d9d4ca 60%, transparent 64%),
+    radial-gradient(1.2px 1.2px at 58% 30%, #efebe3 60%, transparent 64%),
+    radial-gradient(.7px .7px at 77% 64%, #d9d4ca 60%, transparent 64%),
+    radial-gradient(1px 1px at 88% 12%, #e8e4dc 60%, transparent 64%),
+    radial-gradient(.6px .6px at 45% 92%, #e8e4dc 60%, transparent 64%),
+    radial-gradient(.8px .8px at 22% 48%, #d9d4ca 60%, transparent 64%),
+    radial-gradient(.6px .6px at 66% 84%, #e8e4dc 60%, transparent 64%);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --paper: #dedad1; --paper-2: #cdc8bd; --card: #e7e3da; --ink: #2b2925; --ink-2: #66625a; --line: #a9a397;
+    --blue: #4f6577; --red: #8c4c4a; --green: #5b6b4e; --amber: #9a8150; }
+}
+body[data-drape="yellow"] { --drape: #b9a77c; }
+body[data-drape="blue"] { --drape: #8e9ba6; }
+body[data-drape="red"] { --drape: #a88480; }
+body[data-drape="cream"] { --drape: #cbc5b8; }
+body[data-drape="green"] { --drape: #98a08a; }
+
+body { background-image: var(--stars), var(--stars), var(--engrave); background-size: 260px 260px, 410px 410px, auto; filter: none; }
+.top { background: rgba(38, 37, 35, .95); border-bottom: 1px solid #4b4842; }
+main { background: var(--hatch), var(--paper); box-shadow: 0 0 0 1px var(--frame-ink), 0 0 0 4px var(--paper), 0 0 0 5px var(--frame-ink), 0 0 0 13px var(--frame), 0 0 0 14px var(--frame-ink), 0 30px 70px -20px rgba(0, 0, 0, .7); }
+
+/* curtains: an ink drawing over a faint wash, with cross-hatching in the folds */
+.drape, .lecon-card::before, .cover::before {
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 74' preserveAspectRatio='none' fill='none' stroke='%232b2925' stroke-width='1.1' stroke-linecap='round'%3E%3Cpath d='M0 70Q8 74 16 58Q36 30 70 36Q100 60 138 40Q164 26 200 46Q236 26 262 40Q300 60 330 36Q364 30 384 58Q392 74 400 70' stroke-width='1.6'/%3E%3Cpath d='M0 6H400' stroke-width='1.4'/%3E%3Cpath d='M12 6Q14 40 10 62M24 6Q30 30 28 44M44 6Q48 24 46 33M70 6Q72 22 70 36M96 6Q100 28 102 48M118 6Q122 24 122 44M150 6Q154 22 152 30M176 6Q180 24 178 36M200 6Q200 26 200 46M224 6Q220 24 222 36M250 6Q246 22 248 30M282 6Q278 24 278 44M304 6Q300 28 298 48M330 6Q328 22 330 36M356 6Q352 24 354 33M376 6Q370 30 372 44M388 6Q386 40 390 62'/%3E%3Cpath d='M30 20Q70 44 110 26M290 26Q330 44 370 20M150 28Q200 44 250 28' stroke-width='.7' stroke-dasharray='2 2'/%3E%3C/svg%3E"),
+    repeating-linear-gradient(90deg, rgba(43, 41, 37, .14) 0 1px, transparent 1px 7px),
+    linear-gradient(var(--drape), var(--drape));
+  background-size: 100% 100%, auto, auto;
+  filter: none;
+}
+.lecon-card::before, .cover::before { background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 46' preserveAspectRatio='none' fill='none' stroke='%232b2925' stroke-width='1' stroke-linecap='round'%3E%3Cpath d='M0 44Q6 46 10 36Q18 18 34 22Q50 36 70 26Q84 18 100 30Q116 18 130 26Q150 36 166 22Q182 18 190 36Q194 46 200 44' stroke-width='1.4'/%3E%3Cpath d='M8 3Q10 26 7 40M20 3Q24 16 22 24M40 3Q42 16 40 26M60 3Q64 18 64 30M84 3Q86 14 86 22M100 3V30M116 3Q114 14 114 22M136 3Q136 18 136 30M160 3Q158 16 160 26M180 3Q176 16 178 24M192 3Q190 26 193 40'/%3E%3C/svg%3E"),
+    repeating-linear-gradient(90deg, rgba(43, 41, 37, .14) 0 1px, transparent 1px 6px),
+    linear-gradient(var(--c-drape, var(--drape)), var(--c-drape, var(--drape))); }
+.cover::before { --c-drape: #a88480; }
+.cover.sons::before { --c-drape: #8e9ba6; }
+.unit:nth-of-type(4n+1) .lecon-card { --c-drape: #b9a77c; }
+.unit:nth-of-type(4n+2) .lecon-card { --c-drape: #8e9ba6; }
+.unit:nth-of-type(4n+3) .lecon-card { --c-drape: #a88480; }
+.unit:nth-of-type(4n+4) .lecon-card { --c-drape: #cbc5b8; }
+
+/* the night inside each card: charcoal with ruled engraving lines */
+.lecon-card, .cover, .cover.sons {
+  background: var(--stars), var(--engrave), #2f2e2b;
+  background-size: 180px 180px, auto, auto;
+  border-color: var(--frame);
+  box-shadow: 0 0 0 1px var(--frame-ink), inset 0 0 0 1px var(--frame-ink), inset 0 0 0 3px #3a3834, 0 12px 22px -14px rgba(0, 0, 0, .6);
+}
+.lecon-card h3 { color: #ece8df; font-weight: 400; }
+.lecon-card .n { color: #c8c1b2; }
+.lecon-card .zh { color: #a9a397; }
+.lecon-card .prog { background: var(--hatch), #e3dfd6; border-top: 1px solid var(--frame-ink); box-shadow: inset 0 3px 0 var(--c-drape); }
+.lecon-card .pt i, .pt i { background: var(--ink-2); }
+.pbar.done .pt i { background: var(--green); }
+.lecon-card::after, .cover::after { opacity: 1; }
+.cover .c-num, .cover svg { color: #c8c1b2; }
+
+/* buttons, tabs and frames drawn in thin ink */
+.btn:not(.ghost), .mode[aria-pressed="true"] { background: #2f2d29; border-color: #2f2d29; color: #ece8df; }
+.btn.ghost, .mode { background: transparent; border: 1px solid var(--frame-ink); color: var(--ink); }
+.btn.ghost:hover, .mode:hover { background: var(--hatch), rgba(43, 41, 37, .05); }
+.tab[aria-selected="true"] { border-bottom-color: var(--ink); }
+.tab b { color: var(--ink-2); }
+.unit-title h2 { color: var(--ink); }
+.kicker { color: var(--ink-2); }
+.score { color: var(--ink); }
+.drill .bar i { background: var(--ink-2); }
+.feedback.ok { background: var(--hatch), rgba(91, 107, 78, .14); }
+.feedback.bad { background: var(--hatch), rgba(140, 76, 74, .12); }
+.feedback.accent { background: var(--hatch), rgba(154, 129, 80, .16); }
+.play { background: transparent; border-color: var(--frame-ink); color: var(--ink); }
+.play.on { background: var(--ink); color: var(--card); }
+.wchip, .choice, .letter { background: transparent; border-color: var(--line); }
+.tip-lab, .ctag.sp, .v-tag.irr, .conj-group.is-special { color: var(--red); border-color: var(--red); }
+.cloze-in { background: rgba(43, 41, 37, .05); }
+
+/* mouth diagrams: grey hatching instead of pink */
+.mouth-svg .tongue { fill: rgba(43, 41, 37, .14); stroke: var(--ink); stroke-width: 1.4; }
+.mouth-svg .lip, .mouth-svg .lipfront { stroke: var(--red); stroke-width: 1.8; }
+.mouth-svg .palate, .mouth-svg .velum { stroke: var(--ink); }
+.mouth-svg .peak, .mouth-svg .contact { fill: var(--red); }
+.mouth figcaption span { background: transparent; border: 1px solid var(--line); }
+
+/* stamps and seals in faded tints */
+.stamp.on.v .st-glyph path { stroke: #4f6577; }
+.stamp.on.t .st-glyph path { stroke: #8c4c4a; }
+.badge.on { border-color: var(--red); color: var(--red); }
