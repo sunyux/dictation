@@ -331,6 +331,72 @@
   async function idbGet(k) { try { const db = await idb(); return await new Promise(r => { const q = db.transaction('kv').objectStore('kv').get(k); q.onsuccess = () => r(q.result); q.onerror = () => r(null); }); } catch { return null; } }
   if (navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(() => { });
 
+  /* ---------- typewriter mode, printed slips and printable worksheets ---------- */
+  const twOn = () => !!settings.typewriter;
+  document.documentElement.classList.toggle('tw', !!settings.typewriter);
+  window.NH_VOLUME = settings.volume;
+  document.addEventListener('keydown', e => {
+    if (!twOn() || !window.TYPEWRITER || !e.target.matches || !e.target.matches('input:not([type=checkbox]):not([type=range]):not([type=file]), textarea')) return;
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.key === 'Enter') TYPEWRITER.ret();
+    else if (e.key === ' ') TYPEWRITER.space();
+    else if (e.key === 'Backspace') TYPEWRITER.back();
+    else if (e.key.length === 1) TYPEWRITER.key();
+  }, true);
+
+  // a paper slip that comes out of a printer, typed line by line
+  function printSlip(title, lines) {
+    const old = $('#slip'); if (old) old.remove();
+    const ov = document.createElement('div');
+    ov.id = 'slip'; ov.className = 'slip-ov';
+    const now = new Date();
+    const stamp = `${dayStr(now)}  ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+    const all = ['*** CAHIER DE DICTÉE ***', stamp, '', title, '-'.repeat(26), ...lines, '-'.repeat(26), bi('继续加油！', 'Continue comme ça !'), '', '  · · ·'];
+    ov.innerHTML = `<div class="printer"><div class="printer-body"><span class="printer-led"></span><span class="printer-name">IMPRIMERIE</span></div><div class="printer-slot"></div>
+        <div class="paper-wrap"><div class="paper"><pre class="paper-text"></pre></div></div></div>
+      <div class="slip-actions"><button class="btn small" id="slip-print">${bi('用打印机打出来', 'Print on paper')}</button><button class="btn ghost small" id="slip-close">${bi('收起', 'Close')}</button></div>`;
+    document.body.appendChild(ov);
+    const pre = $('.paper-text', ov);
+    let li = 0, ci = 0, stopped = false;
+    const step = () => {
+      if (stopped || li >= all.length) return;
+      const line = all[li];
+      if (ci === 0 && window.TYPEWRITER) TYPEWRITER.printLine();
+      ci = Math.min(line.length, ci + 3);
+      pre.textContent = all.slice(0, li).join('\n') + (li ? '\n' : '') + line.slice(0, ci);
+      if (ci >= line.length) { li++; ci = 0; setTimeout(step, 90); } else setTimeout(step, 18);
+    };
+    setTimeout(step, 450);
+    const close = () => { stopped = true; ov.remove(); };
+    $('#slip-close', ov).onclick = close;
+    ov.addEventListener('click', e => { if (e.target === ov) close(); });
+    $('#slip-print', ov).onclick = () => { stopped = true; pre.textContent = all.join('\n'); document.body.classList.add('printing-slip'); window.print(); document.body.classList.remove('printing-slip'); };
+  }
+  const slipBtn = id => `<button class="btn ghost" id="${id}"><svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M6 9V3h12v6M6 18H4v-7h16v7h-2M7 14h10v7H7z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg> ${bi('打印小票', 'Print a slip')}</button>`;
+  const vw = t => [...String(t)].reduce((n, c) => n + (/[\u2E80-\uFFEF]/.test(c) ? 2 : 1), 0);
+  const pad = (a, b, w = 26) => { a = String(a); b = String(b); return a + ' '.repeat(Math.max(1, w - vw(a) - vw(b))) + b; };
+
+  // a printable worksheet for one leçon: words, gap-fill, full text, then the answers
+  function printWorksheet(book, lecon) {
+    const area = document.createElement('div');
+    area.id = 'print-area';
+    const blanks = n => '_'.repeat(Math.max(6, Math.min(18, n + 2)));
+    const cloze = (lecon.cloze || []).map(row => row.map(s => typeof s === 'string' ? esc(s) : `<span class="pw-blank">${blanks(s.b.length)}</span>`).join('')).join('<br>');
+    const lines = lecon.text.filter(r => !r.h);
+    area.innerHTML = `
+      <section class="pw-page"><h1>Leçon ${lecon.n} · ${esc(lecon.title)}</h1><p class="pw-sub">${esc(book.title)} · ${esc(lecon.zh)} · ${bi('姓名', 'Name')} ________ ${bi('日期', 'Date')} ________</p>
+        <h2>${bi('一、词汇默写', 'I. Vocabulary')}</h2>
+        <table class="pw-table">${lecon.vocab.map((v, k) => `<tr><td>${k + 1}</td><td>${esc(v.zh)}</td><td>${esc(v.pos)}</td><td class="pw-line"></td></tr>`).join('')}</table></section>
+      ${cloze ? `<section class="pw-page"><h2>${bi('二、课文填空', 'II. Fill the gaps')}</h2><div class="pw-cloze">${cloze}</div></section>` : ''}
+      <section class="pw-page"><h2>${bi('三、全文默写', 'III. Full dictation')}</h2>${lines.map(r => `<p class="pw-zh">${esc(r.zh)}</p><div class="pw-write"></div>`).join('')}</section>
+      <section class="pw-page"><h2>${bi('答案', 'Answers')}</h2>
+        <ol class="pw-ans">${lecon.vocab.map(v => `<li><b>${esc(v.fr)}</b> — ${esc(v.zh)}</li>`).join('')}</ol>
+        ${lines.map(r => `<p class="pw-fr">${esc(r.fr)}</p>`).join('')}</section>`;
+    document.body.appendChild(area);
+    document.body.classList.add('printing-sheet');
+    setTimeout(() => { window.print(); document.body.classList.remove('printing-sheet'); area.remove(); }, 50);
+  }
+
   /* ---------- cloud sync: Google sign-in + one Firestore document per user ---------- */
   const NOSYNC = new Set(['nh:settings', 'nh:lastAuto', 'nh:lastBackup', 'nh:lastSync']);
   const CLOUD = {
@@ -1396,11 +1462,12 @@
         <select id="s-voice">${vs.length ? vs.map(v => `<option ${TTS.voice && v.name === TTS.voice.name ? 'selected' : ''}>${esc(v.name)}</option>`).join('') : '<option>（系统没有法语声音）</option>'}</select></label>
  <div class="lab" style="margin-bottom:4px">${bi('外观', 'Look')}</div>
       <div class="modes" style="margin-bottom:14px"><button class="mode" data-look="color" aria-pressed="${settings.look !== 'mono'}">${bi('彩色', 'Colour')}</button><button class="mode" data-look="mono" aria-pressed="${settings.look === 'mono'}">${bi('黑白', 'Black & white')}</button></div>
+      <label class="chk"><input type="checkbox" id="s-tw" ${settings.typewriter ? 'checked' : ''}> ${bi('打字机模式（打字声 + 打字机字体）', 'Typewriter mode (key sounds + typewriter font)')}</label>
       <label class="chk"><input type="checkbox" id="s-len" ${settings.lenient ? 'checked' : ''}> 重音写错也算对</label>
       <button class="btn ghost small" data-say="Bonjour ! Je m'appelle Alice. Ça va bien ?">试听</button>
       <p class="kbd" style="margin:12px 0 0">macOS 可在 系统设置 › 辅助功能 › 朗读内容 › 系统声音 下载更自然的法语声音（如 Amélie 高音质）。</p>`;
     $('#s-rate').oninput = e => { settings.rate = +e.target.value; $('#rate-v').textContent = settings.rate.toFixed(2); saveSettings(); };
-    $('#s-vol').oninput = e => { settings.volume = +e.target.value; $('#vol-v').textContent = Math.round(settings.volume * 100) + '%'; saveSettings(); };
+    $('#s-vol').oninput = e => { settings.volume = +e.target.value; window.NH_VOLUME = settings.volume; $('#vol-v').textContent = Math.round(settings.volume * 100) + '%'; saveSettings(); };
     $('#s-vol').onchange = () => TTS.say('Bonjour !');
     $('#s-voice').onchange = e => { settings.voice = e.target.value; TTS.pick(); saveSettings(); };
     $$('[data-look]', box).forEach(b => b.onclick = () => {
@@ -1408,6 +1475,7 @@
       document.documentElement.classList.toggle('mono', settings.look === 'mono');
       $$('[data-look]', box).forEach(x => x.setAttribute('aria-pressed', x === b));
     });
+    $('#s-tw').onchange = e => { settings.typewriter = e.target.checked; saveSettings(); document.documentElement.classList.toggle('tw', settings.typewriter); if (settings.typewriter && window.TYPEWRITER) TYPEWRITER.ret(); };
     $('#s-len').onchange = e => { settings.lenient = e.target.checked; saveSettings(); };
   }
   $('#settings-btn').onclick = () => {
@@ -1567,7 +1635,10 @@
           ${wrong.length ? `<ul>${wrong.map(e => `<li><span lang="fr">${esc(e.fr)}</span><span class="w-zh">${e.kind === 'cloze' ? esc(e.zh) : G(e)}</span></li>`).join('')}</ul>` : ''}
           <div class="drill-actions" style="justify-content:center">
             ${wrong.length ? `<button class="btn" id="again-wrong">${bi(`练习答错的（${wrong.length}）`, `Practise the misses (${wrong.length})`)}</button>` : ''}
-            <a class="btn ${wrong.length ? 'ghost' : ''}" href="#/review">${bi('回到错题本', 'Back to mistake book')}</a></div></div>`;
+            <a class="btn ${wrong.length ? 'ghost' : ''}" href="#/review">${bi('回到错题本', 'Back to mistake book')}</a>${slipBtn('slip')}</div></div>`;
+        $('#slip', box).onclick = () => printSlip(practice ? bi(`错题练习 · 第 ${round - 1} 轮`, `PRATIQUE · TOUR ${round - 1}`) : bi('今日复习', 'RÉVISION DU JOUR'),
+          [pad(bi('题数', 'Questions'), queue.length), pad(bi('答对', 'Justes'), right), pad(bi('今日分数', 'Points'), XP.today().xp), pad(bi('连续天数', 'Série'), XP.streak()),
+            ...(wrong.length ? ['', bi('要再看看：', 'À revoir :'), ...wrong.slice(0, 12).map(e => '  ' + e.fr.slice(0, 26))] : ['', bi('全部答对！', 'Sans faute !')])]);
         if (wrong.length) $('#again-wrong', box).onclick = () => reviewDrill(box, shuffle(wrong), round + 1);
         return;
       }
@@ -1693,7 +1764,9 @@
         ${prev ? `<a class="btn ghost small" href="#/${book.id}/${prev.n}">‹ Leçon ${prev.n}</a>` : ''}
         <span class="spacer"></span>
         ${next ? `<a class="btn ghost small" href="#/${book.id}/${next.n}">Leçon ${next.n} ›</a>` : ''}
-      </div>`;
+      </div>
+      <div class="toolbar" style="justify-content:center"><button class="btn ghost small" id="worksheet">${bi('打印这一课的默写纸', 'Print a worksheet for this leçon')}</button></div>`;
+    $('#worksheet', main).onclick = () => printWorksheet(book, lecon);
     $$('.tab', main).forEach(b => b.onclick = () => { history.replaceState(null, '', `#/${book.id}/${lecon.n}/${b.dataset.tab}`); route(); });
     const pane = $('#pane');
     const ctx = { book, lecon, pane, save: (part, s) => setProg(book.id, lecon.n, part, s) };
@@ -1921,7 +1994,10 @@
         ${wrong.length ? `<ul>${wrong.map(v => `<li><span lang="fr">${esc(v.fr)}</span><span class="w-zh">${G(v)}</span></li>`).join('')}</ul>` : '<p>全部正确，很棒。</p>'}
         <div class="drill-actions" style="justify-content:center">
           ${wrong.length ? '<button class="btn" id="again-wrong">只练错的</button>' : ''}
-          <button class="btn ghost" id="again">重新开始</button></div></div>`;
+          <button class="btn ghost" id="again">重新开始</button>${slipBtn('slip')}</div></div>`;
+      $('#slip', box).onclick = () => printSlip(`${ctx.lecon.n ? 'LEÇON ' + ctx.lecon.n : bi('生词本', 'MES MOTS')} · ${test ? bi('首测', 'PREMIER TEST') : bi('默写', 'DICTÉE')}`,
+        [pad(bi('题数', 'Mots'), queue.length), pad(bi('一次写对', 'Du premier coup'), firstTry), pad(bi('正确率', 'Score'), Math.round(score * 100) + ' %'), pad(bi('已掌握', 'Appris'), st.words + '/' + st.totalWords),
+          ...(wrong.length ? ['', bi('要再看看：', 'À revoir :'), ...wrong.slice(0, 12).map(v => '  ' + v.fr)] : ['', bi('全部正确！', 'Sans faute !')])]);
       const w = wrong.slice();
       $('#again', box).onclick = () => route();
       if (w.length) $('#again-wrong', box).onclick = () => { queue = shuffle(w); i = 0; wrong = []; firstTry = 0; draw(); };

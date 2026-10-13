@@ -1,0 +1,68 @@
+/* typewriter mode, the printer slip, and print layouts */
+
+/* ---- typewriter mode: answers look typed ---- */
+html.tw .answer-in, html.tw .cloze-in, html.tw .full-in, html.tw .typed-recite, html.tw textarea, html.tw #lk-in {
+  font-family: "Special Elite", "Courier New", monospace !important;
+  letter-spacing: .02em;
+  color: #26221d;
+}
+html.tw .answer-in { font-size: 24px; }
+html.tw .answer-in:focus, html.tw .full-in:focus { caret-color: #a54a44; }
+
+/* ---- the printer and its paper slip ---- */
+.slip-ov { position: fixed; inset: 0; z-index: 70; background: rgba(20, 18, 15, .55); display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 60px; overflow-y: auto; animation: fade .2s; }
+.printer { width: 340px; max-width: calc(100vw - 24px); position: relative; }
+.printer-body {
+  height: 64px; border-radius: 10px 10px 4px 4px; position: relative; z-index: 2;
+  background: linear-gradient(#5b554c, #3a3630); border: 1px solid #22201c;
+  box-shadow: inset 0 2px 0 rgba(255, 255, 255, .15), 0 10px 20px -8px rgba(0, 0, 0, .6);
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+}
+.printer-name { font: 15px "IM Fell English SC", serif; letter-spacing: .3em; color: #d9cfb9; }
+.printer-led { width: 8px; height: 8px; border-radius: 50%; background: #9fd18a; box-shadow: 0 0 8px #9fd18a; animation: blink 1s infinite; }
+@keyframes blink { 50% { opacity: .35; } }
+.printer-slot { height: 10px; margin: -4px 14px 0; background: #14120f; border-radius: 0 0 6px 6px; position: relative; z-index: 3; }
+.paper-wrap { overflow: hidden; margin: -6px 26px 0; position: relative; z-index: 1; }
+.paper {
+  background:
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, .02) 0 1px, transparent 1px 22px),
+    #fbf8f0;
+  padding: 18px 16px 26px;
+  box-shadow: 0 8px 18px -8px rgba(0, 0, 0, .5);
+  animation: feed 2.6s cubic-bezier(.3, .7, .4, 1) both;
+  -webkit-mask: linear-gradient(#000 calc(100% - 10px), transparent calc(100% - 10px)), conic-gradient(from -45deg at 50% 100%, #000 90deg, transparent 0) 0 100% / 12px 10px repeat-x;
+          mask: linear-gradient(#000 calc(100% - 10px), transparent calc(100% - 10px)), conic-gradient(from -45deg at 50% 100%, #000 90deg, transparent 0) 0 100% / 12px 10px repeat-x;
+}
+@keyframes feed { from { transform: translateY(-100%); } to { transform: translateY(0); } }
+.paper-text { margin: 0; font: 14px/22px "Special Elite", "Courier New", monospace; color: #2a2620; white-space: pre-wrap; min-height: 200px; }
+.slip-actions { display: flex; gap: 10px; margin: 18px 0 40px; }
+.slip-actions .btn.ghost { color: #efe6d2; border-color: #8d8473; }
+
+/* ---- printing: only the slip, or only the worksheet ---- */
+#print-area { display: none; }
+@media print {
+  @page { margin: 16mm; }
+  body { background: #fff !important; }
+  body.printing-slip > *:not(#slip), body.printing-slip .printer-body, body.printing-slip .printer-slot, body.printing-slip .slip-actions { display: none !important; }
+  body.printing-slip .slip-ov { position: static; background: none; padding: 0; display: block; }
+  body.printing-slip .paper { animation: none; box-shadow: none; -webkit-mask: none; mask: none; border: 1px dashed #999; width: 80mm; }
+  body.printing-slip .paper-wrap { margin: 0; overflow: visible; }
+  body.printing-sheet > *:not(#print-area) { display: none !important; }
+  body.printing-sheet #print-area { display: block; color: #000; font: 12pt/1.6 "EB Garamond", "Noto Serif SC", serif; }
+  .pw-page { page-break-after: always; }
+  .pw-page:last-child { page-break-after: auto; }
+  .pw-page h1 { font: 20pt "IM Fell English SC", serif; margin: 0 0 4pt; letter-spacing: .05em; }
+  .pw-page h2 { font: 14pt "IM Fell English SC", serif; margin: 14pt 0 8pt; border-bottom: 1px solid #000; padding-bottom: 3pt; }
+  .pw-sub { font-size: 10pt; color: #333; margin: 0 0 10pt; }
+  .pw-table { width: 100%; border-collapse: collapse; font-size: 11pt; }
+  .pw-table td { border-bottom: 1px solid #bbb; padding: 5pt 4pt; vertical-align: bottom; }
+  .pw-table td:first-child { width: 18pt; color: #666; }
+  .pw-table td:nth-child(3) { width: 60pt; font-style: italic; color: #555; }
+  .pw-line { width: 45%; }
+  .pw-cloze { font-size: 12pt; line-height: 2.2; }
+  .pw-blank { letter-spacing: 1px; }
+  .pw-zh { margin: 10pt 0 2pt; font-size: 11pt; }
+  .pw-write { height: 30pt; border-bottom: 1px solid #999; background: repeating-linear-gradient(transparent 0 14pt, #ddd 14pt 15pt); }
+  .pw-ans { columns: 2; font-size: 10.5pt; }
+  .pw-fr { font-size: 11pt; margin: 4pt 0; }
+}
