@@ -54,10 +54,12 @@ body[data-drape="blue"] { --drape-img: url(img/drape-blue.webp); }
 body[data-drape="red"] { --drape-img: url(img/drape-red.webp); }
 body[data-drape="cream"] { --drape-img: url(img/drape-cream.webp); }
 body[data-drape="green"] { --drape-img: url(img/drape-green.webp); }
-.unit:nth-of-type(4n+1) .lecon-card { --card-drape: url(img/drape-yellow-s.webp); }
-.unit:nth-of-type(4n+2) .lecon-card { --card-drape: url(img/drape-blue-s.webp); }
-.unit:nth-of-type(4n+3) .lecon-card { --card-drape: url(img/drape-red-s.webp); }
-.unit:nth-of-type(4n+4) .lecon-card { --card-drape: url(img/drape-cream-s.webp); }
+.unit:nth-of-type(6n+1) .lecon-card { --card-drape: url(img/drape-r1-s.webp); }
+.unit:nth-of-type(6n+2) .lecon-card { --card-drape: url(img/drape-r2-s.webp); }
+.unit:nth-of-type(6n+3) .lecon-card { --card-drape: url(img/drape-r3-s.webp); }
+.unit:nth-of-type(6n+4) .lecon-card { --card-drape: url(img/drape-r4-s.webp); }
+.unit:nth-of-type(6n+5) .lecon-card { --card-drape: url(img/drape-r5-s.webp); }
+.unit:nth-of-type(6n+6) .lecon-card { --card-drape: url(img/drape-r6-s.webp); }
 .lecon-card { --card-drape: url(img/drape-yellow-s.webp); }
 
 html .drape, html:not(.no-riso) .drape {
