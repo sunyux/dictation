@@ -138,3 +138,4 @@ main .corner { display: none !important; }
   background-repeat: repeat;
   background-blend-mode: normal, overlay, normal;
 }
+.nav-journal { text-decoration: none; display: grid; place-items: center; }
