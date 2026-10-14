@@ -70,7 +70,7 @@ html .drape, html:not(.no-riso) .drape {
 }
 html .lecon-card::before, html:not(.no-riso) .lecon-card::before {
   -webkit-mask: none; mask: none;
-  top: -4px; left: -4px; right: -4px; height: 72px; z-index: 1;
+  top: -4px; left: -4px; right: -4px; height: 58px; z-index: 1;
   background: var(--card-drape) center top / 100% 100% no-repeat;
   filter: drop-shadow(0 3px 2px rgba(0, 0, 0, .4));
 }
