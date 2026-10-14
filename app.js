@@ -148,6 +148,7 @@
     5: ['Chambre', 'window'], 6: ['Portrait', 'face'], 7: ['Boutique', 'dress'], 8: ['Montmartre', 'easel'],
     9: ['Appartement', 'house'], 10: ['Louvre', 'pyramid'], 11: ['Martinique', 'palm'], 12: ['Marseille', 'boat'],
     13: ['Gare', 'clock'], 14: ['Londres', 'bigben'], 15: ['Dimanche', 'racket'], 16: ['Piscine', 'swim'],
+    17: ['Crêpes', 'pan'], 18: ['Val d\'Isère', 'skis'], 19: ['Barcelone', 'letter'], 20: ['Fêtes', 'firework'],
   };
   const GLYPH = {
     tower: 'M50 12 L42 88 M50 12 L58 88 M44 62 H56 M46 44 H54 M38 88 Q50 70 62 88 M50 6 V12',
@@ -165,6 +166,10 @@
     bigben: 'M38 88 V34 H62 V88 M38 34 L50 12 L62 34 M44 46 A6 6 0 1 1 43.9 46 M50 52 V48 M50 52 L53 54 M38 64 H62 M38 76 H62 M30 88 H70',
     racket: 'M44 18 Q24 22 26 44 Q30 62 46 60 Q64 56 62 36 Q58 16 44 18 M34 28 L56 50 M30 40 L50 58 M40 22 L60 44 M50 58 L66 84 M66 84 L70 82 M72 30 A6 6 0 1 1 71.9 30',
     swim: 'M14 70 Q24 64 34 70 T54 70 T74 70 T90 70 M14 82 Q24 76 34 82 T54 82 T74 82 T90 82 M30 60 Q46 44 66 50 L76 46 M62 34 A6 6 0 1 1 61.9 34 M40 56 L56 40',
+    pan: 'M18 52 A26 10 0 1 0 70 52 A26 10 0 1 0 18 52 M70 52 L92 44 M24 52 Q44 40 64 52 M32 48 Q44 44 56 48 M44 28 Q48 20 44 14 M54 30 Q58 22 54 16',
+    skis: 'M30 14 L44 88 M44 14 L58 88 M26 12 Q30 8 34 12 M40 12 Q44 8 48 12 M66 20 V70 M66 20 L62 26 M74 22 V74 M74 22 L78 28 M60 70 H80',
+    letter: 'M14 30 H86 V74 H14 Z M14 30 L50 56 L86 30 M14 74 L40 52 M86 74 L60 52 M64 36 H80 V48 H64 Z',
+    firework: 'M50 50 L50 20 M50 50 L72 28 M50 50 L80 50 M50 50 L72 72 M50 50 L50 80 M50 50 L28 72 M50 50 L20 50 M50 50 L28 28 M50 16 v-4 M76 24 l3 -3 M84 50 h4 M50 84 v4 M24 24 l-3 -3 M16 50 h-4 M30 88 L50 50',
     boat: 'M20 66 H80 L70 80 H30 Z M50 66 V14 M50 18 L76 58 H50 M50 24 L30 58 H50 M10 88 Q20 84 30 88 T50 88 T70 88 T90 88',
   };
   const STREAK_BADGES = [3, 7, 14, 30, 60, 100];
@@ -1520,6 +1525,7 @@
     if ((m = s.match(/^(.*), pl\.m\. (\S+)$/))) { acc.add(m[2]); s = m[1]; acc.add(s); }
     if (s.includes('(-)')) { [s.replace('(-)', '-'), s.replace('(-)', ' ')].forEach(x => acc.add(x)); say = s.replace('(-)', ' '); return { accept: [...acc], say }; }
     if ((m = s.match(/^(.*?)(\S+) \/ (\S+)(.*)$/))) { acc.add(m[1] + m[2] + m[4]); acc.add(m[1] + m[3] + m[4]); return { accept: [...acc], say: m[1] + m[3] + m[4] }; }
+    if ((m = s.match(/^(.+?)\((la|le|les|l')\)$/))) { const art = m[2] === "l'" ? "l'" : m[2] + ' '; [m[1], art + m[1]].forEach(x => acc.add(x)); return { accept: [...acc], say: art + m[1] }; }
     if ((m = s.match(/^(\S+)\s*\((se|s')\)$/))) {
       const v = m[1], pro = /^[aeiouyhâéèêî]/i.test(v) ? "s'" : 'se ';
       [v, pro + v, 'se ' + v, v + ' (' + m[2] + ')'].forEach(x => acc.add(x));
@@ -2226,7 +2232,10 @@
     'reprendre': 'reprends reprends reprend reprenons reprenez reprennent', 'détendre': 'détends détends détend détendons détendez détendent',
     'lever': 'lève lèves lève levons levez lèvent', 'promener': 'promène promènes promène promenons promenez promènent',
     'manger': 'mange manges mange mangeons mangez mangent', 'nager': 'nage nages nage nageons nagez nagent',
-    'commencer': 'commence commences commence commençons commencez commencent', 'recommencer': 'recommence recommences recommence recommençons recommencez recommencent',
+    'commencer': 'commence commences commence commençons commencez commencent',
+    'acheter': 'achète achètes achète achetons achetez achètent', 'boire': 'bois bois boit buvons buvez boivent',
+    'venir': 'viens viens vient venons venez viennent', 'revenir': 'reviens reviens revient revenons revenez reviennent',
+    'descendre': 'descends descends descend descendons descendez descendent', 'recommencer': 'recommence recommences recommence recommençons recommencez recommencent',
   };
   const TIPS = {
     'être': '完全不规则，整串背：je suis · tu es · il est / nous sommes · vous êtes · ils sont。',
@@ -2249,6 +2258,11 @@
     'nager': '同 manger：nous nageons 加 e 保持 g 软音。',
     'commencer': '只有 nous 特殊：commençons 用 ç，让 c 在 o 前保持 [s] 音。同类：recommencer。',
     'recommencer': 're + commencer：nous recommençons 用 ç。',
+    'acheter': '词尾不发音时 e 变 è：achète · achètes · achète · achètent；nous / vous 不变：achetons · achetez。同 lever。',
+    'boire': '完全不规则：bois · bois · boit / buvons · buvez · boivent。nous / vous 用 buv-，ils 用 boiv-。',
+    'venir': '单数 vien- + s s t：viens · viens · vient；nous / vous 用 ven-：venons · venez；ils 双 n：viennent。复合过去时用 être。',
+    'revenir': 're + venir，变位完全同 venir：reviens · revenons · reviennent。',
+    'descendre': '-re 规则动词：去掉 -re 得 descend-，加 -s · -s · （无）· -ons · -ez · -ent：il descend（d 不发音）。复合过去时用 être。',
     'appeler': "词根 appel + er。词尾不发音的 je / tu / il / ils 写双 l：appelle · appelles · appelle · appellent；nous / vous 单 l：appelons · appelez。代词跟着人称变：me · te · se · nous · vous · se，元音前省略成 m' t' s'。",
   };
   function verbTip(fr) {

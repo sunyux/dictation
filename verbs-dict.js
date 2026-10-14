@@ -87,6 +87,17 @@
     "s'endormir": { zh: '睡着', en: 'to fall asleep', pres: 'endors endors endort endormons endormez endorment', pp: 'endormi' },
     'se détendre': { zh: '放松', en: 'to relax' },
     'se terminer': { zh: '结束', en: 'to end' },
+    // Unité 5
+    'acheter':   { zh: '买', en: 'to buy', pres: 'achète achètes achète achetons achetez achètent', fut: 'achèter' },
+    'boire':     { zh: '喝', en: 'to drink', pres: 'bois bois boit buvons buvez boivent', pp: 'bu', imp: 'buv' },
+    'revenir':   { zh: '回来', en: 'to come back', pres: 'reviens reviens revient revenons revenez reviennent', pp: 'revenu', fut: 'reviendr', aux: 'être' },
+    'descendre': { zh: '下来', en: 'to go down', aux: 'être' },
+    'monter':    { zh: '登上', en: 'to go up', aux: 'être' },
+    'tomber':    { zh: '跌落', en: 'to fall', aux: 'être' },
+    'marcher':   { zh: '走路', en: 'to walk' },
+    'inviter':   { zh: '邀请', en: 'to invite' },
+    'fêter':     { zh: '庆祝', en: 'to celebrate' },
+    'exister':   { zh: '存在', en: 'to exist' },
   };
 
   const P = ['je', 'tu', 'il/elle/on', 'nous', 'vous', 'ils/elles'];

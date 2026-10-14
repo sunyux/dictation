@@ -6378,6 +6378,1737 @@ window.BOOKS = [{
      ]
     }
    ]
+  },
+  {
+   "n": 5,
+   "lecons": [
+    {
+     "n": 17,
+     "title": "On fait des crêpes ?",
+     "zh": "咱们做可丽饼吧？",
+     "vocab": [
+      {
+       "g": "阳性名词",
+       "zh": "黄油",
+       "pos": "n.m.",
+       "fr": "beurre"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "苹果酒",
+       "pos": "n.m.",
+       "fr": "cidre"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "可乐",
+       "pos": "n.m.",
+       "fr": "coca"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "晚餐",
+       "pos": "n.m.",
+       "fr": "dîner"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "奶酪",
+       "pos": "n.m.",
+       "fr": "fromage"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "克",
+       "pos": "n.m.",
+       "fr": "gramme"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "公斤，千克（kilogramme 的缩写）",
+       "pos": "n.m.",
+       "fr": "kilo"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "牛奶",
+       "pos": "n.m.",
+       "fr": "lait"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "蔬菜",
+       "pos": "n.m.pl.",
+       "fr": "légumes"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "升",
+       "pos": "n.m.",
+       "fr": "litre"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "鸡蛋",
+       "pos": "n.m.",
+       "fr": "œuf"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "面包",
+       "pos": "n.m.",
+       "fr": "pain"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "鱼",
+       "pos": "n.m.",
+       "fr": "poisson"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "餐；进餐",
+       "pos": "n.m.",
+       "fr": "repas"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "大米",
+       "pos": "n.m.",
+       "fr": "riz"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "糖",
+       "pos": "n.m.",
+       "fr": "sucre"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "超市",
+       "pos": "n.m.",
+       "fr": "supermarché"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "全部，一切，整体，全体",
+       "pos": "n.m.sing.",
+       "fr": "tout"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "葡萄酒",
+       "pos": "n.m.",
+       "fr": "vin"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "瓶子",
+       "pos": "n.f.",
+       "fr": "bouteille"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "圣蜡节（天主教节日）",
+       "pos": "n.f.",
+       "fr": "Chandeleur"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "果酱",
+       "pos": "n.f.",
+       "fr": "confiture"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "可丽饼（一种以鸡蛋、面粉为原料的油煎薄饼）",
+       "pos": "n.f.",
+       "fr": "crêpe"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "水",
+       "pos": "n.f.",
+       "fr": "eau"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "面粉",
+       "pos": "n.f.",
+       "fr": "farine"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "单子，清单",
+       "pos": "n.f.",
+       "fr": "liste"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "半公斤；磅",
+       "pos": "n.f.",
+       "fr": "livre"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "矿泉水",
+       "pos": "n.f.",
+       "fr": "eau minérale"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "苹果",
+       "pos": "n.f.",
+       "fr": "pomme"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "土豆",
+       "pos": "n.f.",
+       "fr": "pomme de terre"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "凉拌生菜；生菜；沙拉",
+       "pos": "n.f.",
+       "fr": "salade"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "肉",
+       "pos": "n.f.",
+       "fr": "viande"
+      },
+      {
+       "g": "动词",
+       "zh": "买",
+       "pos": "v.t.",
+       "fr": "acheter"
+      },
+      {
+       "g": "动词",
+       "zh": "喝",
+       "pos": "v.t.",
+       "fr": "boire"
+      },
+      {
+       "g": "动词",
+       "zh": "吃晚餐",
+       "pos": "v.i.",
+       "fr": "dîner"
+      },
+      {
+       "g": "动词",
+       "zh": "需要；必须，应该，应当（原形动词为 falloir）",
+       "pos": "v.impers.",
+       "fr": "il faut"
+      },
+      {
+       "g": "动词",
+       "zh": "邀请",
+       "pos": "v.t.",
+       "fr": "inviter"
+      },
+      {
+       "g": "动词",
+       "zh": "打电话",
+       "pos": "v.i.",
+       "fr": "téléphoner"
+      },
+      {
+       "g": "动词",
+       "zh": "给某人打电话",
+       "pos": "v.i.",
+       "fr": "téléphoner à qn"
+      },
+      {
+       "g": "形容词",
+       "zh": "矿物质的；含矿物质的",
+       "pos": "adj.",
+       "fr": "minéral(e)"
+      },
+      {
+       "g": "副词",
+       "zh": "足够地",
+       "pos": "adv.",
+       "fr": "assez"
+      }
+     ],
+     "cloze": [
+      [
+       "– C'est la Chandeleur. On ",
+       {
+        "b": "fait"
+       },
+       " des ",
+       {
+        "b": "crêpes"
+       },
+       ", ce soir ?"
+      ],
+      [
+       "– D'",
+       {
+        "b": "accord"
+       },
+       ", mais tu ",
+       {
+        "b": "fais"
+       },
+       " les ",
+       {
+        "b": "courses"
+       },
+       "."
+      ],
+      [
+       "– Et toi, tu ",
+       {
+        "b": "fais"
+       },
+       " les ",
+       {
+        "b": "crêpes"
+       },
+       ", alors."
+      ],
+      [
+       "– Oui, ",
+       {
+        "b": "bien"
+       },
+       " sûr. On ",
+       {
+        "b": "invite"
+       },
+       " Max et Sarah ?"
+      ],
+      [
+       "– Ah, oui ! Bon. Il ",
+       {
+        "b": "faut"
+       },
+       " de la farine et ",
+       {
+        "b": "des"
+       },
+       " œufs, c'",
+       {
+        "b": "est"
+       },
+       " ça ?"
+      ],
+      [
+       "– Hum, hum."
+      ],
+      [
+       "– Combien de ",
+       {
+        "b": "kilos"
+       },
+       " de farine ?"
+      ],
+      [
+       "– Un ",
+       {
+        "b": "kilo"
+       },
+       " de farine et ",
+       {
+        "b": "six"
+       },
+       " œufs. Achète ",
+       {
+        "b": "aussi"
+       },
+       " un litre de ",
+       {
+        "b": "lait"
+       },
+       " et 250 grammes de ",
+       {
+        "b": "beurre"
+       },
+       "."
+      ],
+      [
+       "– C'est ",
+       {
+        "b": "tout"
+       },
+       " ?"
+      ],
+      [
+       "– Non, prends du ",
+       {
+        "b": "sucre"
+       },
+       " et de la confiture. Et du ",
+       {
+        "b": "cidre"
+       },
+       "."
+      ],
+      [
+       "– Deux bouteilles, c'",
+       {
+        "b": "est"
+       },
+       " assez ?"
+      ],
+      [
+       "– Oui, ça va. Et ",
+       {
+        "b": "achète"
+       },
+       " aussi de l'",
+       {
+        "b": "eau"
+       },
+       " minérale, du Coca et ",
+       {
+        "b": "des"
+       },
+       " céréales…"
+      ],
+      [
+       "– Des ",
+       {
+        "b": "céréales"
+       },
+       " ? Pour faire ",
+       {
+        "b": "des"
+       },
+       " crêpes !"
+      ],
+      [
+       "– Non, ",
+       {
+        "b": "pour"
+       },
+       " le petit ",
+       {
+        "b": "déjeuner"
+       },
+       "."
+      ],
+      [
+       "– Ah ! Tu téléphones à Max et Sarah ?"
+      ],
+      [
+       "– D'",
+       {
+        "b": "accord"
+       },
+       "."
+      ],
+      [
+       "– Bon. J'y vais."
+      ]
+     ],
+     "text": [
+      {
+       "zh": "– 今天是圣蜡节。我们今晚做可丽饼吧？",
+       "fr": "– C'est la Chandeleur. On fait des crêpes, ce soir ?"
+      },
+      {
+       "zh": "– 好啊，不过你去买东西。",
+       "fr": "– D'accord, mais tu fais les courses."
+      },
+      {
+       "zh": "– 那你来做可丽饼。",
+       "fr": "– Et toi, tu fais les crêpes, alors."
+      },
+      {
+       "zh": "– 好，当然。我们请 Max 和 Sarah 来吗？",
+       "fr": "– Oui, bien sûr. On invite Max et Sarah ?"
+      },
+      {
+       "zh": "– 啊，好啊！嗯。需要面粉和鸡蛋，对吧？",
+       "fr": "– Ah, oui ! Bon. Il faut de la farine et des œufs, c'est ça ?"
+      },
+      {
+       "zh": "– 嗯，嗯。",
+       "fr": "– Hum, hum."
+      },
+      {
+       "zh": "– 面粉要几公斤？",
+       "fr": "– Combien de kilos de farine ?"
+      },
+      {
+       "zh": "– 一公斤面粉和六个鸡蛋。再买一升牛奶和 250 克黄油。",
+       "fr": "– Un kilo de farine et six œufs. Achète aussi un litre de lait et 250 grammes de beurre."
+      },
+      {
+       "zh": "– 就这些？",
+       "fr": "– C'est tout ?"
+      },
+      {
+       "zh": "– 不，还要买点糖和果酱。还有苹果酒。",
+       "fr": "– Non, prends du sucre et de la confiture. Et du cidre."
+      },
+      {
+       "zh": "– 两瓶，够吗？",
+       "fr": "– Deux bouteilles, c'est assez ?"
+      },
+      {
+       "zh": "– 嗯，够了。再买点矿泉水、可乐和麦片……",
+       "fr": "– Oui, ça va. Et achète aussi de l'eau minérale, du Coca et des céréales…"
+      },
+      {
+       "zh": "– 麦片？用来做可丽饼？！",
+       "fr": "– Des céréales ? Pour faire des crêpes !"
+      },
+      {
+       "zh": "– 不是，是早饭吃的。",
+       "fr": "– Non, pour le petit déjeuner."
+      },
+      {
+       "zh": "– 啊！你给 Max 和 Sarah 打电话？",
+       "fr": "– Ah ! Tu téléphones à Max et Sarah ?"
+      },
+      {
+       "zh": "– 好的。",
+       "fr": "– D'accord."
+      },
+      {
+       "zh": "– 好。我去了。",
+       "fr": "– Bon. J'y vais."
+      }
+     ]
+    },
+    {
+     "n": 18,
+     "title": "Il est comment ?",
+     "zh": "它是什么样的？",
+     "vocab": [
+      {
+       "g": "阳性名词",
+       "zh": "礼物",
+       "pos": "n.m.",
+       "fr": "cadeau (pl. cadeaux)"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "甜点",
+       "pos": "n.m.",
+       "fr": "dessert"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "便衣警察",
+       "pos": "n.m.",
+       "fr": "inspecteur de police"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "商店",
+       "pos": "n.m.",
+       "fr": "magasin"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "房子；家",
+       "pos": "n.f.",
+       "fr": "maison"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "面条",
+       "pos": "n.f.pl.",
+       "fr": "pâtes"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "比萨饼",
+       "pos": "n.f.",
+       "fr": "pizza"
+      },
+      {
+       "g": "名词",
+       "zh": "检察员，视察员",
+       "pos": "n.",
+       "fr": "inspecteur(trice)"
+      },
+      {
+       "g": "形容词",
+       "zh": "美丽的，漂亮的；优美的",
+       "pos": "adj.",
+       "fr": "beau"
+      },
+      {
+       "g": "形容词",
+       "zh": "热的，暖的，烫的；暖和的，保暖的",
+       "pos": "adj.",
+       "fr": "chaud(e)"
+      },
+      {
+       "g": "形容词",
+       "zh": "特别好的",
+       "pos": "adj.",
+       "fr": "excellent(e)"
+      },
+      {
+       "g": "形容词",
+       "zh": "单独的，独自的；孤单的",
+       "pos": "adj.",
+       "fr": "seul(e)"
+      },
+      {
+       "g": "形容词",
+       "zh": "整个的，全部的",
+       "pos": "adj.indéf.sing.",
+       "fr": "tout(e)"
+      },
+      {
+       "g": "代词",
+       "zh": "一切，一切事物",
+       "pos": "pron.indéf.sing.",
+       "fr": "tout"
+      },
+      {
+       "g": "副词",
+       "zh": "昨天",
+       "pos": "adv.",
+       "fr": "hier"
+      },
+      {
+       "g": "冠词、感叹词、短语",
+       "zh": "〈俗〉哦！",
+       "pos": "interj.",
+       "fr": "ouais"
+      },
+      {
+       "g": "冠词、感叹词、短语",
+       "zh": "哇！（表示惊叹、赞美）",
+       "pos": "interj.",
+       "fr": "waouh"
+      }
+     ],
+     "cloze": [
+      [
+       "– Alors, Fabien, qu'est-ce ",
+       {
+        "b": "que"
+       },
+       " tu as fait ",
+       {
+        "b": "hier"
+       },
+       " ?"
+      ],
+      [
+       "– Eh bien, j'ai ",
+       {
+        "b": "fait"
+       },
+       " les ",
+       {
+        "b": "magasins"
+       },
+       "."
+      ],
+      [
+       "– Non ! Toi ?"
+      ],
+      [
+       "– Oui, oui. C'",
+       {
+        "b": "est"
+       },
+       " pour le ",
+       {
+        "b": "ski"
+       },
+       ". Je pars à Val d'Isère ",
+       {
+        "b": "dimanche"
+       },
+       "."
+      ],
+      [
+       "– Et qu'est-ce ",
+       {
+        "b": "que"
+       },
+       " tu as acheté, ",
+       {
+        "b": "alors"
+       },
+       " ?"
+      ],
+      [
+       "– Eh bien, j'ai ",
+       {
+        "b": "acheté"
+       },
+       " ces ",
+       {
+        "b": "chaussures"
+       },
+       "."
+      ],
+      [
+       "– Waouh ! Elles sont ",
+       {
+        "b": "très"
+       },
+       " jolies !"
+      ],
+      [
+       "– Ouais, ",
+       {
+        "b": "bon"
+       },
+       "… Ce sont ",
+       {
+        "b": "des"
+       },
+       " chaussures de ",
+       {
+        "b": "ski"
+       },
+       ", c'est ",
+       {
+        "b": "tout"
+       },
+       " !… J'ai aussi ",
+       {
+        "b": "pris"
+       },
+       " un pull."
+      ],
+      [
+       "– Il ",
+       {
+        "b": "est"
+       },
+       " comment ",
+       {
+        "b": "ton"
+       },
+       " pull ?"
+      ],
+      [
+       "– Tiens, ",
+       {
+        "b": "regarde"
+       },
+       "."
+      ],
+      [
+       "– Ah oui, c'",
+       {
+        "b": "est"
+       },
+       " un beau ",
+       {
+        "b": "pull"
+       },
+       " !"
+      ],
+      [
+       "– Hum, hum… Il ",
+       {
+        "b": "est"
+       },
+       " très ",
+       {
+        "b": "chaud"
+       },
+       "."
+      ],
+      [
+       "– Et hier ",
+       {
+        "b": "soir"
+       },
+       ", qu'est-ce ",
+       {
+        "b": "que"
+       },
+       " tu as fait ?"
+      ],
+      [
+       "– J'ai ",
+       {
+        "b": "dîné"
+       },
+       " dans un ",
+       {
+        "b": "petit"
+       },
+       " restaurant ",
+       {
+        "b": "italien"
+       },
+       " à côté de ",
+       {
+        "b": "chez"
+       },
+       " moi, ",
+       {
+        "b": "avec"
+       },
+       " ma sœur."
+      ],
+      [
+       "– Il ",
+       {
+        "b": "est"
+       },
+       " bien, ce ",
+       {
+        "b": "restaurant"
+       },
+       " ?"
+      ],
+      [
+       "– Très bien. Il ",
+       {
+        "b": "est"
+       },
+       " simple, ",
+       {
+        "b": "mais"
+       },
+       " la cuisine ",
+       {
+        "b": "est"
+       },
+       " bonne. Ma ",
+       {
+        "b": "sœur"
+       },
+       " a pris ",
+       {
+        "b": "des"
+       },
+       " pâtes et, ",
+       {
+        "b": "moi"
+       },
+       ", j'ai mangé ",
+       {
+        "b": "une"
+       },
+       " pizza."
+      ],
+      [
+       "– Et ",
+       {
+        "b": "pour"
+       },
+       " le dessert ?"
+      ],
+      [
+       "– Nous n'",
+       {
+        "b": "avons"
+       },
+       " pas ",
+       {
+        "b": "pris"
+       },
+       " de dessert."
+      ],
+      [
+       "– Et ",
+       {
+        "b": "bien"
+       },
+       ", moi, j'ai ",
+       {
+        "b": "travaillé"
+       },
+       " toute la ",
+       {
+        "b": "journée"
+       },
+       " et j'ai dîné ",
+       {
+        "b": "seul"
+       },
+       " !"
+      ]
+     ],
+     "text": [
+      {
+       "zh": "– Fabien，你昨天做什么了？",
+       "fr": "– Alors, Fabien, qu'est-ce que tu as fait hier ?"
+      },
+      {
+       "zh": "– 嗯，我去逛商店了。",
+       "fr": "– Eh bien, j'ai fait les magasins."
+      },
+      {
+       "zh": "– 不会吧！你？",
+       "fr": "– Non ! Toi ?"
+      },
+      {
+       "zh": "– 是啊是啊。是为了滑雪。我星期天去 Val d'Isère。",
+       "fr": "– Oui, oui. C'est pour le ski. Je pars à Val d'Isère dimanche."
+      },
+      {
+       "zh": "– 那你买了什么？",
+       "fr": "– Et qu'est-ce que tu as acheté, alors ?"
+      },
+      {
+       "zh": "– 嗯，我买了这双鞋。",
+       "fr": "– Eh bien, j'ai acheté ces chaussures."
+      },
+      {
+       "zh": "– 哇！真漂亮！",
+       "fr": "– Waouh ! Elles sont très jolies !"
+      },
+      {
+       "zh": "– 哦，嗯……就是双滑雪鞋而已！……我还买了一件毛衣。",
+       "fr": "– Ouais, bon… Ce sont des chaussures de ski, c'est tout !… J'ai aussi pris un pull."
+      },
+      {
+       "zh": "– 你的毛衣什么样？",
+       "fr": "– Il est comment ton pull ?"
+      },
+      {
+       "zh": "– 喏，你看。",
+       "fr": "– Tiens, regarde."
+      },
+      {
+       "zh": "– 啊，真是件漂亮的毛衣！",
+       "fr": "– Ah oui, c'est un beau pull !"
+      },
+      {
+       "zh": "– 嗯，嗯……它很暖和。",
+       "fr": "– Hum, hum… Il est très chaud."
+      },
+      {
+       "zh": "– 那昨天晚上你做什么了？",
+       "fr": "– Et hier soir, qu'est-ce que tu as fait ?"
+      },
+      {
+       "zh": "– 我和我姐姐在我家旁边的一家意大利小餐馆吃了晚饭。",
+       "fr": "– J'ai dîné dans un petit restaurant italien à côté de chez moi, avec ma sœur."
+      },
+      {
+       "zh": "– 这家餐馆好吗？",
+       "fr": "– Il est bien, ce restaurant ?"
+      },
+      {
+       "zh": "– 很好。很简单，但菜做得好。我姐姐点了意面，我吃了一个比萨。",
+       "fr": "– Très bien. Il est simple, mais la cuisine est bonne. Ma sœur a pris des pâtes et, moi, j'ai mangé une pizza."
+      },
+      {
+       "zh": "– 甜点呢？",
+       "fr": "– Et pour le dessert ?"
+      },
+      {
+       "zh": "– 我们没点甜点。",
+       "fr": "– Nous n'avons pas pris de dessert."
+      },
+      {
+       "zh": "– 唉，我呢，工作了一整天，一个人吃的晚饭！",
+       "fr": "– Et bien, moi, j'ai travaillé toute la journée et j'ai dîné seul !"
+      }
+     ]
+    },
+    {
+     "n": 19,
+     "title": "Chère Léa…",
+     "zh": "亲爱的 Léa……",
+     "vocab": [
+      {
+       "g": "阳性名词",
+       "zh": "〈俗〉（在脸颊上的）亲吻",
+       "pos": "n.m.",
+       "fr": "bisou"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "公园",
+       "pos": "n.m.",
+       "fr": "parc"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "年",
+       "pos": "n.f.",
+       "fr": "année"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "次",
+       "pos": "n.f.",
+       "fr": "fois"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "分钟",
+       "pos": "n.f.",
+       "fr": "minute"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "共和国",
+       "pos": "n.f.",
+       "fr": "république"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "夜晚",
+       "pos": "n.f.",
+       "fr": "soirée"
+      },
+      {
+       "g": "动词",
+       "zh": "下来",
+       "pos": "v.i.",
+       "fr": "descendre"
+      },
+      {
+       "g": "动词",
+       "zh": "走，行走",
+       "pos": "v.i.",
+       "fr": "marcher"
+      },
+      {
+       "g": "动词",
+       "zh": "登上，上升",
+       "pos": "v.i.",
+       "fr": "monter"
+      },
+      {
+       "g": "动词",
+       "zh": "停留，逗留",
+       "pos": "v.i.",
+       "fr": "rester"
+      },
+      {
+       "g": "动词",
+       "zh": "回来",
+       "pos": "v.i.",
+       "fr": "revenir"
+      },
+      {
+       "g": "动词",
+       "zh": "跌落，落下",
+       "pos": "v.i.",
+       "fr": "tomber"
+      },
+      {
+       "g": "动词",
+       "zh": "来",
+       "pos": "v.i.",
+       "fr": "venir"
+      },
+      {
+       "g": "形容词",
+       "zh": "壮丽的；豪华的；极美的，极好的；非凡的",
+       "pos": "adj.",
+       "fr": "magnifique"
+      },
+      {
+       "g": "副词",
+       "zh": "那里，那边",
+       "pos": "adv.",
+       "fr": "là-bas"
+      },
+      {
+       "g": "地名",
+       "zh": "巴塞罗那（西班牙）",
+       "pos": "",
+       "fr": "Barcelone"
+      },
+      {
+       "g": "地名",
+       "zh": "波尔多（法国）",
+       "pos": "",
+       "fr": "Bordeaux"
+      }
+     ],
+     "cloze": [
+      [
+       "明信片"
+      ],
+      [
+       "Chère Léa,"
+      ],
+      [
+       "Étienne et moi, ",
+       {
+        "b": "nous"
+       },
+       " sommes à Barcelone ",
+       {
+        "b": "pour"
+       },
+       " le week-",
+       {
+        "b": "end"
+       },
+       ", chez Alicia. Nous ",
+       {
+        "b": "sommes"
+       },
+       " arrivés ",
+       {
+        "b": "vendredi"
+       },
+       " en avion. Samedi, Alicia et ",
+       {
+        "b": "moi"
+       },
+       ", nous ",
+       {
+        "b": "sommes"
+       },
+       " allées ",
+       {
+        "b": "faire"
+       },
+       " des ",
+       {
+        "b": "courses"
+       },
+       ". Nous avons ",
+       {
+        "b": "marché"
+       },
+       " toute la ",
+       {
+        "b": "journée"
+       },
+       ". Le soir, ",
+       {
+        "b": "nous"
+       },
+       " sommes ",
+       {
+        "b": "allés"
+       },
+       " au restaurant ",
+       {
+        "b": "tous"
+       },
+       " les ",
+       {
+        "b": "trois"
+       },
+       " et nous ",
+       {
+        "b": "sommes"
+       },
+       " rentrés à ",
+       {
+        "b": "deux"
+       },
+       " heures du ",
+       {
+        "b": "matin"
+       },
+       ". Nous avons ",
+       {
+        "b": "passé"
+       },
+       " une ",
+       {
+        "b": "excellente"
+       },
+       " soirée !"
+      ],
+      [
+       "Ce ",
+       {
+        "b": "matin"
+       },
+       ", nous ",
+       {
+        "b": "avons"
+       },
+       " visité le ",
+       {
+        "b": "musée"
+       },
+       " Picasso et, cet ",
+       {
+        "b": "après"
+       },
+       "-midi, ",
+       {
+        "b": "nous"
+       },
+       " sommes ",
+       {
+        "b": "allés"
+       },
+       " au parc Güell. C'",
+       {
+        "b": "est"
+       },
+       " magnifique !"
+      ],
+      [
+       "Nous ",
+       {
+        "b": "rentrons"
+       },
+       " dans ",
+       {
+        "b": "deux"
+       },
+       " jours."
+      ],
+      [
+       "À ",
+       {
+        "b": "bientôt"
+       },
+       ". Bisous,"
+      ],
+      [
+       "Mathilde"
+      ]
+     ],
+     "text": [
+      {
+       "h": "明信片"
+      },
+      {
+       "zh": "亲爱的 Léa：",
+       "fr": "Chère Léa,"
+      },
+      {
+       "zh": "我和 Étienne 来 Barcelone 过周末，住在 Alicia 家。我们星期五坐飞机到的。星期六，我和 Alicia 去买东西了。我们走了一整天。晚上，我们三个人去了餐馆，凌晨两点才回来。我们度过了一个非常棒的夜晚！",
+       "fr": "Étienne et moi, nous sommes à Barcelone pour le week-end, chez Alicia. Nous sommes arrivés vendredi en avion. Samedi, Alicia et moi, nous sommes allées faire des courses. Nous avons marché toute la journée. Le soir, nous sommes allés au restaurant tous les trois et nous sommes rentrés à deux heures du matin. Nous avons passé une excellente soirée !"
+      },
+      {
+       "zh": "今天上午，我们参观了毕加索博物馆，今天下午，我们去了 Güell 公园。太美了！",
+       "fr": "Ce matin, nous avons visité le musée Picasso et, cet après-midi, nous sommes allés au parc Güell. C'est magnifique !"
+      },
+      {
+       "zh": "我们两天后回来。",
+       "fr": "Nous rentrons dans deux jours."
+      },
+      {
+       "zh": "回头见。亲亲，",
+       "fr": "À bientôt. Bisous,"
+      },
+      {
+       "h": "Mathilde"
+      }
+     ]
+    },
+    {
+     "n": 20,
+     "title": "Les fêtes",
+     "zh": "节日",
+     "vocab": [
+      {
+       "g": "阳性名词",
+       "zh": "（建筑术语）拱，法圈",
+       "pos": "n.m.",
+       "fr": "arc"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "凯旋门",
+       "pos": "n.m.",
+       "fr": "arc de triomphe"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "火；焰火",
+       "pos": "n.m.",
+       "fr": "feu"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "焰火",
+       "pos": "n.m.",
+       "fr": "feu d'artifice"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "蛋糕",
+       "pos": "n.m.",
+       "fr": "gâteau"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "合唱队(团)，演奏乐团，小乐队",
+       "pos": "n.m.",
+       "fr": "groupe"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "六月",
+       "pos": "n.m.",
+       "fr": "juin"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "七月",
+       "pos": "n.m.",
+       "fr": "juillet"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "杂志",
+       "pos": "n.m.",
+       "fr": "magazine"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "结婚",
+       "pos": "n.m.",
+       "fr": "mariage"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "时刻",
+       "pos": "n.m.",
+       "fr": "moment"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "铃兰",
+       "pos": "n.m.",
+       "fr": "muguet"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "圣诞节",
+       "pos": "n.m.",
+       "fr": "Noël"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "新年",
+       "pos": "n.m.",
+       "fr": "nouvel an"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "爸爸",
+       "pos": "n.m.",
+       "fr": "papa"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "男朋友",
+       "pos": "n.m.",
+       "fr": "petit ami"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "回忆",
+       "pos": "n.m.",
+       "fr": "souvenir"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "胜利，凯旋",
+       "pos": "n.m.",
+       "fr": "triomphe"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "调查",
+       "pos": "n.f.",
+       "fr": "enquête"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "〈俗〉大学（faculté 的缩写）",
+       "pos": "n.f.",
+       "fr": "fac"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "节日；晚会",
+       "pos": "n.f.",
+       "fr": "fête"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "糕点店",
+       "pos": "n.f.",
+       "fr": "pâtisserie"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "情人节",
+       "pos": "n.f.",
+       "fr": "Saint-Valentin(la)"
+      },
+      {
+       "g": "名词",
+       "zh": "〈俗〉朋友，伙伴，同伴",
+       "pos": "n.",
+       "fr": "copain(copine)"
+      },
+      {
+       "g": "动词",
+       "zh": "存在",
+       "pos": "v.i.",
+       "fr": "exister"
+      },
+      {
+       "g": "动词",
+       "zh": "庆祝，纪念",
+       "pos": "v.t.",
+       "fr": "fêter"
+      },
+      {
+       "g": "形容词",
+       "zh": "最近的，最新的；最后的",
+       "pos": "adj.",
+       "fr": "dernier(ère)"
+      },
+      {
+       "g": "形容词",
+       "zh": "浪漫的，罗曼蒂克的",
+       "pos": "adj.",
+       "fr": "romantique"
+      },
+      {
+       "g": "形容词",
+       "zh": "维也纳的",
+       "pos": "adj.",
+       "fr": "viennois(e)"
+      },
+      {
+       "g": "冠词、感叹词、短语",
+       "zh": "新年好！",
+       "pos": "",
+       "fr": "Bonne année !"
+      },
+      {
+       "g": "地名",
+       "zh": "维也纳（奥地利）",
+       "pos": "",
+       "fr": "Vienne"
+      }
+     ],
+     "cloze": [
+      [
+       "引言"
+      ],
+      [
+       "Pour le 14 juillet, la Saint-Valentin ou ",
+       {
+        "b": "pour"
+       },
+       " Noël, qu'est-ce ",
+       {
+        "b": "que"
+       },
+       " vous ",
+       {
+        "b": "faites"
+       },
+       " ? La fête ",
+       {
+        "b": "avec"
+       },
+       " des ",
+       {
+        "b": "amis"
+       },
+       " ou un dîner à ",
+       {
+        "b": "deux"
+       },
+       " ? Le Nouveau Magazine a fait ",
+       {
+        "b": "son"
+       },
+       " enquête."
+      ],
+      [
+       "见证 a"
+      ],
+      [
+       "« Pour le 14 ",
+       {
+        "b": "juillet"
+       },
+       ", cette ",
+       {
+        "b": "année"
+       },
+       ", je suis ",
+       {
+        "b": "allée"
+       },
+       " à Paris, avec ",
+       {
+        "b": "deux"
+       },
+       " copines de la ",
+       {
+        "b": "fac"
+       },
+       ". Nous avons vu le ",
+       {
+        "b": "feu"
+       },
+       " d'artifice à ",
+       {
+        "b": "côté"
+       },
+       " de l'Arc de triomphe et ",
+       {
+        "b": "ensuite"
+       },
+       " nous ",
+       {
+        "b": "sommes"
+       },
+       " allées ",
+       {
+        "b": "dans"
+       },
+       " une ",
+       {
+        "b": "boîte"
+       },
+       " sur ",
+       {
+        "b": "les"
+       },
+       " Champs-Élysées. Et on a fait la ",
+       {
+        "b": "fête"
+       },
+       " toute la ",
+       {
+        "b": "nuit"
+       },
+       ". »"
+      ],
+      [
+       "见证 b"
+      ],
+      [
+       "« À Noël, l'année ",
+       {
+        "b": "dernière"
+       },
+       ", avec ",
+       {
+        "b": "mon"
+       },
+       " mari, ",
+       {
+        "b": "nous"
+       },
+       " sommes ",
+       {
+        "b": "allés"
+       },
+       " une ",
+       {
+        "b": "semaine"
+       },
+       " à Vienne pour ",
+       {
+        "b": "fêter"
+       },
+       " nos ",
+       {
+        "b": "vingt"
+       },
+       " ans de ",
+       {
+        "b": "mariage"
+       },
+       ". Nous avons ",
+       {
+        "b": "visité"
+       },
+       " toute la ",
+       {
+        "b": "ville"
+       },
+       " à pied. Nous ",
+       {
+        "b": "sommes"
+       },
+       " bien ",
+       {
+        "b": "sûr"
+       },
+       " allés ",
+       {
+        "b": "dans"
+       },
+       " des ",
+       {
+        "b": "pâtisseries"
+       },
+       " viennoises ; ",
+       {
+        "b": "nous"
+       },
+       " aimons ",
+       {
+        "b": "beaucoup"
+       },
+       " les ",
+       {
+        "b": "gâteaux"
+       },
+       " ! Nous avons ",
+       {
+        "b": "passé"
+       },
+       " des ",
+       {
+        "b": "moments"
+       },
+       " magnifiques là-",
+       {
+        "b": "bas"
+       },
+       ". »"
+      ],
+      [
+       "见证 c"
+      ],
+      [
+       "« Arthur et moi, ",
+       {
+        "b": "nous"
+       },
+       " allons ",
+       {
+        "b": "toujours"
+       },
+       " au restaurant ",
+       {
+        "b": "pour"
+       },
+       " la Saint-Valentin. Cette année, ",
+       {
+        "b": "nous"
+       },
+       " avons ",
+       {
+        "b": "mangé"
+       },
+       " sur un ",
+       {
+        "b": "bateau"
+       },
+       ", dans un ",
+       {
+        "b": "très"
+       },
+       " bon ",
+       {
+        "b": "restaurant"
+       },
+       ". C'est ",
+       {
+        "b": "romantique"
+       },
+       ", non ? »"
+      ],
+      [
+       "见证 d"
+      ],
+      [
+       "« Pour la ",
+       {
+        "b": "fête"
+       },
+       " de la Musique, le 21 juin, on a ",
+       {
+        "b": "passé"
+       },
+       " la nuit ",
+       {
+        "b": "dans"
+       },
+       " les ",
+       {
+        "b": "rues"
+       },
+       " à écouter de la ",
+       {
+        "b": "musique"
+       },
+       " avec ",
+       {
+        "b": "des"
+       },
+       " copains. On a ",
+       {
+        "b": "beaucoup"
+       },
+       " marché et on a vu ",
+       {
+        "b": "des"
+       },
+       " groupes ",
+       {
+        "b": "sympa"
+       },
+       ". Et c'est ",
+       {
+        "b": "gratuit"
+       },
+       " ! Je suis ",
+       {
+        "b": "rentré"
+       },
+       " à trois ",
+       {
+        "b": "heures"
+       },
+       " du matin. »"
+      ]
+     ],
+     "text": [
+      {
+       "h": "引言"
+      },
+      {
+       "zh": "7 月 14 日、情人节或者圣诞节，你们做什么？和朋友们一起狂欢，还是两个人共进晚餐？《新杂志》做了调查。",
+       "fr": "Pour le 14 juillet, la Saint-Valentin ou pour Noël, qu'est-ce que vous faites ? La fête avec des amis ou un dîner à deux ? Le Nouveau Magazine a fait son enquête."
+      },
+      {
+       "h": "见证 a"
+      },
+      {
+       "zh": "「今年 7 月 14 日，我和两个大学女同学去了 Paris。我们在凯旋门旁边看了焰火，然后去了香榭丽舍大街上的一家夜总会。我们狂欢了一整夜。」",
+       "fr": "« Pour le 14 juillet, cette année, je suis allée à Paris, avec deux copines de la fac. Nous avons vu le feu d'artifice à côté de l'Arc de triomphe et ensuite nous sommes allées dans une boîte sur les Champs-Élysées. Et on a fait la fête toute la nuit. »"
+      },
+      {
+       "h": "见证 b"
+      },
+      {
+       "zh": "「去年圣诞节，我和我丈夫去 Vienne 待了一周，庆祝我们结婚二十周年。我们走路逛遍了整座城市。我们当然去了维也纳的糕点店；我们非常喜欢蛋糕！我们在那里度过了美好的时光。」",
+       "fr": "« À Noël, l'année dernière, avec mon mari, nous sommes allés une semaine à Vienne pour fêter nos vingt ans de mariage. Nous avons visité toute la ville à pied. Nous sommes bien sûr allés dans des pâtisseries viennoises ; nous aimons beaucoup les gâteaux ! Nous avons passé des moments magnifiques là-bas. »"
+      },
+      {
+       "h": "见证 c"
+      },
+      {
+       "zh": "「我和 Arthur 情人节总是去餐馆。今年，我们在一条船上的一家很好的餐馆吃饭。很浪漫吧？」",
+       "fr": "« Arthur et moi, nous allons toujours au restaurant pour la Saint-Valentin. Cette année, nous avons mangé sur un bateau, dans un très bon restaurant. C'est romantique, non ? »"
+      },
+      {
+       "h": "见证 d"
+      },
+      {
+       "zh": "「6 月 21 日音乐节，我们和朋友们在街上听了一整夜音乐。我们走了很多路，看了几支很棒的乐队。而且是免费的！我凌晨三点才回家。」",
+       "fr": "« Pour la fête de la Musique, le 21 juin, on a passé la nuit dans les rues à écouter de la musique avec des copains. On a beaucoup marché et on a vu des groupes sympa. Et c'est gratuit ! Je suis rentré à trois heures du matin. »"
+      }
+     ]
+    }
+   ]
   }
  ]
 }];

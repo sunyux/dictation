@@ -6,7 +6,8 @@ OUT = os.path.join(os.path.dirname(__file__), '..', 'data.js')
 UNITS = {1: ('你好法语1_Unité1_默写版.txt', '你好法语1_Unité1_全文翻译默写.txt'),
          2: ('你好法语1_Unité2_默写版.txt', '你好法语1_Unité2_全文翻译默写.txt'),
          3: ('你好法语1_Unité3_默写版_1.txt', '你好法语1_Unité3_全文翻译默写.txt'),
-         4: ('你好法语1_Unité4_默写版.txt', '你好法语1_Unité4_全文翻译默写.txt')}
+         4: ('你好法语1_Unité4_默写版.txt', '你好法语1_Unité4_全文翻译默写.txt'),
+         5: ('你好法语1_Unité5_默写版.txt', '你好法语1_Unité5_全文翻译默写.txt')}
 # Rows lost at a PDF page break in the answer key
 PATCH = {(1, 15): 'français(e)', (1, 16): 'italien(ne)', (1, 17): 'ma', (1, 18): 'mon'}
 
