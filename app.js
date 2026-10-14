@@ -460,7 +460,7 @@
   }
 
   /* ---------- cloud sync: Google sign-in + one Firestore document per user ---------- */
-  const NOSYNC = new Set(['nh:settings', 'nh:lastAuto', 'nh:lastBackup', 'nh:lastSync']);
+  const NOSYNC = new Set(['nh:synccode', 'nh:eaFold', 'nh:settings', 'nh:lastAuto', 'nh:lastBackup', 'nh:lastSync']);
   const CLOUD = {
     ready: false, user: null, timer: null, busy: false, applying: false, status: '',
     on: () => !!(window.FIREBASE_CONFIG && window.firebase),
@@ -472,10 +472,10 @@
         firebase.auth().getRedirectResult().catch(() => { });
         firebase.auth().onAuthStateChanged(async u => {
           this.user = u; this.ready = true;
-          if (u) await this.pull();
+          if (this.linked()) await this.pull();
           refreshCloudUI();
         });
-        document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && this.user) this.pull(); });
+        document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && this.linked()) this.pull(); });
       } catch (e) { this.status = 'error'; }
     },
     async signIn() {
@@ -486,8 +486,29 @@
         else alert(tr('登录失败：') + (e.message || e.code));
       }
     },
-    signOut() { firebase.auth().signOut(); },
-    doc() { return this.db.collection('users').doc(this.user.uid); },
+    signOut() { localStorage.removeItem('nh:synccode'); firebase.auth().signOut(); },
+    // a sync code: an alternative to Google — anyone with the code shares the same progress
+    code: () => localStorage.getItem('nh:synccode') || '',
+    linked() { return !!this.user && (!this.user.isAnonymous || !!this.code()); },
+    newCode() {
+      const A = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789', r = crypto.getRandomValues(new Uint8Array(12));
+      return [...r].map(x => A[x % 32]).join('').replace(/(.{4})(?!$)/g, '$1-');
+    },
+    async useCode(code) {
+      code = String(code || '').toUpperCase().replace(/[^A-Z0-9]/g, '').replace(/(.{4})(?!$)/g, '$1-');
+      if (code.length !== 14) { alert(tr('同步码应该是 12 个字母或数字')); return; }
+      localStorage.setItem('nh:synccode', code);
+      try {
+        if (!this.user) await firebase.auth().signInAnonymously();
+        else { await this.pull(); refreshCloudUI(); }
+      } catch (e) {
+        localStorage.removeItem('nh:synccode');
+        alert(tr('同步码登录失败：') + (e.code === 'auth/operation-not-allowed' || e.code === 'auth/admin-restricted-operation' ? tr('需要在 Firebase 里开启「匿名」登录方式。') : (e.message || e.code)));
+      }
+    },
+    doc() {
+      return this.user.isAnonymous ? this.db.collection('codes').doc(this.code()) : this.db.collection('users').doc(this.user.uid);
+    },
     local() {
       const data = {};
       Object.keys(localStorage).filter(k => k.startsWith('nh:') && !NOSYNC.has(k)).forEach(k => { data[k] = localStorage.getItem(k); });
@@ -495,7 +516,7 @@
     },
     // download the cloud copy, merge it into this device, then upload the merged result
     async pull() {
-      if (!this.user || this.busy) return;
+      if (!this.linked() || this.busy) return;
       this.busy = true; this.status = 'syncing'; refreshCloudUI();
       try {
         const snap = await this.doc().get();
@@ -513,27 +534,33 @@
       this.busy = false; refreshCloudUI();
     },
     async push() {
-      if (!this.user) return;
+      if (!this.linked()) return;
       try {
         await this.doc().set({ data: this.local(), updated: firebase.firestore.FieldValue.serverTimestamp(), email: this.user.email || '' });
         store.set('lastSync', new Date().toISOString(), true); this.status = 'ok';
       } catch (e) { this.status = 'error'; this.err = e.code || e.message || String(e); }
       refreshCloudUI();
     },
-    changed() { if (this.user && !this.applying) { clearTimeout(this.timer); this.timer = setTimeout(() => this.push(), 3000); } },
+    changed() { if (this.linked() && !this.applying) { clearTimeout(this.timer); this.timer = setTimeout(() => this.push(), 3000); } },
   };
   function cloudHTML() {
     if (!window.FIREBASE_CONFIG) return `<p class="hint-text" style="margin:0">云同步还没有设置。</p>`;
     if (!window.firebase) return `<p class="notice">云同步组件没有加载（可能是网络问题），刷新页面再试。</p>`;
     if (!CLOUD.ready) return `<p class="kbd">正在连接…</p>`;
-    if (!CLOUD.user) return `<p class="hint-text" style="margin:0 0 12px">用 Google 账号登录后，手机和电脑会自动共用同一份进度：掌握的单词、错题本、打卡和邮票。</p>
-      <button class="btn" id="cl-in">用 Google 登录</button>`;
+    if (!CLOUD.linked()) return `<p class="hint-text" style="margin:0 0 12px">用 Google 账号登录后，手机和电脑会自动共用同一份进度：掌握的单词、错题本、打卡和邮票。</p>
+      <button class="btn" id="cl-in">用 Google 登录</button>
+      <p class="hint-text" style="margin:16px 0 8px">不想用 Google？也可以用<b>同步码</b>：在一台设备上生成，在其他设备上输入同一个码，进度就会同步。</p>
+      <div class="toolbar"><button class="btn ghost" id="cl-gen">生成同步码</button>
+        <input id="cl-code" class="answer-in" style="font-size:16px;max-width:220px;text-transform:uppercase" placeholder="XXXX-XXXX-XXXX" autocomplete="off" spellcheck="false">
+        <button class="btn ghost" id="cl-use">用这个码</button></div>`;
     const last = store.get('lastSync', '');
     const st = CLOUD.status === 'syncing' ? '正在同步…' : CLOUD.status === 'error' ? '同步失败' : last ? `已同步 · ${last.slice(0, 16).replace('T', ' ')}` : '';
-    return `<div class="toolbar"><span>已登录：<b>${esc(CLOUD.user.email || CLOUD.user.displayName || '')}</b></span>
+    const who = CLOUD.user.isAnonymous ? `同步码：<b class="sync-code" lang="en">${esc(CLOUD.code())}</b>` : `已登录：<b>${esc(CLOUD.user.email || CLOUD.user.displayName || '')}</b>`;
+    return `<div class="toolbar"><span>${who}</span>
       <span class="kbd">${st}</span><span class="spacer"></span>
-      <button class="btn ghost small" id="cl-now">立即同步</button><button class="btn ghost small" id="cl-out">退出登录</button></div>
+      ${CLOUD.user.isAnonymous ? `<button class="btn ghost small" id="cl-copy">复制</button>` : ''}<button class="btn ghost small" id="cl-now">立即同步</button><button class="btn ghost small" id="cl-out">退出登录</button></div>
       ${CLOUD.status === 'error' ? `<p class="notice" style="margin:8px 0 0">${esc(cloudErr(CLOUD.err))}<br><span class="kbd" lang="en">${esc(CLOUD.err || '')}</span></p>` : ''}
+      ${CLOUD.user.isAnonymous ? `<p class="hint-text" style="margin:8px 0 0">把这个码记下来（截图或抄在本子上）。在别的设备的「同步码」里输入它，就能拿回全部记录。码丢了就找不回来了。</p>` : ''}
       <p class="kbd" style="margin:6px 0 0">每次练习后自动上传；打开网站或切回这个页面时自动下载并合并。</p>`;
   }
   function cloudErr(code) {
@@ -545,13 +572,17 @@
   }
   function refreshCloudUI() {
     const box = $('#cloud'); if (box) { box.innerHTML = cloudHTML(); bindCloud(box); }
-    const dot = $('#cloud-dot'); if (dot) dot.dataset.state = CLOUD.user ? CLOUD.status || 'ok' : 'off';
+    const dot = $('#cloud-dot'); if (dot) dot.dataset.state = CLOUD.linked() ? CLOUD.status || 'ok' : 'off';
   }
   function bindCloud(box) {
     const i = $('#cl-in', box), n = $('#cl-now', box), o = $('#cl-out', box);
     if (i) i.onclick = () => CLOUD.signIn();
     if (n) n.onclick = () => CLOUD.pull();
-    if (o) o.onclick = () => CLOUD.signOut();
+    if (o) o.onclick = () => { if (!CLOUD.user.isAnonymous || confirm(tr('退出前请确认已经记下同步码，否则这台设备就连不回这份记录了。'))) CLOUD.signOut(); };
+    const g = $('#cl-gen', box), u = $('#cl-use', box), c = $('#cl-copy', box);
+    if (g) g.onclick = () => CLOUD.useCode(CLOUD.newCode());
+    if (u) u.onclick = () => CLOUD.useCode($('#cl-code', box).value);
+    if (c) c.onclick = () => navigator.clipboard.writeText(CLOUD.code()).then(() => { c.textContent = tr('已复制'); });
   }
 
   /* ---------- verb dictionary (from the Mon Français site + the textbook verbs) ---------- */
@@ -939,15 +970,16 @@
     const rows = analyseErrors();
     if (!rows.length) return `<section class="unit"><div class="unit-title"><h2>${bi('易错分析', 'Mistake patterns')}</h2></div>
       <p class="hint-text" style="margin:0">${bi('写错的单词会在这里按类型统计，比如「au 写成 eu」，并链接到《法语发音》里对应的练习。多做几次默写就会出现。', 'Your misspellings will be grouped here by type — e.g. "au written as eu" — with a link to the matching lesson in the pronunciation book. Do a few dictations and they will appear.')}</p></section>`;
-    const max = rows[0].n;
-    return `<section class="unit"><div class="unit-title"><h2>${bi('易错分析', 'Mistake patterns')}</h2><span>${bi('你最常把什么写成什么', 'What you most often write instead')}</span></div>
+    const max = rows[0].n, open = localStorage.getItem('nh:eaFold') !== '1';
+    return `<section class="unit"><details class="ea-fold" ${open ? 'open' : ''} ontoggle="try{localStorage.setItem('nh:eaFold',this.open?'0':'1')}catch(e){}">
+      <summary class="unit-title"><h2>${bi('易错分析', 'Mistake patterns')}</h2><span>${bi('你最常把什么写成什么', 'What you most often write instead')}</span><i class="ea-chev" aria-hidden="true">▾</i></summary>
       <div class="err-ana">${rows.map(r => `<div class="ea-row">
         <div class="ea-head"><b lang="fr">${tl(r)}</b><span class="ea-n">${r.n} ${bi('次', 'times')}</span>
           ${r.lesson ? `<a class="btn ghost small" href="#/sons/${r.lesson}/quiz">${bi('去练习 ›', 'Practise ›')}</a>` : ''}</div>
         <div class="ea-bar"><i style="width:${Math.max(6, r.n / max * 100)}%"></i></div>
         <div class="ea-ex">${r.ex.map(x => x.quiz ? `<span lang="fr">${esc(x.c)} <small>${bi('选了', 'chose')} ${esc(x.t)}</small></span>`
           : `<span lang="fr"><s>${esc(x.t)}</s> → ${esc(x.c)}</span>`).join('')}</div>
-      </div>`).join('')}</div></section>`;
+      </div>`).join('')}</div></details></section>`;
   }
 
   /* ---------- tools: quick lookup (overlay) and translation ---------- */

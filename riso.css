@@ -141,3 +141,10 @@ main .corner { display: none !important; }
   background-blend-mode: normal, overlay, normal;
 }
 .nav-journal { text-decoration: none; display: grid; place-items: center; }
+
+/* collapsible mistake patterns */
+.ea-fold > summary { cursor: pointer; list-style: none; }
+.ea-fold > summary::-webkit-details-marker { display: none; }
+.ea-chev { margin-left: auto; font-style: normal; transition: transform .2s; }
+.ea-fold:not([open]) .ea-chev { transform: rotate(-90deg); }
+.sync-code { font-family: "Special Elite", "Courier New", monospace; letter-spacing: .08em; }
