@@ -218,12 +218,12 @@
   }
   function stampSVG(n, kind, on) {
     const [city, g] = STAMPS[n] || ['Leçon ' + n, 'house'];
-    return `<svg viewBox="0 0 100 120" class="stamp ${on ? 'on' : ''} ${kind}" aria-label="${esc(city)}">
-      <rect x="3" y="3" width="94" height="114" rx="2" class="st-paper"/>
-      <rect x="9" y="9" width="82" height="102" class="st-frame"/>
-      <g transform="translate(10 6) scale(.8)" class="st-glyph"><path d="${GLYPH[g]}"/></g>
-      <text x="50" y="96" class="st-city">${esc(city)}</text>
-      <text x="50" y="106" class="st-sub">${kind === 'v' ? 'VOCABULAIRE' : 'TEXTE'} · ${n}</text>
+    // engraved stamp frame (blue for vocabulary, red for the text); the leçon's drawing goes inside
+    return `<svg viewBox="0 0 100 113" class="stamp ${on ? 'on' : ''} ${kind}" aria-label="${esc(city)}">
+      <image href="img/stamp-${kind}.webp" width="100" height="113" preserveAspectRatio="none"/>
+      <g transform="translate(26 17) scale(.48)" class="st-glyph"><path d="${GLYPH[g]}"/></g>
+      <text x="50" y="80" class="st-city">${esc(city)}</text>
+      <text x="50" y="88" class="st-sub">${kind === 'v' ? 'VOCABULAIRE' : 'TEXTE'} · ${n}</text>
     </svg>`;
   }
   // called after mastery changes: award stamps when a part of a leçon is complete

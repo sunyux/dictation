@@ -148,3 +148,11 @@ main .corner { display: none !important; }
 .ea-chev { margin-left: auto; font-style: normal; transition: transform .2s; }
 .ea-fold:not([open]) .ea-chev { transform: rotate(-90deg); }
 .sync-code { font-family: "Special Elite", "Courier New", monospace; letter-spacing: .08em; }
+
+/* engraved stamp frames: locked stamps look faded and grey */
+.stamp:not(.on) image { filter: grayscale(1) opacity(.5); }
+.stamp .st-glyph path { stroke-width: 3; }
+.stamp:not(.on) .st-glyph path, .stamp:not(.on) text { opacity: .45; }
+.stamp .st-city { font-size: 9px; }
+.stamp .st-sub { font-size: 5px; }
+.album .stamp { width: 78px; }
