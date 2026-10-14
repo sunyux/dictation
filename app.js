@@ -475,7 +475,11 @@
           if (this.linked()) await this.pull();
           refreshCloudUI();
         });
-        document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && this.linked()) this.pull(); });
+        document.addEventListener('visibilitychange', () => {
+          if (document.visibilityState === 'visible' && this.linked()) this.pull();
+          else this.flush();
+        });
+        window.addEventListener('pagehide', () => this.flush());
       } catch (e) { this.status = 'error'; }
     },
     async signIn() {
@@ -541,7 +545,10 @@
       } catch (e) { this.status = 'error'; this.err = e.code || e.message || String(e); }
       refreshCloudUI();
     },
-    changed() { if (this.linked() && !this.applying) { clearTimeout(this.timer); this.timer = setTimeout(() => this.push(), 3000); } },
+    // to save free Firestore quota: upload once a practice ends (leaving the page, switching away), not after every answer
+    dirty: false,
+    changed() { if (this.linked() && !this.applying) { this.dirty = true; clearTimeout(this.timer); this.timer = setTimeout(() => this.flush(), 120000); } },
+    flush() { if (this.dirty && this.linked()) { this.dirty = false; clearTimeout(this.timer); this.push(); } },
   };
   function cloudHTML() {
     if (!window.FIREBASE_CONFIG) return `<p class="hint-text" style="margin:0">云同步还没有设置。</p>`;
@@ -561,7 +568,7 @@
       ${CLOUD.user.isAnonymous ? `<button class="btn ghost small" id="cl-copy">复制</button>` : ''}<button class="btn ghost small" id="cl-now">立即同步</button><button class="btn ghost small" id="cl-out">退出登录</button></div>
       ${CLOUD.status === 'error' ? `<p class="notice" style="margin:8px 0 0">${esc(cloudErr(CLOUD.err))}<br><span class="kbd" lang="en">${esc(CLOUD.err || '')}</span></p>` : ''}
       ${CLOUD.user.isAnonymous ? `<p class="hint-text" style="margin:8px 0 0">把这个码记下来（截图或抄在本子上）。在别的设备的「同步码」里输入它，就能拿回全部记录。码丢了就找不回来了。</p>` : ''}
-      <p class="kbd" style="margin:6px 0 0">每次练习后自动上传；打开网站或切回这个页面时自动下载并合并。</p>`;
+      <p class="kbd" style="margin:6px 0 0">每次练习结束（离开练习页或切走）时自动上传；打开网站或切回这个页面时自动下载并合并。</p>`;
   }
   function cloudErr(code) {
     code = String(code || '');
@@ -1769,6 +1776,7 @@
   /* ---------- router ---------- */
   let cleanup = () => { };
   function route() {
+    CLOUD.flush();
     cleanup(); cleanup = () => { };
     TTS.stop(); seqToken++;
     const parts = location.hash.replace(/^#\/?/, '').split('/').filter(Boolean);
