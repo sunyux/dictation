@@ -459,6 +459,73 @@
     setTimeout(() => { window.print(); document.body.classList.remove('printing-sheet'); area.remove(); }, 50);
   }
 
+  /* ---------- noun gender: colour hints and a faint article before the word ---------- */
+  function gender(pos) {
+    pos = String(pos || '');
+    return /(^|\W)n\.m\.|^m\./.test(pos) ? 'm' : /(^|\W)n\.f\.|^f\./.test(pos) ? 'f' : '';
+  }
+  function artHint(v) {
+    const g = gender(v.pos); if (!g) return '';
+    const pl = /pl\./.test(v.pos), vow = /^[aeiouyhâàéèêëîïôûœ]/i.test(v.fr);
+    const a = pl ? 'des · les' : g === 'm' ? (vow ? "un · l'" : 'un · le') : (vow ? "une · l'" : 'une · la');
+    return `<span class="art-hint" aria-hidden="true">${a}</span>`;
+  }
+  // the right answer with the letters whose accent differs from what was typed marked
+  function accentDiff(typed, target) {
+    const t = [...typed.normalize('NFC')], c = [...target.normalize('NFC')];
+    if (t.length !== c.length) return esc(target);
+    return c.map((ch, i) => ch !== t[i] && strip(ch).toLowerCase() === strip(t[i]).toLowerCase() ? `<mark class="acc-x">${esc(ch)}</mark>` : esc(ch)).join('');
+  }
+
+  /* ---------- accent bar: typewriter keys, number shortcuts and e/ → é composing ---------- */
+  const ACCENTS = {
+    keys: ['é', 'è', 'ê', 'ë', 'à', 'â', 'ù', 'û', 'ç', 'œ'],
+    // composing pairs (only in single-word answers, where "donc," etc. can't occur)
+    pairs: { 'e/': 'é', 'e\\': 'è', 'e^': 'ê', 'e"': 'ë', 'a\\': 'à', 'a^': 'â', 'u\\': 'ù', 'u^': 'û', 'c,': 'ç', 'oe': 'œ', 'i^': 'î', 'o^': 'ô' },
+    el: null, target: null,
+    // which inputs get the bar; "word" ones also get the number keys and composing
+    fits: el => el && el.matches && el.matches('.answer-in[lang="fr"], .cloze-in, .full-in, #typed'),
+    isWord: el => el.matches('input.answer-in[lang="fr"], .cloze-in'),
+    init() {
+      const bar = this.el = document.createElement('div');
+      bar.className = 'acc-bar'; bar.hidden = true; bar.setAttribute('role', 'toolbar'); bar.setAttribute('aria-label', 'accents');
+      bar.innerHTML = this.keys.map((k, i) => `<button type="button" class="acc-key" data-k="${k}" tabindex="-1"><small>${(i + 1) % 10}</small>${k}</button>`).join('');
+      document.body.appendChild(bar);
+      // keep focus in the input when a key is pressed
+      bar.addEventListener('pointerdown', e => e.preventDefault());
+      bar.addEventListener('click', e => { const b = e.target.closest('.acc-key'); if (b && this.target) this.insert(this.target, b.dataset.k, 0); });
+      document.addEventListener('focusin', e => { if (this.fits(e.target)) { this.target = e.target; bar.hidden = false; bar.classList.toggle('word', this.isWord(e.target)); } });
+      document.addEventListener('focusout', () => setTimeout(() => { if (!this.fits(document.activeElement)) { bar.hidden = true; this.target = null; } }, 0));
+      document.addEventListener('keydown', e => {
+        const el = e.target;
+        if (!this.fits(el) || !this.isWord(el) || e.ctrlKey || e.metaKey || e.altKey || !/^[0-9]$/.test(e.key)) return;
+        e.preventDefault();
+        const k = this.keys[(+e.key + 9) % 10];
+        this.insert(el, k, 0); this.press(k);
+      });
+      document.addEventListener('input', e => {
+        const el = e.target;
+        if (!this.fits(el) || !this.isWord(el) || e.inputType !== 'insertText') return;
+        const p = el.selectionStart, two = el.value.slice(p - 2, p);
+        const out = this.pairs[two.toLowerCase()];
+        if (!out) return;
+        const ch = two[0] === two[0].toUpperCase() && two[0] !== two[0].toLowerCase() ? out.toUpperCase() : out;
+        el.setSelectionRange(p - 2, p); this.insert(el, ch, 0); this.press(out);
+      });
+    },
+    insert(el, ch) {
+      el.focus();
+      const a = el.selectionStart ?? el.value.length, b = el.selectionEnd ?? a;
+      el.setRangeText(ch, a, b, 'end');
+      el.dispatchEvent(new Event('input', { bubbles: true }));
+    },
+    press(k) {
+      const b = this.el && this.el.querySelector(`[data-k="${k}"]`); if (!b) return;
+      b.classList.remove('down'); void b.offsetWidth; b.classList.add('down');
+      setTimeout(() => b.classList.remove('down'), 160);
+    },
+  };
+
   /* ---------- cloud sync: Google sign-in + one Firestore document per user ---------- */
   const NOSYNC = new Set(['nh:synccode', 'nh:eaFold', 'nh:settings', 'nh:lastAuto', 'nh:lastBackup', 'nh:lastSync']);
   const CLOUD = {
@@ -2116,11 +2183,11 @@
           <button class="btn ghost small" id="vplay">${ICON.play} ${bi('全部朗读', 'Read all')}</button>`) +
         `<p class="hint-text">${bi('按住左边的 ⠿ 拖动，可以在同一组里调整单词顺序。', 'Drag ⠿ on the left to reorder words within a group.')}${custom ? ` <a href="#" id="vreset">${bi('恢复课本顺序', 'Restore book order')}</a>` : ''}</p>` +
         groups.map(g => `<div class="vgroup" data-g="${esc(g.g || '')}"><h3>${esc(g.g || '')}</h3>${g.items.map(v => `
-          <div class="vrow ${hide ? 'hidefr' : ''} ${mst.w[v.fr] ? 'mastered' : ''}" data-say="${esc(forms(v.fr).say)}" data-fr="${esc(v.fr)}">
+          <div class="vrow ${hide ? 'hidefr' : ''} ${mst.w[v.fr] ? 'mastered' : ''} ${gender(v.pos) ? 'g-' + gender(v.pos) : ''}" data-say="${esc(forms(v.fr).say)}" data-fr="${esc(v.fr)}">
             <span class="vdrag" title="${bi('拖动调整顺序', 'Drag to reorder')}" aria-label="${bi('拖动调整顺序', 'Drag to reorder')}">⠿</span>
             <span class="play">${ICON.play}</span>
             <span class="vzh">${G(v)}</span><span class="pos">${esc(v.pos)}</span>
-            <span class="vfr" lang="fr">${esc(v.fr)}</span>
+            <span class="vfr" lang="fr">${artHint(v)}${esc(v.fr)}</span>
             ${wordTip(lecon.n, v) ? `<span class="vtip" ${showTip ? '' : 'hidden'}>${wordTip(lecon.n, v)}</span>` : ''}</div>`).join('')}</div>`).join('');
       enableDrag(pane, () => { saveOrder(ctx.book.id, lecon.n, pane); if (!$('#vreset', pane)) paneVocab(ctx, 'list'); });
       const rs = $('#vreset', pane); if (rs) rs.onclick = e => { e.preventDefault(); store.set(orderKey(ctx.book.id, lecon.n), null); paneVocab(ctx, 'list'); };
@@ -2177,7 +2244,7 @@
         <div class="count">${i + 1} / ${queue.length}</div>
         <div class="bar"><i style="width:${i / queue.length * 100}%"></i></div>
         <div class="prompt"><div class="pmean">${MEAN(v)}</div>
-          <div class="ppos">${playBtn(forms(v.fr).say)} ${esc(v.pos)}${v.g ? ' · ' + esc(v.g) : ''}</div></div>
+          <div class="ppos">${playBtn(forms(v.fr).say)} <span class="pos ${gender(v.pos) ? 'g-' + gender(v.pos) : ''}">${esc(v.pos)}</span>${v.g ? ' · ' + esc(v.g) : ''}</div></div>
         <input class="answer-in" id="ans" lang="fr" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${bi('用法语写…', 'Write in French…')}">
         <div class="drill-actions">
           ${test ? '' : '<button class="btn ghost small" id="hint">提示一个字母</button>'}
@@ -2230,7 +2297,8 @@
       else SRS.hit(it);
       fb.innerHTML = `<div class="feedback ${r}">
         <span class="lab">${good ? (hintN ? '对了（用了提示）' : '完全正确') : r === 'accent' ? '差一点：注意重音符号' : giveUp ? '答案' : '不对，正确答案是'}</span>
-        <div class="ans" lang="fr">${playBtn(forms(v.fr).say)} ${esc(v.fr)}</div>
+        <div class="ans" lang="fr">${playBtn(forms(v.fr).say)} ${r === 'accent' ? accentDiff(inp.value.trim(), v.fr) : esc(v.fr)}</div>
+        ${r === 'accent' ? `<span class="lab acc-note">${bi('拼写正确，注意标出的重音符号', 'Spelling is right — check the marked accents')}</span>` : ''}
         ${test && missN ? `<span class="lab">${toBook ? bi(`首测已经错了 ${missN} 次，加入错题本了`, `Missed ${missN} times in first tests — added to the mistake book`) : missN >= 3 ? bi('已经在错题本里了', 'Already in the mistake book') : bi(`首测错了 ${missN} 次（错满 3 次会进错题本）`, `Missed ${missN} times in first tests (3 puts it in the mistake book)`)}</span>` : ''}
         ${tipBox(wordTip(ctx.lecon.n, v))}</div>`;
       TTS.say(forms(v.fr).say);
@@ -2798,6 +2866,7 @@
   renderLang();
   const qsb = $('#qs-btn'); if (qsb) qsb.onclick = () => openLookup();
   CLOUD.init();
+  ACCENTS.init();
   renderStatus();
   translateTree(document.body);
   idbGet('handle').then(h => { if (h && h.queryPermission) h.queryPermission({ mode: 'readwrite' }).then(p => { if (p === 'granted') { BACKUP.handle = h; BACKUP.write(); } }); });

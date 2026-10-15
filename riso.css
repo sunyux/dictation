@@ -173,3 +173,36 @@ input:focus, textarea:focus, select:focus { outline: none; box-shadow: none; }
 /* French typography: ligatures, kerning, old-style figures */
 [lang="fr"], .lecon-card h3, .unit-title h2 { font-feature-settings: "liga" 1, "kern" 1; font-kerning: normal; font-variant-numeric: oldstyle-nums; }
 html.mono .lecon-card { outline-color: rgba(0, 0, 0, .14); }
+
+/* ---- noun gender: Prussian blue for masculine, dried rose for feminine ---- */
+:root { --g-m: #4a6b82; --g-f: #b55d5c; }
+.pos.g-m, .g-m .pos { color: var(--g-m) !important; font-family: var(--serif); font-style: italic; background: none; }
+.pos.g-f, .g-f .pos { color: var(--g-f) !important; font-family: var(--serif); font-style: italic; background: none; }
+.vrow.g-m { box-shadow: inset 2px 0 0 rgba(74, 107, 130, .2); }
+.vrow.g-f { box-shadow: inset 2px 0 0 rgba(181, 93, 92, .2); }
+.art-hint { font: italic .78em var(--serif); opacity: .45; margin-right: .45em; white-space: nowrap; }
+.g-m .art-hint { color: var(--g-m); }
+.g-f .art-hint { color: var(--g-f); }
+.vrow.hidefr .art-hint { visibility: visible; }
+html.mono { --g-m: #333; --g-f: #777; }
+
+/* ---- accent bar: little typewriter keys ---- */
+.acc-bar {
+  position: fixed; left: 50%; bottom: 14px; transform: translateX(-50%); z-index: 40;
+  display: flex; gap: 4px; padding: 6px 8px; flex-wrap: wrap; justify-content: center; max-width: calc(100vw - 24px);
+  background: #f3ecdc; border: 1px solid #b9ad94; border-radius: 6px; box-shadow: 0 2px 0 0 rgba(0, 0, 0, .1);
+}
+.acc-bar[hidden] { display: none; }
+.acc-key {
+  position: relative; width: 31px; height: 31px; border-radius: 50%; padding: 0; cursor: pointer;
+  font: 18px/1 "EB Garamond", serif; color: #26221d; background: #fbf8f0;
+  border: 1px solid #8d8473; box-shadow: 0 2px 0 0 rgba(0, 0, 0, .12); transition: transform .12s, box-shadow .12s;
+}
+.acc-key small { position: absolute; left: 4px; top: 1px; font: 9px "Courier New", monospace; opacity: .5; }
+.acc-bar:not(.word) .acc-key small { display: none; }
+.acc-key:hover { transform: translateY(-1px); }
+.acc-key:active, .acc-key.down { transform: translateY(1px); box-shadow: 0 1px 0 0 rgba(0, 0, 0, .12); background: #efe6d2; }
+
+/* ---- accent forgiveness: amber marks on the letters to fix ---- */
+mark.acc-x { background: rgba(214, 160, 60, .28); color: inherit; border-bottom: 2px solid #c8902c; padding: 0 1px; border-radius: 1px; }
+.acc-note { color: #9a6a1c; }
