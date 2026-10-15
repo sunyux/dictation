@@ -46,7 +46,7 @@
     if (!en) return str;
     return L() === 'en' ? str.replace(t, en) : str.replace(t, `${t} · ${en}`);
   }
-  const SKIP = '.brand, .cover, #langsw, .book-head h1, .crumbs, [lang="fr"], [data-tr]';
+  const SKIP = '.brand, .cover, #langsw, h1, .crumbs, [lang="fr"], [data-tr]';
   function fixNode(n) {
     if (!CJK.test(n.nodeValue) || !n.parentElement || n.parentElement.closest(SKIP)) return;
     const t = n.nodeValue.trim(), en = enFor(t);
@@ -55,6 +55,8 @@
     const wrap = document.createElement('span');
     wrap.dataset.tr = '1';
     const long = en.length > 36 && !n.parentElement.closest('button, .btn, .mode, .tab, label, .kbd');
+    // 中英法: labels and buttons get their English; long sentences stay Chinese only
+    if (long) return;
     wrap.innerHTML = `${esc(n.nodeValue)}<span class="en-ui ${long ? 'block' : ''}" lang="en">${esc(en)}</span>`;
     n.replaceWith(wrap);
   }
@@ -2020,14 +2022,8 @@
         <div class="shelf">${coverHTML(book)}${soundCover()}</div>
         <div class="home-text">
           <p class="kicker" lang="fr">Cahier de dictée</p>
-          <h1>跟着课本，一课一课写下来</h1>
-          <p>每一课都按你的默写讲义整理：先记单词，再练句子，最后整篇默写、开口背诵。所有法语都可以点一下朗读。</p>
-          <ol class="steps-intro">
-            <li><b>1</b><span>词汇 — 看中文和英文含义写法语，可以点播放听发音</span></li>
-            <li><b>2</b><span>句子 — 课文填空、逐句中译法、听写</span></li>
-            <li><b>3</b><span>全文默写 — 对照中文，整篇写出来</span></li>
-            <li><b>4</b><span>背诵 — 对着麦克风说，说对的词会逐个显现</span></li>
-          </ol>
+          <h1>今天写哪一课？</h1>
+          <p>照着默写讲义整理的。法语点一下就会读。</p>
           <div class="toolbar"><a class="btn" href="#/${book.id}">打开《${esc(book.title)}》</a><a class="btn ghost" href="#/sons">打开《${esc(SB().title)}》</a><a class="btn ghost" href="#/journal">写今天的法语日记</a></div>
           ${backupNag()}${reviewBanner()}
         </div>

@@ -206,3 +206,5 @@ html.mono { --g-m: #333; --g-f: #777; }
 /* ---- accent forgiveness: amber marks on the letters to fix ---- */
 mark.acc-x { background: rgba(214, 160, 60, .28); color: inherit; border-bottom: 2px solid #c8902c; padding: 0 1px; border-radius: 1px; }
 .acc-note { color: #9a6a1c; }
+/* less app-like: squared buttons and toggles, like printed labels */
+.btn, .mode, .langsw, .langsw button { border-radius: 3px !important; }
