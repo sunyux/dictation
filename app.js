@@ -29,7 +29,12 @@
     if (L() === 'zhen' && en) return `${zh}<span class="en-gloss" lang="en">${en}</span>`;
     return zh;
   };
-  const MEAN = o => `${o.zh ? `<span class="m-zh">${esc(o.zh)}</span>` : ''}${o.en ? `<span class="m-en" lang="en">${esc(o.en)}</span>` : ''}`;
+  // meaning: 中英法 shows both, 中法 Chinese only, 英法 English only (falling back to Chinese when there is no English)
+  const MEAN = o => {
+    const zh = o.zh && !(L() === 'en' && o.en) ? `<span class="m-zh">${esc(o.zh)}</span>` : '';
+    const en = o.en && L() !== 'zh' ? `<span class="m-en" lang="en">${esc(o.en)}</span>` : '';
+    return zh + en;
+  };
   const Gt = o => L() === 'en' ? (o.en || o.zh || '') : (o.zh || '');   // plain text
   const H = r => esc(L() === 'en' ? (r.hen || r.h) : r.h);
   // 英法 mode: translate the remaining Chinese UI text fragments (see i18n.js)
@@ -46,7 +51,7 @@
     if (!en) return str;
     return L() === 'en' ? str.replace(t, en) : str.replace(t, `${t} · ${en}`);
   }
-  const SKIP = '.brand, .cover, #langsw, h1, .crumbs, [lang="fr"], [data-tr]';
+  const SKIP = '.brand, .cover, #langsw, .book-head h1, .crumbs, [lang="fr"], [data-tr]';
   function fixNode(n) {
     if (!CJK.test(n.nodeValue) || !n.parentElement || n.parentElement.closest(SKIP)) return;
     const t = n.nodeValue.trim(), en = enFor(t);
@@ -55,8 +60,6 @@
     const wrap = document.createElement('span');
     wrap.dataset.tr = '1';
     const long = en.length > 36 && !n.parentElement.closest('button, .btn, .mode, .tab, label, .kbd');
-    // 中英法: labels and buttons get their English; long sentences stay Chinese only
-    if (long) return;
     wrap.innerHTML = `${esc(n.nodeValue)}<span class="en-ui ${long ? 'block' : ''}" lang="en">${esc(en)}</span>`;
     n.replaceWith(wrap);
   }
@@ -569,14 +572,14 @@
     },
     async useCode(code) {
       code = String(code || '').toUpperCase().replace(/[^A-Z0-9]/g, '').replace(/(.{4})(?!$)/g, '$1-');
-      if (code.length !== 14) { alert(tr('同步码应该是 12 个字母或数字')); return; }
+      if (code.length !== 14) { alert(bi('同步码应该是 12 个字母或数字', 'A sync code has 12 letters or digits')); return; }
       localStorage.setItem('nh:synccode', code);
       try {
         if (!this.user) await firebase.auth().signInAnonymously();
         else { await this.pull(); refreshCloudUI(); }
       } catch (e) {
         localStorage.removeItem('nh:synccode');
-        alert(tr('同步码登录失败：') + (e.code === 'auth/operation-not-allowed' || e.code === 'auth/admin-restricted-operation' ? tr('需要在 Firebase 里开启「匿名」登录方式。') : (e.message || e.code)));
+        alert(bi('同步码登录失败：', 'Sync code sign-in failed: ') + (e.code === 'auth/operation-not-allowed' || e.code === 'auth/admin-restricted-operation' ? bi('需要在 Firebase 里开启「匿名」登录方式。', 'Anonymous sign-in needs to be turned on in Firebase.') : (e.message || e.code)));
       }
     },
     doc() {
@@ -625,18 +628,18 @@
     if (!CLOUD.ready) return `<p class="kbd">正在连接…</p>`;
     if (!CLOUD.linked()) return `<p class="hint-text" style="margin:0 0 12px">用 Google 账号登录后，手机和电脑会自动共用同一份进度：掌握的单词、错题本、打卡和邮票。</p>
       <button class="btn" id="cl-in">用 Google 登录</button>
-      <p class="hint-text" style="margin:16px 0 8px">不想用 Google？也可以用<b>同步码</b>：在一台设备上生成，在其他设备上输入同一个码，进度就会同步。</p>
-      <div class="toolbar"><button class="btn ghost" id="cl-gen">生成同步码</button>
+      <p class="hint-text" style="margin:16px 0 8px">${bi('不想用 Google？也可以用同步码：在一台设备上生成，在其他设备上输入同一个码，进度就会同步。', 'No Google? Use a sync code instead: make one on one device, type the same code on the others, and your progress syncs.')}</p>
+      <div class="toolbar"><button class="btn ghost" id="cl-gen">${bi('生成同步码', 'Make a sync code')}</button>
         <input id="cl-code" class="answer-in" style="font-size:16px;max-width:220px;text-transform:uppercase" placeholder="XXXX-XXXX-XXXX" autocomplete="off" spellcheck="false">
-        <button class="btn ghost" id="cl-use">用这个码</button></div>`;
+        <button class="btn ghost" id="cl-use">${bi('用这个码', 'Use this code')}</button></div>`;
     const last = store.get('lastSync', '');
     const st = CLOUD.status === 'syncing' ? '正在同步…' : CLOUD.status === 'error' ? '同步失败' : last ? `已同步 · ${last.slice(0, 16).replace('T', ' ')}` : '';
-    const who = CLOUD.user.isAnonymous ? `同步码：<b class="sync-code" lang="en">${esc(CLOUD.code())}</b>` : `已登录：<b>${esc(CLOUD.user.email || CLOUD.user.displayName || '')}</b>`;
+    const who = CLOUD.user.isAnonymous ? `${bi('同步码', 'Sync code')}：<b class="sync-code" lang="en">${esc(CLOUD.code())}</b>` : `已登录：<b>${esc(CLOUD.user.email || CLOUD.user.displayName || '')}</b>`;
     return `<div class="toolbar"><span>${who}</span>
       <span class="kbd">${st}</span><span class="spacer"></span>
-      ${CLOUD.user.isAnonymous ? `<button class="btn ghost small" id="cl-copy">复制</button>` : ''}<button class="btn ghost small" id="cl-now">立即同步</button><button class="btn ghost small" id="cl-out">退出登录</button></div>
+      ${CLOUD.user.isAnonymous ? `<button class="btn ghost small" id="cl-copy">${bi('复制', 'Copy')}</button>` : ''}<button class="btn ghost small" id="cl-now">立即同步</button><button class="btn ghost small" id="cl-out">退出登录</button></div>
       ${CLOUD.status === 'error' ? `<p class="notice" style="margin:8px 0 0">${esc(cloudErr(CLOUD.err))}<br><span class="kbd" lang="en">${esc(CLOUD.err || '')}</span></p>` : ''}
-      ${CLOUD.user.isAnonymous ? `<p class="hint-text" style="margin:8px 0 0">把这个码记下来（截图或抄在本子上）。在别的设备的「同步码」里输入它，就能拿回全部记录。码丢了就找不回来了。</p>` : ''}
+      ${CLOUD.user.isAnonymous ? `<p class="hint-text" style="margin:8px 0 0">${bi('把这个码记下来（截图或抄在本子上）。在别的设备的「同步码」里输入它，就能拿回全部记录。码丢了就找不回来了。', 'Write this code down (screenshot it or copy it into a notebook). Type it into "Sync code" on another device to get all your records back. A lost code can\'t be recovered.')}</p>` : ''}
       <p class="kbd" style="margin:6px 0 0">每次练习结束（离开练习页或切走）时自动上传；打开网站或切回这个页面时自动下载并合并。</p>`;
   }
   function cloudErr(code) {
@@ -654,11 +657,11 @@
     const i = $('#cl-in', box), n = $('#cl-now', box), o = $('#cl-out', box);
     if (i) i.onclick = () => CLOUD.signIn();
     if (n) n.onclick = () => CLOUD.pull();
-    if (o) o.onclick = () => { if (!CLOUD.user.isAnonymous || confirm(tr('退出前请确认已经记下同步码，否则这台设备就连不回这份记录了。'))) CLOUD.signOut(); };
+    if (o) o.onclick = () => { if (!CLOUD.user.isAnonymous || confirm(bi('退出前请确认已经记下同步码，否则这台设备就连不回这份记录了。', 'Make sure you have written the sync code down first — otherwise this device can\'t reconnect to these records.'))) CLOUD.signOut(); };
     const g = $('#cl-gen', box), u = $('#cl-use', box), c = $('#cl-copy', box);
     if (g) g.onclick = () => CLOUD.useCode(CLOUD.newCode());
     if (u) u.onclick = () => CLOUD.useCode($('#cl-code', box).value);
-    if (c) c.onclick = () => navigator.clipboard.writeText(CLOUD.code()).then(() => { c.textContent = tr('已复制'); });
+    if (c) c.onclick = () => navigator.clipboard.writeText(CLOUD.code()).then(() => { c.textContent = bi('已复制', 'Copied'); });
   }
 
   /* ---------- verb dictionary (from the Mon Français site + the textbook verbs) ---------- */
@@ -2022,8 +2025,8 @@
         <div class="shelf">${coverHTML(book)}${soundCover()}</div>
         <div class="home-text">
           <p class="kicker" lang="fr">Cahier de dictée</p>
-          <h1>今天写哪一课？</h1>
-          <p>照着默写讲义整理的。法语点一下就会读。</p>
+          <h1>${bi('今天写哪一课？', 'Which leçon today?')}</h1>
+          <p>${bi('照着默写讲义整理的。法语点一下就会读。', 'Built from your dictation handouts. Tap any French to hear it.')}</p>
           <div class="toolbar"><a class="btn" href="#/${book.id}">打开《${esc(book.title)}》</a><a class="btn ghost" href="#/sons">打开《${esc(SB().title)}》</a><a class="btn ghost" href="#/journal">写今天的法语日记</a></div>
           ${backupNag()}${reviewBanner()}
         </div>
@@ -2240,7 +2243,7 @@
         <div class="count">${i + 1} / ${queue.length}</div>
         <div class="bar"><i style="width:${i / queue.length * 100}%"></i></div>
         <div class="prompt"><div class="pmean">${MEAN(v)}</div>
-          <div class="ppos">${playBtn(forms(v.fr).say)} <span class="pos ${gender(v.pos) ? 'g-' + gender(v.pos) : ''}">${esc(v.pos)}</span>${v.g ? ' · ' + esc(v.g) : ''}</div></div>
+          <div class="ppos">${playBtn(forms(v.fr).say)} <span class="pos ${gender(v.pos) ? 'g-' + gender(v.pos) : ''}">${esc(v.pos)}</span>${v.g ? ' · ' + esc(tr(v.g)) : ''}</div></div>
         <input class="answer-in" id="ans" lang="fr" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${bi('用法语写…', 'Write in French…')}">
         <div class="drill-actions">
           ${test ? '' : '<button class="btn ghost small" id="hint">提示一个字母</button>'}
