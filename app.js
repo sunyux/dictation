@@ -16,7 +16,8 @@
   const settings = Object.assign({ rate: 0.85, volume: 0.7, lenient: false, voice: '' }, store.get('settings', {}));
   const saveSettings = () => store.set('settings', settings);
   if (!settings.lang) settings.lang = 'zh';
-  document.documentElement.classList.toggle('mono', settings.look === 'mono');
+  const applyLook = () => { document.documentElement.classList.toggle('mono', settings.look === 'mono'); document.documentElement.classList.toggle('ed', settings.look === 'ed'); };
+  applyLook();
   document.documentElement.classList.toggle('no-riso', settings.riso === false);
   // language modes: 'zhen' 中英法 · 'zh' 中法 · 'en' 英法
   const L = () => settings.lang;
@@ -1486,7 +1487,15 @@
     main.innerHTML = `
       <p class="kicker" lang="fr">Mon carnet</p>
       <h1 style="font-size:44px">我的打卡与邮册</h1>
-      <div class="review-stats">
+      <div class="ed-stats">
+        <div><div class="num">${s}<sup>DAYS</sup></div><span class="lab">Streak <span>· 连续天数</span></span></div>
+        <div><div class="num">${lecons.reduce((a, l) => a + MASTER.stats(book.id, l).words, 0)}<sup>WORDS</sup></div><span class="lab">Mastered <span>· 已掌握</span></span></div>
+        <div><div class="num">${XP.today().xp}<sup>/ ${g} PTS</sup></div><span class="lab">Today <span>· 今日分数</span></span></div>
+        <div><div class="num">${XP.best()}<sup>DAYS</sup></div><span class="lab">Best run <span>· 最长连续</span></span></div>
+        <div><div class="num">${XP.total()}<sup>PTS</sup></div><span class="lab">Total <span>· 总分</span></span></div>
+        <div><div class="num">${stampCount}<sup>/ ${lecons.length * 2}</sup></div><span class="lab">Stamps <span>· 邮票</span></span></div>
+      </div>
+      <div class="review-stats ed-swap">
         <div><b>${s}</b><span>连续天数</span></div>
         <div><b>${XP.best()}</b><span>最长连续</span></div>
         <div><b>${XP.today().xp}<small>/${g}</small></b><span>今日分数</span></div>
@@ -1709,7 +1718,7 @@
       <label><span class="lab">法语声音</span>
         <select id="s-voice">${vs.length ? vs.map(v => `<option ${TTS.voice && v.name === TTS.voice.name ? 'selected' : ''}>${esc(v.name)}</option>`).join('') : '<option>（系统没有法语声音）</option>'}</select></label>
  <div class="lab" style="margin-bottom:4px">${bi('外观', 'Look')}</div>
-      <div class="modes" style="margin-bottom:14px"><button class="mode" data-look="color" aria-pressed="${settings.look !== 'mono'}">${bi('彩色', 'Colour')}</button><button class="mode" data-look="mono" aria-pressed="${settings.look === 'mono'}">${bi('黑白', 'Black & white')}</button></div>
+      <div class="modes" style="margin-bottom:14px"><button class="mode" data-look="color" aria-pressed="${!settings.look || settings.look === 'color'}">${bi('彩色', 'Colour')}</button><button class="mode" data-look="mono" aria-pressed="${settings.look === 'mono'}">${bi('黑白', 'Black & white')}</button><button class="mode" data-look="ed" aria-pressed="${settings.look === 'ed'}">${bi('报刊目录', 'Editorial')}</button></div>
       <label class="chk"><input type="checkbox" id="s-riso" ${settings.riso !== false ? 'checked' : ''}> ${bi('丝网印刷质感', 'Screen-print texture')}</label>
       <label class="chk"><input type="checkbox" id="s-tw" ${settings.typewriter ? 'checked' : ''}> ${bi('打字机模式（打字声 + 打字机字体）', 'Typewriter mode (key sounds + typewriter font)')}</label>
       <label class="chk"><input type="checkbox" id="s-len" ${settings.lenient ? 'checked' : ''}> 重音写错也算对</label>
@@ -1720,8 +1729,7 @@
     $('#s-vol').onchange = () => TTS.say('Bonjour !');
     $('#s-voice').onchange = e => { settings.voice = e.target.value; TTS.pick(); saveSettings(); };
     $$('[data-look]', box).forEach(b => b.onclick = () => {
-      settings.look = b.dataset.look; saveSettings();
-      document.documentElement.classList.toggle('mono', settings.look === 'mono');
+      settings.look = b.dataset.look; saveSettings(); applyLook();
       $$('[data-look]', box).forEach(x => x.setAttribute('aria-pressed', x === b));
     });
     $('#s-riso').onchange = e => { settings.riso = e.target.checked; saveSettings(); document.documentElement.classList.toggle('no-riso', !settings.riso); };
@@ -1777,6 +1785,8 @@
   let cleanup = () => { };
   function route() {
     CLOUD.flush();
+    const sec = '#/' + (location.hash.replace(/^#\/?/, '').split('/')[0] || '');
+    $$('.top a[href^="#/"]').forEach(a => { if (a.getAttribute('href') === sec && sec !== '#/') a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
     cleanup(); cleanup = () => { };
     TTS.stop(); seqToken++;
     const parts = location.hash.replace(/^#\/?/, '').split('/').filter(Boolean);
@@ -1974,14 +1984,34 @@
     return `<div class="prog ${big ? 'big' : ''}">${bar('词汇', st.words, st.totalWords, st.vocabDone)}${bar('课文', st.lines, st.totalLines, st.textDone)}</div>`;
   }
 
+  // the "editorial" look: the book as a ruled index, one row per leçon
+  function ledgerHTML(book) {
+    const ticks = (a, b, done) => `<span class="lg-ticks ${done ? 'done' : ''}">${Array.from({ length: 10 }, (_, i) => `<i class="${b && a / b * 10 > i + 0.001 ? 'on' : ''}"></i>`).join('')}</span>`;
+    return `<div class="ledger">${book.units.map(u => `
+      <div class="lg-unit"><b lang="fr">Unité ${u.n}</b><span lang="fr">Leçon ${u.lecons[0].n}–${u.lecons[u.lecons.length - 1].n}</span></div>
+      ${u.lecons.map(l => {
+        const st = MASTER.stats(book.id, l);
+        return `<a class="lg-row" href="#/${book.id}/${l.n}">
+          <span class="lg-no">${String(l.n).padStart(2, '0')}</span>
+          <span><span class="lg-title" lang="fr">${esc(l.title)}</span><span class="lg-sub">${esc(l.zh)}</span></span>
+          <span class="lg-prog">
+            <span class="lg-line"><span><b>${st.words}</b> / ${st.totalWords} WORDS</span>${ticks(st.words, st.totalWords, st.vocabDone)}</span>
+            <span class="lg-line"><span><b>${st.lines}</b> / ${st.totalLines} LINES</span>${ticks(st.lines, st.totalLines, st.textDone)}</span>
+          </span>
+          <span class="lg-go">[ ENTER ↗ ]</span>
+        </a>`;
+      }).join('')}`).join('')}</div>`;
+  }
+
   function viewBook(book) {
     document.title = book.title + ' · 默写本';
     const PARTS = ['vocab', 'phrases', 'full', 'recite'];
     main.innerHTML = `
       <div class="book-head">${coverHTML(book, 'div')}<div><p class="kicker" lang="fr">${esc(book.fr)}</p><h1>${esc(book.title)}</h1></div></div>
       ${reviewBanner()}
+      ${ledgerHTML(book)}
       ${book.units.map(u => `
-        <section class="unit">
+        <section class="unit ed-hide">
           <div class="unit-title"><h2 lang="fr">Unité ${u.n}</h2><span>Leçon ${u.lecons[0].n}–${u.lecons[u.lecons.length - 1].n}</span></div>
           <div class="lecons">${u.lecons.map(l => {
             const p = getProg(book.id, l.n);
