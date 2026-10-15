@@ -13,7 +13,6 @@ html.mono { --ink-a: rgba(0, 0, 0, .22); --ink-b: rgba(0, 0, 0, .14); }
 html:not(.no-riso) body::after {
   content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 90;
   background: var(--speckle) 0 0 / 300px 300px;
-  mix-blend-mode: multiply; opacity: .14;
 }
 
 /* halftone dots on printed colour areas */
@@ -85,7 +84,6 @@ main { padding-top: 110px; }
 .lecon-card { padding-top: 54px; }
 .lecon-card::after { top: 40px; }
 /* a light screen-print dot layer over the curtain images */
-html:not(.no-riso) .drape::after { content: ""; position: absolute; inset: 0; background: var(--dots); mix-blend-mode: multiply; opacity: .6; }
 /* black & white look: grey curtains */
 html.mono .drape, html.mono .lecon-card::before, html.mono .cover::before { filter: grayscale(1) contrast(1.05) drop-shadow(0 3px 2px rgba(0, 0, 0, .35)); }
 @media (max-width: 720px) { html .drape { height: 70px; } main { padding-top: 80px; } }
@@ -158,3 +156,20 @@ main .corner { display: none !important; }
 .album .stamp { width: 120px; }
 .album { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
 html:not(.no-riso) .stamp { filter: none; }
+
+/* ---- micro-polish: paper-card feel, quieter interactions, finer French type ---- */
+/* cards: a hairline inner frame and a flat card-stock edge instead of a soft drop shadow */
+.lecon-card { outline: 1px solid rgba(233, 224, 204, .2); outline-offset: -5px; transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+.lecon-card:hover { transform: translateY(-1px); box-shadow: 0 0 0 1px var(--frame-ink, #2b2925), 0 2px 0 0 rgba(0, 0, 0, .22); }
+.lecon-card:active, .btn:active { transform: translateY(1px); }
+.btn { transition: transform .2s ease, background-color .2s ease, border-color .2s ease, color .2s ease; }
+.btn:hover { transform: translateY(-1px); }
+/* "passed": a small tilted postmark instead of plain coloured text */
+.pbar.done .pn { display: inline-block; padding: 0 5px; border: 3px double currentColor; border-radius: 2px; transform: rotate(-2deg); font: italic 600 12px/1.5 var(--serif); letter-spacing: .04em; min-width: 0; }
+/* no browser focus halos: inputs change their line colour, buttons get a quiet ink outline */
+input, textarea, select { transition: border-color .2s ease, background-color .2s ease; }
+input:focus, textarea:focus, select:focus { outline: none; box-shadow: none; }
+.btn:focus-visible, .mode:focus-visible, .lecon-card:focus-visible, .settings-btn:focus-visible { outline: 1px dashed currentColor; outline-offset: 3px; box-shadow: none; }
+/* French typography: ligatures, kerning, old-style figures */
+[lang="fr"], .lecon-card h3, .unit-title h2 { font-feature-settings: "liga" 1, "kern" 1; font-kerning: normal; font-variant-numeric: oldstyle-nums; }
+html.mono .lecon-card { outline-color: rgba(0, 0, 0, .14); }
