@@ -1783,6 +1783,7 @@
  <div class="lab" style="margin-bottom:4px">${bi('外观', 'Look')}</div>
       <div class="modes" style="margin-bottom:14px"><button class="mode" data-look="color" aria-pressed="${settings.look !== 'mono'}">${bi('彩色', 'Colour')}</button><button class="mode" data-look="mono" aria-pressed="${settings.look === 'mono'}">${bi('黑白', 'Black & white')}</button></div>
       <label class="chk"><input type="checkbox" id="s-riso" ${settings.riso !== false ? 'checked' : ''}> ${bi('丝网印刷质感', 'Screen-print texture')}</label>
+      <label class="chk"><input type="checkbox" id="s-dust" ${settings.dust !== false ? 'checked' : ''}> ${bi('空气里的浮尘', 'Dust in the light')}</label>
       <label class="chk"><input type="checkbox" id="s-tw" ${settings.typewriter ? 'checked' : ''}> ${bi('打字机模式（打字声 + 打字机字体）', 'Typewriter mode (key sounds + typewriter font)')}</label>
       <label class="chk"><input type="checkbox" id="s-len" ${settings.lenient ? 'checked' : ''}> 重音写错也算对</label>
       <button class="btn ghost small" data-say="Bonjour ! Je m'appelle Alice. Ça va bien ?">试听</button>
@@ -1797,6 +1798,7 @@
       $$('[data-look]', box).forEach(x => x.setAttribute('aria-pressed', x === b));
     });
     $('#s-riso').onchange = e => { settings.riso = e.target.checked; saveSettings(); document.documentElement.classList.toggle('no-riso', !settings.riso); };
+    $('#s-dust').onchange = e => { settings.dust = e.target.checked; saveSettings(); if (window.DUST) DUST.set(settings.dust); };
     $('#s-tw').onchange = e => { settings.typewriter = e.target.checked; saveSettings(); document.documentElement.classList.toggle('tw', settings.typewriter); if (settings.typewriter && window.TYPEWRITER) TYPEWRITER.ret(); };
     $('#s-len').onchange = e => { settings.lenient = e.target.checked; saveSettings(); };
   }
@@ -2866,6 +2868,7 @@
   const qsb = $('#qs-btn'); if (qsb) qsb.onclick = () => openLookup();
   CLOUD.init();
   ACCENTS.init();
+  if (window.DUST) DUST.set(settings.dust !== false && settings.look !== 'mono');
   renderStatus();
   translateTree(document.body);
   idbGet('handle').then(h => { if (h && h.queryPermission) h.queryPermission({ mode: 'readwrite' }).then(p => { if (p === 'granted') { BACKUP.handle = h; BACKUP.write(); } }); });

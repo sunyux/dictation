@@ -208,3 +208,5 @@ mark.acc-x { background: rgba(214, 160, 60, .28); color: inherit; border-bottom:
 .acc-note { color: #9a6a1c; }
 /* less app-like: squared buttons and toggles, like printed labels */
 .btn, .mode, .langsw, .langsw button { border-radius: 3px !important; }
+/* floating dust (dust.js): above the page, never in the way */
+canvas.dust { position: fixed; inset: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 60; }
