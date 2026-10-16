@@ -210,3 +210,31 @@ mark.acc-x { background: rgba(214, 160, 60, .28); color: inherit; border-bottom:
 .btn, .mode, .langsw, .langsw button { border-radius: 3px !important; }
 /* floating dust (dust.js): above the page, never in the way */
 canvas.dust { position: fixed; inset: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 60; }
+
+/* ---- illuminated-manuscript pigments: ultramarine, cinnabar, sap green, antique gold ---- */
+html:not(.mono), html:not(.mono) body {
+  --blue: #27408b; --red: #b23a26; --green: #4e6b34; --amber: #a8823a; --gold: #a8823a;
+  --wash-blue: rgba(39, 64, 139, .10); --wash-red: rgba(178, 58, 38, .10); --wash-green: rgba(78, 107, 52, .12); --wash-amber: rgba(168, 130, 58, .15);
+}
+html:not(.mono) .pbar.done .pt i { background: var(--green); }
+html:not(.mono) .pbar.done .pn { color: var(--red); }
+html:not(.mono) .kicker { color: var(--gold); }
+html:not(.mono) .unit-title { border-color: var(--gold); }
+html:not(.mono) .answer-in:focus, html:not(.mono) .full-in:focus, html:not(.mono) .cloze-in:focus { border-bottom-color: var(--blue) !important; caret-color: var(--red); }
+html:not(.mono) .tab[aria-selected="true"], html:not(.mono) .tabs .on { color: var(--blue); }
+html:not(.mono) .crumbs .sep { color: var(--gold); }
+
+/* verdicts as wax seals: cinnabar for wrong, ultramarine for right, gold for "almost" */
+.feedback { position: relative; padding-right: 64px !important; }
+.feedback::after {
+  position: absolute; right: 12px; top: 12px; width: 40px; height: 40px; border-radius: 50%;
+  display: grid; place-items: center; font: 22px/1 "IM Fell English", serif; color: #f3ead6;
+  box-shadow: inset 0 0 0 3px rgba(255, 255, 255, .14), inset 0 -3px 5px rgba(0, 0, 0, .28), 0 1px 0 rgba(0, 0, 0, .2);
+  transform: rotate(-8deg); animation: seal .35s cubic-bezier(.2, 1.4, .4, 1);
+  clip-path: polygon(50% 0, 61% 6%, 73% 3%, 80% 13%, 92% 17%, 94% 30%, 100% 41%, 96% 53%, 100% 65%, 92% 75%, 90% 88%, 77% 91%, 68% 100%, 55% 96%, 43% 100%, 33% 93%, 20% 95%, 14% 83%, 3% 76%, 5% 63%, 0 51%, 5% 39%, 2% 26%, 12% 19%, 17% 7%, 30% 6%, 40% 0);
+}
+.feedback.ok::after { content: "✓"; background: radial-gradient(circle at 40% 35%, #3a58ad, #1c2f6a); }
+.feedback.bad::after { content: "✗"; background: radial-gradient(circle at 40% 35%, #c9503a, #8a2616); }
+.feedback.accent::after { content: "~"; background: radial-gradient(circle at 40% 35%, #c39a4c, #85642a); }
+@keyframes seal { from { transform: scale(1.6) rotate(-20deg); opacity: 0; } to { transform: rotate(-8deg); opacity: 1; } }
+html.mono .feedback::after { background: #333 !important; }
