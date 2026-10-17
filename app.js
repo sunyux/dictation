@@ -110,9 +110,13 @@
     save(db) { store.set('srs', db); },
     id: it => it.kind === 'word' && it.pos !== '变位' ? `${it.book}|${it.n}|word|${it.fr}` : `${it.book}|${it.n}|${it.kind}|${it.fr}|${it.zh}`,
     // item: {book, n, kind: 'word'|'cloze'|'sentence', fr, zh, pos?}
-    miss(it) {
+    // typed: what was written instead (kept: the last 3 different attempts)
+    miss(it, typed = '') {
       const db = this.all(), id = this.id(it), old = db[id] || { right: 0, wrong: 0, first: dayStr() };
-      db[id] = { ...old, ...it, box: 0, due: addDays(1), wrong: old.wrong + 1, last: dayStr(), done: false };
+      let tries = old.tries || [];
+      const t = String(typed || '').trim();
+      if (t && norm(t) !== norm(it.fr)) tries = [{ t, d: dayStr() }, ...tries.filter(x => x.t !== t)].slice(0, 3);
+      db[id] = { ...old, ...it, box: 0, due: addDays(1), wrong: old.wrong + 1, last: dayStr(), done: false, tries };
       this.save(db);
     },
     hit(it) {
@@ -1964,6 +1968,20 @@
       <span><b>${due ? '今天要复习' : '今天的复习完成了'}</b><br><span class="kbd">错题本里共 ${total} 条 · 点击进入</span></span></a>`;
   }
 
+  // what was written instead of this item: stored attempts, plus older typo-log entries for words
+  function wrongTries(e) {
+    const out = (e.tries || []).map(x => x.t);
+    if (e.kind === 'word') {
+      const acc = new Set([e.fr, ...forms(e.fr).accept].map(norm));
+      ERRS.all().filter(x => !x.q && acc.has(norm(x.c))).reverse().forEach(x => { if (!out.includes(x.t)) out.push(x.t); });
+    }
+    return out.slice(0, 3);
+  }
+  const triesHTML = e => {
+    const t = wrongTries(e); if (!t.length) return '';
+    const cut = x => x.length > 60 ? x.slice(0, 58) + '…' : x;
+    return `<div class="err-tries">${bi('写成过', 'You wrote')}：${t.map(x => `<s lang="fr">${esc(cut(x))}</s>`).join('<span class="sep">·</span>')}</div>`;
+  };
   function viewReview(sub) {
     document.title = '错题本 · 每日复习';
     const KIND = { word: '单词', cloze: '填空', sentence: '句子' };
@@ -2004,7 +2022,7 @@
         <section class="unit"><div class="unit-title"><h2 lang="fr">${leconName(+n)}</h2><span>${list.length} 条</span></div>
         ${list.map(e => `<div class="err-row">
           <span class="err-kind">${KIND[e.kind]}</span>
-          <div class="err-body"><div lang="fr">${playBtn(e.kind === 'word' ? forms(e.fr).say : e.fr)} ${esc(e.fr)}${e.kind === 'word' && window.DEEP && DEEP[e.fr] ? `<button class="deep-btn" data-deep="${esc(e.fr)}" lang="zh">${bi('详解', 'In depth')}</button>` : ''}</div><div class="lzh">${e.kind === 'cloze' ? esc(e.zh) : G(e)}${e.pos ? ' · ' + esc(e.pos) : ''}</div></div>
+          <div class="err-body"><div lang="fr">${playBtn(e.kind === 'word' ? forms(e.fr).say : e.fr)} ${esc(e.fr)}${e.kind === 'word' && window.DEEP && DEEP[e.fr] ? `<button class="deep-btn" data-deep="${esc(e.fr)}" lang="zh">${bi('详解', 'In depth')}</button>` : ''}</div><div class="lzh">${e.kind === 'cloze' ? esc(e.zh) : G(e)}${e.pos ? ' · ' + esc(e.pos) : ''}</div>${triesHTML(e)}</div>
           <span class="err-meta">错 ${e.wrong} 次<br>${e.due <= today ? '<b class="w-miss">&nbsp;今天&nbsp;</b>' : e.due.slice(5).replace('-', '/') + ' 复习'}</span>
           <button class="err-del" data-id="${esc(e.id)}" title="移出错题本" aria-label="移出错题本">×</button>
         </div>`).join('')}</section>`).join('')
@@ -2039,6 +2057,7 @@
         <div class="lc-fr" lang="fr">${playBtn(say)} ${word ? artHint(e) : ''}<b>${esc(e.fr)}</b></div>
         <div class="lc-mean">${e.kind === 'cloze' ? esc(e.zh) : G(e)}${e.pos ? ` <span class="pos ${gender(e.pos) ? 'g-' + gender(e.pos) : ''}">${esc(e.pos)}</span>` : ''}</div>
         ${e.wrong ? `<p class="kbd">${bi(`写错过 ${e.wrong} 次`, `Missed ${e.wrong} times`)}</p>` : ''}
+        ${triesHTML(e)}
         ${tipBox(tip)}
         ${word && window.DEEP && DEEP[e.fr] ? `<button class="deep-btn lc-deep" data-deep="${esc(e.fr)}">${bi('看详解', 'In-depth card')}</button>` : ''}
         <div class="toolbar lc-nav">
@@ -2123,7 +2142,7 @@
         if (good) XP.gain(1, bi('练习答对', 'Practice right'));
         lab = good ? bi('对了', 'Right') : bi('还没对，等下再来', 'Not yet — it will come back');
       } else {
-        good ? (SRS.hit(e), XP.gain(3, '复习答对')) : SRS.miss(e);
+        good ? (SRS.hit(e), XP.gain(3, '复习答对')) : SRS.miss(e, giveUp ? '' : val);
         const next = good ? GAPS[Math.min((e.box || 0) + 1, GAPS.length - 1)] : 1;
         lab = good ? `答对了 · ${(e.box || 0) + 1 >= GAPS.length ? '已掌握' : next + ' 天后再复习'}` : '明天再来一次';
       }
@@ -2415,12 +2434,12 @@
       let toBook = false, missN = 0;
       if (!good || hintN) {
         wrong.push(v);
-        if (!test) { SRS.miss(it); MASTER.word(bk, ln, v.fr, false); }
+        if (!test) { SRS.miss(it, giveUp ? '' : inp.value); MASTER.word(bk, ln, v.fr, false); }
         else {
           // the first test keeps misses out of the mistake book — unless the same word is missed 3 times
           const tk = `testmiss:${bk}:${ln}`, tm = store.get(tk, {});
           tm[v.fr] = (tm[v.fr] || 0) + 1; store.set(tk, tm);
-          if (tm[v.fr] >= 3 && !inReview(bk, ln, v.fr)) { SRS.miss(it); toBook = true; }
+          if (tm[v.fr] >= 3 && !inReview(bk, ln, v.fr)) { SRS.miss(it, giveUp ? '' : inp.value); toBook = true; }
           missN = tm[v.fr];
         }
       } else if (test || !inReview(bk, ln, v.fr)) MASTER.word(bk, ln, v.fr);
@@ -2648,7 +2667,7 @@
       if (!good && !giveUp && r !== 'pron') ERRS.typed(c.text, val);
       if (good) { right++; XP.gain(1, '变位正确'); }
       const it = { book: book.id, n: v.n, kind: 'word', fr: c.text, zh: `${forms(v.fr).say} · ${c.p}（现在时）`, en: `${forms(v.fr).say} · ${c.p} (present tense)`, pos: '变位' };
-      good ? SRS.hit(it) : SRS.miss(it);
+      good ? SRS.hit(it) : SRS.miss(it, giveUp ? '' : val);
       $('#fb', box).innerHTML = `<div class="feedback ${good ? 'ok' : r === 'bad' ? 'bad' : 'accent'}">
         <span class="lab">${good ? '正确' : r === 'accent' ? '差一点：注意重音' : r === 'pron' ? '动词对了，记得连主语一起写' : '正确答案'}</span>
         <div class="ans" lang="fr">${playBtn(c.text)} ${esc(c.text)} <span class="kbd" style="font-family:var(--zh)">${esc(v.fr)} · ${G(v)}</span></div>
@@ -2700,7 +2719,7 @@
         const ctxLine = [...row.childNodes].map(nd => nd === inp ? '____' : nd.nodeType === 3 ? nd.textContent : nd.tagName === 'INPUT' ? nd.dataset.a : '').join('');
         const it = { book: ctx.book.id, n: ctx.lecon.n, kind: 'cloze', fr: inp.dataset.a, zh: ctxLine.trim() };
         if (r === 'ok') { ok++; SRS.hit(it); }
-        else SRS.miss(it), inp.value.trim() && ERRS.typed(inp.dataset.a, inp.value), inp.insertAdjacentHTML('afterend', `<span class="cloze-fix">${esc(inp.dataset.a)}</span>`);
+        else SRS.miss(it, inp.value), inp.value.trim() && ERRS.typed(inp.dataset.a, inp.value), inp.insertAdjacentHTML('afterend', `<span class="cloze-fix">${esc(inp.dataset.a)}</span>`);
       });
       XP.gain(ok, `填空 ${ok} 个正确`);
       const s = ok / ins.length;
@@ -2747,7 +2766,7 @@
         scores[i] = d.score;
         if (d.perfect) XP.gain(3, '句子全对');
         const it = { book: ctx.book.id, n: ctx.lecon.n, kind: 'sentence', fr: s.fr, zh: s.zh, en: s.en };
-        d.perfect ? SRS.hit(it) : SRS.miss(it);
+        d.perfect ? SRS.hit(it) : SRS.miss(it, giveUp ? '' : val);
         if (!d.perfect && !giveUp) ERRS.sentence(s.fr, val);
       }
       const cls = d.perfect ? 'ok' : d.score > 0.7 ? 'accent' : 'bad';
@@ -2807,7 +2826,7 @@
         const r = lecon.text[t.dataset.k], d = diff(r.fr, t.value);
         total += d.score;
         if (t.value.trim() && !d.perfect && t.dataset.logged !== t.value) { t.dataset.logged = t.value; ERRS.sentence(r.fr, t.value); }
-        if (t.value.trim()) { const it = { book: book.id, n: lecon.n, kind: 'sentence', fr: r.fr.replace(/^–\s*/, ''), zh: r.zh.replace(/^–\s*/, ''), en: (r.en || '').replace(/^–\s*/, '') }; d.perfect ? SRS.hit(it) : SRS.miss(it); if (d.perfect) MASTER.line(book.id, lecon.n, +t.dataset.k); }
+        if (t.value.trim()) { const it = { book: book.id, n: lecon.n, kind: 'sentence', fr: r.fr.replace(/^–\s*/, ''), zh: r.zh.replace(/^–\s*/, ''), en: (r.en || '').replace(/^–\s*/, '') }; d.perfect ? SRS.hit(it) : SRS.miss(it, t.value); if (d.perfect) MASTER.line(book.id, lecon.n, +t.dataset.k); }
         t.nextElementSibling.innerHTML = d.perfect ? `<span class="w-ok">✓</span>`
           : `<div lang="fr">${marked(r.fr, d.st)}</div>${d.extra.length ? `<div class="yours">多写/拼错：<span class="w-extra">${esc(d.extra.join(' '))}</span></div>` : ''}`;
       });

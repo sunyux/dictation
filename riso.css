@@ -405,3 +405,8 @@ html .lecon-card .n, html .lecon-card h3, html .lecon-card .zh { text-shadow: 0 
 
 /* French text two sizes larger than the surrounding text (not compounding when nested) */
 [lang="fr"]:not([lang="fr"] [lang="fr"]):not(input):not(textarea):not(.kicker):not(.brand-fr):not(.n) { font-size: calc(1em + 2px); }
+/* mistake book: what you wrote instead */
+.err-tries { font: 14px var(--zh, serif); color: var(--ink-2); margin: 3px 0 0 40px; }
+.err-tries s { color: var(--bad, #b23a26); text-decoration-thickness: 1.5px; margin: 0 2px; }
+.err-tries .sep { margin: 0 4px; opacity: .5; }
+.learn-card .err-tries { margin-left: 0; font-size: 16px; }
