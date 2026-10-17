@@ -212,7 +212,7 @@ mark.acc-x { background: rgba(214, 160, 60, .28); color: inherit; border-bottom:
 canvas.dust { position: fixed; inset: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 60; }
 
 /* ---- illuminated-manuscript pigments: ultramarine, cinnabar, sap green, antique gold ---- */
-html:not(.mono), html:not(.mono) body {
+html:root:not(.mono):not(.x), html:not(.mono) body {
   --blue: #27408b; --red: #b23a26; --green: #4e6b34; --amber: #a8823a; --gold: #a8823a;
   --wash-blue: rgba(39, 64, 139, .10); --wash-red: rgba(178, 58, 38, .10); --wash-green: rgba(78, 107, 52, .12); --wash-amber: rgba(168, 130, 58, .15);
 }
@@ -351,3 +351,57 @@ html.focusing main { padding-top: 84px !important; }
 .focus-goal-done { position: fixed; top: 92px; left: 50%; transform: translateX(-50%); z-index: 72; animation: fp-pop .4s cubic-bezier(.2, 1.6, .4, 1); }
 .focus-goal-done > div { display: flex; align-items: center; gap: 12px; background: #2f2a22; color: #f7efdc; border: 1px solid #e8c37a; padding: 10px 16px; border-radius: 12px; box-shadow: 0 10px 30px -10px rgba(0, 0, 0, .6); }
 .focus-goal-done b { color: #e8c37a; font-size: 18px; }
+
+/* ===== colour system: one accent, colours that mean something ===== */
+html:root:not(.mono):not(.x), html:not(.mono) body {
+  /* warmer, whiter paper — better contrast for long dictation */
+  --paper: #faf6ec; --paper-2: #f0e9da; --card: #fffcf5;
+  --accent: #7d2635;          /* deep wine: links, selected states, progress ring, small headings */
+  --ok: #3f6b3a; --bad: #b23a26; --almost: #a8823a;   /* feedback only */
+  --ph1: #5b7088; --ph2: #6f8a5e; --ph3: #a07a4a; --ph4: #7d6a92;   /* phases: learn/vocab · quiz/sentences · dictation/full · recite */
+  --book1: #7d2635; --book2: #4f6a80;
+}
+html:not(.mono) a:not(.btn):not(.lecon-card):not(.cover):not(.brand):not(.lg-row) { color: var(--accent); }
+html:not(.mono) .kicker, html:not(.mono) .unit-title span { color: var(--accent) !important; }
+html:not(.mono) .unit-title { border-color: color-mix(in srgb, var(--accent) 35%, transparent) !important; }
+html:not(.mono) .crumbs .sep { color: inherit !important; }
+html:not(.mono) .ring-fg { stroke: #e7b3b9 !important; }
+html:not(.mono) .ring-fg.full { stroke: #f0d6a0 !important; }
+html:not(.mono) .mode[aria-pressed="true"], html:not(.mono) .langsw [aria-pressed="true"] { background: var(--accent) !important; color: #fff !important; border-color: var(--accent) !important; }
+html:not(.mono) .deep-btn { border-color: var(--accent); color: var(--accent); }
+html:not(.mono) .deep-btn:hover { background: var(--accent); color: #fff; }
+html:not(.mono) .dp-sec { border-top-color: color-mix(in srgb, var(--accent) 30%, transparent); }
+html:not(.mono) .dp-sec h3 b { color: var(--accent); }
+/* gold only means "my words" (★) */
+.nav-mine, .fav.on { color: #c9a23a !important; }
+
+/* phases: tab number + underline carry the phase colour */
+html:not(.mono) .tabs .tab:nth-child(1) { --ph: var(--ph1); }
+html:not(.mono) .tabs .tab:nth-child(2) { --ph: var(--ph2); }
+html:not(.mono) .tabs .tab:nth-child(3) { --ph: var(--ph3); }
+html:not(.mono) .tabs .tab:nth-child(4) { --ph: var(--ph4); }
+html:not(.mono) .tabs .tab b { color: var(--ph) !important; }
+html:not(.mono) .tabs .tab[aria-selected="true"] { color: var(--ink) !important; border-bottom-color: var(--ph) !important; }
+
+/* feedback: exactly two colours (plus amber for "almost") */
+html:not(.mono) .feedback.ok { background: color-mix(in srgb, var(--ok) 10%, transparent) !important; }
+html:not(.mono) .feedback.bad { background: color-mix(in srgb, var(--bad) 9%, transparent) !important; }
+html:not(.mono) .feedback.accent { background: color-mix(in srgb, var(--almost) 12%, transparent) !important; }
+.feedback.ok::after { background: radial-gradient(circle at 40% 35%, #5a8a52, #2e5229) !important; }
+.feedback.bad::after { background: radial-gradient(circle at 40% 35%, #c9503a, #8a2616) !important; }
+html:not(.mono) .pbar.done .pt i { background: var(--ok) !important; }
+html:not(.mono) .pbar.done .pn { color: var(--ok) !important; }
+html:not(.mono) .cloze-in.ok { border-bottom-color: var(--ok) !important; }
+html:not(.mono) .cloze-in.bad { border-bottom-color: var(--bad) !important; }
+
+/* the two books: a colour band, not a whole curtain */
+html .shelf .cover::before, html .book-head .cover::before { display: none !important; }
+html:not(.mono) .shelf .cover, html:not(.mono) .book-head .cover { box-shadow: inset 0 7px 0 var(--book1), 0 10px 24px -14px rgba(0, 0, 0, .55) !important; }
+html:not(.mono) .shelf .cover.sons, html:not(.mono) .book-head .cover.sons { box-shadow: inset 0 7px 0 var(--book2), 0 10px 24px -14px rgba(0, 0, 0, .55) !important; }
+
+/* no pink offset shadows on headings */
+html h1, html .unit-title h2, html .lecon-card h3, html .score, html .brand-zh, html .cover .c-zh { text-shadow: none !important; }
+html .lecon-card .n, html .lecon-card h3, html .lecon-card .zh { text-shadow: 0 1px 2px rgba(0, 0, 0, .55) !important; }
+
+/* French text two sizes larger than the surrounding text (not compounding when nested) */
+[lang="fr"]:not([lang="fr"] [lang="fr"]):not(input):not(textarea):not(.kicker):not(.brand-fr):not(.n) { font-size: calc(1em + 2px); }
