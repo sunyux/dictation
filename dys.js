@@ -41,11 +41,46 @@
     while (parts.length > 1 && ![...parts[parts.length - 1]].some(isV)) { const l = parts.pop(); parts[parts.length - 1] += l; }
     return parts;
   }
-  // word(s) → HTML with alternating-colour syllables; spaces, apostrophes, hyphens, punctuation kept
+  /* ---------- silent and nasal letters (rule-based; exceptions listed) ---------- */
+  const SOUNDED_END = new Set(['bus', 'sud', 'est', 'ouest', 'tennis', 'fils', 'huit', 'six', 'dix', 'week-end', 'stress', 'match', 'golf', 'sac', 'but', 'net', 'cap', 'stop', 'bar', 'lac', 'mer', 'hiver', 'enfer', 'super', 'hier', 'amer', 'ananas', 'maïs', 'plus', 'os', 'ours', 'tous', 'jus', 'cours']);
+  const NO_FINAL_E = new Set(['que', 'le', 'me', 'te', 'se', 'ne', 'ce', 'de', 'je']);
+  // returns, for each letter, '' | 'sil' (silent) | 'nas' (written n/m that only nasalises the vowel before it)
+  function mask(word) {
+    const w = [...word], lw = w.map(c => c.toLowerCase()), n = w.length, m = new Array(n).fill('');
+    const base = lw.join('');
+    const isC = i => i >= 0 && i < n && !isV(lw[i]) && /[a-zç]/.test(lw[i]);
+    const syl = syllabify(word).length;
+    // h on its own (not ch / ph / th)
+    for (let i = 0; i < n; i++) if (lw[i] === 'h' && !(i > 0 && 'cpt'.includes(lw[i - 1]) && 'ctp'.includes(lw[i - 1]))) m[i] = 'sil';
+    // u after q, and after g before e / i
+    for (let i = 1; i < n - 1; i++) if (lw[i] === 'u' && (lw[i - 1] === 'q' || (lw[i - 1] === 'g' && 'eiéèê'.includes(lw[i + 1])))) m[i] = 'sil';
+    // nasal n / m: vowel + n|m + consonant or end (not nn / mm, not before a vowel)
+    for (let i = 1; i < n; i++) if ((lw[i] === 'n' || lw[i] === 'm') && isV(lw[i - 1]) && lw[i + 1] !== lw[i] && (i === n - 1 || (!isV(lw[i + 1]) && lw[i + 1] !== 'h' && lw[i + 1] !== undefined))) m[i] = 'nas';
+    if (SOUNDED_END.has(base)) return m;
+    // endings
+    const set = (i, v = 'sil') => { if (i >= 0 && i < n && !m[i]) m[i] = v; };
+    const last = lw[n - 1];
+    if (/(e)(s)$/.test(base) && n > 3 && !/[èé]s$/.test(base) && syl >= 2) { set(n - 2); set(n - 1); }   // femmes
+    else if (/ent$/.test(base) && n > 4 && syl >= 2) { set(n - 1); }                                      // comment, souvent (t)
+    else if (/er$/.test(base) && syl >= 2) { set(n - 1); }                                                  // parler, boulanger
+    else if (/ez$/.test(base) && n > 3) { set(n - 1); }                                                     // vous parlez
+    else if (last === 'e' && n > 2 && !NO_FINAL_E.has(base) && [...lw.slice(0, n - 1)].some(isV)) { set(n - 1); }
+    else if ('sxzdtp'.includes(last) && n > 2) { set(n - 1); }
+    else if (last === 'g' && lw[n - 2] === 'n') { set(n - 1); }                                              // long
+    else if (last === 'c' && lw[n - 2] === 'n') { set(n - 1); }                                              // blanc
+    // e before a hard g in -geons / -geant: mangeons
+    for (let i = 1; i < n - 1; i++) if (lw[i] === 'e' && lw[i - 1] === 'g' && 'aoàô'.includes(lw[i + 1])) set(i);
+    return m;
+  }
+  // word(s) → HTML with alternating-colour syllables; silent letters grey, nasal markers dotted
   function chunk(text) {
     return String(text).split(/([\s'’\-–.,;:!?()¿¡…]+)/).map(tok => {
       if (!tok || /^[\s'’\-–.,;:!?()¿¡…]+$/.test(tok) || !/[a-zàâäéèêëîïôöùûüœæç]/i.test(tok)) return esc(tok);
-      return syllabify(tok).map((s, k) => `<span class="syl s${k % 2}">${esc(s)}</span>`).join('');
+      const mk = mask(tok); let at = 0;
+      return syllabify(tok).map((sy, k) => {
+        const inner = [...sy].map(ch => { const c = mk[at++]; return c ? `<i class="${c === 'sil' ? 'sl' : 'nl'}">${esc(ch)}</i>` : esc(ch); }).join('');
+        return `<span class="syl s${k % 2}">${inner}</span>`;
+      }).join('');
     }).join('');
   }
 
@@ -90,6 +125,42 @@
       <div class="cmp-row"><span class="cmp-lab">${L('正确', 'Right')}</span><span class="cmp-w">${right.join('')}</span></div></div>${note}`;
   }
 
+  /* ---------- where you usually go wrong in a word ---------- */
+  // attempts: strings you wrote instead of `correct`. Returns { marks:Set(index in correct), text } for the 1–2 commonest slips.
+  function spots(correct, attempts, lang) {
+    const C = [...norm(correct)], tally = new Map();
+    attempts.forEach(a => {
+      const T = [...norm(a)]; if (!T.length || T.join('') === C.join('')) return;
+      let ci = 0;
+      align(T, C).forEach(o => {
+        let key, i = ci;
+        if (o.k === 'eq') { ci++; return; }
+        if (o.k === 'swap') { key = `swap|${i}|${o.c}|${o.t}`; ci += 2; }
+        else if (o.k === 'sub') { key = `sub|${i}|${o.c}|${o.t}`; ci++; }
+        else if (o.k === 'ins') { key = `miss|${i}|${o.c}|`; ci++; }
+        else { i = Math.max(0, ci - 1); key = `extra|${i}|${C[i] || ''}|${o.t}`; }
+        tally.set(key, (tally.get(key) || 0) + 1);
+      });
+    });
+    if (!tally.size) return null;
+    const list = [...tally.entries()].map(([k, n]) => { const [kind, i, c, t] = k.split('|'); return { kind, i: +i, c, t, n }; }).sort((a, b) => b.n - a.n || a.i - b.i);
+    const top = list.slice(0, 2), marks = new Set();
+    const en = lang === 'en', both = lang === 'zhen';
+    const L = (zh, e) => (en ? e : both ? `${zh} · ${e}` : zh);
+    const sent = d => {
+      if (d.kind === 'swap') { [d.i, d.i + 1].forEach(x => marks.add(x)); return L(`第 ${d.i + 1}–${d.i + 2} 位 “${d.c}” 容易写反（写成过 “${d.t}”）`, `letters ${d.i + 1}–${d.i + 2} “${d.c}” often come out reversed (“${d.t}”)`); }
+      marks.add(d.i);
+      if (d.kind === 'sub') return L(`第 ${d.i + 1} 位 “${d.c}” 容易写成 “${d.t}”`, `letter ${d.i + 1} “${d.c}” often becomes “${d.t}”`);
+      if (d.kind === 'miss') return L(`第 ${d.i + 1} 位 “${d.c}” 容易漏掉`, `letter ${d.i + 1} “${d.c}” often gets left out`);
+      return L(`“${d.c}” 后面容易多写 “${d.t}”`, `an extra “${d.t}” often sneaks in after “${d.c}”`);
+    };
+    return { text: top.map(sent).join(en ? '; ' : '；'), marks, n: top[0].n };
+  }
+  // the word with the trouble letters underlined
+  function marked(word, marks) {
+    return [...word].map((c, i) => marks.has(i) ? `<u class="hot">${esc(c)}</u>` : esc(c)).join('');
+  }
+
   /* ---------- reading the letters aloud ---------- */
   const NAMES = { a: 'a', b: 'bé', c: 'cé', d: 'dé', e: 'e', f: 'effe', g: 'gé', h: 'ache', i: 'i', j: 'ji', k: 'ka', l: 'elle', m: 'emme', n: 'enne', o: 'o', p: 'pé', q: 'ku', r: 'erre', s: 'esse', t: 'té', u: 'u', v: 'vé', w: 'double vé', x: 'ixe', y: 'i grec', z: 'zède',
     'é': 'e accent aigu', 'è': 'e accent grave', 'ê': 'e accent circonflexe', 'ë': 'e tréma', 'à': 'a accent grave', 'â': 'a accent circonflexe', 'ù': 'u accent grave', 'û': 'u accent circonflexe', 'î': 'i accent circonflexe', 'ô': 'o accent circonflexe', 'ç': 'c cédille', 'œ': 'o e dans l\'o', '\'': 'apostrophe', '’': 'apostrophe', '-': 'trait d\'union' };
@@ -131,5 +202,5 @@
     draw();
   }
 
-  window.DYS = { syllabify, chunk, compare, spell, stopSpell, spellRow, tiles, NAMES };
+  window.DYS = { syllabify, chunk, mask, spots, marked, compare, spell, stopSpell, spellRow, tiles, NAMES };
 })();

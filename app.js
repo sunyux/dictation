@@ -2032,7 +2032,7 @@
         <section class="unit"><div class="unit-title"><h2 lang="fr">${leconName(+n)}</h2><span>${list.length} 条</span></div>
         ${list.map(e => `<div class="err-row">
           <span class="err-kind">${KIND[e.kind]}</span>
-          <div class="err-body"><div lang="fr">${playBtn(e.kind === 'word' ? forms(e.fr).say : e.fr)} ${esc(e.fr)}${e.kind === 'word' && window.DEEP && DEEP[e.fr] ? `<button class="deep-btn" data-deep="${esc(e.fr)}" lang="zh">${bi('详解', 'In depth')}</button>` : ''}</div><div class="lzh">${e.kind === 'cloze' ? esc(e.zh) : G(e)}${e.pos ? ' · ' + esc(e.pos) : ''}</div>${triesHTML(e)}</div>
+          <div class="err-body"><div lang="fr">${playBtn(e.kind === 'word' ? forms(e.fr).say : e.fr)} ${esc(e.fr)}${e.kind === 'word' && window.DEEP && DEEP[e.fr] ? `<button class="deep-btn" data-deep="${esc(e.fr)}" lang="zh">${bi('详解', 'In depth')}</button>` : ''}</div><div class="lzh">${e.kind === 'cloze' ? esc(e.zh) : G(e)}${e.pos ? ' · ' + esc(e.pos) : ''}</div>${triesHTML(e)}${e.kind === 'word' ? spotLine(e) : ''}</div>
           <span class="err-meta">错 ${e.wrong} 次<br>${e.due <= today ? '<b class="w-miss">&nbsp;今天&nbsp;</b>' : e.due.slice(5).replace('-', '/') + ' 复习'}</span>
           <button class="err-del" data-id="${esc(e.id)}" title="移出错题本" aria-label="移出错题本">×</button>
         </div>`).join('')}</section>`).join('')
@@ -2050,6 +2050,23 @@
   /* ---------- spelling aids (dys.js): syllable chunks, letter comparison, spell aloud, tiles ---------- */
   const dysOn = () => settings.dys !== false && !!window.DYS;
   const frHTML = t => dysOn() ? DYS.chunk(t) : esc(t);
+  // everything you have written instead of this word (typo log + stored attempts)
+  function attemptsFor(e) {
+    const acc = new Set([e.fr, ...forms(e.fr).accept].map(norm));
+    const out = ERRS.all().filter(x => !x.q && acc.has(norm(x.c))).map(x => x.t);
+    const have = new Set(out.map(norm));
+    (e.tries || []).forEach(x => { if (!have.has(norm(x.t))) out.push(x.t); });
+    return out;
+  }
+  // where in the word you usually slip: { text, marks, target } or null
+  function spotInfo(e) {
+    if (!window.DYS || e.kind !== 'word') return null;
+    const target = closest(e.fr, '');
+    const at = attemptsFor(e).filter(t => /\s/.test(norm(t)) === /\s/.test(norm(target)));
+    const r = at.length ? DYS.spots(target, at, L()) : null;
+    return r ? { ...r, target } : null;
+  }
+  const spotLine = e => { const r = spotInfo(e); return r ? `<p class="err-spot">${bi('提醒', 'Watch')}：${esc(r.text)}</p>` : ''; };
   const dysCompare = (c, typed) => window.DYS && typed && String(typed).trim() ? DYS.compare(c, typed, L()) : '';
   const dysTools = () => window.DYS ? `<button class="btn ghost small" id="dys-spell" type="button">${bi('读字母', 'Say the letters')}</button><button class="btn ghost small" id="dys-tiles" type="button">${bi('字母拼块', 'Letter tiles')}</button>` : '';
   function bindDys(box, getWord, inp) {
@@ -2079,6 +2096,7 @@
         <div class="lc-mean">${e.kind === 'cloze' ? esc(e.zh) : G(e)}${e.pos ? ` <span class="pos ${gender(e.pos) ? 'g-' + gender(e.pos) : ''}">${esc(e.pos)}</span>` : ''}</div>
         ${e.wrong ? `<p class="kbd">${bi(`写错过 ${e.wrong} 次`, `Missed ${e.wrong} times`)}</p>` : ''}
         ${triesHTML(e)}
+        ${(() => { const r = spotInfo(e); return r ? `<div class="lc-spot" lang="fr">${DYS.marked(r.target, r.marks)}</div>${spotLine(e)}` : ''; })()}
         ${tipBox(tip)}
         ${word && window.DEEP && DEEP[e.fr] ? `<button class="deep-btn lc-deep" data-deep="${esc(e.fr)}">${bi('看详解', 'In-depth card')}</button>` : ''}
         <div class="toolbar lc-nav">
@@ -2138,6 +2156,7 @@
           <div class="ppos">${playBtn(promptSay(e))} ${esc(e.kind === 'cloze' ? '' : e.pos || '')}</div></div>
         ${word ? `<input class="answer-in" id="ans" lang="fr" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${bi('用法语写…', 'Write in French…')}">`
           : `<textarea class="answer-in" id="ans" lang="fr" rows="2" autocapitalize="off" spellcheck="false" placeholder="${bi('写出法语句子…', 'Write the French sentence…')}"></textarea>`}
+        ${word ? spotLine(e) : ''}
         <div id="peek"></div>
         <div class="drill-actions"><button class="btn ghost small" id="skip">${bi('不会，看答案', 'Show answer')}</button>
           <button class="btn ghost small peek-btn" id="stuck">${bi('卡住了，先看一眼', 'Stuck — show me first')}</button>
@@ -2394,7 +2413,7 @@
           <label class="kbd" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="vhide" ${hide ? 'checked' : ''}> ${bi('遮住法语', 'Hide French')}</label>
           <label class="kbd" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="vtip" ${showTip ? 'checked' : ''}> ${bi('记忆提示', 'Memory tips')}</label>
           <button class="btn ghost small" id="vplay">${ICON.play} ${bi('全部朗读', 'Read all')}</button>`) +
-        `<p class="hint-text">${bi('按住左边的 ⠿ 拖动，可以在同一组里调整单词顺序。', 'Drag ⠿ on the left to reorder words within a group.')}${custom ? ` <a href="#" id="vreset">${bi('恢复课本顺序', 'Restore book order')}</a>` : ''}</p>` +
+        `<p class="hint-text">${bi('按住左边的 ⠿ 拖动，可以在同一组里调整单词顺序。', 'Drag ⠿ on the left to reorder words within a group.')}${dysOn() ? ` <span class="dys-legend">${bi('灰色字母 = 不发音；点线字母 = 只让前面的元音变鼻音。', 'Grey letters are silent; dotted letters only nasalise the vowel before them.')}</span>` : ''}${custom ? ` <a href="#" id="vreset">${bi('恢复课本顺序', 'Restore book order')}</a>` : ''}</p>` +
         groups.map(g => `<div class="vgroup" data-g="${esc(g.g || '')}"><h3>${esc(g.g || '')}</h3>${g.items.map(v => `
           <div class="vrow ${hide ? 'hidefr' : ''} ${mst.w[v.fr] ? 'mastered' : ''} ${gender(v.pos) ? 'g-' + gender(v.pos) : ''}" data-say="${esc(forms(v.fr).say)}" data-fr="${esc(v.fr)}">
             <span class="vdrag" title="${bi('拖动调整顺序', 'Drag to reorder')}" aria-label="${bi('拖动调整顺序', 'Drag to reorder')}">⠿</span>
