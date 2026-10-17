@@ -1839,6 +1839,7 @@
       <div class="modes" style="margin-bottom:14px"><button class="mode" data-look="color" aria-pressed="${settings.look !== 'mono'}">${bi('彩色', 'Colour')}</button><button class="mode" data-look="mono" aria-pressed="${settings.look === 'mono'}">${bi('黑白', 'Black & white')}</button></div>
       <label class="chk"><input type="checkbox" id="s-riso" ${settings.riso !== false ? 'checked' : ''}> ${bi('丝网印刷质感', 'Screen-print texture')}</label>
       <label class="chk"><input type="checkbox" id="s-dust" ${settings.dust !== false ? 'checked' : ''}> ${bi('空气里的浮尘', 'Dust in the light')}</label>
+      <label class="chk"><input type="checkbox" id="s-focus" ${settings.focus ? 'checked' : ''}> ${bi('专注模式（练习时只留题目，10 分钟一段，到点提醒休息）', 'Focus mode (only the exercise on screen, 10-minute sprints with break reminders)')}</label>
       <label class="chk"><input type="checkbox" id="s-tw" ${settings.typewriter ? 'checked' : ''}> ${bi('打字机模式（打字声 + 打字机字体）', 'Typewriter mode (key sounds + typewriter font)')}</label>
       <label class="chk"><input type="checkbox" id="s-len" ${settings.lenient ? 'checked' : ''}> 重音写错也算对</label>
       <button class="btn ghost small" data-say="Bonjour ! Je m'appelle Alice. Ça va bien ?">试听</button>
@@ -1854,6 +1855,7 @@
     });
     $('#s-riso').onchange = e => { settings.riso = e.target.checked; saveSettings(); document.documentElement.classList.toggle('no-riso', !settings.riso); };
     $('#s-dust').onchange = e => { settings.dust = e.target.checked; saveSettings(); if (window.DUST) DUST.set(settings.dust); };
+    $('#s-focus').onchange = e => setFocus(e.target.checked);
     $('#s-tw').onchange = e => { settings.typewriter = e.target.checked; saveSettings(); document.documentElement.classList.toggle('tw', settings.typewriter); if (settings.typewriter && window.TYPEWRITER) TYPEWRITER.ret(); };
     $('#s-len').onchange = e => { settings.lenient = e.target.checked; saveSettings(); };
   }
@@ -1904,12 +1906,24 @@
 
   /* ---------- router ---------- */
   let cleanup = () => { };
+  window.NH_LANG = () => L();
+  function setFocus(v) {
+    settings.focus = !!v; saveSettings();
+    const c = $('#s-focus'); if (c) c.checked = settings.focus;
+    const b = $('#focus-btn'); if (b) b.setAttribute('aria-pressed', settings.focus);
+    if (window.FOCUS) FOCUS.set(settings.focus);
+  }
+  window.NH_SET_FOCUS = setFocus;
+  if (window.FOCUS) FOCUS.set(!!settings.focus);
+  { const b = $('#focus-btn'); if (b) { b.setAttribute('aria-pressed', !!settings.focus); b.onclick = () => setFocus(!settings.focus); } }
   function route() {
     CLOUD.flush();
     cleanup(); cleanup = () => { };
     TTS.stop(); seqToken++;
     const parts = location.hash.replace(/^#\/?/, '').split('/').filter(Boolean);
     const crumbs = $('#crumbs');
+    // focus mode only kicks in on practice pages
+    if (window.FOCUS) FOCUS.page((BOOKS.some(b => b.id === parts[0]) && parts.length >= 2) || (parts[0] === 'review' && !!parts[1]) || (parts[0] === 'sons' && parts.length >= 2));
     // curtain colour of the reading plate, by section
     document.body.dataset.drape = { journal: 'green', sons: 'blue', review: 'red', tools: 'cream', mine: 'green', verbes: 'blue', me: 'red' }[parts[0]] || 'yellow';
     window.scrollTo(0, 0);

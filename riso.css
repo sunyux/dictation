@@ -283,3 +283,32 @@ body.deep-open { overflow: hidden; }
 .lc-nav { margin-top: 18px; }
 .learn-done h2 { margin-top: 0; }
 .err-body .deep-btn { font-size: 12px; }
+
+/* ---- focus mode: only the exercise ---- */
+html.focusing .top, html.focusing .drape, html.focusing main .wear, html.focusing canvas.dust,
+html.focusing .footer-note, html.focusing .credit, html.focusing .acc-bar:not(.word) { display: none !important; }
+html.focusing main::before, html.focusing main::after { display: none !important; }
+html.focusing body { background-image: none !important; background-color: #1b1a18 !important; }
+html.focusing main { max-width: 760px; padding-top: 56px !important; box-shadow: 0 0 0 1px var(--frame-ink), 0 30px 70px -20px rgba(0, 0, 0, .8) !important; }
+html.focusing .lecon-head .prog, html.focusing .lecon-head .zh, html.focusing .lecon-head h1::after { display: none; }
+html.focusing .drill { font-size: 1.05em; }
+#focus-btn[aria-pressed="true"] { color: var(--gold, #a8823a) !important; }
+.focus-pill {
+  position: fixed; top: 10px; left: 50%; transform: translateX(-50%); z-index: 70;
+  display: flex; align-items: center; gap: 10px; padding: 6px 8px 6px 14px; border-radius: 999px;
+  background: rgba(30, 28, 25, .92); color: #efe6d2; font: 14px var(--serif);
+  box-shadow: 0 6px 18px -6px rgba(0, 0, 0, .6); overflow: hidden;
+}
+.focus-pill[hidden] { display: none; }
+.focus-pill::after { content: ""; position: absolute; left: 0; bottom: 0; height: 2px; width: var(--fp, 0%); background: var(--gold, #a8823a); transition: width 1s linear; }
+.fp-dot { width: 7px; height: 7px; border-radius: 50%; background: #9fd18a; box-shadow: 0 0 6px #9fd18a; }
+.fp-time { font-variant-numeric: tabular-nums; letter-spacing: .04em; }
+.fp-streak { color: #e8c37a; }
+.fp-streak.pop { animation: fp-pop .35s cubic-bezier(.2, 1.6, .4, 1); }
+@keyframes fp-pop { from { transform: scale(1.5); } to { transform: scale(1); } }
+.focus-pill button { background: none; border: 1px solid rgba(239, 230, 210, .3); color: inherit; border-radius: 999px; padding: 2px 10px; font: 13px var(--serif); cursor: pointer; }
+.focus-break { position: fixed; inset: 0; z-index: 90; background: rgba(20, 18, 15, .82); display: grid; place-items: center; padding: 20px; animation: fade .3s; }
+.fb-box { background: var(--paper, #f3ecdc); color: var(--ink); max-width: 420px; padding: 28px 30px; text-align: center; border: 1px solid var(--frame-ink, #5c5447); }
+.fb-box h2 { margin: 0 0 8px; }
+.fb-count { font-size: 40px; font-variant-numeric: tabular-nums; margin: 10px 0 16px; }
+.fb-box .toolbar { justify-content: center; }

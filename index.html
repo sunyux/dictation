@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="celeste.css?v=64">
   <link rel="stylesheet" href="mono.css?v=46">
   <link rel="stylesheet" href="print.css?v=57">
-  <link rel="stylesheet" href="riso.css?v=88">
+  <link rel="stylesheet" href="riso.css?v=89">
 </head>
 <body>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="riso-rough"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="3" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.2" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
@@ -28,6 +28,7 @@
     <a class="btn ghost small nav-tools" href="#/tools">工具</a>
     <a class="btn ghost small nav-verbs" href="#/verbes">动词词典</a>
     <a class="btn ghost small" href="#/review">错题本</a>
+    <button class="settings-btn" id="focus-btn" aria-label="专注模式" title="专注模式"><svg viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="3" fill="currentColor"/></svg></button>
     <button class="settings-btn" id="settings-btn" aria-label="设置" title="朗读与判分设置">
       <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/><circle cx="16" cy="7" r="2.2" stroke="currentColor" stroke-width="1.6" fill="none"/><circle cx="10" cy="17" r="2.2" stroke="currentColor" stroke-width="1.6" fill="none"/></svg>
     </button>
@@ -47,6 +48,7 @@
   <script src="mouth.js?v=38"></script>
   <script src="typewriter.js?v=47"></script>
   <script src="dust.js?v=2"></script>
+  <script src="focus.js?v=2"></script>
   <script src="journal-prompts.js?v=71"></script>
   <script src="sky.js?v=38"></script>
   <script src="numbers.js?v=38"></script>
@@ -91,6 +93,6 @@
   <script src="deep/en-19.js?v=1"></script>
   <script src="deep/zh-20.js?v=1"></script>
   <script src="deep/en-20.js?v=1"></script>
-  <script src="app.js?v=83"></script>
+  <script src="app.js?v=84"></script>
 </body>
 </html>
