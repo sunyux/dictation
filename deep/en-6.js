@@ -1,0 +1,156 @@
+// Leçon 6 · Portrait-robot — English cards
+Object.assign(window.DEEP_EN = window.DEEP_EN || {}, {
+  'homme': {
+    pos: 'n.m. (pl. hommes)', s: 'Man; human being. One word, two senses: l\'homme (mankind) and un homme (a man) — the default "person" was male, which is why some now prefer l\'être humain.',
+    cog: 'Cognates: human, humane, homicide (Latin homo). Faux-ami-ish: homme alone never means "homey".', ipa: '[ɔm]', ph: 'Silent h; open [ɔ]; les hommes has liaison [le.z‿ɔm].', pi: 'h is silent: l\'homme, les‿hommes.', et: 'Latin homo.',
+    ex: [['Un homme t\'attend à l\'accueil.', 'A man\'s waiting for you at reception.'], ['Les hommes et les femmes sont égaux.', 'Men and women are equal.'], ['C\'est un homme très gentil.', 'He\'s a really kind man.']],
+    co: [['un homme d\'affaires', 'a businessman'], ['l\'homme', 'mankind'], ['un bonhomme de neige', 'a snowman']], sy: [['monsieur', 'courant, polite', 'sir'], ['mec / type / gars', 'familier', 'guy'], ['être humain', 'courant', 'human being']], fq: 'Extremely common.',
+    me: 'Silent h: l\'homme, les‿hommes.', tr: { en: 'That man is my teacher.', fr: 'Cet homme est mon professeur.', alt: 'Ce monsieur-là, c\'est mon prof.', note: 'cet before a vowel.' },
+  },
+  'jean': {
+    pos: 'n.m. (pl. jeans; un jean is also used)', s: 'Jeans. French says un jean or un jeans; the first is more common.', cog: 'From English jeans, from Genoa cloth.', ipa: '[dʒin]', ph: 'English-style j [dʒ].',
+    pi: 'A rare j = [dʒ]; unrelated to the name Jean [ʒɑ̃].', et: 'From Génes (Genoa) fabric.', ex: [['Il porte un jean et un tee-shirt.', 'He\'s wearing jeans and a T-shirt.'], ['Ce jean est trop serré.', 'These jeans are too tight.']],
+    co: [['un jean slim / bootcut', 'skinny / bootcut jeans'], ['en jean', 'denim']], sy: [['pantalon', 'courant', 'trousers'], ['denim', 'courant', 'denim']], fq: 'Common.', me: 'jean = Genoa cloth.',
+    tr: { en: 'I\'d like to buy a pair of black jeans.', fr: 'Je voudrais acheter un jean noir.', alt: 'Je cherche un jean noir.', note: 'Colour after the noun.' },
+  },
+  'pantalon': {
+    pos: 'n.m. (pl. pantalons)', s: 'Trousers. French counts it as singular: un pantalon.', cog: 'Cognate: pantaloon (from the Italian comedy character Pantalone).', ipa: '[pɑ̃.ta.lɔ̃]', ph: 'Two nasals.',
+    pi: 'Singular in French ("a trouser"), plural in English.', et: 'Pantalone.', ex: [['Je cherche un pantalon noir.', 'I\'m looking for black trousers.'], ['Ce pantalon est trop court.', 'These trousers are too short.']],
+    co: [['mettre un pantalon', 'put trousers on'], ['un pantalon de sport', 'tracksuit bottoms']], sy: [['jean', 'courant', 'jeans'], ['falzar', 'argot', 'trousers (slang)'], ['short', 'courant', 'shorts']], fq: 'Common.',
+    me: 'One pantalon, not "pantalons" for one pair.', tr: { en: 'These trousers are too long.', fr: 'Ce pantalon est trop long.', alt: 'Ce pantalon est trop long pour moi.', note: 'Singular.' },
+  },
+  'portrait-robot': {
+    pos: 'n.m. (pl. portraits-robots)', s: 'Identikit / photofit picture a police artist builds from witnesses\' descriptions. Figuratively: a typical profile (le portrait-robot du candidat idéal).',
+    cog: 'portrait + robot (both borrowed into English).', ipa: '[pɔʁ.tʁɛ.ʁɔ.bo]', ph: 'robot: [ʁɔbo], t silent.', pi: 'Both words take -s in the plural.', et: 'portrait + robot: a picture "assembled by machine".',
+    ex: [['La police a publié le portrait-robot du suspect.', 'The police released the suspect\'s photofit.']], co: [['faire un portrait-robot', 'make a photofit']], sy: [['portrait', 'courant', 'portrait']], fq: 'Low frequency (news).',
+    me: 'This unit\'s task: building a person from a description.', tr: { en: 'The police drew a photofit from the witness\'s description.', fr: 'La police a fait un portrait-robot d\'après la description du témoin.', alt: 'La police a dessiné un portrait-robot avec l\'aide du témoin.', note: 'd\'après = based on.' },
+  },
+  'tee-shirt': {
+    pos: 'n.m. (pl. tee-shirts; also t-shirt)', s: 'T-shirt.', cog: 'From English.', ipa: '[ti.ʃœʁt]', ph: 'French-style: sh = [ʃ], ir = [œʁ].', pi: '"tee-SHERT" doesn\'t exist in French.', et: 'English.',
+    ex: [['Il porte un tee-shirt blanc.', 'He\'s wearing a white T-shirt.']], co: [['un tee-shirt à manches courtes / longues', 'short- / long-sleeved T-shirt']], sy: [['tee', 'familier', 'tee'], ['polo', 'courant', 'polo shirt']], fq: 'Common.',
+    me: 'ir is pronounced like eur.', tr: { en: 'I\'m wearing a white T-shirt and jeans.', fr: 'Je porte un tee-shirt blanc et un jean.', alt: 'J\'ai mis un tee-shirt blanc et un jean.', note: 'porter = to wear; mettre = to put on.' },
+  },
+  'vêtement': {
+    pos: 'n.m. (pl. vêtements)', s: 'A piece of clothing. Clothes in general: des vêtements.', cog: 'Cognates: vest, vestment, invest (Latin vestire, "to clothe").', ipa: '[vɛt.mɑ̃]', ph: 'Middle e nearly silent.',
+    pi: 'Accent ê.', et: 'From vêtir.', ex: [['Je cherche des vêtements pour l\'hiver.', 'I\'m looking for winter clothes.'], ['Range tes vêtements !', 'Put your clothes away!']],
+    co: [['un magasin de vêtements', 'clothes shop'], ['des vêtements de sport', 'sportswear']], sy: [['fringues', 'familier', 'clothes'], ['habits', 'courant', 'clothes']], fq: 'Common.',
+    me: 'vêtement ← vêtir ← veste.', tr: { en: 'I need to buy some new clothes.', fr: 'J\'ai besoin d\'acheter de nouveaux vêtements.', alt: 'Il me faut de nouvelles fringues.', note: 'de nouveaux before plural.' },
+  },
+  'basket': {
+    pos: 'n.f. (usually plural: baskets)', s: 'Trainers / sneakers. Les baskets = everyday sports shoes; le basket (masc.) = the sport basketball.', cog: 'From basketball shoes.', ipa: '[bas.kɛt]', ph: 't pronounced.',
+    pi: 'Shoes: feminine (les baskets); the sport: masculine (le basket).', et: 'English.', ex: [['Je mets mes baskets pour courir.', 'I\'m putting my trainers on to run.']], co: [['une paire de baskets', 'a pair of trainers'], ['lâche-moi les baskets', 'leave me alone (casual)']],
+    sy: [['tennis', 'courant', 'sports shoes'], ['sneakers', 'courant', 'sneakers']], fq: 'Fairly common.', me: 'Baskets (shoes, f.) / le basket (sport, m.).', tr: { en: 'I have a new pair of white trainers.', fr: 'J\'ai une nouvelle paire de baskets blanches.', alt: 'J\'ai de nouvelles baskets blanches.', note: 'Feminine plural.' },
+  },
+  'chaussure': {
+    pos: 'n.f. (pl. chaussures)', s: 'Shoe. Usually plural; une paire de chaussures. Verb chausser = to put on shoes; Je chausse du 38 = I take a size 38.', cog: 'No English cognate (Latin calceus, as in "calceolaria").',
+    ipa: '[ʃo.syʁ]', ph: 'ch = [ʃ]; u = [y].', pi: 'chaussure (shoe) vs chaussette (sock).', et: 'From chausser.', ex: [['Enlève tes chaussures avant d\'entrer.', 'Take your shoes off before you come in.'], ['Quelle est ta pointure ?', 'What\'s your shoe size?']],
+    co: [['une paire de chaussures', 'a pair of shoes'], ['mettre / enlever ses chaussures', 'put on / take off shoes']], sy: [['souliers', 'soutenu', 'shoes'], ['baskets', 'courant', 'trainers']], fq: 'Common.', me: 'chaussure ← chausser.',
+    tr: { en: 'My shoes are too small.', fr: 'Mes chaussures sont trop petites.', alt: 'Mes chaussures me font mal, elles sont trop petites.', note: 'Feminine plural.' },
+  },
+  'chemise': {
+    pos: 'n.f. (pl. chemises)', s: 'Shirt (formal, collar and buttons); folder. Women\'s blouse = chemisier.', cog: 'Cognates: chemise (borrowed), camisole (Latin camisia).', ipa: '[ʃə.miz]', ph: 's = [z].',
+    pi: 'Feminine even for a man\'s shirt.', et: 'Latin camisia.', ex: [['Il porte une chemise blanche et une cravate.', 'He\'s wearing a white shirt and tie.']], co: [['une chemise à manches longues', 'long-sleeved shirt'], ['en chemise', 'in shirt-sleeves']],
+    sy: [['chemisier', 'courant', 'blouse'], ['tee-shirt', 'courant', 'T-shirt']], fq: 'Fairly common.', me: 'Feminine: une chemise.', tr: { en: 'He\'s wearing a blue shirt today.', fr: 'Il porte une chemise bleue aujourd\'hui.', alt: 'Il a mis une chemise bleue aujourd\'hui.', note: 'bleue feminine.' },
+  },
+  'chose': {
+    pos: 'n.f. (pl. choses)', s: 'Thing; matter. Broader and more abstract than objet: quelque chose (something), autre chose (something else), pas grand-chose (not much).', cog: 'Cognate: cause (Latin causa).',
+    ipa: '[ʃoz]', ph: 's = [z].', pi: 'quelque chose is masculine as a whole: quelque chose de beau.', et: 'Latin causa.', ex: [['J\'ai quelque chose à te dire.', 'I have something to tell you.'], ['Ce n\'est pas grand-chose.', 'It\'s nothing much.']],
+    co: [['quelque chose', 'something'], ['autre chose', 'something else'], ['pas grand-chose', 'not much']], sy: [['truc', 'familier', 'thing, thingy'], ['objet', 'courant', 'object']], fq: 'Extremely common.',
+    me: 'quelque chose de + masculine adjective.', tr: { en: 'I\'d like something tasty to eat.', fr: 'Je voudrais manger quelque chose de bon.', alt: 'J\'ai envie de manger un truc bon.', note: 'quelque chose de + adj.' },
+  },
+  'couleur': {
+    pos: 'n.f. (pl. couleurs)', s: 'Colour. De quelle couleur est…? What colour is…?', cog: 'Colour (Latin color). Trap: feminine despite -eur.', ipa: '[ku.lœʁ]', ph: '-eur [œʁ].', pi: 'Feminine: la couleur, la fleur, la peur.', et: 'Latin color.',
+    ex: [['De quelle couleur est ta voiture ?', 'What colour is your car?'], ['Quelle est ta couleur préférée ?', 'What\'s your favourite colour?']], co: [['de quelle couleur', 'what colour'], ['en couleur(s)', 'in colour']], sy: [['teinte', 'soutenu', 'shade'], ['nuance', 'courant', 'hue']], fq: 'Common.',
+    me: 'Feminine -eur: couleur, fleur, peur, chaleur.', tr: { en: 'What colour is your bag?', fr: 'De quelle couleur est ton sac ?', alt: 'Il est de quelle couleur, ton sac ?', note: 'de quelle couleur + être.' },
+  },
+  'lunettes': {
+    pos: 'n.f.pl.', s: 'Glasses (spectacles). Always plural: des lunettes; une paire de lunettes. lunettes de soleil = sunglasses.', cog: 'From lune (moon): round lenses like "little moons".', ipa: '[ly.nɛt]', ph: 'u = [y]; t pronounced.',
+    pi: 'Plural only.', et: 'Diminutive of lune.', ex: [['Je ne trouve plus mes lunettes.', 'I can\'t find my glasses.'], ['Il porte des lunettes rondes.', 'He wears round glasses.']],
+    co: [['porter des lunettes', 'wear glasses'], ['lunettes de soleil / de vue', 'sunglasses / prescription glasses']], sy: [['lentilles', 'courant', 'contact lenses']], fq: 'Common.', me: 'lunettes ← lune.', tr: { en: 'He wears glasses; I don\'t.', fr: 'Il porte des lunettes, moi non.', alt: 'Lui, il a des lunettes ; moi, pas.', note: 'moi non = I don\'t.' },
+  },
+  'porter': {
+    pos: 'verb, 1st group, regular', s: 'To wear; to carry; to bear. Il porte une barbe = he has a beard. porter = wearing (state); mettre = putting on (action).', cog: 'Cognates: port, portable, transport, import (Latin portare).',
+    ipa: '[pɔʁ.te]', ph: 'Open [ɔ].', pi: 'Il porte un chapeau (is wearing) / Il met un chapeau (puts on).', et: 'Latin portare.', ex: [['Elle porte une robe rouge.', 'She\'s wearing a red dress.'], ['Tu peux porter ce sac ?', 'Can you carry this bag?']],
+    co: [['porter des lunettes', 'wear glasses'], ['porter un sac', 'carry a bag'], ['porter plainte', 'file a complaint']], sy: [['mettre', 'courant', 'put on'], ['transporter', 'courant', 'transport']], fq: 'Extremely common.',
+    me: 'porter = wearing; mettre = putting on.', tr: { en: 'She\'s wearing a blue dress and a hat.', fr: 'Elle porte une robe bleue et un chapeau.', alt: 'Elle est en robe bleue, avec un chapeau.', note: 'Description → porter.' },
+  },
+  'autre': {
+    pos: 'adj. (same for m./f.); also pronoun', s: 'Other; another. un autre (another one), l\'autre (the other), les autres (the others), autre chose (something else).', cog: 'Cognates: alter, alternate (Latin alter).',
+    ipa: '[otʁ]', ph: 'au = [o].', pi: 'Plural indefinite: d\'autres (not des autres).', et: 'Latin alter.', ex: [['Tu as un autre stylo ?', 'Have you got another pen?'], ['Les autres sont déjà partis.', 'The others have already left.']],
+    co: [['autre chose', 'something else'], ['d\'autres + noun', 'other…'], ['l\'un l\'autre', 'each other']], sy: [['différent', 'courant', 'different']], fq: 'Extremely common.', me: 'd\'autres for "some others".',
+    tr: { en: 'I\'ve read this one already — do you have any others?', fr: 'Celui-ci, je l\'ai déjà lu. Vous en avez d\'autres ?', alt: 'Celui-là, je l\'ai déjà lu. Vous avez autre chose ?', note: 'd\'autres.' },
+  },
+  'blanc(che)': {
+    pos: 'adj. m. blanc / f. blanche', s: 'White. Also blank (une page blanche), white wine (un blanc), and "blank vote".', cog: 'Cognates: blank, blanch, blanket (from the same Germanic/French root). Trap: avoir un blanc = to go blank.',
+    ipa: 'm. [blɑ̃] · f. [blɑ̃ʃ]', ph: 'Masculine c silent.', pi: 'Feminine: blanche.', et: 'Germanic blank.', ex: [['Elle porte une robe blanche.', 'She\'s wearing a white dress.'], ['J\'ai eu un blanc pendant l\'examen.', 'My mind went blank during the exam.']],
+    co: [['un blanc', 'a glass of white wine'], ['avoir un blanc', 'to go blank'], ['nuit blanche', 'sleepless night']], sy: [['clair', 'courant', 'light-coloured']], fq: 'Common.', me: 'une nuit blanche = an all-nighter.',
+    tr: { en: 'I had a sleepless night last night.', fr: 'J\'ai passé une nuit blanche hier.', alt: 'Hier, j\'ai pas dormi de la nuit.', note: 'passer une nuit blanche.' },
+  },
+  'bleu(e)': {
+    pos: 'adj. m. bleu / f. bleue', s: 'Blue. Also un bleu = a bruise; a steak cooked "bleu" is nearly raw.', cog: 'Blue.', ipa: '[blø]', ph: 'eu = [ø]; same for both genders.', pi: 'Feminine bleue sounds the same.', et: 'Germanic blao.',
+    ex: [['Elle a les yeux bleus.', 'She has blue eyes.'], ['Je me suis fait un bleu au genou.', 'I\'ve bruised my knee.']], co: [['un bleu', 'a bruise'], ['bleu marine', 'navy blue'], ['un steak bleu', 'a very rare steak']], sy: [['azur', 'soutenu', 'azure']], fq: 'Common.',
+    me: 'Colours go after the noun.', tr: { en: 'She has blue eyes.', fr: 'Elle a les yeux bleus.', alt: 'Ses yeux sont bleus.', note: 'Plural agreement.' },
+  },
+  'blond(e)': {
+    pos: 'adj. m. blond / f. blonde', s: 'Blond(e). Also une blonde = a blonde woman, a lager, or a mild cigarette.', cog: 'Blond.', ipa: 'm. [blɔ̃] · f. [blɔ̃d]', ph: 'Feminine d pronounced.', pi: 'Masculine d silent.',
+    et: 'Germanic blund.', ex: [['Elle a les cheveux blonds.', 'She has blonde hair.'], ['Je prends une blonde.', 'I\'ll have a lager.']], co: [['les cheveux blonds', 'blonde hair'], ['une blonde', 'a lager / blonde woman']], sy: [['roux', 'courant', 'red-headed'], ['châtain', 'courant', 'chestnut']], fq: 'Fairly common.',
+    me: 'Hair takes the plural: les cheveux blonds.', tr: { en: 'My brother\'s blond; I\'m dark-haired.', fr: 'Mon frère est blond, moi je suis brune.', alt: 'Mon frère a les cheveux blonds et moi bruns.', note: 'Gender agreement for yourself.' },
+  },
+  'brun(e)': {
+    pos: 'adj. m. brun / f. brune', s: 'Brown; dark-haired. For hair, brun = dark (brown or black); for objects, brown (but marron is more common).', cog: 'Brown (Germanic brun).', ipa: 'm. [bʁœ̃] · f. [bʁyn]',
+    ph: 'Masculine nasal, feminine not.', pi: 'brun [bʁœ̃] / brune [bʁyn] — very different sounds.', et: 'Germanic.', ex: [['Elle a les cheveux bruns.', 'She has dark hair.'], ['J\'aime le sucre brun.', 'I like brown sugar.']],
+    co: [['une brune', 'a brunette / dark beer'], ['brun clair / foncé', 'light / dark brown']], sy: [['marron', 'courant', 'brown (objects)'], ['châtain', 'courant', 'light-brown hair']], fq: 'Fairly common.', me: 'Hair: brun; objects: marron.',
+    tr: { en: 'She has dark hair.', fr: 'Elle a les cheveux bruns.', alt: 'Elle est brune.', note: 'être brune = be dark-haired.' },
+  },
+  'grand(e)': {
+    pos: 'adj. m. grand / f. grande', s: 'Tall; big; great. Before a noun: un grand homme (a great man); after: un homme grand (a tall man).', cog: 'Cognates: grand, grandiose (Latin grandis).', ipa: 'm. [gʁɑ̃] · f. [gʁɑ̃d]',
+    ph: 'Liaison with [t]: un grand‿homme [gʁɑ̃.t‿ɔm].', pi: 'Liaison is [t], not [d].', et: 'Latin grandis.', ex: [['Elle est grande et mince.', 'She\'s tall and slim.'], ['Mon grand frère a 20 ans.', 'My big brother is 20.']],
+    co: [['un grand frère / une grande sœur', 'older brother / sister'], ['pas grand-chose', 'not much']], sy: [['haut', 'courant', 'tall (things)'], ['énorme', 'courant', 'huge']], fq: 'Extremely common.', me: 'grand for people, haut for objects.',
+    tr: { en: 'My big brother is very tall; my sister is smaller than me.', fr: 'Mon grand frère est très grand, ma sœur est plus petite que moi.', alt: 'Mon frère est très grand, ma sœur est plus petite que moi.', note: 'plus petite que.' },
+  },
+  'leur, leurs': {
+    pos: 'possessive: leur (sing.) / leurs (pl.)', s: 'Their. No gender: leur père, leur mère / leurs enfants.', cog: 'Latin illorum.', ipa: '[lœʁ]', ph: 'leurs‿amis liaison.', pi: 'leur is also an indirect pronoun (to them): Je leur parle — position tells them apart.',
+    et: 'Latin illorum.', ex: [['Ils aiment leur maison.', 'They love their house.'], ['Je leur téléphone ce soir.', 'I\'m calling them tonight.']], co: [['leur + singular', 'leur voiture'], ['leurs + plural', 'leurs amis']],
+    sy: [['son / sa / ses', '—', 'his / her']], fq: 'Extremely common.', me: 'One owner: son; several owners: leur.', tr: { en: 'Their son works in Canada.', fr: 'Leur fils travaille au Canada.', alt: 'Leur fils bosse au Canada.', note: 'fils singular → leur.' },
+  },
+  'noir(e)': {
+    pos: 'adj. m. noir / f. noire', s: 'Black; dark. un noir = a black coffee.', cog: 'Cognates: Niger, negro (Latin niger).', ipa: '[nwaʁ]', ph: 'oi = [wa].', pi: 'Same sound for both genders.', et: 'Latin niger.',
+    ex: [['Un café noir, s\'il vous plaît.', 'A black coffee, please.'], ['Il fait nuit noire.', 'It\'s pitch dark.']], co: [['un film noir', 'a film noir'], ['voir tout en noir', 'see only the dark side'], ['travailler au noir', 'work under the table']], sy: [['sombre', 'courant', 'dark'], ['foncé', 'courant', 'dark (colour)']], fq: 'Common.',
+    me: 'voir la vie en noir = be pessimistic.', tr: { en: 'He\'s wearing a black hat and a black jacket.', fr: 'Il porte un chapeau noir et un blouson noir.', alt: 'Il est tout en noir : chapeau noir, blouson noir.', note: 'Colour after noun.' },
+  },
+  'petit(e)': {
+    pos: 'adj. m. petit / f. petite', s: 'Small; short; young; (affectionate) little. petit ami / petite amie = boyfriend / girlfriend.', cog: 'Cognates: petite, petty (Latin pittitus).', ipa: 'm. [pə.ti] · f. [pə.tit]',
+    ph: 'Liaison: petit‿ami.', pi: 'petit ami (boyfriend) vs petit-fils (grandson).', et: 'Latin pittitus.', ex: [['Elle est petite mais très forte.', 'She\'s small but strong.'], ['C\'est mon petit ami.', 'This is my boyfriend.']],
+    co: [['petit ami / petite amie', 'boyfriend / girlfriend'], ['petit déjeuner', 'breakfast'], ['petit à petit', 'little by little']], sy: [['court', 'courant', 'short (objects)'], ['mini', 'familier', 'tiny']], fq: 'Extremely common.',
+    me: 'petit déjeuner = "little lunch" = breakfast.', tr: { en: 'My little sister is very small, but she\'s very clever.', fr: 'Ma petite sœur est petite, mais elle est très intelligente.', alt: 'Ma petite sœur est toute petite, mais elle est très intelligente.', note: 'petite sœur vs est petite.' },
+  },
+  'rouge': {
+    pos: 'adj. (same for m./f.); noun le rouge', s: 'Red. Also red wine (un rouge) and lipstick (rouge à lèvres).', cog: 'Cognates: rouge, ruby, rubric (Latin rubeus).', ipa: '[ʁuʒ]', ph: 'ge = [ʒ].', pi: 'Same for both genders.',
+    et: 'Latin rubeus.', ex: [['Elle porte une robe rouge.', 'She\'s wearing a red dress.'], ['Un verre de rouge, s\'il vous plaît.', 'A glass of red, please.']], co: [['voir rouge', 'see red'], ['le rouge à lèvres', 'lipstick']],
+    sy: [['écarlate', 'soutenu', 'scarlet']], fq: 'Common.', me: 'voir rouge = see red.', tr: { en: 'The light is red, let\'s wait.', fr: 'Le feu est rouge, on attend.', alt: 'C\'est rouge, on s\'arrête.', note: 'Invariable in gender.' },
+  },
+  'vert(e)': {
+    pos: 'adj. m. vert / f. verte', s: 'Green; unripe; eco. un vert = green; les Verts = the Greens.', cog: 'Cognates: verdant, verdure (Latin viridis).', ipa: 'm. [vɛʁ] · f. [vɛʁt]', ph: 'Masculine t silent.', pi: 'vert / verre / ver / vers all sound [vɛʁ].',
+    et: 'Latin viridis.', ex: [['Le feu est vert, on peut traverser.', 'The light\'s green, we can cross.'], ['Elle a les yeux verts.', 'She has green eyes.']], co: [['le thé vert', 'green tea'], ['un espace vert', 'a green space'], ['feu vert', 'green light / go-ahead']],
+    sy: [['écologique', 'courant', 'eco-friendly']], fq: 'Common.', me: 'donner le feu vert = give the go-ahead.', tr: { en: 'She has green eyes.', fr: 'Elle a des yeux verts.', alt: 'Elle a les yeux verts.', note: 'Plural agreement.' },
+  },
+  'lui': {
+    pos: 'personal pronoun (indirect object / stressed)', s: 'Him (stressed); to him / to her (indirect object). Je lui parle = I talk to him OR her.', cog: 'No English cognate.', ipa: '[lɥi]', ph: 'ui = [ɥi].',
+    pi: 'As an indirect object, lui is gender-neutral.', et: 'Latin illui.', ex: [['Lui, il ne vient pas.', 'As for him, he\'s not coming.'], ['Je lui téléphone demain.', 'I\'ll call him / her tomorrow.'], ['C\'est à lui.', 'It\'s his.']],
+    co: [['c\'est lui', 'it\'s him'], ['lui aussi / lui non plus', 'him too / him neither'], ['lui parler / lui dire', 'speak / say to him or her']], sy: [['elle', '—', 'her (stressed)']], fq: 'Extremely common.',
+    me: 'lui as indirect object has no gender.', tr: { en: 'I call him, but he doesn\'t answer.', fr: 'Je lui téléphone, mais il ne répond pas.', alt: 'Je l\'appelle mais il ne décroche pas.', note: 'téléphoner à → lui; appeler → le.' },
+  },
+  'd\'accord': {
+    pos: 'adverbial phrase', s: 'OK; agreed; all right. D\'accord. = Fine. Je suis d\'accord = I agree. Je ne suis pas d\'accord = I disagree.', cog: 'Cognates: accord, accordion, accord (chord) — from "to bring into harmony".',
+    ipa: '[da.kɔʁ]', ph: 'cc = [k].', pi: 'Être d\'accord avec qqn.', et: 'de + accord (agreement).', ex: [['— On y va ? — D\'accord.', '"Shall we go?" "OK."'], ['Je suis d\'accord avec toi.', 'I agree with you.']],
+    co: [['être d\'accord (avec qqn)', 'agree (with)'], ['se mettre d\'accord', 'reach an agreement']], sy: [['ok', 'familier', 'OK'], ['entendu', 'soutenu', 'agreed'], ['ça marche', 'familier', 'works for me']], fq: 'Extremely common.',
+    me: 'd\'accord is also the usual "OK" in reply.', tr: { en: '"Shall we meet at 8?" "OK."', fr: '— On se voit à 8 h ? — D\'accord.', alt: '— À 8 h ? — Ça marche.', note: 'd\'accord = OK.' },
+  },
+  'ne… pas': {
+    pos: 'negation (ne + verb + pas)', s: 'Not. French negation wraps the verb: Je ne parle pas anglais. In speech ne often vanishes: Je parle pas anglais. pas does the real work.', cog: 'No cognate. Trap: pas originally meant "a step" (je ne marche pas = I don\'t take a step).',
+    ipa: '[nə … pa]', ph: 'n\' before vowels.', pi: 'un / une / des → de after pas: J\'ai un chat → Je n\'ai pas de chat. But after être: Ce n\'est pas un chat.', et: 'ne (Latin non) + pas ("step").',
+    ex: [['Je ne parle pas chinois.', 'I don\'t speak Chinese.'], ['Je n\'ai pas de voiture.', 'I don\'t have a car.'], ['C\'est pas grave !', 'No big deal!']],
+    co: [['ne… pas de + noun', 'no / not any'], ['ne… plus / jamais / rien', 'no longer / never / nothing'], ['pas du tout', 'not at all']], sy: [['non', 'courant', 'no'], ['ne… jamais', 'courant', 'never']], fq: 'Most frequent.',
+    me: 'pas = "a step": I don\'t walk a step.', tr: { en: 'I don\'t drink coffee; I don\'t have time.', fr: 'Je ne bois pas de café, je n\'ai pas le temps.', alt: 'Je bois pas de café, j\'ai pas le temps.', note: 'pas de café but pas le temps.' },
+  },
+});
