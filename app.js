@@ -1957,6 +1957,10 @@
     const items = Object.entries(db).map(([id, e]) => ({ id, ...e }));
     const due = SRS.due();
     const active = items.filter(e => !e.done), done = items.filter(e => e.done);
+    if (sub === 'learn' || sub === 'early-learn') {
+      main.innerHTML = '<div class="toolbar"><a class="btn ghost small" href="#/review">‹ 返回错题本</a></div><div id="drill"></div>';
+      return reviewLearn($('#drill'), sub === 'learn' ? due : active, sub === 'learn' ? '#/review/go' : '#/review/early');
+    }
     if (sub === 'go' || sub === 'listen' || sub === 'early' || sub === 'early-listen') {
       main.innerHTML = '<div class="toolbar"><a class="btn ghost small" href="#/review">‹ 返回错题本</a></div><div id="drill"></div>';
       return reviewDrill($('#drill'), shuffle(sub.startsWith('early') ? active : due));
@@ -1974,9 +1978,9 @@
         <div><b>${done.length}</b><span>已掌握</span></div>
       </div>
       <div class="toolbar">
-        ${due.length ? `<a class="btn" href="#/review/go">开始今天的复习（${due.length}）</a>`
+        ${due.length ? `<a class="btn ghost" href="#/review/learn">${bi('先学一遍', 'Study first')}</a><a class="btn" href="#/review/go">开始今天的复习（${due.length}）</a>`
           : `<span class="btn ghost" aria-disabled="true">今天没有要复习的</span>`}
-        ${active.length && !due.length ? '<a class="btn ghost" href="#/review/early">提前复习全部</a>' : ''}
+        ${active.length && !due.length ? `<a class="btn ghost" href="#/review/early-learn">${bi('先学一遍', 'Study first')}</a><a class="btn ghost" href="#/review/early">提前复习全部</a>` : ''}
         <span class="spacer"></span>
         <button class="btn ghost small" id="exp">导出备份</button>
         <label class="btn ghost small" style="cursor:pointer">导入<input type="file" id="imp" accept=".json" hidden></label>
@@ -1986,7 +1990,7 @@
         <section class="unit"><div class="unit-title"><h2 lang="fr">${leconName(+n)}</h2><span>${list.length} 条</span></div>
         ${list.map(e => `<div class="err-row">
           <span class="err-kind">${KIND[e.kind]}</span>
-          <div class="err-body"><div lang="fr">${playBtn(e.kind === 'word' ? forms(e.fr).say : e.fr)} ${esc(e.fr)}</div><div class="lzh">${e.kind === 'cloze' ? esc(e.zh) : G(e)}${e.pos ? ' · ' + esc(e.pos) : ''}</div></div>
+          <div class="err-body"><div lang="fr">${playBtn(e.kind === 'word' ? forms(e.fr).say : e.fr)} ${esc(e.fr)}${e.kind === 'word' && window.DEEP && DEEP[e.fr] ? `<button class="deep-btn" data-deep="${esc(e.fr)}" lang="zh">${bi('详解', 'In depth')}</button>` : ''}</div><div class="lzh">${e.kind === 'cloze' ? esc(e.zh) : G(e)}${e.pos ? ' · ' + esc(e.pos) : ''}</div></div>
           <span class="err-meta">错 ${e.wrong} 次<br>${e.due <= today ? '<b class="w-miss">&nbsp;今天&nbsp;</b>' : e.due.slice(5).replace('-', '/') + ' 复习'}</span>
           <button class="err-del" data-id="${esc(e.id)}" title="移出错题本" aria-label="移出错题本">×</button>
         </div>`).join('')}</section>`).join('')
@@ -2001,6 +2005,49 @@
 
   const promptSay = e => e.kind === 'cloze' ? e.zh.replace('____', e.fr).replace(/^–\s*/, '') : e.kind === 'word' && e.pos !== '变位' ? forms(e.fr).say : e.fr;
   // round 1 is the real review (updates the schedule); later rounds practise the misses until all are right
+  // study pass before the review: one card per item — word, sound, meaning, tip, in-depth card — then go to the drill
+  function reviewLearn(box, list, next) {
+    const items = [...list].sort((a, b) => a.n - b.n);
+    let i = 0;
+    const draw = () => {
+      if (i >= items.length) {
+        box.innerHTML = `<div class="drill learn-done"><h2>${bi('学完了', 'All studied')}</h2>
+          <p class="hint-text">${bi(`${items.length} 条都看过一遍了，现在默写巩固一下。`, `You\'ve been through all ${items.length}. Now write them out.`)}</p>
+          <div class="toolbar"><a class="btn" href="${next}">${bi('开始复习', 'Start the review')}</a><button class="btn ghost" id="lr-again">${bi('再看一遍', 'Go through again')}</button></div></div>`;
+        $('#lr-again', box).onclick = () => { i = 0; draw(); };
+        return;
+      }
+      const e = items[i], word = e.kind === 'word';
+      const say = word ? forms(e.fr).say : e.fr;
+      const tip = word ? wordTip(e.n, e) : '';
+      box.innerHTML = `<div class="drill learn-card ${word && gender(e.pos) ? 'g-' + gender(e.pos) : ''}">
+        <div class="prog-line"><span class="kbd">${i + 1} / ${items.length}</span><span class="kbd" lang="fr">${esc(leconName(e.n))}</span></div>
+        <div class="lc-fr" lang="fr">${playBtn(say)} ${word ? artHint(e) : ''}<b>${esc(e.fr)}</b></div>
+        <div class="lc-mean">${e.kind === 'cloze' ? esc(e.zh) : G(e)}${e.pos ? ` <span class="pos ${gender(e.pos) ? 'g-' + gender(e.pos) : ''}">${esc(e.pos)}</span>` : ''}</div>
+        ${e.wrong ? `<p class="kbd">${bi(`写错过 ${e.wrong} 次`, `Missed ${e.wrong} times`)}</p>` : ''}
+        ${tipBox(tip)}
+        ${word && window.DEEP && DEEP[e.fr] ? `<button class="deep-btn lc-deep" data-deep="${esc(e.fr)}">${bi('看详解', 'In-depth card')}</button>` : ''}
+        <div class="toolbar lc-nav">
+          <button class="btn ghost" id="lr-prev" ${i ? '' : 'disabled'}>‹ ${bi('上一个', 'Back')}</button>
+          <span class="spacer"></span>
+          <button class="btn" id="lr-next">${i + 1 < items.length ? bi('下一个', 'Next') + ' ›' : bi('学完了', 'Done') + ' ✓'}</button>
+        </div>
+        <p class="kbd">${bi('← → 键翻页，空格再听一遍', '← → to move, Space to hear again')}</p></div>`;
+      $('#lr-prev', box).onclick = () => { if (i) { i--; draw(); } };
+      $('#lr-next', box).onclick = () => { i++; draw(); };
+      TTS.say(say);
+    };
+    const key = ev => {
+      if (!box.isConnected) return document.removeEventListener('keydown', key);
+      if (document.querySelector('.deep-ov') || /INPUT|TEXTAREA/.test(document.activeElement.tagName)) return;
+      if (ev.key === 'ArrowRight') { ev.preventDefault(); if (i < items.length) { i++; draw(); } }
+      else if (ev.key === 'ArrowLeft') { ev.preventDefault(); if (i) { i--; draw(); } }
+      else if (ev.key === ' ' && i < items.length) { ev.preventDefault(); const e = items[i]; TTS.say(e.kind === 'word' ? forms(e.fr).say : e.fr); }
+    };
+    document.addEventListener('keydown', key);
+    draw();
+  }
+
   function reviewDrill(box, queue, round = 1) {
     const practice = round > 1;
     let i = 0, answered = false, right = 0;
