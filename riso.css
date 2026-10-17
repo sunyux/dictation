@@ -410,3 +410,14 @@ html .lecon-card .n, html .lecon-card h3, html .lecon-card .zh { text-shadow: 0 
 .err-tries s { color: var(--bad, #b23a26); text-decoration-thickness: 1.5px; margin: 0 2px; }
 .err-tries .sep { margin: 0 4px; opacity: .5; }
 .learn-card .err-tries { margin-left: 0; font-size: 16px; }
+/* errorless review */
+.peek-card { margin: 10px 0 4px; padding: 12px 16px; background: color-mix(in srgb, var(--ok, #3f6b3a) 9%, transparent); border-left: 3px solid var(--ok, #3f6b3a); position: relative; overflow: hidden; }
+.peek-card .lab { font-size: 14px; color: var(--ink-2); display: block; }
+.peek-ans { font-size: 28px; display: flex; align-items: center; gap: 10px; margin-top: 4px; }
+.peek-bar { position: absolute; left: 0; bottom: 0; height: 3px; width: 100%; background: var(--ok, #3f6b3a); transform-origin: left; animation: peek-shrink linear forwards; }
+@keyframes peek-shrink { to { transform: scaleX(0); } }
+.peek-now { color: var(--ok, #3f6b3a); margin: 8px 0 0; }
+.copy-note { margin: 10px 0 0; font-size: 15px; color: var(--ink-2); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.answer-in.copied { border-bottom-color: var(--ok, #3f6b3a) !important; color: var(--ok, #3f6b3a) !important; }
+.answer-in.shake { animation: shake .3s; }
+@keyframes shake { 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }

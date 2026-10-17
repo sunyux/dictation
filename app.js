@@ -128,6 +128,12 @@
       else e.due = addDays(GAPS[e.box]);
       this.save(db);
     },
+    // looked at the answer, then wrote it right: see it again tomorrow, but no new mistake counted
+    again(it) {
+      const db = this.all(), e = db[this.id(it)];
+      if (!e) return;
+      e.box = 0; e.due = addDays(1); e.last = dayStr(); this.save(db);
+    },
     remove(id) { const db = this.all(); delete db[id]; this.save(db); },
     due() { const t = dayStr(); return Object.entries(this.all()).filter(([, e]) => !e.done && e.due <= t).map(([id, e]) => ({ id, ...e })); },
   };
@@ -2083,8 +2089,11 @@
 
   function reviewDrill(box, queue, round = 1) {
     const practice = round > 1;
-    let i = 0, answered = false, right = 0;
+    // errorless review: wrong answers are copied right once (the wrong spelling is cleared away),
+    // "I'm stuck" shows the answer to memorise instead of guessing; words missed 3+ times are shown automatically before you write
+    let i = 0, answered = false, right = 0, stage = 'ask', peeked = false;
     const wrong = [];
+    const answerOf = e => e.kind === 'word' ? closest(e.fr, '') : e.fr;
     const draw = () => {
       if (i >= queue.length) {
         const allRight = !wrong.length;
@@ -2103,7 +2112,7 @@
         if (wrong.length) $('#again-wrong', box).onclick = () => reviewDrill(box, shuffle(wrong), round + 1);
         return;
       }
-      const e = queue[i]; answered = false;
+      const e = queue[i]; answered = false; stage = 'ask'; peeked = false;
       const word = e.kind !== 'sentence';
       box.innerHTML = `<div class="drill">
         <div class="count">${practice ? bi(`练习 ${round - 1} · `, `Practice ${round - 1} · `) : ''}${i + 1} / ${queue.length} · ${leconName(e.n)}</div>
@@ -2114,12 +2123,49 @@
           <div class="ppos">${playBtn(promptSay(e))} ${esc(e.kind === 'cloze' ? '' : e.pos || '')}</div></div>
         ${word ? `<input class="answer-in" id="ans" lang="fr" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${bi('用法语写…', 'Write in French…')}">`
           : `<textarea class="answer-in" id="ans" lang="fr" rows="2" autocapitalize="off" spellcheck="false" placeholder="${bi('写出法语句子…', 'Write the French sentence…')}"></textarea>`}
-        <div class="drill-actions"><button class="btn ghost small" id="skip">${bi('不会，看答案', 'Show answer')}</button><span class="spacer"></span><span class="kbd"><kbd>Enter</kbd> 检查 / 下一个</span></div>
+        <div id="peek"></div>
+        <div class="drill-actions"><button class="btn ghost small" id="skip">${bi('不会，看答案', 'Show answer')}</button>
+          <button class="btn ghost small peek-btn" id="stuck">${bi('卡住了，先看一眼', 'Stuck — show me first')}</button>
+          <span class="spacer"></span><span class="kbd"><kbd>Enter</kbd> 检查 / 下一个</span></div>
         <div id="fb"></div></div>`;
       const inp = $('#ans', box); inp.focus();
       if (store.get('vauto', false)) setTimeout(() => TTS.say(promptSay(e)), 200);
-      inp.onkeydown = ev => { if (ev.key === 'Enter' && !ev.shiftKey) { ev.preventDefault(); answered ? (i++, draw()) : check(); } };
+      inp.onkeydown = ev => {
+        if (ev.key !== 'Enter' || ev.shiftKey) return;
+        ev.preventDefault();
+        if (stage === 'copy') return copyCheck();
+        answered ? (i++, draw()) : check();
+      };
       $('#skip', box).onclick = () => check(true);
+      $('#stuck', box).onclick = () => peek(e);
+      // missed 3+ times: look first, then write — so the right spelling is the one that gets practised
+      if (!practice && (e.wrong || 0) >= 3) peek(e, true);
+    };
+    // show the answer for a moment, then hide it and write it from memory
+    const peek = (e, auto = false) => {
+      if (answered) return;
+      peeked = true;
+      const inp = $('#ans', box), p = $('#peek', box), ans = answerOf(e);
+      inp.value = ''; inp.disabled = true; $('#stuck', box).disabled = true;
+      p.innerHTML = `<div class="peek-card"><span class="lab">${auto ? bi('这个错过好几次了，先看清楚再写', 'Missed this a few times — look first, then write') : bi('看清楚，记住它', 'Look carefully and remember it')}</span>
+        <div class="peek-ans" lang="fr">${playBtn(e.kind === 'word' ? forms(e.fr).say : e.fr)} ${esc(ans)}</div><i class="peek-bar"></i></div>`;
+      TTS.say(e.kind === 'word' ? forms(e.fr).say : e.fr);
+      const ms = Math.min(7000, 2500 + ans.length * 90);
+      p.querySelector('.peek-bar').style.animationDuration = ms + 'ms';
+      setTimeout(() => {
+        if (queue[i] !== e || answered) return;
+        p.innerHTML = `<p class="kbd peek-now">${bi('现在凭记忆写出来', 'Now write it from memory')}</p>`;
+        inp.disabled = false; inp.focus();
+      }, ms);
+    };
+    // after a mistake: copy the right answer once, with the wrong one cleared away
+    const copyCheck = () => {
+      const e = queue[i], inp = $('#ans', box), val = inp.value;
+      const ok = e.kind === 'sentence' ? diff(e.fr, val).perfect : checkWord(val, e.fr) === 'ok';
+      if (!ok) { inp.classList.remove('shake'); void inp.offsetWidth; inp.classList.add('shake'); return; }
+      stage = 'done'; answered = true;
+      inp.classList.add('copied'); inp.readOnly = true;
+      const c = $('#copy-note', box); if (c) c.innerHTML = `✓ ${bi('好，就是这个样子。按 Enter 继续', 'That\'s the one. Press Enter to go on')}`;
     };
     const check = (giveUp = false) => {
       const e = queue[i], val = $('#ans', box).value;
@@ -2138,7 +2184,10 @@
       }
       if (good) right++; else wrong.push(e);
       let lab;
-      if (practice) {
+      if (peeked && good) {
+        if (!practice) SRS.again(e);
+        lab = bi('写对了（先看过答案）· 明天再巩固一次', 'Right (after a look) · once more tomorrow');
+      } else if (practice) {
         if (good) XP.gain(1, bi('练习答对', 'Practice right'));
         lab = good ? bi('对了', 'Right') : bi('还没对，等下再来', 'Not yet — it will come back');
       } else {
@@ -2148,8 +2197,18 @@
       }
       $('#fb', box).innerHTML = `<div class="feedback ${good ? 'ok' : 'bad'}"><span class="lab">${lab}</span>
         <div class="ans" lang="fr">${playBtn(say)}<span>${html}</span></div>
-        ${e.kind === 'word' ? tipBox(e.pos === '变位' ? verbTip(e.zh.split(' · ')[0].replace(/^(se |s')/, '')) : wordTip(e.n, e)) : ''}</div>`;
+        ${e.kind === 'word' ? tipBox(e.pos === '变位' ? verbTip(e.zh.split(' · ')[0].replace(/^(se |s')/, '')) : wordTip(e.n, e)) : ''}
+        ${good ? '' : `<p class="copy-note" id="copy-note">${bi('照着上面的正确答案，在输入框里抄一遍', 'Copy the right answer above into the box once')}
+          <button class="btn ghost small" id="copy-skip">${bi('跳过', 'Skip')}</button></p>`}</div>`;
       TTS.say(say);
+      $('#stuck', box).disabled = true;
+      if (!good) {
+        // clear the wrong spelling away and make the right one the last thing typed
+        const inp = $('#ans', box);
+        stage = 'copy'; answered = false;
+        inp.value = ''; inp.disabled = false; inp.placeholder = bi('抄一遍正确答案…', 'Copy the right answer…'); inp.focus();
+        $('#copy-skip', box).onclick = () => { stage = 'done'; answered = true; i++; draw(); };
+      }
     };
     draw();
   }
