@@ -3,6 +3,8 @@
 // suggests a break when the sprint ends, and shows a quiet "right in a row" counter.
 (function () {
   const SPRINT = 10 * 60, BREAK = 2 * 60;      // seconds
+  let ruler = (() => { try { return localStorage.getItem('nh:fruler') !== '0'; } catch (e) { return true; } })(), band, lastY = 300;
+  const fine = matchMedia('(pointer: fine)').matches;
   let on = false, active = false, left = SPRINT, tick = 0, streak = 0, pill, ov, obs;
   const zh = () => (window.NH_LANG ? window.NH_LANG() : 'zh') !== 'en';
   const T = (a, b) => (zh() ? a : b);
@@ -12,9 +14,18 @@
     pill = document.createElement('div');
     pill.className = 'focus-pill'; pill.hidden = true;
     pill.innerHTML = `<span class="fp-dot"></span><span class="fp-time"></span><span class="fp-streak" hidden></span>
-      <button class="fp-pause" type="button"></button><button class="fp-exit" type="button"></button>`;
+      <button class="fp-ruler" type="button"></button><button class="fp-pause" type="button"></button><button class="fp-exit" type="button"></button>`;
     document.body.appendChild(pill);
     pill.querySelector('.fp-exit').onclick = () => { window.FOCUS.set(false, true); };
+    pill.querySelector('.fp-ruler').onclick = () => { ruler = !ruler; try { localStorage.setItem('nh:fruler', ruler ? '1' : '0'); } catch (e) { } applyRuler(); label(); };
+    // reading ruler: a bright band follows the pointer, the rest of the page dims
+    band = document.createElement('div'); band.className = 'focus-ruler'; band.hidden = true;
+    band.innerHTML = '<i class="fr-top"></i><i class="fr-bot"></i>';
+    document.body.appendChild(band);
+    document.addEventListener('pointermove', e => {
+      if (e.pointerType !== 'mouse') return;
+      lastY = e.clientY; if (!band.hidden) band.style.setProperty('--y', lastY + 'px');
+    }, { passive: true });
     pill.querySelector('.fp-pause').onclick = () => { tick ? stop() : start(); label(); };
     // watch answers being marked right / wrong anywhere in the page
     obs = new MutationObserver(ms => {
@@ -34,6 +45,8 @@
     pill.querySelector('.fp-time').textContent = mmss(left);
     pill.querySelector('.fp-pause').textContent = tick ? T('暂停', 'Pause') : T('继续', 'Resume');
     pill.querySelector('.fp-exit').textContent = T('退出专注', 'Exit focus');
+    const r = pill.querySelector('.fp-ruler'); r.hidden = !fine;
+    r.textContent = T('阅读尺', 'Ruler'); r.setAttribute('aria-pressed', ruler);
     pill.style.setProperty('--fp', (1 - left / SPRINT) * 100 + '%');
   }
   function showStreak() {
@@ -63,12 +76,18 @@
     ov.querySelector('#fb-go').onclick = () => { clearInterval(t); ov.remove(); left = SPRINT; label(); start(); };
     ov.querySelector('#fb-stop').onclick = () => { clearInterval(t); ov.remove(); location.hash = '#/'; };
   }
+  function applyRuler() {
+    if (!band) return;
+    band.hidden = !(on && active && ruler && fine);
+    band.style.setProperty('--y', lastY + 'px');
+  }
   function apply() {
     const want = on && active;
     document.documentElement.classList.toggle('focusing', want);
     if (!pill) build();
     pill.hidden = !want;
     if (want) { start(); label(); } else { stop(); }
+    applyRuler();
   }
 
   window.FOCUS = {

@@ -312,3 +312,18 @@ html.focusing .drill { font-size: 1.05em; }
 .fb-box h2 { margin: 0 0 8px; }
 .fb-count { font-size: 40px; font-variant-numeric: tabular-nums; margin: 10px 0 16px; }
 .fb-box .toolbar { justify-content: center; }
+
+/* focus mode: what the pointer is on lights up */
+html.focusing .vrow:hover, html.focusing .err-row:hover, html.focusing .dp-ex li:hover,
+html.focusing .textblock p:hover, html.focusing .tline:hover, html.focusing .sent:hover, html.focusing .line:hover,
+html.focusing .drill .q:hover, html.focusing .drill .pmean:hover, html.focusing .lc-fr:hover, html.focusing .lc-mean:hover {
+  background: rgba(232, 195, 122, .22) !important; box-shadow: inset 3px 0 0 var(--gold, #a8823a) !important; border-radius: 2px;
+}
+html.focusing .vrow, html.focusing .err-row, html.focusing .textblock p { transition: background .15s, box-shadow .15s; }
+/* reading ruler: dim above and below a band that follows the pointer */
+.focus-ruler { position: fixed; inset: 0; pointer-events: none; z-index: 65; --y: 300px; --h: 46px; }
+.focus-ruler[hidden] { display: none; }
+.focus-ruler i { position: absolute; left: 0; right: 0; background: rgba(15, 14, 12, .42); transition: height .06s linear, top .06s linear; }
+.fr-top { top: 0; height: max(0px, calc(var(--y) - var(--h))); }
+.fr-bot { top: calc(var(--y) + var(--h)); bottom: 0; }
+.fp-ruler[aria-pressed="true"] { background: rgba(232, 195, 122, .25) !important; border-color: #e8c37a !important; }
