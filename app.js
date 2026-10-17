@@ -1744,6 +1744,61 @@
     mic: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor"/><path d="M6 11a6 6 0 0 0 12 0M12 17v4M9 21h6" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>',
   };
   const playBtn = (text, extra = '') => `<button class="play ${extra}" data-say="${esc(text)}" aria-label="朗读" title="朗读">${ICON.play}</button>`;
+  /* ---------- in-depth word card (words-deep.js): meaning, sound, roots, examples, collocations, register, use ---------- */
+  function openDeep(fr) {
+    const en = L() === 'en' && window.DEEP_EN && DEEP_EN[fr];
+    const d = en || (window.DEEP && DEEP[fr]); if (!d) return;
+    const cog = window.DEEP_EN && DEEP_EN[fr] && DEEP_EN[fr].cog;
+    const word = fr.replace(/\s*\(pl\..*\)$/, '');
+    const exHTML = d => `<ul class="dp-ex">${d.ex.map(([f, z]) => `<li><span lang="fr">${playBtn(f)} ${esc(f)}</span><small>${esc(z)}</small></li>`).join('')}</ul>`;
+    const coHTML = d => `<ul class="dp-co">${d.co.map(([f, z]) => `<li><b lang="fr">${esc(f)}</b> ${esc(z)}</li>`).join('')}</ul>`;
+    const syHTML = d => `<table class="dp-sy">${d.sy.map(([w, r, n]) => `<tr><td lang="fr">${esc(w)}</td><td class="dp-reg">${esc(r)}</td><td>${esc(n)}</td></tr>`).join('')}</table>`;
+    const tryHTML = (q, d) => `<div class="dp-try"><p class="dp-q">${bi('试着翻译', 'Translate')}：<b>${esc(q)}</b></p>
+          <textarea class="answer-in" lang="fr" rows="2" autocapitalize="off" spellcheck="false" placeholder="${bi('用法语写…', 'Write in French…')}"></textarea>
+          <button class="btn small dp-show">${bi('对照参考答案', 'Compare with the answer')}</button>
+          <div class="dp-ans" hidden><p lang="fr">${playBtn(d.tr.fr)} <b>${esc(d.tr.fr)}</b></p><p lang="fr" class="dp-alt">${bi('更口语', 'More casual')}：${esc(d.tr.alt)}</p><p class="dp-note">${esc(d.tr.note)}</p></div></div>`;
+    const sec = (n, zh, frT, body) => `<section class="dp-sec"><h3><b>${n}</b> ${zh} <span lang="fr">${frT}</span></h3>${body}</section>`;
+    const ov = document.createElement('div');
+    ov.className = 'deep-ov';
+    ov.innerHTML = `<div class="deep-box" role="dialog" aria-label="${esc(word)}">
+      <button class="deep-x" aria-label="${bi('关闭', 'Close')}">×</button>
+      <header class="dp-head"><h2 lang="fr">${playBtn(forms(fr).say)} ${esc(word)}</h2><p class="dp-pos">${esc(d.pos)}</p></header>
+      ${en ? [
+        sec(1, 'Core meaning', 'Sens principal', `<p>${esc(d.s)}</p>`),
+        sec(2, 'English cognates & false friends', 'Connexions avec l\'anglais', `<p>${esc(d.cog)}</p>`),
+        sec(3, 'Pronunciation', 'Prononciation', `<p class="dp-ipa" lang="fr">${esc(d.ipa)}</p><p>${esc(d.ph)}</p><p class="dp-trap"><b>Watch out</b> ${esc(d.pi)}</p>`),
+        sec(4, 'Etymology & grammar', 'Étymologie', `<p>${esc(d.et)}</p>`),
+        sec(5, 'Real-life examples', 'Exemples', exHTML(d)),
+        sec(6, 'Collocations & prepositions', 'Collocations', coHTML(d)),
+        sec(7, 'Nuance & register', 'Nuances & registres', syHTML(d)),
+        sec(8, 'Naturalness & frequency', 'Usage actuel', `<p>${esc(d.fq)}</p>`),
+        sec(9, 'Memory hook & practice', 'Pratique', `<p>${esc(d.me)}</p>${tryHTML(d.tr.en, d)}`),
+      ].join('') : [
+        sec(1, '核心含义', 'Sens principal', `<p>${esc(d.s)}</p>`),
+        sec(2, '发音', 'Prononciation', `<p class="dp-ipa" lang="fr">${esc(d.ipa)}</p><p>${esc(d.ph)}</p><p class="dp-trap"><b>易错</b> ${esc(d.pi)}</p>`),
+        sec(3, '词源与构词', 'Étymologie', `<p>${esc(d.et)}</p>${L() === 'zhen' && cog ? `<p class="dp-cog" lang="en">${esc(cog)}</p>` : ''}`),
+        sec(4, '真实例句', 'Exemples', exHTML(d)),
+        sec(5, '常见搭配', 'Collocations', coHTML(d)),
+        sec(6, '近义词与语域', 'Nuances & registres', syHTML(d)),
+        sec(7, '频率与语感', 'Fréquence', `<p>${esc(d.fq)}</p>`),
+        sec(8, '记忆与练习', 'Mémorisation & pratique', `<p>${esc(d.me)}</p>${tryHTML(d.tr.zh, d)}`),
+      ].join('')}
+    </div>`;
+    document.body.appendChild(ov);
+    document.body.classList.add('deep-open');
+    const close = () => { ov.remove(); document.body.classList.remove('deep-open'); document.removeEventListener('keydown', esc1); };
+    const esc1 = e => { if (e.key === 'Escape') close(); };
+    document.addEventListener('keydown', esc1);
+    ov.addEventListener('click', e => { if (e.target === ov || e.target.closest('.deep-x')) close(); });
+    $('.dp-show', ov).onclick = () => { $('.dp-ans', ov).hidden = false; };
+  }
+  document.addEventListener('click', e => {
+    const b = e.target.closest('[data-deep]');
+    if (!b) return;
+    e.stopPropagation(); e.preventDefault();
+    openDeep(b.dataset.deep);
+  }, true);
+
   // one global handler for every [data-say] button
   document.addEventListener('click', e => {
     const b = e.target.closest('[data-say]');
@@ -2188,7 +2243,7 @@
             <span class="vdrag" title="${bi('拖动调整顺序', 'Drag to reorder')}" aria-label="${bi('拖动调整顺序', 'Drag to reorder')}">⠿</span>
             <span class="play">${ICON.play}</span>
             <span class="vzh">${G(v)}</span><span class="pos">${esc(v.pos)}</span>
-            <span class="vfr" lang="fr">${artHint(v)}${esc(v.fr)}</span>
+            <span class="vfr" lang="fr">${artHint(v)}${esc(v.fr)}${window.DEEP && DEEP[v.fr] ? `<button class="deep-btn" data-deep="${esc(v.fr)}" lang="zh">${bi('详解', 'In depth')}</button>` : ''}</span>
             ${wordTip(lecon.n, v) ? `<span class="vtip" ${showTip ? '' : 'hidden'}>${wordTip(lecon.n, v)}</span>` : ''}</div>`).join('')}</div>`).join('');
       enableDrag(pane, () => { saveOrder(ctx.book.id, lecon.n, pane); if (!$('#vreset', pane)) paneVocab(ctx, 'list'); });
       const rs = $('#vreset', pane); if (rs) rs.onclick = e => { e.preventDefault(); store.set(orderKey(ctx.book.id, lecon.n), null); paneVocab(ctx, 'list'); };
