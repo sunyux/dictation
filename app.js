@@ -2366,6 +2366,7 @@
         <div class="drill-actions">
           ${test ? '' : '<button class="btn ghost small" id="hint">提示一个字母</button>'}
           <button class="btn ghost small" id="skip">${bi('不会，看答案', 'Show answer')}</button>
+          <button class="btn ghost small stuck-btn" id="stuck">${bi('卡住了', 'I\'m stuck')}</button>
           <span class="spacer"></span>
           <span class="kbd"><kbd>Enter</kbd> 检查 / 下一个</span>
         </div>
@@ -2385,6 +2386,18 @@
         inp.value = target.slice(0, hintN); inp.focus();
       };
       $('#skip', box).onclick = () => check(true);
+      // "I'm stuck": first a nudge (sound + first letter), then put the word at the end of this round
+      let stuckN = 0;
+      $('#stuck', box).onclick = () => {
+        const inp = $('#ans', box);
+        if (!stuckN++) {
+          TTS.say(forms(v.fr).say);
+          if (!test) { hintN = Math.max(hintN, 1); inp.value = forms(v.fr).accept[0].slice(0, hintN); }
+          $('#stuck', box).textContent = bi('还是不会，先跳过', 'Still stuck — skip for now');
+          inp.focus();
+        } else if (queue.length - i > 1) { queue.push(queue.splice(i, 1)[0]); draw(); }
+        else check(true);
+      };
       $('#ord', box).onclick = e => { e.preventDefault(); store.set('vorder', order === 'shuffle' ? 'book' : 'shuffle'); wordDrill(ctx, box, mode, words); };
     };
     const check = (giveUp = false) => {

@@ -327,3 +327,27 @@ html.focusing .vrow, html.focusing .err-row, html.focusing .textblock p { transi
 .fr-top { top: 0; height: max(0px, calc(var(--y) - var(--h))); }
 .fr-bot { top: calc(var(--y) + var(--h)); bottom: 0; }
 .fp-ruler[aria-pressed="true"] { background: rgba(232, 195, 122, .25) !important; border-color: #e8c37a !important; }
+
+/* focus mode extras */
+.stuck-btn { display: none; }
+html.focusing .stuck-btn { display: inline-flex; border-color: var(--gold, #a8823a); color: var(--gold, #a8823a); }
+/* one line at a time in full dictation: the others fade back */
+html.focusing #flines:focus-within .tline:not(:focus-within) { opacity: .22; filter: blur(1.2px); transition: opacity .2s, filter .2s; }
+html.focusing #flines .tline:focus-within { background: rgba(232, 195, 122, .14); }
+/* bigger text */
+html.focus-big .drill, html.focus-big .textblock, html.focus-big .learn-card, html.focus-big .vrow { font-size: 1.22em; line-height: 1.75; }
+html.focus-big .answer-in { font-size: 30px !important; }
+/* right answer: a soft gold glow around the page */
+main.fp-flash { animation: fp-flash .7s ease-out; }
+@keyframes fp-flash { 0% { box-shadow: 0 0 0 1px var(--frame-ink), 0 0 0 0 rgba(232, 195, 122, .0); } 30% { box-shadow: 0 0 0 1px var(--frame-ink), 0 0 0 10px rgba(232, 195, 122, .55); } 100% { box-shadow: 0 0 0 1px var(--frame-ink), 0 0 0 22px rgba(232, 195, 122, 0); } }
+/* pill: two rows */
+.focus-pill { flex-direction: column; align-items: stretch; gap: 4px; border-radius: 16px; padding: 7px 10px; max-width: calc(100vw - 20px); }
+.fp-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: center; }
+.fp-tools button { font-size: 12px; padding: 1px 9px; }
+.fp-tools button[aria-pressed="true"] { background: rgba(232, 195, 122, .25); border-color: #e8c37a; }
+.fp-goal { color: #e8c37a; font-variant-numeric: tabular-nums; }
+.fp-goal[hidden] { display: none; }
+html.focusing main { padding-top: 84px !important; }
+.focus-goal-done { position: fixed; top: 92px; left: 50%; transform: translateX(-50%); z-index: 72; animation: fp-pop .4s cubic-bezier(.2, 1.6, .4, 1); }
+.focus-goal-done > div { display: flex; align-items: center; gap: 12px; background: #2f2a22; color: #f7efdc; border: 1px solid #e8c37a; padding: 10px 16px; border-radius: 12px; box-shadow: 0 10px 30px -10px rgba(0, 0, 0, .6); }
+.focus-goal-done b { color: #e8c37a; font-size: 18px; }
