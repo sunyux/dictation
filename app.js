@@ -2418,8 +2418,8 @@
           <div class="vrow ${hide ? 'hidefr' : ''} ${mst.w[v.fr] ? 'mastered' : ''} ${gender(v.pos) ? 'g-' + gender(v.pos) : ''}" data-say="${esc(forms(v.fr).say)}" data-fr="${esc(v.fr)}">
             <span class="vdrag" title="${bi('拖动调整顺序', 'Drag to reorder')}" aria-label="${bi('拖动调整顺序', 'Drag to reorder')}">⠿</span>
             <span class="play">${ICON.play}</span>
-            <span class="vzh">${G(v)}</span><span class="pos">${esc(v.pos)}</span>
             <span class="vfr" lang="fr">${artHint(v)}${frHTML(v.fr)}${window.DEEP && DEEP[v.fr] ? `<button class="deep-btn" data-deep="${esc(v.fr)}" lang="zh">${bi('详解', 'In depth')}</button>` : ''}</span>
+            <span class="pos">${esc(v.pos)}</span><span class="vzh">${G(v)}</span>
             ${wordTip(lecon.n, v) ? `<span class="vtip" ${showTip ? '' : 'hidden'}>${wordTip(lecon.n, v)}</span>` : ''}</div>`).join('')}</div>`).join('');
       enableDrag(pane, () => { saveOrder(ctx.book.id, lecon.n, pane); if (!$('#vreset', pane)) paneVocab(ctx, 'list'); });
       const rs = $('#vreset', pane); if (rs) rs.onclick = e => { e.preventDefault(); store.set(orderKey(ctx.book.id, lecon.n), null); paneVocab(ctx, 'list'); };

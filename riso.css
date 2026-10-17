@@ -468,3 +468,16 @@ html.dys .syl i.nl { font-style: inherit; opacity: .6; text-decoration: underlin
 .err-body .err-spot { margin-left: 40px; font-size: 13px; background: none; }
 .lc-spot { font: 30px "Courier New", ui-monospace, monospace; letter-spacing: .08em; margin: 8px 0 2px; }
 .lc-spot u.hot { text-decoration: none; background: rgba(214, 160, 60, .4); border-bottom: 3px solid #c8902c; padding: 0 2px; }
+
+/* vocab rows read: French → part of speech → translation */
+.vrow { grid-template-columns: 20px 30px minmax(0, 1.3fr) auto minmax(0, 1fr); }
+.vrow .vfr { text-align: left; }
+.vrow .pos { white-space: nowrap; }
+@media (max-width: 720px), (pointer: coarse) {
+  .vrow { grid-template-columns: 30px 30px 1fr; row-gap: 2px; }
+  .vrow .vdrag, .vrow .play { grid-row: 1 / span 3; }
+  .vrow .vfr { grid-column: 3; grid-row: 1; text-align: left; }
+  .vrow .pos { display: block !important; grid-column: 3; grid-row: 2; font-size: 13px; }
+  .vrow .vzh { grid-column: 3; grid-row: 3; }
+  .vrow .vtip { grid-column: 3; }
+}
