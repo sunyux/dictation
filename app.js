@@ -1849,6 +1849,7 @@
       <div class="modes" style="margin-bottom:14px"><button class="mode" data-look="color" aria-pressed="${settings.look !== 'mono'}">${bi('彩色', 'Colour')}</button><button class="mode" data-look="mono" aria-pressed="${settings.look === 'mono'}">${bi('黑白', 'Black & white')}</button></div>
       <label class="chk"><input type="checkbox" id="s-riso" ${settings.riso !== false ? 'checked' : ''}> ${bi('丝网印刷质感', 'Screen-print texture')}</label>
       <label class="chk"><input type="checkbox" id="s-dust" ${settings.dust !== false ? 'checked' : ''}> ${bi('空气里的浮尘', 'Dust in the light')}</label>
+      <label class="chk"><input type="checkbox" id="s-dys" ${settings.dys !== false ? 'checked' : ''}> ${bi('拼写辅助（单词分音节着色、字母间距加宽、写错时对照字母）', 'Spelling aids (syllable colours, wider letter spacing, letter-by-letter comparison)')}</label>
       <label class="chk"><input type="checkbox" id="s-focus" ${settings.focus ? 'checked' : ''}> ${bi('专注模式（练习时只留题目，10 分钟一段，到点提醒休息）', 'Focus mode (only the exercise on screen, 10-minute sprints with break reminders)')}</label>
       <label class="chk"><input type="checkbox" id="s-tw" ${settings.typewriter ? 'checked' : ''}> ${bi('打字机模式（打字声 + 打字机字体）', 'Typewriter mode (key sounds + typewriter font)')}</label>
       <label class="chk"><input type="checkbox" id="s-len" ${settings.lenient ? 'checked' : ''}> 重音写错也算对</label>
@@ -1865,6 +1866,7 @@
     });
     $('#s-riso').onchange = e => { settings.riso = e.target.checked; saveSettings(); document.documentElement.classList.toggle('no-riso', !settings.riso); };
     $('#s-dust').onchange = e => { settings.dust = e.target.checked; saveSettings(); if (window.DUST) DUST.set(settings.dust); };
+    $('#s-dys').onchange = e => { settings.dys = e.target.checked; saveSettings(); applyDys(); route(); };
     $('#s-focus').onchange = e => setFocus(e.target.checked);
     $('#s-tw').onchange = e => { settings.typewriter = e.target.checked; saveSettings(); document.documentElement.classList.toggle('tw', settings.typewriter); if (settings.typewriter && window.TYPEWRITER) TYPEWRITER.ret(); };
     $('#s-len').onchange = e => { settings.lenient = e.target.checked; saveSettings(); };
@@ -1917,6 +1919,8 @@
   /* ---------- router ---------- */
   let cleanup = () => { };
   window.NH_LANG = () => L();
+  function applyDys() { document.documentElement.classList.toggle('dys', settings.dys !== false); }
+  applyDys();
   function setFocus(v) {
     settings.focus = !!v; saveSettings();
     const c = $('#s-focus'); if (c) c.checked = settings.focus;
@@ -2043,6 +2047,17 @@
 
   const promptSay = e => e.kind === 'cloze' ? e.zh.replace('____', e.fr).replace(/^–\s*/, '') : e.kind === 'word' && e.pos !== '变位' ? forms(e.fr).say : e.fr;
   // round 1 is the real review (updates the schedule); later rounds practise the misses until all are right
+  /* ---------- spelling aids (dys.js): syllable chunks, letter comparison, spell aloud, tiles ---------- */
+  const dysOn = () => settings.dys !== false && !!window.DYS;
+  const frHTML = t => dysOn() ? DYS.chunk(t) : esc(t);
+  const dysCompare = (c, typed) => window.DYS && typed && String(typed).trim() ? DYS.compare(c, typed, L()) : '';
+  const dysTools = () => window.DYS ? `<button class="btn ghost small" id="dys-spell" type="button">${bi('读字母', 'Say the letters')}</button><button class="btn ghost small" id="dys-tiles" type="button">${bi('字母拼块', 'Letter tiles')}</button>` : '';
+  function bindDys(box, getWord, inp) {
+    const sp = $('#dys-spell', box), tl = $('#dys-tiles', box); if (!sp) return;
+    const panel = () => { let p = $('#dys-panel', box); if (!p) { p = document.createElement('div'); p.id = 'dys-panel'; (inp.closest('.drill') || box).insertBefore(p, $('.drill-actions', box)); } return p; };
+    sp.onclick = () => { const p = panel(), w = getWord(); p.innerHTML = `<div class="dys-box"><div class="sp-syl" lang="fr">${DYS.chunk(w)}</div>${DYS.spellRow(w)}</div>`; DYS.spell(w, p.querySelector('.sp-row'), (t, cb) => TTS.say(t, cb)); };
+    tl.onclick = () => { const p = panel(), w = getWord(); if (/\s/.test(w.trim())) { p.innerHTML = `<p class="kbd">${bi('这个词有空格，拼块只适合单个词。', 'Tiles work for single words only.')}</p>`; return; } p.innerHTML = '<div class="dys-box"></div>'; DYS.tiles(p.firstChild, w, v => { inp.value = v; inp.dispatchEvent(new Event('input', { bubbles: true })); }); };
+  }
   // study pass before the review: one card per item — word, sound, meaning, tip, in-depth card — then go to the drill
   function reviewLearn(box, list, next) {
     const items = [...list].sort((a, b) => a.n - b.n);
@@ -2060,7 +2075,7 @@
       const tip = word ? wordTip(e.n, e) : '';
       box.innerHTML = `<div class="drill learn-card ${word && gender(e.pos) ? 'g-' + gender(e.pos) : ''}">
         <div class="prog-line"><span class="kbd">${i + 1} / ${items.length}</span><span class="kbd" lang="fr">${esc(leconName(e.n))}</span></div>
-        <div class="lc-fr" lang="fr">${playBtn(say)} ${word ? artHint(e) : ''}<b>${esc(e.fr)}</b></div>
+        <div class="lc-fr" lang="fr">${playBtn(say)} ${word ? artHint(e) : ''}<b>${word ? frHTML(e.fr) : esc(e.fr)}</b></div>
         <div class="lc-mean">${e.kind === 'cloze' ? esc(e.zh) : G(e)}${e.pos ? ` <span class="pos ${gender(e.pos) ? 'g-' + gender(e.pos) : ''}">${esc(e.pos)}</span>` : ''}</div>
         ${e.wrong ? `<p class="kbd">${bi(`写错过 ${e.wrong} 次`, `Missed ${e.wrong} times`)}</p>` : ''}
         ${triesHTML(e)}
@@ -2126,6 +2141,7 @@
         <div id="peek"></div>
         <div class="drill-actions"><button class="btn ghost small" id="skip">${bi('不会，看答案', 'Show answer')}</button>
           <button class="btn ghost small peek-btn" id="stuck">${bi('卡住了，先看一眼', 'Stuck — show me first')}</button>
+          ${word ? dysTools() : ''}
           <span class="spacer"></span><span class="kbd"><kbd>Enter</kbd> 检查 / 下一个</span></div>
         <div id="fb"></div></div>`;
       const inp = $('#ans', box); inp.focus();
@@ -2138,6 +2154,7 @@
       };
       $('#skip', box).onclick = () => check(true);
       $('#stuck', box).onclick = () => peek(e);
+      if (word) bindDys(box, () => answerOf(e), inp);
       // missed 3+ times: look first, then write — so the right spelling is the one that gets practised
       if (!practice && (e.wrong || 0) >= 3) peek(e, true);
     };
@@ -2148,7 +2165,7 @@
       const inp = $('#ans', box), p = $('#peek', box), ans = answerOf(e);
       inp.value = ''; inp.disabled = true; $('#stuck', box).disabled = true;
       p.innerHTML = `<div class="peek-card"><span class="lab">${auto ? bi('这个错过好几次了，先看清楚再写', 'Missed this a few times — look first, then write') : bi('看清楚，记住它', 'Look carefully and remember it')}</span>
-        <div class="peek-ans" lang="fr">${playBtn(e.kind === 'word' ? forms(e.fr).say : e.fr)} ${esc(ans)}</div><i class="peek-bar"></i></div>`;
+        <div class="peek-ans" lang="fr">${playBtn(e.kind === 'word' ? forms(e.fr).say : e.fr)} ${e.kind === 'word' ? frHTML(ans) : esc(ans)}</div><i class="peek-bar"></i></div>`;
       TTS.say(e.kind === 'word' ? forms(e.fr).say : e.fr);
       const ms = Math.min(7000, 2500 + ans.length * 90);
       p.querySelector('.peek-bar').style.animationDuration = ms + 'ms';
@@ -2180,7 +2197,7 @@
       } else {
         const r = giveUp ? 'bad' : checkWord(val, e.fr);
         if (r !== 'ok' && !giveUp) ERRS.typed(e.kind === 'word' && e.pos !== '变位' ? closest(e.fr, val) : e.fr, val);
-        good = r === 'ok'; html = esc(e.fr) + (r === 'accent' ? ' <span class="kbd">（注意重音）</span>' : '');
+        good = r === 'ok'; html = (e.kind === 'word' ? frHTML(e.fr) : esc(e.fr)) + (r === 'accent' ? ' <span class="kbd">（注意重音）</span>' : '');
       }
       if (good) right++; else wrong.push(e);
       let lab;
@@ -2197,6 +2214,7 @@
       }
       $('#fb', box).innerHTML = `<div class="feedback ${good ? 'ok' : 'bad'}"><span class="lab">${lab}</span>
         <div class="ans" lang="fr">${playBtn(say)}<span>${html}</span></div>
+        ${!good && !giveUp && e.kind === 'word' && r !== 'accent' ? dysCompare(answerOf(e), val) : ''}
         ${e.kind === 'word' ? tipBox(e.pos === '变位' ? verbTip(e.zh.split(' · ')[0].replace(/^(se |s')/, '')) : wordTip(e.n, e)) : ''}
         ${good ? '' : `<p class="copy-note" id="copy-note">${bi('照着上面的正确答案，在输入框里抄一遍', 'Copy the right answer above into the box once')}
           <button class="btn ghost small" id="copy-skip">${bi('跳过', 'Skip')}</button></p>`}</div>`;
@@ -2382,7 +2400,7 @@
             <span class="vdrag" title="${bi('拖动调整顺序', 'Drag to reorder')}" aria-label="${bi('拖动调整顺序', 'Drag to reorder')}">⠿</span>
             <span class="play">${ICON.play}</span>
             <span class="vzh">${G(v)}</span><span class="pos">${esc(v.pos)}</span>
-            <span class="vfr" lang="fr">${artHint(v)}${esc(v.fr)}${window.DEEP && DEEP[v.fr] ? `<button class="deep-btn" data-deep="${esc(v.fr)}" lang="zh">${bi('详解', 'In depth')}</button>` : ''}</span>
+            <span class="vfr" lang="fr">${artHint(v)}${frHTML(v.fr)}${window.DEEP && DEEP[v.fr] ? `<button class="deep-btn" data-deep="${esc(v.fr)}" lang="zh">${bi('详解', 'In depth')}</button>` : ''}</span>
             ${wordTip(lecon.n, v) ? `<span class="vtip" ${showTip ? '' : 'hidden'}>${wordTip(lecon.n, v)}</span>` : ''}</div>`).join('')}</div>`).join('');
       enableDrag(pane, () => { saveOrder(ctx.book.id, lecon.n, pane); if (!$('#vreset', pane)) paneVocab(ctx, 'list'); });
       const rs = $('#vreset', pane); if (rs) rs.onclick = e => { e.preventDefault(); store.set(orderKey(ctx.book.id, lecon.n), null); paneVocab(ctx, 'list'); };
@@ -2445,6 +2463,7 @@
           ${test ? '' : '<button class="btn ghost small" id="hint">提示一个字母</button>'}
           <button class="btn ghost small" id="skip">${bi('不会，看答案', 'Show answer')}</button>
           <button class="btn ghost small stuck-btn" id="stuck">${bi('卡住了', 'I\'m stuck')}</button>
+          ${dysTools()}
           <span class="spacer"></span>
           <span class="kbd"><kbd>Enter</kbd> 检查 / 下一个</span>
         </div>
@@ -2476,6 +2495,7 @@
         } else if (queue.length - i > 1) { queue.push(queue.splice(i, 1)[0]); draw(); }
         else check(true);
       };
+      bindDys(box, () => forms(v.fr).accept.find(x => !/[(/]/.test(x)) || forms(v.fr).accept[0], inp);
       $('#ord', box).onclick = e => { e.preventDefault(); store.set('vorder', order === 'shuffle' ? 'book' : 'shuffle'); wordDrill(ctx, box, mode, words); };
     };
     const check = (giveUp = false) => {
@@ -2505,7 +2525,8 @@
       else SRS.hit(it);
       fb.innerHTML = `<div class="feedback ${r}">
         <span class="lab">${good ? (hintN ? '对了（用了提示）' : '完全正确') : r === 'accent' ? '差一点：注意重音符号' : giveUp ? '答案' : '不对，正确答案是'}</span>
-        <div class="ans" lang="fr">${playBtn(forms(v.fr).say)} ${r === 'accent' ? accentDiff(inp.value.trim(), v.fr) : esc(v.fr)}</div>
+        <div class="ans" lang="fr">${playBtn(forms(v.fr).say)} ${r === 'accent' ? accentDiff(inp.value.trim(), v.fr) : frHTML(v.fr)}</div>
+        ${!good && !giveUp && r !== 'accent' ? dysCompare(closest(v.fr, inp.value), inp.value) : ''}
         ${r === 'accent' ? `<span class="lab acc-note">${bi('拼写正确，注意标出的重音符号', 'Spelling is right — check the marked accents')}</span>` : ''}
         ${test && missN ? `<span class="lab">${toBook ? bi(`首测已经错了 ${missN} 次，加入错题本了`, `Missed ${missN} times in first tests — added to the mistake book`) : missN >= 3 ? bi('已经在错题本里了', 'Already in the mistake book') : bi(`首测错了 ${missN} 次（错满 3 次会进错题本）`, `Missed ${missN} times in first tests (3 puts it in the mistake book)`)}</span>` : ''}
         ${tipBox(wordTip(ctx.lecon.n, v))}</div>`;

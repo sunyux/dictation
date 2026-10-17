@@ -421,3 +421,41 @@ html .lecon-card .n, html .lecon-card h3, html .lecon-card .zh { text-shadow: 0 
 .answer-in.copied { border-bottom-color: var(--ok, #3f6b3a) !important; color: var(--ok, #3f6b3a) !important; }
 .answer-in.shake { animation: shake .3s; }
 @keyframes shake { 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+
+/* ===== spelling aids ===== */
+/* syllable chunks: alternating colour, a hair of space */
+.syl { display: inline; }
+html.dys .syl + .syl { margin-left: .06em; }
+html.dys .syl.s0 { color: var(--accent, #7d2635); }
+html.dys .syl.s1 { color: var(--ink); }
+html:not(.dys) .syl.s0, html:not(.dys) .syl.s1 { color: inherit; }
+/* wider letter and word spacing where you read words you have to spell (not the whole page) */
+html.dys .drill, html.dys .vfr, html.dys .learn-card, html.dys .peek-card, html.dys .feedback .ans, html.dys .dp-head h2 { letter-spacing: .06em; word-spacing: .22em; }
+html.dys .answer-in { letter-spacing: .1em; }
+html.dys .drill .zh, html.dys .drill .pmean, html.dys .lzh, html.dys .vzh, html.dys .kbd, html.dys .btn, html.dys .count { letter-spacing: normal; word-spacing: normal; }
+/* comparison */
+.cmp { margin: 10px 0 4px; font-size: 26px; font-family: "Courier New", ui-monospace, monospace; }
+.cmp-row { display: flex; align-items: baseline; gap: 12px; }
+.cmp-lab { width: 6.2em; line-height: 1.2; font: 13px var(--zh, sans-serif); color: var(--ink-2); flex: none; }
+.cmp-w { display: inline-flex; letter-spacing: 0 !important; }
+.cmp-w i { font-style: normal; display: inline-block; min-width: .75em; text-align: center; }
+.cmp-w i.bad { color: var(--bad, #b23a26); text-decoration: line-through; }
+.cmp-w i.fix { color: var(--ok, #3f6b3a); border-bottom: 2px solid var(--ok, #3f6b3a); }
+.cmp-w i.sw { background: rgba(214, 160, 60, .32); border-bottom: 2px solid #c8902c; }
+.cmp-w i.gap { color: var(--bad, #b23a26); }
+.cmp-note { margin: 4px 0 0; font-size: 15px; }
+.cmp-note b { font-family: "Courier New", monospace; color: #9a6a1c; }
+/* say the letters */
+.dys-box { margin: 10px 0; padding: 10px 14px; border: 1px dashed var(--line); }
+.sp-syl { font-size: 26px; margin-bottom: 6px; }
+.sp-row { display: inline-flex; gap: 6px; flex-wrap: wrap; }
+.sp-l { display: inline-block; min-width: 1.6em; text-align: center; font: 28px "Courier New", ui-monospace, monospace; padding: 2px 4px; border-bottom: 3px solid transparent; letter-spacing: 0 !important; transition: background .1s; }
+.sp-l.on { background: rgba(232, 195, 122, .45); border-bottom-color: var(--accent, #7d2635); transform: translateY(-2px); }
+/* letter tiles */
+.tl-built { min-height: 54px; display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-bottom: 10px; }
+.tl-b { font: 30px "Courier New", ui-monospace, monospace; padding: 2px 6px; border-bottom: 3px solid var(--accent, #7d2635); letter-spacing: 0 !important; }
+.tl-hint { color: var(--ink-2); }
+.tl-pool { display: flex; gap: 8px; flex-wrap: wrap; }
+.tl-t, .tl-undo { min-width: 46px; height: 46px; border: 1px solid #8d8473; background: #fffcf5; font: 26px "Courier New", ui-monospace, monospace; cursor: pointer; border-radius: 4px; box-shadow: 0 2px 0 rgba(0, 0, 0, .12); letter-spacing: 0 !important; }
+.tl-t:active, .tl-undo:active { transform: translateY(1px); box-shadow: none; }
+.tl-t:disabled { opacity: .25; cursor: default; }
