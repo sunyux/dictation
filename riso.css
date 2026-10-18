@@ -481,3 +481,10 @@ html.dys .syl i.nl { font-style: inherit; opacity: .6; text-decoration: underlin
   .vrow .vzh { grid-column: 3; grid-row: 3; }
   .vrow .vtip { grid-column: 3; }
 }
+
+/* scores and counters: plain lining digits (the old-style 0 looked like an empty circle) */
+.review-stats b, .score, .rb-n, .ea-n, .badge b, .status .st-txt b, .count, .pn, .fp-time, .fp-goal, .fb-count, .count-n {
+  font-family: "Cormorant Garamond", "EB Garamond", Georgia, serif !important;
+  font-variant-numeric: lining-nums tabular-nums !important; font-feature-settings: "lnum" 1, "tnum" 1 !important; font-weight: 700;
+}
+.review-stats b { font-size: 36px; }
