@@ -2078,15 +2078,33 @@
     tl.onclick = () => { const p = panel(), w = getWord(); if (/\s/.test(w.trim())) { p.innerHTML = `<p class="kbd">${bi('这个词有空格，拼块只适合单个词。', 'Tiles work for single words only.')}</p>`; return; } p.innerHTML = '<div class="dys-box"></div>'; DYS.tiles(p.firstChild, w, v => { inp.value = v; inp.dispatchEvent(new Event('input', { bubbles: true })); }); };
   }
   // study pass before the review: one card per item — word, sound, meaning, tip, in-depth card — then go to the drill
-  function reviewLearn(box, list, next) {
-    const items = [...list].sort((a, b) => a.n - b.n);
-    let i = 0;
+  // points for studying: +1 per card the first time it is seen today, +5 / +3 for finishing the pass (once a day)
+  function learnPoints(e, pass) {
+    const t = dayStr(); let d = store.get('learned', {});
+    if (d.d !== t) d = { d: t, ids: [], done: [] };
+    const id = `${e.book || ''}|${e.n}|${e.fr}`;
+    if (d.ids.includes(id)) return 0;
+    d.ids.push(id); store.set('learned', d); XP.gain(1, bi('先学一遍', 'Study first')); return 1;
+  }
+  function learnBonus(key, pts) {
+    const t = dayStr(); let d = store.get('learned', {});
+    if (d.d !== t) d = { d: t, ids: [], done: [] };
+    if (d.done.includes(key)) return 0;
+    d.done.push(key); store.set('learned', d); XP.gain(pts, bi('学完一遍', 'Finished a study pass')); return pts;
+  }
+  function reviewLearn(box, list, next, opts = {}) {
+    const items = opts.onNext ? [...list] : [...list].sort((a, b) => a.n - b.n);
+    let i = 0, earned = 0;
+    const advance = () => { earned += learnPoints(items[i]); i++; draw(); };
     const draw = () => {
       if (i >= items.length) {
+        const bonus = learnBonus('pass:' + (opts.title || next), opts.onNext ? 5 : 3); earned += bonus;
         box.innerHTML = `<div class="drill learn-done"><h2>${bi('学完了', 'All studied')}</h2>
-          <p class="hint-text">${bi(`${items.length} 条都看过一遍了，现在默写巩固一下。`, `You\'ve been through all ${items.length}. Now write them out.`)}</p>
-          <div class="toolbar"><a class="btn" href="${next}">${bi('开始复习', 'Start the review')}</a><button class="btn ghost" id="lr-again">${bi('再看一遍', 'Go through again')}</button></div></div>`;
-        $('#lr-again', box).onclick = () => { i = 0; draw(); };
+          <div class="score">${earned ? '+' + earned : '0'}<small> ${bi('分', 'pts')}</small></div>
+          <p class="hint-text">${earned ? bi(`${items.length} 个都看过一遍了。看一个新词 +1 分，学完整遍 +${opts.onNext ? 5 : 3} 分（每天各算一次）。`, `All ${items.length} studied. +1 for each new card, +${opts.onNext ? 5 : 3} for finishing (once a day).`) : bi(`${items.length} 个今天都已经学过，积分已经算过了。`, `You studied all ${items.length} today already — points were counted.`)} ${opts.onNext ? bi('现在默写巩固一下。', 'Now write them out.') : bi('现在默写巩固一下。', 'Now write them out.')}</p>
+          <div class="toolbar">${opts.onNext ? `<button class="btn" id="lr-go">${opts.nextLabel}</button>` : `<a class="btn" href="${next}">${bi('开始复习', 'Start the review')}</a>`}<button class="btn ghost" id="lr-again">${bi('再看一遍', 'Go through again')}</button></div></div>`;
+        $('#lr-again', box).onclick = () => { i = 0; earned = 0; draw(); };
+        if (opts.onNext) $('#lr-go', box).onclick = opts.onNext;
         return;
       }
       const e = items[i], word = e.kind === 'word';
@@ -2108,13 +2126,13 @@
         </div>
         <p class="kbd">${bi('← → 键翻页，空格再听一遍', '← → to move, Space to hear again')}</p></div>`;
       $('#lr-prev', box).onclick = () => { if (i) { i--; draw(); } };
-      $('#lr-next', box).onclick = () => { i++; draw(); };
+      $('#lr-next', box).onclick = advance;
       TTS.say(say);
     };
     const key = ev => {
       if (!box.isConnected) return document.removeEventListener('keydown', key);
       if (document.querySelector('.deep-ov') || /INPUT|TEXTAREA/.test(document.activeElement.tagName)) return;
-      if (ev.key === 'ArrowRight') { ev.preventDefault(); if (i < items.length) { i++; draw(); } }
+      if (ev.key === 'ArrowRight') { ev.preventDefault(); if (i < items.length) advance(); }
       else if (ev.key === 'ArrowLeft') { ev.preventDefault(); if (i) { i--; draw(); } }
       else if (ev.key === ' ' && i < items.length) { ev.preventDefault(); const e = items[i]; TTS.say(e.kind === 'word' ? forms(e.fr).say : e.fr); }
     };
@@ -2400,88 +2418,11 @@
   }
 
   /* ----- 1 · vocabulary ----- */
-  // speak the words: see the meaning, say the French word out loud; the microphone checks it
-  function vocabSay(ctx, box, words, round = 1) {
-    const queue = shuffle(words);
-    let i = 0, right = 0, answered = false, rec = null, listening = false;
-    const missed = [];
-    const cands = v => forms(v.fr).accept.filter(x => !/[(/]/.test(x)).concat(forms(v.fr).accept.map(x => x.replace(/\s*\(.*?\)/g, '').trim())).filter(Boolean);
-    const strip = t => t.replace(/^(le|la|les|l'|un|une|des|ce|cette|mon|ma)\s+/i, '');
-    const matches = (heard, v) => [heard, strip(heard)].some(h => cands(v).some(c => close(h, c) || close(h, strip(c))));
-    const stopRec = () => { listening = false; if (rec) { try { rec.stop(); } catch { } } const m = $('#smic', box); m && m.classList.remove('on'); };
-    cleanup = stopRec;
-    const draw = () => {
-      stopRec(); TTS.stop();
-      if (i >= queue.length) return summary();
-      const v = queue[i]; answered = false;
-      box.innerHTML = `<div class="drill say-drill">
-        <div class="count">${round > 1 ? bi(`再说一遍 ${round - 1} · `, `Again ${round - 1} · `) : ''}${i + 1} / ${queue.length}</div>
-        <div class="bar"><i style="width:${i / queue.length * 100}%"></i></div>
-        <div class="prompt${gx(v.pos)}"><div class="pmean ${v.zh.length > 30 ? 'long' : ''}">${MEAN(v)}</div>
-          <div class="ppos">${esc(v.pos || '')}${v.g && L() !== 'en' ? ' · ' + esc(tr(v.g)) : ''}</div></div>
-        <div class="recite-ctrl">
-          <button class="mic" id="smic" ${SR ? '' : 'disabled'} aria-label="${bi('说出这个词', 'Say this word')}">${ICON.mic}</button>
-          <div class="heard" id="sheard">${SR ? bi('点麦克风，用法语说出这个词。', 'Tap the microphone and say the word in French.') : bi('这个浏览器不支持语音识别：先自己说出来，再点「看答案」自评。', 'No speech recognition here: say it aloud, then tap "Show answer" and mark yourself.')}</div></div>
-        <div id="sans"></div>
-        <div class="drill-actions"><button class="btn ghost small" id="sshow">${bi('看答案', 'Show answer')}</button>
-          <button class="btn ghost small" id="sskip">${bi('跳过', 'Skip')}</button><span class="spacer"></span></div></div>`;
-      const heard = $('#sheard', box);
-      $('#sshow', box).onclick = () => reveal(v, null);
-      $('#sskip', box).onclick = () => { missed.push(v); i++; draw(); };
-      if (SR) $('#smic', box).onclick = () => { if (listening) return stopRec(); TTS.stop(); startRec(v); };
-    };
-    const startRec = v => {
-      rec = new SR(); rec.lang = 'fr-FR'; rec.continuous = false; rec.interimResults = true; rec.maxAlternatives = 4;
-      const heard = $('#sheard', box); let got = false, finalSeen = false;
-      rec.onresult = e => {
-        const r = e.results[e.results.length - 1], alts = [...r].map(a => a.transcript.trim()).filter(Boolean);
-        heard.textContent = '« ' + (alts[0] || '') + ' »';
-        if (alts.some(a => matches(a, v)) && !answered) { got = true; stopRec(); reveal(v, true, alts[0]); }
-        else if (r.isFinal) finalSeen = true;
-      };
-      rec.onerror = e => {
-        if (e.error === 'not-allowed' || e.error === 'service-not-allowed') heard.textContent = bi('没有麦克风权限，请在浏览器里允许使用麦克风。', 'No microphone permission — please allow it in the browser.');
-        else if (e.error === 'network') heard.textContent = bi('语音识别需要联网。', 'Speech recognition needs an internet connection.');
-        listening = false;
-      };
-      rec.onend = () => { listening = false; $('#smic', box)?.classList.remove('on'); if (!got && !answered && finalSeen) heard.textContent += '  ' + bi('— 不太对，再说一次，或点「看答案」', '— not quite; try again or tap "Show answer"'); else if (!got && !answered && !finalSeen) heard.textContent = bi('没听清，再说一次。', 'Didn\'t catch that — try again.'); };
-      try { rec.start(); listening = true; $('#smic', box).classList.add('on'); heard.textContent = bi('在听…', 'Listening…'); } catch { heard.textContent = bi('无法启动语音识别。', 'Could not start speech recognition.'); }
-    };
-    // ok === true: recognised; null: asked for the answer (self-mark)
-    const reveal = (v, ok, heardText) => {
-      if (answered) return; answered = true; stopRec();
-      const say = forms(v.fr).say;
-      if (ok) { right++; XP.gain(1, bi('背诵单词', 'Spoken word')); }
-      $('#sans', box).innerHTML = `<div class="feedback ${ok ? 'ok' : 'accent'}"><span class="lab">${ok ? bi('说对了', 'Right') : bi('答案', 'The answer')}</span>
-        <div class="ans${gx(v.pos)}" lang="fr">${playBtn(say)}<span>${frHTML(v.fr)}</span></div>
-        ${ok ? '' : `<div class="drill-actions" style="margin-top:8px"><button class="btn small" id="sgood">${bi('我说对了', 'I said it right')}</button><button class="btn ghost small" id="sbad">${bi('还没说对', 'Not yet')}</button></div>`}</div>`;
-      TTS.say(say);
-      const go = () => { i++; draw(); };
-      if (ok) setTimeout(() => { if (queue[i] === v && answered) go(); }, 1300);
-      else {
-        $('#sgood', box).onclick = () => { right++; go(); };
-        $('#sbad', box).onclick = () => { missed.push(v); go(); };
-      }
-      $('#sshow', box).disabled = true;
-    };
-    const summary = () => {
-      box.innerHTML = `<div class="drill summary"><p class="kicker" lang="fr">${round > 1 ? bi(`再说一遍 ${round - 1}`, `Again ${round - 1}`) : 'Bilan'}</p>
-        <div class="score">${right} / ${queue.length}</div>
-        <p>${missed.length ? bi(`还有 ${missed.length} 个没说顺，再来一遍。`, `${missed.length} still shaky — go again.`) : bi('全部说对了！', 'All of them!')}</p>
-        ${missed.length ? `<ul>${missed.map(v => `<li><span lang="fr">${frHTML(v.fr)}</span><span class="w-zh">${G(v)}</span></li>`).join('')}</ul>` : ''}
-        <div class="drill-actions" style="justify-content:center">${missed.length ? `<button class="btn" id="sagain">${bi('再说一遍这些', 'Say these again')}</button>` : ''}
-          <button class="btn ${missed.length ? 'ghost' : ''}" id="sall">${bi('整课重来', 'Whole lesson again')}</button></div></div>`;
-      if (missed.length) $('#sagain', box).onclick = () => vocabSay(ctx, box, missed.slice(), round + 1);
-      $('#sall', box).onclick = () => vocabSay(ctx, box, words, 1);
-    };
-    draw();
-  }
-
   function paneVocab(ctx, mode = store.get('vmode', 'list')) {
     if (mode === 'listen') { mode = 'write'; store.set('vauto', true); }
     const { lecon, pane } = ctx;
     store.set('vmode', mode);
-    const head = modeBar([['list', bi('浏览', 'Browse')], ['test', bi('首测', 'First test')], ['write', bi('默写', 'Dictation')], ['say', bi('背诵', 'Recite')], ['conj', bi('动词变位', 'Conjugation')]], mode);
+    const head = modeBar([['list', bi('浏览', 'Browse')], ['learn', bi('先学一遍', 'Study first')], ['test', bi('首测', 'First test')], ['write', bi('默写', 'Dictation')], ['conj', bi('动词变位', 'Conjugation')]], mode);
     if (mode === 'list') {
       const groups = [];
       orderedVocab(ctx.book.id, lecon).forEach(v => { let g = groups.find(x => x.g === v.g); if (!g) groups.push(g = { g: v.g, items: [] }); g.items.push(v); });
@@ -2520,7 +2461,11 @@
       if (mode === 'conj') { pane.innerHTML = head + '<div id="drill"></div>'; bindModes(pane, m => paneVocab(ctx, m)); return conjPane(ctx, $('#drill', pane)); }
       pane.innerHTML = head + '<div id="drill"></div>';
       const box = $('#drill', pane);
-      if (mode === 'say') { bindModes(pane, m => paneVocab(ctx, m)); return vocabSay(ctx, box, lecon.vocab.filter(v => !/^\*/.test(v.fr))); }
+      if (mode === 'learn') {
+        bindModes(pane, m => paneVocab(ctx, m));
+        const items = lecon.vocab.filter(v => !/^\*/.test(v.fr) || true).map(v => ({ ...v, kind: 'word', book: ctx.book.id, n: lecon.n }));
+        return reviewLearn(box, items, null, { onNext: () => paneVocab(ctx, 'write'), nextLabel: bi('去默写', 'Go to dictation'), title: leconName(lecon.n) });
+      }
       if (mode === 'test') {
         const st = MASTER.stats(ctx.book.id, lecon);
         box.innerHTML = `<div class="drill summary"><p class="kicker" lang="fr">Premier test</p>
