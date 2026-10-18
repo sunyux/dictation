@@ -484,7 +484,7 @@
     pos = String(pos || '');
     return /(^|\W)n\.m\.|^m\./.test(pos) ? 'm' : /(^|\W)n\.f\.|^f\./.test(pos) ? 'f' : '';
   }
-  // colour class for a word: plural yellow, masculine blue, feminine red
+  // colour class for a word: plural green, masculine blue, feminine magenta
   const gx = pos => /pl\./.test(String(pos || '')) ? ' gx-p' : gender(pos) === 'm' ? ' gx-m' : gender(pos) === 'f' ? ' gx-f' : '';
   function artHint(v) {
     const g = gender(v.pos); if (!g) return '';
