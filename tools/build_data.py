@@ -2,14 +2,18 @@
 import json, re, sys, os, unicodedata
 
 SRC = sys.argv[1]  # dir with extracted .txt files
-OUT = os.path.join(os.path.dirname(__file__), '..', 'data.js')
+OUT = os.environ.get('OUT') or os.path.join(os.path.dirname(__file__), '..', 'data.js')
 UNITS = {1: ('你好法语1_Unité1_默写版.txt', '你好法语1_Unité1_全文翻译默写.txt'),
          2: ('你好法语1_Unité2_默写版.txt', '你好法语1_Unité2_全文翻译默写.txt'),
          3: ('你好法语1_Unité3_默写版_1.txt', '你好法语1_Unité3_全文翻译默写.txt'),
          4: ('你好法语1_Unité4_默写版.txt', '你好法语1_Unité4_全文翻译默写.txt'),
-         5: ('你好法语1_Unité5_默写版.txt', '你好法语1_Unité5_全文翻译默写.txt')}
+         5: ('你好法语1_Unité5_默写版.txt', '你好法语1_Unité5_全文翻译默写.txt'),
+         6: ('你好法语1_Unité6_默写版.txt', '你好法语1_Unité6_全文翻译默写.txt')}
 # Rows lost at a PDF page break in the answer key
 PATCH = {(1, 15): 'français(e)', (1, 16): 'italien(ne)', (1, 17): 'ma', (1, 18): 'mon'}
+# Answer rows the PDF text extraction dropped at a page break (leçon, number)
+PATCH.update({(22, 19): 'étranger(ère)', (22, 20): 'indispensable', (22, 21): 'privé(e)', (22, 22): 'souriant(e)',
+              (24, 19): 'calme', (24, 20): 'court(e)', (24, 21): 'familier(ère)', (24, 22): 'idéal(e)'})
 
 FOOT = re.compile(r'^Unité \d · Leçon .*第 \d+ 页\s*$')
 LECON = re.compile(r'^Leçon (\d+)　(.+?)(?:　(.+?))?$')
@@ -149,6 +153,7 @@ def texts(zh_lines, fr_lines):
 
 book = {'id': 'nihao1', 'title': '你好法语 1', 'fr': 'Bonjour ! Le français 1', 'units': []}
 for u, (vf, tf) in UNITS.items():
+    if os.environ.get('ONLY') and str(u) != os.environ['ONLY']: continue
     v = read(vf); t = read(tf)
     vk = v.index('参考答案'); tk = t.index('参考答案')
     vq, va = split_lecons(v, 0, vk), split_lecons(v, vk)

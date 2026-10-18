@@ -8109,6 +8109,1453 @@ window.BOOKS = [{
      ]
     }
    ]
+  },
+  {
+   "n": 6,
+   "lecons": [
+    {
+     "n": 21,
+     "title": "C'est interdit !",
+     "zh": "这是被禁止的！",
+     "vocab": [
+      {
+       "g": "阳性名词",
+       "zh": "巧克力",
+       "pos": "n.m.",
+       "fr": "chocolat"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "医生",
+       "pos": "n.m.",
+       "fr": "médecin"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "手机；笔记本电脑",
+       "pos": "n.m.",
+       "fr": "portable"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "到达",
+       "pos": "n.f.",
+       "fr": "arrivée"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "班级；教室",
+       "pos": "n.f.",
+       "fr": "classe"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "（演出场地的）座位",
+       "pos": "n.f.",
+       "fr": "place"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "（火车）车厢",
+       "pos": "n.f.",
+       "fr": "voiture"
+      },
+      {
+       "g": "名词",
+       "zh": "狗",
+       "pos": "n.",
+       "fr": "chien(ne)"
+      },
+      {
+       "g": "动词",
+       "zh": "给",
+       "pos": "v.t.",
+       "fr": "donner"
+      },
+      {
+       "g": "动词",
+       "zh": "原谅，宽恕",
+       "pos": "v.t.",
+       "fr": "excuser"
+      },
+      {
+       "g": "动词",
+       "zh": "能，会；可以",
+       "pos": "v.t.",
+       "fr": "pouvoir"
+      },
+      {
+       "g": "形容词",
+       "zh": "被禁止的",
+       "pos": "adj.",
+       "fr": "interdit(e)"
+      },
+      {
+       "g": "形容词",
+       "zh": "重要的",
+       "pos": "adj.",
+       "fr": "important(e)"
+      },
+      {
+       "g": "形容词",
+       "zh": "被容许的",
+       "pos": "adj.",
+       "fr": "permis(e)"
+      }
+     ],
+     "cloze": [
+      [
+       "对话 1"
+      ],
+      [
+       "– Excusez-moi, ",
+       {
+        "b": "madame"
+       },
+       ", il est ",
+       {
+        "b": "interdit"
+       },
+       " de fumer ",
+       {
+        "b": "dans"
+       },
+       " le restaurant."
+      ],
+      [
+       "– Où ",
+       {
+        "b": "est"
+       },
+       "-ce que je ",
+       {
+        "b": "peux"
+       },
+       " fumer, ",
+       {
+        "b": "alors"
+       },
+       " ?"
+      ],
+      [
+       "– Vous pouvez ",
+       {
+        "b": "fumer"
+       },
+       " sur la ",
+       {
+        "b": "terrasse"
+       },
+       "."
+      ],
+      [
+       "– Sur la terrasse ? Alors, ça ! Non ",
+       {
+        "b": "merci"
+       },
+       " !"
+      ],
+      [
+       "– Madame, s'il vous ",
+       {
+        "b": "plaît"
+       },
+       " ! Ne fumez ",
+       {
+        "b": "pas"
+       },
+       " ici !"
+      ],
+      [
+       "对话 2"
+      ],
+      [
+       "– Je ",
+       {
+        "b": "voudrais"
+       },
+       " une ",
+       {
+        "b": "chambre"
+       },
+       ", s'il vous ",
+       {
+        "b": "plaît"
+       },
+       ". Pour une ",
+       {
+        "b": "personne"
+       },
+       "."
+      ],
+      [
+       "– Pour une ",
+       {
+        "b": "personne"
+       },
+       "… D'accord. Donnez-",
+       {
+        "b": "moi"
+       },
+       " votre ",
+       {
+        "b": "passeport"
+       },
+       ", s'il vous ",
+       {
+        "b": "plaît"
+       },
+       "… Ah ! Vous avez un ",
+       {
+        "b": "chien"
+       },
+       " ?"
+      ],
+      [
+       "– Oui."
+      ],
+      [
+       "– Je suis ",
+       {
+        "b": "désolée"
+       },
+       ", monsieur, ",
+       {
+        "b": "mais"
+       },
+       " vous ne ",
+       {
+        "b": "pouvez"
+       },
+       " pas ",
+       {
+        "b": "prendre"
+       },
+       " votre ",
+       {
+        "b": "chien"
+       },
+       " avec ",
+       {
+        "b": "vous"
+       },
+       " dans la ",
+       {
+        "b": "chambre"
+       },
+       "."
+      ],
+      [
+       "– Mais comment ça ?!"
+      ],
+      [
+       "对话 3"
+      ],
+      [
+       "– Pardon, ",
+       {
+        "b": "madame"
+       },
+       ", vous ne ",
+       {
+        "b": "pouvez"
+       },
+       " pas ",
+       {
+        "b": "utiliser"
+       },
+       " votre ",
+       {
+        "b": "portable"
+       },
+       "."
+      ],
+      [
+       "– Comment ça, je ne peux ",
+       {
+        "b": "pas"
+       },
+       " ! Mais je téléphone à ",
+       {
+        "b": "mon"
+       },
+       " fils ! C'",
+       {
+        "b": "est"
+       },
+       " très ",
+       {
+        "b": "important"
+       },
+       " !"
+      ],
+      [
+       "– Non madame, je ",
+       {
+        "b": "suis"
+       },
+       " désolée. Ce n'",
+       {
+        "b": "est"
+       },
+       " pas ",
+       {
+        "b": "possible"
+       },
+       ". On ne peut ",
+       {
+        "b": "pas"
+       },
+       " téléphoner ",
+       {
+        "b": "dans"
+       },
+       " l'avion. Téléphonez-",
+       {
+        "b": "lui"
+       },
+       " à l'aéroport, à l'",
+       {
+        "b": "arrivée"
+       },
+       "."
+      ]
+     ],
+     "text": [
+      {
+       "h": "对话 1"
+      },
+      {
+       "zh": "– 对不起，女士，餐厅里禁止吸烟。",
+       "fr": "– Excusez-moi, madame, il est interdit de fumer dans le restaurant."
+      },
+      {
+       "zh": "– 那我可以在哪儿吸烟呢？",
+       "fr": "– Où est-ce que je peux fumer, alors ?"
+      },
+      {
+       "zh": "– 您可以在露台上吸烟。",
+       "fr": "– Vous pouvez fumer sur la terrasse."
+      },
+      {
+       "zh": "– 在露台上？那可不行！不用了，谢谢！",
+       "fr": "– Sur la terrasse ? Alors, ça ! Non merci !"
+      },
+      {
+       "zh": "– 女士，拜托了！请别在这里吸烟！",
+       "fr": "– Madame, s'il vous plaît ! Ne fumez pas ici !"
+      },
+      {
+       "h": "对话 2"
+      },
+      {
+       "zh": "– 我想要一个房间，麻烦您。单人间。",
+       "fr": "– Je voudrais une chambre, s'il vous plaît. Pour une personne."
+      },
+      {
+       "zh": "– 单人间……好的。请把您的护照给我……啊！您有一条狗？",
+       "fr": "– Pour une personne… D'accord. Donnez-moi votre passeport, s'il vous plaît… Ah ! Vous avez un chien ?"
+      },
+      {
+       "zh": "– 是的。",
+       "fr": "– Oui."
+      },
+      {
+       "zh": "– 很抱歉，先生，但您不能把狗带进房间。",
+       "fr": "– Je suis désolée, monsieur, mais vous ne pouvez pas prendre votre chien avec vous dans la chambre."
+      },
+      {
+       "zh": "– 怎么会这样？！",
+       "fr": "– Mais comment ça ?!"
+      },
+      {
+       "h": "对话 3"
+      },
+      {
+       "zh": "– 对不起，女士，您不能使用手机。",
+       "fr": "– Pardon, madame, vous ne pouvez pas utiliser votre portable."
+      },
+      {
+       "zh": "– 怎么不能！我是在给我儿子打电话！这很重要！",
+       "fr": "– Comment ça, je ne peux pas ! Mais je téléphone à mon fils ! C'est très important !"
+      },
+      {
+       "zh": "– 不行，女士，很抱歉。这是不可以的。飞机上不能打电话。请您到机场、落地之后再给他打。",
+       "fr": "– Non madame, je suis désolée. Ce n'est pas possible. On ne peut pas téléphoner dans l'avion. Téléphonez-lui à l'aéroport, à l'arrivée."
+      }
+     ]
+    },
+    {
+     "n": 22,
+     "title": "Petites annonces",
+     "zh": "启事",
+     "vocab": [
+      {
+       "g": "阳性名词",
+       "zh": "面试，会面",
+       "pos": "n.m.",
+       "fr": "entretien"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "意大利语",
+       "pos": "n.m.",
+       "fr": "italien"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "词语",
+       "pos": "n.m.",
+       "fr": "mot"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "问题",
+       "pos": "n.m.",
+       "fr": "problème"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "小学",
+       "pos": "n.f.",
+       "fr": "école"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "经验；经历",
+       "pos": "n.f.",
+       "fr": "expérience"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "语言；舌头",
+       "pos": "n.f.",
+       "fr": "langue"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "信；字母",
+       "pos": "n.f.",
+       "fr": "lettre"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "散步；散步场所，散步大道",
+       "pos": "n.f.",
+       "fr": "promenade"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "品质，质量",
+       "pos": "n.f.",
+       "fr": "qualité"
+      },
+      {
+       "g": "名词",
+       "zh": "顾客，客户",
+       "pos": "n.",
+       "fr": "client(e)"
+      },
+      {
+       "g": "名词",
+       "zh": "（旅馆、商店等的）接待员",
+       "pos": "n.",
+       "fr": "réceptionniste"
+      },
+      {
+       "g": "动词",
+       "zh": "联系",
+       "pos": "v.t.",
+       "fr": "contacter"
+      },
+      {
+       "g": "动词",
+       "zh": "说，说出",
+       "pos": "v.t.",
+       "fr": "dire"
+      },
+      {
+       "g": "动词",
+       "zh": "预订，保留，预留",
+       "pos": "v.t.",
+       "fr": "réserver"
+      },
+      {
+       "g": "动词",
+       "zh": "知道，会",
+       "pos": "v.t.",
+       "fr": "savoir"
+      },
+      {
+       "g": "动词",
+       "zh": "想要",
+       "pos": "v.t.",
+       "fr": "vouloir"
+      },
+      {
+       "g": "形容词",
+       "zh": "有活力的",
+       "pos": "adj.",
+       "fr": "dynamique"
+      },
+      {
+       "g": "形容词",
+       "zh": "外国的",
+       "pos": "adj.",
+       "fr": "étranger(ère)"
+      },
+      {
+       "g": "形容词",
+       "zh": "不可或缺的",
+       "pos": "adj.",
+       "fr": "indispensable"
+      },
+      {
+       "g": "形容词",
+       "zh": "私人的",
+       "pos": "adj.",
+       "fr": "privé(e)"
+      },
+      {
+       "g": "形容词",
+       "zh": "面带微笑的",
+       "pos": "adj.",
+       "fr": "souriant(e)"
+      },
+      {
+       "g": "副词",
+       "zh": "已经",
+       "pos": "adv.",
+       "fr": "déjà"
+      },
+      {
+       "g": "副词",
+       "zh": "有时",
+       "pos": "adv.",
+       "fr": "parfois"
+      },
+      {
+       "g": "介词、连词",
+       "zh": "[表示人际相互关系] 和，同，跟，与",
+       "pos": "prép.",
+       "fr": "avec"
+      },
+      {
+       "g": "地名",
+       "zh": "尼斯（法国）",
+       "pos": "",
+       "fr": "Nice"
+      }
+     ],
+     "cloze": [
+      [
+       "招聘启事"
+      ],
+      [
+       "Hôtel du musée, Nice"
+      ],
+      [
+       "Vous ",
+       {
+        "b": "êtes"
+       },
+       " un H ou une F ",
+       {
+        "b": "entre"
+       },
+       " 25 et 35 ans, ",
+       {
+        "b": "souriant"
+       },
+       "(e) et dynamique. Vous ",
+       {
+        "b": "voulez"
+       },
+       " travailler ",
+       {
+        "b": "avec"
+       },
+       " des ",
+       {
+        "b": "clients"
+       },
+       " français et ",
+       {
+        "b": "étrangers"
+       },
+       ". Vous savez ",
+       {
+        "b": "parler"
+       },
+       " anglais, ",
+       {
+        "b": "espagnol"
+       },
+       " et italien. Vous ",
+       {
+        "b": "pouvez"
+       },
+       " travailler ",
+       {
+        "b": "parfois"
+       },
+       " le week-",
+       {
+        "b": "end"
+       },
+       "."
+      ],
+      [
+       "Nous cherchons un(e) ",
+       {
+        "b": "réceptionniste"
+       },
+       "."
+      ],
+      [
+       "Contactez Madame Davoust, Directrice, Hôtel du musée,"
+      ],
+      [
+       "56, ",
+       {
+        "b": "promenade"
+       },
+       " des Anglais, 06200 Nice, 04 93 75 28 39"
+      ]
+     ],
+     "text": [
+      {
+       "h": "招聘启事"
+      },
+      {
+       "zh": "博物馆酒店，Nice",
+       "fr": "Hôtel du musée, Nice"
+      },
+      {
+       "zh": "您是 25 到 35 岁之间的男士或女士，面带微笑，充满活力。您愿意与法国和外国客人一起工作。您会说英语、西班牙语和意大利语。您有时可以在周末工作。",
+       "fr": "Vous êtes un H ou une F entre 25 et 35 ans, souriant(e) et dynamique. Vous voulez travailler avec des clients français et étrangers. Vous savez parler anglais, espagnol et italien. Vous pouvez travailler parfois le week-end."
+      },
+      {
+       "zh": "我们招聘一名接待员。",
+       "fr": "Nous cherchons un(e) réceptionniste."
+      },
+      {
+       "zh": "请联系 Madame Davoust，经理，博物馆酒店，",
+       "fr": "Contactez Madame Davoust, Directrice, Hôtel du musée,"
+      },
+      {
+       "zh": "地址：56, promenade des Anglais, 06200 Nice，电话：04 93 75 28 39",
+       "fr": "56, promenade des Anglais, 06200 Nice, 04 93 75 28 39"
+      }
+     ]
+    },
+    {
+     "n": 23,
+     "title": "Qu'est-ce qu'on lui offre ?",
+     "zh": "我们送她什么呢？",
+     "vocab": [
+      {
+       "g": "阳性名词",
+       "zh": "生日",
+       "pos": "n.m.",
+       "fr": "anniversaire"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "激光唱片；光盘（英文 Compact Disc 的缩写）",
+       "pos": "n.m.",
+       "fr": "CD"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "爱好，兴趣；品位",
+       "pos": "n.m.",
+       "fr": "goût"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "地点，地方",
+       "pos": "n.m.",
+       "fr": "lieu"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "菜肴",
+       "pos": "n.m.",
+       "fr": "plat"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "花",
+       "pos": "n.f.",
+       "fr": "fleur"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "主意",
+       "pos": "n.f.",
+       "fr": "idée"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "绘画；油画",
+       "pos": "n.f.",
+       "fr": "peinture"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "退休",
+       "pos": "n.f.",
+       "fr": "retraite"
+      },
+      {
+       "g": "名词",
+       "zh": "同事",
+       "pos": "n.",
+       "fr": "collègue"
+      },
+      {
+       "g": "名词",
+       "zh": "来宾",
+       "pos": "n.",
+       "fr": "invité(e)"
+      },
+      {
+       "g": "动词",
+       "zh": "选择",
+       "pos": "v.t.",
+       "fr": "choisir"
+      },
+      {
+       "g": "动词",
+       "zh": "了解；认识",
+       "pos": "v.t.",
+       "fr": "connaître"
+      },
+      {
+       "g": "动词",
+       "zh": "放开，使得",
+       "pos": "v.t.",
+       "fr": "laisser"
+      },
+      {
+       "g": "动词",
+       "zh": "赠送，提供",
+       "pos": "v.t.",
+       "fr": "offrir"
+      },
+      {
+       "g": "动词",
+       "zh": "离开",
+       "pos": "v.t.",
+       "fr": "quitter"
+      },
+      {
+       "g": "动词",
+       "zh": "拿着",
+       "pos": "v.t.",
+       "fr": "tenir"
+      },
+      {
+       "g": "形容词",
+       "zh": "坏的，不好的",
+       "pos": "adj.",
+       "fr": "mauvais(e)"
+      },
+      {
+       "g": "形容词",
+       "zh": "独到的，新颖的",
+       "pos": "adj.",
+       "fr": "original(e)"
+      },
+      {
+       "g": "形容词",
+       "zh": "真实的，确实的",
+       "pos": "adj.",
+       "fr": "vrai"
+      },
+      {
+       "g": "代词",
+       "zh": "什么，什么事，什么东西（无性数变化，只用来指物）",
+       "pos": "pron.interr.",
+       "fr": "quoi"
+      },
+      {
+       "g": "副词",
+       "zh": "为什么",
+       "pos": "adv.",
+       "fr": "pourquoi"
+      },
+      {
+       "g": "介词、连词",
+       "zh": "（表示相关）关于，对于",
+       "pos": "prép.",
+       "fr": "sur"
+      },
+      {
+       "g": "冠词、感叹词、短语",
+       "zh": "某个东西，某物（= qch.）",
+       "pos": "loc.",
+       "fr": "quelque chose"
+      }
+     ],
+     "cloze": [
+      [
+       "– Mais qu'est-ce ",
+       {
+        "b": "que"
+       },
+       " vous ",
+       {
+        "b": "faites"
+       },
+       " ?"
+      ],
+      [
+       "– Eh bien, on ",
+       {
+        "b": "cherche"
+       },
+       " une ",
+       {
+        "b": "idée"
+       },
+       " de cadeau ",
+       {
+        "b": "pour"
+       },
+       " Colette."
+      ],
+      [
+       "– Mais pourquoi ? C'",
+       {
+        "b": "est"
+       },
+       " son ",
+       {
+        "b": "anniversaire"
+       },
+       " ?"
+      ],
+      [
+       "– Mais non ! Elle ",
+       {
+        "b": "quitte"
+       },
+       " l'agence ",
+       {
+        "b": "cette"
+       },
+       " semaine. Elle ",
+       {
+        "b": "part"
+       },
+       " à la retraite."
+      ],
+      [
+       "– Ah ! ",
+       {
+        "b": "mais"
+       },
+       " oui, c'",
+       {
+        "b": "est"
+       },
+       " vrai !"
+      ],
+      [
+       "– Et ",
+       {
+        "b": "alors"
+       },
+       ", on lui ",
+       {
+        "b": "offre"
+       },
+       " un cadeau ",
+       {
+        "b": "pour"
+       },
+       " son ",
+       {
+        "b": "départ"
+       },
+       "."
+      ],
+      [
+       "– Oui, mais on ne ",
+       {
+        "b": "sait"
+       },
+       " pas ",
+       {
+        "b": "quoi"
+       },
+       " acheter."
+      ],
+      [
+       "– Tu la ",
+       {
+        "b": "connais"
+       },
+       " bien, ",
+       {
+        "b": "toi"
+       },
+       ", Colette. Quels sont ",
+       {
+        "b": "ses"
+       },
+       " goûts ?"
+      ],
+      [
+       "– Qu'",
+       {
+        "b": "est"
+       },
+       "-ce qu'elle ",
+       {
+        "b": "aime"
+       },
+       " ? Je ne sais ",
+       {
+        "b": "pas"
+       },
+       ", moi… Offrez-",
+       {
+        "b": "lui"
+       },
+       " des ",
+       {
+        "b": "fleurs"
+       },
+       "… Ou pourquoi ",
+       {
+        "b": "pas"
+       },
+       " un CD de Pavarotti ? Elle l'adore !"
+      ],
+      [
+       "– Ce n'",
+       {
+        "b": "est"
+       },
+       " pas ",
+       {
+        "b": "très"
+       },
+       " original !"
+      ],
+      [
+       "– Bon, ",
+       {
+        "b": "alors"
+       },
+       ", vous ",
+       {
+        "b": "pouvez"
+       },
+       " lui ",
+       {
+        "b": "offrir"
+       },
+       " un livre d'",
+       {
+        "b": "art"
+       },
+       " sur la ",
+       {
+        "b": "photo"
+       },
+       " ou sur la ",
+       {
+        "b": "peinture"
+       },
+       "."
+      ],
+      [
+       "– Ah ! oui, ",
+       {
+        "b": "tiens"
+       },
+       ", ça c'est ",
+       {
+        "b": "une"
+       },
+       " bonne ",
+       {
+        "b": "idée"
+       },
+       "… Ah ! mais ",
+       {
+        "b": "non"
+       },
+       ", le directeur ",
+       {
+        "b": "achète"
+       },
+       " un livre !"
+      ],
+      [
+       "– Ah ! Écoutez, ",
+       {
+        "b": "bon"
+       },
+       ", je suis ",
+       {
+        "b": "désolé"
+       },
+       " mais je n'ai ",
+       {
+        "b": "pas"
+       },
+       " d'autre ",
+       {
+        "b": "idée"
+       },
+       "…"
+      ]
+     ],
+     "text": [
+      {
+       "zh": "– 你们在干什么呢？",
+       "fr": "– Mais qu'est-ce que vous faites ?"
+      },
+      {
+       "zh": "– 嗯，我们在想送 Colette 什么礼物。",
+       "fr": "– Eh bien, on cherche une idée de cadeau pour Colette."
+      },
+      {
+       "zh": "– 为什么要送？是她的生日吗？",
+       "fr": "– Mais pourquoi ? C'est son anniversaire ?"
+      },
+      {
+       "zh": "– 不是！她这周要离开公司。她要退休了。",
+       "fr": "– Mais non ! Elle quitte l'agence cette semaine. Elle part à la retraite."
+      },
+      {
+       "zh": "– 啊！对哦，没错！",
+       "fr": "– Ah ! mais oui, c'est vrai !"
+      },
+      {
+       "zh": "– 那么，我们送她一份离职礼物吧。",
+       "fr": "– Et alors, on lui offre un cadeau pour son départ."
+      },
+      {
+       "zh": "– 好，可是我们不知道买什么。",
+       "fr": "– Oui, mais on ne sait pas quoi acheter."
+      },
+      {
+       "zh": "– 你很了解 Colette 啊。她有什么爱好？",
+       "fr": "– Tu la connais bien, toi, Colette. Quels sont ses goûts ?"
+      },
+      {
+       "zh": "– 她喜欢什么？我也不知道……送她花吧……或者为什么不送一张 Pavarotti 的 CD？她可喜欢他了！",
+       "fr": "– Qu'est-ce qu'elle aime ? Je ne sais pas, moi… Offrez-lui des fleurs… Ou pourquoi pas un CD de Pavarotti ? Elle l'adore !"
+      },
+      {
+       "zh": "– 这不太有新意！",
+       "fr": "– Ce n'est pas très original !"
+      },
+      {
+       "zh": "– 好吧，那你们可以送她一本关于摄影或绘画的艺术书。",
+       "fr": "– Bon, alors, vous pouvez lui offrir un livre d'art sur la photo ou sur la peinture."
+      },
+      {
+       "zh": "– 啊！对，这是个好主意……啊！不行，经理要买书！",
+       "fr": "– Ah ! oui, tiens, ça c'est une bonne idée… Ah ! mais non, le directeur achète un livre !"
+      },
+      {
+       "zh": "– 啊！听着，好吧，很抱歉，我没有别的主意了……",
+       "fr": "– Ah ! Écoutez, bon, je suis désolé mais je n'ai pas d'autre idée…"
+      }
+     ]
+    },
+    {
+     "n": 24,
+     "title": "Le candidat idéal…",
+     "zh": "理想的应聘者",
+     "vocab": [
+      {
+       "g": "阳性名词",
+       "zh": "头发",
+       "pos": "n.m.pl.",
+       "fr": "cheveux"
+      },
+      {
+       "g": "阳性名词",
+       "zh": "眼睛",
+       "pos": "n.m.",
+       "fr": "œil [œj] (pl. yeux [jø])"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "注意，专心",
+       "pos": "n.f.",
+       "fr": "attention"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "企业",
+       "pos": "n.f.",
+       "fr": "entreprise"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "人",
+       "pos": "n.f.",
+       "fr": "personne"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "句子，词句，语句",
+       "pos": "n.f.",
+       "fr": "phrase"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "外表，仪表",
+       "pos": "n.f.",
+       "fr": "présentation"
+      },
+      {
+       "g": "阴性名词",
+       "zh": "生平",
+       "pos": "n.f.",
+       "fr": "vie"
+      },
+      {
+       "g": "名词",
+       "zh": "应聘者，求职者；候选人",
+       "pos": "n.",
+       "fr": "candidat(e)"
+      },
+      {
+       "g": "动词",
+       "zh": "想象",
+       "pos": "v.t.",
+       "fr": "imaginer"
+      },
+      {
+       "g": "动词",
+       "zh": "提出（问题）",
+       "pos": "v.t.",
+       "fr": "poser"
+      },
+      {
+       "g": "动词",
+       "zh": "讲述",
+       "pos": "v.t.",
+       "fr": "raconter"
+      },
+      {
+       "g": "动词",
+       "zh": "研究，探索",
+       "pos": "v.t.",
+       "fr": "rechercher"
+      },
+      {
+       "g": "动词",
+       "zh": "回答，答复",
+       "pos": "v.t.ind.",
+       "fr": "répondre(à)"
+      },
+      {
+       "g": "动词",
+       "zh": "保持，始终处于（某种姿势、状态）",
+       "pos": "v.i.",
+       "fr": "rester"
+      },
+      {
+       "g": "动词",
+       "zh": "使成功，做成功",
+       "pos": "v.t.",
+       "fr": "réussir"
+      },
+      {
+       "g": "动词",
+       "zh": "使用",
+       "pos": "v.t.",
+       "fr": "utiliser"
+      },
+      {
+       "g": "动词",
+       "zh": "销售，卖",
+       "pos": "v.t.",
+       "fr": "vendre"
+      },
+      {
+       "g": "形容词",
+       "zh": "平静的，安静的；冷静的，镇静的",
+       "pos": "adj.",
+       "fr": "calme"
+      },
+      {
+       "g": "形容词",
+       "zh": "短的",
+       "pos": "adj.",
+       "fr": "court(e)"
+      },
+      {
+       "g": "形容词",
+       "zh": "通俗的",
+       "pos": "adj.",
+       "fr": "familier(ère)"
+      },
+      {
+       "g": "形容词",
+       "zh": "理想的",
+       "pos": "adj.",
+       "fr": "idéal(e)"
+      },
+      {
+       "g": "副词",
+       "zh": "正确地；合适地；合乎礼仪地",
+       "pos": "adv.",
+       "fr": "correctement"
+      },
+      {
+       "g": "副词",
+       "zh": "准确地",
+       "pos": "adv.",
+       "fr": "exactement"
+      },
+      {
+       "g": "副词",
+       "zh": "也许",
+       "pos": "adv.",
+       "fr": "peut-être"
+      },
+      {
+       "g": "介词、连词",
+       "zh": "在……之前",
+       "pos": "prép.",
+       "fr": "avant"
+      },
+      {
+       "g": "介词、连词",
+       "zh": "[表示方式] ……地",
+       "pos": "prép.",
+       "fr": "avec"
+      },
+      {
+       "g": "介词、连词",
+       "zh": "在……期间",
+       "pos": "prép.",
+       "fr": "pendant"
+      },
+      {
+       "g": "冠词、感叹词、短语",
+       "zh": "注意……，当心……",
+       "pos": "",
+       "fr": "faire attention à…"
+      }
+     ],
+     "cloze": [
+      [
+       "如何面试成功？（ANPE 的建议）"
+      ],
+      [
+       "Comment réussir un ",
+       {
+        "b": "entretien"
+       },
+       " ?"
+      ],
+      [
+       "面试前 Avant l'entretien"
+      ],
+      [
+       "– Recherchez des ",
+       {
+        "b": "informations"
+       },
+       " sur l'",
+       {
+        "b": "entreprise"
+       },
+       "."
+      ],
+      [
+       "– Passez une ",
+       {
+        "b": "bonne"
+       },
+       " nuit."
+      ],
+      [
+       "– Faites ",
+       {
+        "b": "attention"
+       },
+       " à votre ",
+       {
+        "b": "présentation"
+       },
+       " générale : ",
+       {
+        "b": "les"
+       },
+       " vêtements, ",
+       {
+        "b": "les"
+       },
+       " cheveux…"
+      ],
+      [
+       "– Arrivez à l'",
+       {
+        "b": "heure"
+       },
+       "."
+      ],
+      [
+       "面试中 Pendant l'entretien"
+      ],
+      [
+       "– Restez calme et ",
+       {
+        "b": "souriant"
+       },
+       "(e)."
+      ],
+      [
+       "– Regardez dans ",
+       {
+        "b": "les"
+       },
+       " yeux la ",
+       {
+        "b": "personne"
+       },
+       " en face de ",
+       {
+        "b": "vous"
+       },
+       "."
+      ],
+      [
+       "– Écoutez avec ",
+       {
+        "b": "attention"
+       },
+       " et répondez ",
+       {
+        "b": "avec"
+       },
+       " des ",
+       {
+        "b": "phrases"
+       },
+       " courtes."
+      ],
+      [
+       "– Ne ",
+       {
+        "b": "racontez"
+       },
+       " pas ",
+       {
+        "b": "votre"
+       },
+       " vie ou ",
+       {
+        "b": "vos"
+       },
+       " problèmes."
+      ],
+      [
+       "– Parlez ",
+       {
+        "b": "correctement"
+       },
+       " : n'utilisez ",
+       {
+        "b": "pas"
+       },
+       " de mots ",
+       {
+        "b": "familiers"
+       },
+       "."
+      ],
+      [
+       "– Posez, vous ",
+       {
+        "b": "aussi"
+       },
+       ", des ",
+       {
+        "b": "questions"
+       },
+       " : sur le ",
+       {
+        "b": "travail"
+       },
+       ", les ",
+       {
+        "b": "horaires"
+       },
+       ", l'entreprise"
+      ]
+     ],
+     "text": [
+      {
+       "h": "如何面试成功？（ANPE 的建议）"
+      },
+      {
+       "zh": "如何在面试中取得成功？",
+       "fr": "Comment réussir un entretien ?"
+      },
+      {
+       "h": "面试前 Avant l'entretien"
+      },
+      {
+       "zh": "– 查找有关这家企业的信息。",
+       "fr": "– Recherchez des informations sur l'entreprise."
+      },
+      {
+       "zh": "– 睡个好觉。",
+       "fr": "– Passez une bonne nuit."
+      },
+      {
+       "zh": "– 注意您的整体仪表：衣着、发型……",
+       "fr": "– Faites attention à votre présentation générale : les vêtements, les cheveux…"
+      },
+      {
+       "zh": "– 准时到达。",
+       "fr": "– Arrivez à l'heure."
+      },
+      {
+       "h": "面试中 Pendant l'entretien"
+      },
+      {
+       "zh": "– 保持平静，面带微笑。",
+       "fr": "– Restez calme et souriant(e)."
+      },
+      {
+       "zh": "– 看着面前那个人的眼睛。",
+       "fr": "– Regardez dans les yeux la personne en face de vous."
+      },
+      {
+       "zh": "– 认真倾听，并用简短的句子回答。",
+       "fr": "– Écoutez avec attention et répondez avec des phrases courtes."
+      },
+      {
+       "zh": "– 不要讲述您的生活或您的问题。",
+       "fr": "– Ne racontez pas votre vie ou vos problèmes."
+      },
+      {
+       "zh": "– 说话要得体：不要使用通俗的词语。",
+       "fr": "– Parlez correctement : n'utilisez pas de mots familiers."
+      },
+      {
+       "zh": "– 您也要提问：关于工作、工作时间、企业。",
+       "fr": "– Posez, vous aussi, des questions : sur le travail, les horaires, l'entreprise"
+      }
+     ]
+    }
+   ]
   }
  ]
 }];

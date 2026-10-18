@@ -98,6 +98,24 @@
     'inviter':   { zh: '邀请', en: 'to invite' },
     'fêter':     { zh: '庆祝', en: 'to celebrate' },
     'exister':   { zh: '存在', en: 'to exist' },
+    // Unité 6
+    'excuser':   { zh: '原谅', en: 'to excuse' },
+    'contacter': { zh: '联系', en: 'to contact' },
+    'dire':      { zh: '说', en: 'to say', pres: 'dis dis dit disons dites disent', pp: 'dit', fut: 'dir', imp: 'dis' },
+    'réserver':  { zh: '预订', en: 'to book' },
+    'choisir':   { zh: '选择', en: 'to choose' },
+    'laisser':   { zh: '放开；留下', en: 'to leave / let' },
+    'offrir':    { zh: '赠送', en: 'to give (a gift)', pres: 'offre offres offre offrons offrez offrent', pp: 'offert', fut: 'offrir', imp: 'offr' },
+    'quitter':   { zh: '离开', en: 'to leave' },
+    'tenir':     { zh: '拿着', en: 'to hold', pres: 'tiens tiens tient tenons tenez tiennent', pp: 'tenu', fut: 'tiendr', imp: 'ten' },
+    'imaginer':  { zh: '想象', en: 'to imagine' },
+    'poser':     { zh: '提出；放', en: 'to ask / put down' },
+    'raconter':  { zh: '讲述', en: 'to tell (a story)' },
+    'rechercher':{ zh: '寻找；研究', en: 'to look for' },
+    'répondre':  { zh: '回答', en: 'to answer' },
+    'réussir':   { zh: '成功', en: 'to succeed' },
+    'utiliser':  { zh: '使用', en: 'to use' },
+    'vendre':    { zh: '卖', en: 'to sell' },
   };
 
   const P = ['je', 'tu', 'il/elle/on', 'nous', 'vous', 'ils/elles'];

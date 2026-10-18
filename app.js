@@ -164,6 +164,7 @@
     9: ['Appartement', 'house'], 10: ['Louvre', 'pyramid'], 11: ['Martinique', 'palm'], 12: ['Marseille', 'boat'],
     13: ['Gare', 'clock'], 14: ['Londres', 'bigben'], 15: ['Dimanche', 'racket'], 16: ['Piscine', 'swim'],
     17: ['Crêpes', 'pan'], 18: ['Val d\'Isère', 'skis'], 19: ['Barcelone', 'letter'], 20: ['Fêtes', 'firework'],
+    21: ['Interdit', 'nosmoke'], 22: ['Annonce', 'notice'], 23: ['Cadeau', 'gift'], 24: ['Entretien', 'briefcase'],
   };
   const GLYPH = {
     tower: 'M50 12 L42 88 M50 12 L58 88 M44 62 H56 M46 44 H54 M38 88 Q50 70 62 88 M50 6 V12',
@@ -184,6 +185,10 @@
     pan: 'M18 52 A26 10 0 1 0 70 52 A26 10 0 1 0 18 52 M70 52 L92 44 M24 52 Q44 40 64 52 M32 48 Q44 44 56 48 M44 28 Q48 20 44 14 M54 30 Q58 22 54 16',
     skis: 'M30 14 L44 88 M44 14 L58 88 M26 12 Q30 8 34 12 M40 12 Q44 8 48 12 M66 20 V70 M66 20 L62 26 M74 22 V74 M74 22 L78 28 M60 70 H80',
     letter: 'M14 30 H86 V74 H14 Z M14 30 L50 56 L86 30 M14 74 L40 52 M86 74 L60 52 M64 36 H80 V48 H64 Z',
+    nosmoke: 'M50 12 A38 38 0 1 0 50.1 12 M22 22 L78 78 M26 58 H58 M64 58 H70 M58 52 Q64 46 58 40 M62 38 Q68 32 62 26',
+    notice: 'M22 18 H78 V82 H22 Z M30 30 H70 M30 42 H70 M30 54 H56 M42 18 V10 M58 18 V10 M60 62 H72 V74 H60 Z',
+    gift: 'M20 44 H80 V84 H20 Z M16 32 H84 V44 H16 Z M50 32 V84 M50 32 Q36 12 30 24 Q30 32 50 32 M50 32 Q64 12 70 24 Q70 32 50 32',
+    briefcase: 'M18 36 H82 V80 H18 Z M38 36 V24 H62 V36 M18 56 H82 M45 52 H55 V62 H45 Z',
     firework: 'M50 50 L50 20 M50 50 L72 28 M50 50 L80 50 M50 50 L72 72 M50 50 L50 80 M50 50 L28 72 M50 50 L20 50 M50 50 L28 28 M50 16 v-4 M76 24 l3 -3 M84 50 h4 M50 84 v4 M24 24 l-3 -3 M16 50 h-4 M30 88 L50 50',
     boat: 'M20 66 H80 L70 80 H30 Z M50 66 V14 M50 18 L76 58 H50 M50 24 L30 58 H50 M10 88 Q20 84 30 88 T50 88 T70 88 T90 88',
   };
@@ -2616,6 +2621,11 @@
     'commencer': 'commence commences commence commençons commencez commencent',
     'acheter': 'achète achètes achète achetons achetez achètent', 'boire': 'bois bois boit buvons buvez boivent',
     'venir': 'viens viens vient venons venez viennent', 'revenir': 'reviens reviens revient revenons revenez reviennent',
+    'pouvoir': 'peux peux peut pouvons pouvez peuvent', 'vouloir': 'veux veux veut voulons voulez veulent', 'savoir': 'sais sais sait savons savez savent',
+    'dire': 'dis dis dit disons dites disent', 'choisir': 'choisis choisis choisit choisissons choisissez choisissent',
+    'connaître': 'connais connais connaît connaissons connaissez connaissent', 'offrir': 'offre offres offre offrons offrez offrent',
+    'tenir': 'tiens tiens tient tenons tenez tiennent', 'réussir': 'réussis réussis réussit réussissons réussissez réussissent',
+    'vendre': 'vends vends vend vendons vendez vendent', 'répondre(à)': 'réponds réponds répond répondons répondez répondent',
     'descendre': 'descends descends descend descendons descendez descendent', 'recommencer': 'recommence recommences recommence recommençons recommencez recommencent',
   };
   const TIPS = {
@@ -2643,6 +2653,17 @@
     'boire': '完全不规则：bois · bois · boit / buvons · buvez · boivent。nous / vous 用 buv-，ils 用 boiv-。',
     'venir': '单数 vien- + s s t：viens · viens · vient；nous / vous 用 ven-：venons · venez；ils 双 n：viennent。复合过去时用 être。',
     'revenir': 're + venir，变位完全同 venir：reviens · revenons · reviennent。',
+    'pouvoir': '整串背：peux · peux · peut / pouvons · pouvez · peuvent。后接动词原形：vous pouvez fumer；否定：vous ne pouvez pas。',
+    'vouloir': '整串背：veux · veux · veut / voulons · voulez · veulent。je voudrais（我想要）比 je veux 客气。',
+    'savoir': '整串背：sais · sais · sait / savons · savez · savent。知道事实或「会」做某事（je sais nager）；认识人 / 地方用 connaître。',
+    'dire': 'dis · dis · dit / disons · dites · disent。vous dites（不是 disez）；ils disent 的 -ent 不发音。',
+    'choisir': '-ir 规则动词：去掉 -ir 加 -is · -is · -it · -issons · -issez · -issent。复数多一个 -iss-。同类：réussir。',
+    'connaître': 'connais · connais · connaît / connaissons · connaissez · connaissent。il connaît 保留 î；nous / vous / ils 词根变成 connaiss-。',
+    'offrir': '虽然是 -ir，却像 -er 动词变位：offre · offres · offre · offrons · offrez · offrent。过去分词 offert。',
+    'tenir': '同 venir：单数 tiens · tiens · tient；nous / vous 用 ten-：tenons · tenez；ils 双 n：tiennent。',
+    'réussir': '-ir 规则动词：réussis · réussis · réussit · réussissons · réussissez · réussissent。réussir à + 动词原形。',
+    'vendre': '-re 规则动词：vends · vends · vend · vendons · vendez · vendent。il vend 的 d 不发音；同类：répondre, descendre。',
+    'répondre(à)': '-re 规则动词：réponds · réponds · répond · répondons · répondez · répondent。répondre à qqn（后接 à）。',
     'descendre': '-re 规则动词：去掉 -re 得 descend-，加 -s · -s · （无）· -ons · -ez · -ent：il descend（d 不发音）。复合过去时用 être。',
     'appeler': "词根 appel + er。词尾不发音的 je / tu / il / ils 写双 l：appelle · appelles · appelle · appellent；nous / vous 单 l：appelons · appelez。代词跟着人称变：me · te · se · nous · vous · se，元音前省略成 m' t' s'。",
   };
