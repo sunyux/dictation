@@ -488,3 +488,21 @@ html.dys .syl i.nl { font-style: inherit; opacity: .6; text-decoration: underlin
   font-variant-numeric: lining-nums tabular-nums !important; font-feature-settings: "lnum" 1, "tnum" 1 !important; font-weight: 700;
 }
 .review-stats b { font-size: 36px; }
+
+/* ===== word colours across the page: masculine blue · feminine red · plural yellow (French, part of speech, translations) ===== */
+html .gx-m { --gc: #2d62a6; }
+html .gx-f { --gc: #b8363b; }
+html .gx-p { --gc: #b0801a; }
+html .gx-m, html .gx-f, html .gx-p,
+html .gx-m :is(.vfr, .vzh, .pos, .pmean, .ppos, .lc-fr, .lc-mean, .lzh, .m-zh, .m-en, .en-gloss, .art-hint, .lk-head b, .lk-item .pos, .lk-item .lk-zh, .dp-head h2, .dp-pos, .err-body, .err-body .lzh, .err-body div[lang="fr"]),
+html .gx-f :is(.vfr, .vzh, .pos, .pmean, .ppos, .lc-fr, .lc-mean, .lzh, .m-zh, .m-en, .en-gloss, .art-hint, .lk-head b, .lk-item .pos, .lk-item .lk-zh, .dp-head h2, .dp-pos, .err-body, .err-body .lzh, .err-body div[lang="fr"]),
+html .gx-p :is(.vfr, .vzh, .pos, .pmean, .ppos, .lc-fr, .lc-mean, .lzh, .m-zh, .m-en, .en-gloss, .art-hint, .lk-head b, .lk-item .pos, .lk-item .lk-zh, .dp-head h2, .dp-pos, .err-body, .err-body .lzh, .err-body div[lang="fr"]) { color: var(--gc) !important; }
+html .gx-m .ans, html .gx-f .ans, html .gx-p .ans { color: var(--gc); }
+html.dys .gx-m .syl.s0, html.dys .gx-f .syl.s0, html.dys .gx-p .syl.s0 { color: var(--gc) !important; }
+html.dys .gx-m .syl.s1, html.dys .gx-f .syl.s1, html.dys .gx-p .syl.s1 { color: color-mix(in srgb, var(--gc) 62%, #1c1812) !important; }
+html.dys .gx-m .syl i.sl, html.dys .gx-f .syl i.sl, html.dys .gx-p .syl i.sl { color: #9a948a !important; }
+.gx-m .pos, .gx-f .pos, .gx-p .pos { font-style: italic; }
+/* word rows: a thin bar in the same colour */
+.vrow.gx-m { box-shadow: inset 3px 0 0 rgba(45, 98, 166, .45); }
+.vrow.gx-f { box-shadow: inset 3px 0 0 rgba(184, 54, 59, .45); }
+.vrow.gx-p { box-shadow: inset 3px 0 0 rgba(176, 128, 26, .6); }

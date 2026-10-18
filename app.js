@@ -479,6 +479,8 @@
     pos = String(pos || '');
     return /(^|\W)n\.m\.|^m\./.test(pos) ? 'm' : /(^|\W)n\.f\.|^f\./.test(pos) ? 'f' : '';
   }
+  // colour class for a word: plural yellow, masculine blue, feminine red
+  const gx = pos => /pl\./.test(String(pos || '')) ? ' gx-p' : gender(pos) === 'm' ? ' gx-m' : gender(pos) === 'f' ? ' gx-f' : '';
   function artHint(v) {
     const g = gender(v.pos); if (!g) return '';
     const pl = /pl\./.test(v.pos), vow = /^[aeiouyhâàéèêëîïôûœ]/i.test(v.fr);
@@ -1105,7 +1107,7 @@
       const tag = x.src === 'book' ? `<a class="v-tag book" href="#/${x.book}/${x.n}/vocab">L${x.n}</a>` : x.src === 'sons' ? `<a class="v-tag" href="#/sons/${x.lesson}">${bi('发音书', 'Sounds')}</a>` : `<a class="v-tag" href="#/verbes/${encodeURIComponent(x.verb)}">${bi('动词词典', 'Verbs')}</a>`;
       const tip = x.v ? wordTip(x.n, x.v) : '';
       const verbLink = x.pos && x.pos.startsWith('v') && window.VERBDICT ? (() => { const m = x.fr.match(/^(\S+)\s*\((se|s')\)$/); const key = m ? (/^[aeiouyhâéèêî]/i.test(m[1]) ? "s'" : 'se ') + m[1] : x.fr; return window.VERBDICT.get(key) && x.src !== 'verb' ? `<a class="v-tag" href="#/verbes/${encodeURIComponent(key)}">${bi('变位', 'conjugate')}</a>` : ''; })() : '';
-      return `<div class="lk-item"><div class="lk-head">${playBtn(forms(x.fr).say)}<b lang="fr">${esc(x.fr)}</b>${favBtn({ fr: x.fr, zh: x.zh, en: x.en, pos: x.pos, from: x.src === 'book' ? 'L' + x.n : x.src })}${x.pos ? `<span class="pos">${esc(x.pos)}</span>` : ''}${tag}${verbLink}</div>
+      return `<div class="lk-item${gx(x.pos)}"><div class="lk-head">${playBtn(forms(x.fr).say)}<b lang="fr">${esc(x.fr)}</b>${favBtn({ fr: x.fr, zh: x.zh, en: x.en, pos: x.pos, from: x.src === 'book' ? 'L' + x.n : x.src })}${x.pos ? `<span class="pos">${esc(x.pos)}</span>` : ''}${tag}${verbLink}</div>
         <div class="lk-mean">${G(x)}</div>${tip ? `<div class="lk-tip">${tip}</div>` : ''}</div>`;
     }).join('');
     if (!hits.length && !conj.length) h += `<p class="hint-text" style="margin:8px 2px">${bi('网站的词库里没有找到。', 'Not in the site\'s word lists.')}</p>`;
@@ -1772,7 +1774,7 @@
     ov.className = 'deep-ov';
     ov.innerHTML = `<div class="deep-box" role="dialog" aria-label="${esc(word)}">
       <button class="deep-x" aria-label="${bi('关闭', 'Close')}">×</button>
-      <header class="dp-head"><h2 lang="fr">${playBtn(forms(fr).say)} ${esc(word)}</h2><p class="dp-pos">${esc(d.pos)}</p></header>
+      <header class="dp-head${gx(d.pos)}"><h2 lang="fr">${playBtn(forms(fr).say)} ${esc(word)}</h2><p class="dp-pos">${esc(d.pos)}</p></header>
       ${en ? [
         sec(1, 'Core meaning', 'Sens principal', `<p>${esc(d.s)}</p>`),
         sec(2, 'English cognates & false friends', 'Connexions avec l\'anglais', `<p>${esc(d.cog)}</p>`),
@@ -2030,7 +2032,7 @@
       ${errorAnalysisHTML()}
       ${Object.keys(byLecon).length ? Object.entries(byLecon).map(([n, list]) => `
         <section class="unit"><div class="unit-title"><h2 lang="fr">${leconName(+n)}</h2><span>${list.length} 条</span></div>
-        ${list.map(e => `<div class="err-row">
+        ${list.map(e => `<div class="err-row${gx(e.pos)}">
           <span class="err-kind">${KIND[e.kind]}</span>
           <div class="err-body"><div lang="fr">${playBtn(e.kind === 'word' ? forms(e.fr).say : e.fr)} ${esc(e.fr)}${e.kind === 'word' && window.DEEP && DEEP[e.fr] ? `<button class="deep-btn" data-deep="${esc(e.fr)}" lang="zh">${bi('详解', 'In depth')}</button>` : ''}</div><div class="lzh">${e.kind === 'cloze' ? esc(e.zh) : G(e)}${e.pos ? ' · ' + esc(e.pos) : ''}</div>${triesHTML(e)}${e.kind === 'word' ? spotLine(e) : ''}</div>
           <span class="err-meta">错 ${e.wrong} 次<br>${e.due <= today ? '<b class="w-miss">&nbsp;今天&nbsp;</b>' : e.due.slice(5).replace('-', '/') + ' 复习'}</span>
@@ -2090,7 +2092,7 @@
       const e = items[i], word = e.kind === 'word';
       const say = word ? forms(e.fr).say : e.fr;
       const tip = word ? wordTip(e.n, e) : '';
-      box.innerHTML = `<div class="drill learn-card ${word && gender(e.pos) ? 'g-' + gender(e.pos) : ''}">
+      box.innerHTML = `<div class="drill learn-card ${word && gender(e.pos) ? 'g-' + gender(e.pos) : ''}${word ? gx(e.pos) : ''}">
         <div class="prog-line"><span class="kbd">${i + 1} / ${items.length}</span><span class="kbd" lang="fr">${esc(leconName(e.n))}</span></div>
         <div class="lc-fr" lang="fr">${playBtn(say)} ${word ? artHint(e) : ''}<b>${word ? frHTML(e.fr) : esc(e.fr)}</b></div>
         <div class="lc-mean">${e.kind === 'cloze' ? esc(e.zh) : G(e)}${e.pos ? ` <span class="pos ${gender(e.pos) ? 'g-' + gender(e.pos) : ''}">${esc(e.pos)}</span>` : ''}</div>
@@ -2150,7 +2152,7 @@
       box.innerHTML = `<div class="drill">
         <div class="count">${practice ? bi(`练习 ${round - 1} · `, `Practice ${round - 1} · `) : ''}${i + 1} / ${queue.length} · ${leconName(e.n)}</div>
         <div class="bar"><i style="width:${i / queue.length * 100}%"></i></div>
-        <div class="prompt">${e.kind === 'cloze'
+        <div class="prompt${gx(e.pos)}">${e.kind === 'cloze'
           ? `<div class="pzh long" lang="fr" style="font-family:var(--serif)">${esc(e.zh).replace('____', '<u>&emsp;?&emsp;</u>')}</div><div class="ppos">填出空缺的词</div>`
           : `<div class="pmean ${e.zh.length > 30 ? 'long' : ''}">${MEAN(e)}</div>`}
           <div class="ppos">${playBtn(promptSay(e))} ${esc(e.kind === 'cloze' ? '' : e.pos || '')}</div></div>
@@ -2232,7 +2234,7 @@
         lab = good ? `答对了 · ${(e.box || 0) + 1 >= GAPS.length ? '已掌握' : next + ' 天后再复习'}` : '明天再来一次';
       }
       $('#fb', box).innerHTML = `<div class="feedback ${good ? 'ok' : 'bad'}"><span class="lab">${lab}</span>
-        <div class="ans" lang="fr">${playBtn(say)}<span>${html}</span></div>
+        <div class="ans${gx(e.pos)}" lang="fr">${playBtn(say)}<span>${html}</span></div>
         ${!good && !giveUp && e.kind === 'word' && r !== 'accent' ? dysCompare(answerOf(e), val) : ''}
         ${e.kind === 'word' ? tipBox(e.pos === '变位' ? verbTip(e.zh.split(' · ')[0].replace(/^(se |s')/, '')) : wordTip(e.n, e)) : ''}
         ${good ? '' : `<p class="copy-note" id="copy-note">${bi('照着上面的正确答案，在输入框里抄一遍', 'Copy the right answer above into the box once')}
@@ -2415,7 +2417,7 @@
       box.innerHTML = `<div class="drill say-drill">
         <div class="count">${round > 1 ? bi(`再说一遍 ${round - 1} · `, `Again ${round - 1} · `) : ''}${i + 1} / ${queue.length}</div>
         <div class="bar"><i style="width:${i / queue.length * 100}%"></i></div>
-        <div class="prompt"><div class="pmean ${v.zh.length > 30 ? 'long' : ''}">${MEAN(v)}</div>
+        <div class="prompt${gx(v.pos)}"><div class="pmean ${v.zh.length > 30 ? 'long' : ''}">${MEAN(v)}</div>
           <div class="ppos">${esc(v.pos || '')}${v.g && L() !== 'en' ? ' · ' + esc(tr(v.g)) : ''}</div></div>
         <div class="recite-ctrl">
           <button class="mic" id="smic" ${SR ? '' : 'disabled'} aria-label="${bi('说出这个词', 'Say this word')}">${ICON.mic}</button>
@@ -2451,7 +2453,7 @@
       const say = forms(v.fr).say;
       if (ok) { right++; XP.gain(1, bi('背诵单词', 'Spoken word')); }
       $('#sans', box).innerHTML = `<div class="feedback ${ok ? 'ok' : 'accent'}"><span class="lab">${ok ? bi('说对了', 'Right') : bi('答案', 'The answer')}</span>
-        <div class="ans" lang="fr">${playBtn(say)}<span>${frHTML(v.fr)}</span></div>
+        <div class="ans${gx(v.pos)}" lang="fr">${playBtn(say)}<span>${frHTML(v.fr)}</span></div>
         ${ok ? '' : `<div class="drill-actions" style="margin-top:8px"><button class="btn small" id="sgood">${bi('我说对了', 'I said it right')}</button><button class="btn ghost small" id="sbad">${bi('还没说对', 'Not yet')}</button></div>`}</div>`;
       TTS.say(say);
       const go = () => { i++; draw(); };
@@ -2492,7 +2494,7 @@
           <button class="btn ghost small" id="vplay">${ICON.play} ${bi('全部朗读', 'Read all')}</button>`) +
         `<p class="hint-text">${bi('按住左边的 ⠿ 拖动，可以在同一组里调整单词顺序。', 'Drag ⠿ on the left to reorder words within a group.')}${dysOn() ? ` <span class="dys-legend">${bi('灰色字母 = 不发音；点线字母 = 只让前面的元音变鼻音。', 'Grey letters are silent; dotted letters only nasalise the vowel before them.')}</span>` : ''}${custom ? ` <a href="#" id="vreset">${bi('恢复课本顺序', 'Restore book order')}</a>` : ''}</p>` +
         groups.map(g => `<div class="vgroup" data-g="${esc(g.g || '')}"><h3>${esc(g.g || '')}</h3>${g.items.map(v => `
-          <div class="vrow ${hide ? 'hidefr' : ''} ${mst.w[v.fr] ? 'mastered' : ''} ${gender(v.pos) ? 'g-' + gender(v.pos) : ''}" data-say="${esc(forms(v.fr).say)}" data-fr="${esc(v.fr)}">
+          <div class="vrow${gx(v.pos)} ${hide ? 'hidefr' : ''} ${mst.w[v.fr] ? 'mastered' : ''} ${gender(v.pos) ? 'g-' + gender(v.pos) : ''}" data-say="${esc(forms(v.fr).say)}" data-fr="${esc(v.fr)}">
             <span class="vdrag" title="${bi('拖动调整顺序', 'Drag to reorder')}" aria-label="${bi('拖动调整顺序', 'Drag to reorder')}">⠿</span>
             <span class="play">${ICON.play}</span>
             <span class="vfr" lang="fr">${artHint(v)}${frHTML(v.fr)}${window.DEEP && DEEP[v.fr] ? `<button class="deep-btn" data-deep="${esc(v.fr)}" lang="zh">${bi('详解', 'In depth')}</button>` : ''}</span>
@@ -2553,7 +2555,7 @@
       box.innerHTML = `<div class="drill">
         <div class="count">${i + 1} / ${queue.length}</div>
         <div class="bar"><i style="width:${i / queue.length * 100}%"></i></div>
-        <div class="prompt"><div class="pmean">${MEAN(v)}</div>
+        <div class="prompt${gx(v.pos)}"><div class="pmean">${MEAN(v)}</div>
           <div class="ppos">${playBtn(forms(v.fr).say)} <span class="pos ${gender(v.pos) ? 'g-' + gender(v.pos) : ''}">${esc(v.pos)}</span>${v.g ? ' · ' + esc(tr(v.g)) : ''}</div></div>
         <input class="answer-in" id="ans" lang="fr" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${bi('用法语写…', 'Write in French…')}">
         <div class="drill-actions">
@@ -2622,7 +2624,7 @@
       else SRS.hit(it);
       fb.innerHTML = `<div class="feedback ${r}">
         <span class="lab">${good ? (hintN ? '对了（用了提示）' : '完全正确') : r === 'accent' ? '差一点：注意重音符号' : giveUp ? '答案' : '不对，正确答案是'}</span>
-        <div class="ans" lang="fr">${playBtn(forms(v.fr).say)} ${r === 'accent' ? accentDiff(inp.value.trim(), v.fr) : frHTML(v.fr)}</div>
+        <div class="ans${gx(v.pos)}" lang="fr">${playBtn(forms(v.fr).say)} ${r === 'accent' ? accentDiff(inp.value.trim(), v.fr) : frHTML(v.fr)}</div>
         ${!good && !giveUp && r !== 'accent' ? dysCompare(closest(v.fr, inp.value), inp.value) : ''}
         ${r === 'accent' ? `<span class="lab acc-note">${bi('拼写正确，注意标出的重音符号', 'Spelling is right — check the marked accents')}</span>` : ''}
         ${test && missN ? `<span class="lab">${toBook ? bi(`首测已经错了 ${missN} 次，加入错题本了`, `Missed ${missN} times in first tests — added to the mistake book`) : missN >= 3 ? bi('已经在错题本里了', 'Already in the mistake book') : bi(`首测错了 ${missN} 次（错满 3 次会进错题本）`, `Missed ${missN} times in first tests (3 puts it in the mistake book)`)}</span>` : ''}
