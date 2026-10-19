@@ -2205,7 +2205,7 @@
     // show the answer for a moment, then hide it and write it from memory
     const peek = (e, auto = false) => {
       if (answered) return;
-      peeked = true;
+      peeked = !auto; // only a look the learner asked for delays the schedule; the automatic one is just a study aid
       const inp = $('#ans', box), p = $('#peek', box), ans = answerOf(e);
       inp.value = ''; inp.disabled = true; $('#stuck', box).disabled = true;
       p.innerHTML = `<div class="peek-card"><span class="lab">${auto ? bi('这个错过好几次了，先看清楚再写', 'Missed this a few times — look first, then write') : bi('看清楚，记住它', 'Look carefully and remember it')}</span>
@@ -2233,13 +2233,13 @@
       if (!val.trim() && !giveUp) return;
       answered = true;
       const say = e.kind === 'word' ? forms(e.fr).say : e.fr;
-      let good, html;
+      let good, html, r = 'ok';
       if (e.kind === 'sentence') {
         const d = diff(e.fr, giveUp ? '' : val);
         good = d.perfect; html = giveUp ? esc(e.fr) : marked(e.fr, d.st);
         if (!good && !giveUp) ERRS.sentence(e.fr, val);
       } else {
-        const r = giveUp ? 'bad' : checkWord(val, e.fr);
+        r = giveUp ? 'bad' : checkWord(val, e.fr);
         if (r !== 'ok' && !giveUp) ERRS.typed(e.kind === 'word' && e.pos !== '变位' ? closest(e.fr, val) : e.fr, val);
         good = r === 'ok'; html = (e.kind === 'word' ? frHTML(e.fr) : esc(e.fr)) + (r === 'accent' ? ' <span class="kbd">（注意重音）</span>' : '');
       }
