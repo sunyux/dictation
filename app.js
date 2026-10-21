@@ -23,7 +23,23 @@
   const BI = {};
   const bi = (zh, en) => { BI[zh] = en; return L() === 'en' ? en : zh; };
   window.NH_BI = (zh, en) => bi(zh, en);
+  const CL = () => L() === 'en' ? ': ' : '：';   // colon that matches the language
+  // review items saved before English glosses existed: look the English up from the book
+  let ENIDX = null;
+  const enFill = o => {
+    if (o.en || !o.fr) return o;
+    if (!ENIDX) {
+      ENIDX = new Map();
+      for (const b of BOOKS) for (const u of b.units) for (const l of u.lecons) {
+        l.vocab.forEach(v => { if (v.en) ENIDX.set(`${b.id}|${l.n}|w|${v.fr}`, v.en); });
+        l.text.forEach(r => { if (r.en && r.fr) ENIDX.set(`${b.id}|${l.n}|s|${r.fr.replace(/^–\s*/, '')}`, r.en.replace(/^–\s*/, '')); });
+      }
+    }
+    const en = ENIDX.get(`${o.book}|${o.n}|${o.kind === 'sentence' ? 's' : 'w'}|${o.fr}`);
+    return en ? { ...o, en } : o;
+  };
   const G = o => {
+    o = enFill(o);
     const zh = esc(o.zh || ''), en = esc(o.en || '');
     if (L() === 'en') return en || zh;
     if (L() === 'zhen' && en) return `${zh}<span class="en-gloss" lang="en">${en}</span>`;
@@ -31,11 +47,12 @@
   };
   // meaning: 中英法 shows both, 中法 Chinese only, 英法 English only (falling back to Chinese when there is no English)
   const MEAN = o => {
+    o = enFill(o);
     const zh = o.zh && !(L() === 'en' && o.en) ? `<span class="m-zh">${esc(o.zh)}</span>` : '';
     const en = o.en && L() !== 'zh' ? `<span class="m-en" lang="en">${esc(o.en)}</span>` : '';
     return zh + en;
   };
-  const Gt = o => L() === 'en' ? (o.en || o.zh || '') : (o.zh || '');   // plain text
+  const Gt = o => { o = enFill(o); return L() === 'en' ? (o.en || o.zh || '') : (o.zh || ''); };   // plain text
   const H = r => esc(L() === 'en' ? (r.hen || r.h) : r.h);
   // 英法 mode: translate the remaining Chinese UI text fragments (see i18n.js)
   const CJK = /[\u3400-\u9fff\uff08-\uff1f]/;
@@ -85,6 +102,7 @@
   }).observe(document.body, { childList: true, subtree: true, characterData: true });
   // attach English glosses to the book data
   (function () {
+    if (L() === 'en') { for (const b of BOOKS) b.title = 'Hello French 1'; if (window.SOUNDS) window.SOUNDS.title = 'French sounds'; }
     const EV = window.EN_V || {}, ET = window.EN_T || {};
     for (const b of BOOKS) for (const u of b.units) for (const l of u.lecons) {
       l.vocab.forEach(v => { v.en = EV[l.n + ':' + v.fr] || EV[v.fr] || ''; });
@@ -291,7 +309,7 @@
     const pct = Math.min(1, xp / g), C = 2 * Math.PI * 9;
     el.innerHTML = `<svg viewBox="0 0 24 24" class="ring" aria-hidden="true"><circle cx="12" cy="12" r="9" class="ring-bg"/><circle cx="12" cy="12" r="9" class="ring-fg ${pct >= 1 ? 'full' : ''}" stroke-dasharray="${C * pct} ${C}"/></svg>
       <span class="st-txt"><b>${s}</b> 天 · ${xp}/${g}</span>`;
-    el.title = `连续 ${s} 天达成目标 · 今日 ${xp}/${g} 分`;
+    el.title = bi(`连续 ${s} 天达成目标 · 今日 ${xp}/${g} 分`, `${s}-day streak · today ${xp}/${g} pts`);
   }
 
   /* ---------- backup: full export / import, optional auto-save to a local file ---------- */
@@ -651,7 +669,7 @@
         <button class="btn ghost" id="cl-use">${bi('用这个码', 'Use this code')}</button></div>`;
     const last = store.get('lastSync', '');
     const st = CLOUD.status === 'syncing' ? '正在同步…' : CLOUD.status === 'error' ? '同步失败' : last ? `已同步 · ${last.slice(0, 16).replace('T', ' ')}` : '';
-    const who = CLOUD.user.isAnonymous ? `${bi('同步码', 'Sync code')}：<b class="sync-code" lang="en">${esc(CLOUD.code())}</b>` : `已登录：<b>${esc(CLOUD.user.email || CLOUD.user.displayName || '')}</b>`;
+    const who = CLOUD.user.isAnonymous ? `${bi('同步码', 'Sync code')}${CL()}<b class="sync-code" lang="en">${esc(CLOUD.code())}</b>` : `已登录：<b>${esc(CLOUD.user.email || CLOUD.user.displayName || '')}</b>`;
     return `<div class="toolbar"><span>${who}</span>
       <span class="kbd">${st}</span><span class="spacer"></span>
       ${CLOUD.user.isAnonymous ? `<button class="btn ghost small" id="cl-copy">${bi('复制', 'Copy')}</button>` : ''}<button class="btn ghost small" id="cl-now">立即同步</button><button class="btn ghost small" id="cl-out">退出登录</button></div>
@@ -685,7 +703,7 @@
   function viewVerbs(sel) {
     const D = window.VERBDICT;
     if (!D) { main.innerHTML = '<p class="notice">动词词典没有加载。</p>'; return; }
-    document.title = bi('动词词典', 'Verb dictionary') + ' · 你好法语';
+    document.title = bi('动词词典', 'Verb dictionary') + bi(' · 你好法语', ' · Hello French');
     const strip2 = v => v.replace(/^se |^s'/, '');
     const list = D.list().sort((a, b) => strip2(a).localeCompare(strip2(b), 'fr'));
     // which leçon of the book each verb comes from
@@ -764,7 +782,7 @@
 
   function soundCover(tag = 'a') {
     return `<${tag} class="cover sons" ${tag === 'a' ? 'href="#/sons"' : ''} aria-label="${esc(SB().title)}">
-      <div class="c-zh">法语<br>发音</div><div class="c-fr" lang="fr">${esc(SB().fr)}</div><div class="c-num" lang="fr">ɛ̃</div>
+      <div class="c-zh">${bi('法语<br>发音', 'French<br>sounds')}</div><div class="c-fr" lang="fr">${esc(SB().fr)}</div><div class="c-num" lang="fr">ɛ̃</div>
       <svg viewBox="0 0 200 90" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" aria-hidden="true">
         <path d="M20 70 Q40 20 60 70 T100 70 T140 70 T180 70" /><path d="M20 80 Q50 50 80 80 T140 80 T200 80" stroke-width=".7"/>
         <path d="M150 20 q8 -8 16 0 q-8 10 -16 0z M170 34 q6 -6 12 0 q-6 8 -12 0z" stroke-width=".8"/>
@@ -1099,7 +1117,7 @@
   const TENSE_NAME = { present: ['现在时', 'present'], imparfait: ['未完成过去时', 'imperfect'], futur: ['简单将来时', 'future'], pp: ['过去分词', 'past participle'] };
   const PERSON = ['je', 'tu', 'il/elle', 'nous', 'vous', 'ils/elles'];
   function lookupHTML(q) {
-    const raw = q.trim(); if (!raw) return `<p class="hint-text" style="margin:8px 2px">${bi('输入法语、中文或英文都可以，比如 chapeau、帽子、hat、prennent。', 'Type French, Chinese or English — e.g. chapeau, 帽子, hat, prennent.')}</p>`;
+    const raw = q.trim(); if (!raw) return `<p class="hint-text" style="margin:8px 2px">${bi('输入法语、中文或英文都可以，比如 chapeau、帽子、hat、prennent。', 'Type French or English — e.g. chapeau, hat, prennent.')}</p>`;
     const k = loose(raw), { items, forms2inf } = lookupIndex();
     const word = new RegExp('(^|[^a-z])' + k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '([^a-z]|$)');
     const score = x => x.kfr === k ? 0 : x.kfr.startsWith(k) ? 1 : word.test(x.kmean) ? 1.5 : x.kfr.includes(k) ? 2 : x.kmean.includes(k) ? 3 : 9;
@@ -1168,7 +1186,7 @@
   }, true);
 
   function viewMine(mode) {
-    document.title = bi('生词本', 'My words') + ' · 你好法语';
+    document.title = bi('生词本', 'My words') + bi(' · 你好法语', ' · Hello French');
     const words = MINE.all();
     main.innerHTML = `
       <header class="lecon-head"><p class="kicker" lang="fr">Mon carnet</p><h1>${bi('生词本', 'My words')}</h1>
@@ -1435,7 +1453,7 @@
         </div>
         <aside class="j-hints">
           <section><h3>${bi('句子开头', 'Starters')}</h3><div class="chips" id="j-starters">${p().starters.map(s => `<button class="wchip j-ins" data-ins="${esc(s.replace(/…/g, '').trim())}"><span lang="fr">${esc(s)}</span></button>`).join('')}</div></section>
-          ${p().lecons.length ? `<section><h3>${bi('可以用的词', 'Useful words')} <small>L${p().lecons.join(', L')}</small></h3><div class="chips j-words">${p().lecons.flatMap(n => (findLecon(BOOKS[0], n) || { lecon: { vocab: [] } }).lecon.vocab).filter(v => !/^\p{Lu}/u.test(v.fr)).slice(0, 36).map(v => `<button class="wchip j-ins" data-ins="${esc(forms(v.fr).accept.filter(x => !/[(/]/.test(x))[0] || v.fr)}" title="${esc(v.zh)}"><span lang="fr">${esc(v.fr)}</span><small>${G(v)}</small></button>`).join('')}</div></section>` : ''}
+          ${p().lecons.length ? `<section><h3>${bi('可以用的词', 'Useful words')} <small>L${p().lecons.join(', L')}</small></h3><div class="chips j-words">${p().lecons.flatMap(n => (findLecon(BOOKS[0], n) || { lecon: { vocab: [] } }).lecon.vocab).filter(v => !/^\p{Lu}/u.test(v.fr)).slice(0, 36).map(v => `<button class="wchip j-ins" data-ins="${esc(forms(v.fr).accept.filter(x => !/[(/]/.test(x))[0] || v.fr)}" title="${esc(Gt(v))}"><span lang="fr">${esc(v.fr)}</span><small>${G(v)}</small></button>`).join('')}</div></section>` : ''}
           <section><h3>${bi('语法提示', 'Grammar tip')}</h3><p class="j-tip">${P2(p().tip)}</p></section>
           <section><details><summary>${bi('看一段例文', 'See an example')}</summary><p lang="fr" class="j-ex">${esc(p().example)} ${playBtn(p().example)}</p></details></section>
           <section><h3>${bi('怎么说？', 'How do I say…?')}</h3><div class="j-how"><input id="j-q" class="typed-recite" placeholder="${bi('输入中文或英文', 'Chinese or English')}"><button class="btn small" id="j-qgo">→ FR</button></div><div id="j-qres" class="j-qres"></div></section>
@@ -1493,7 +1511,7 @@
   }
 
   function viewTools(tab, q) {
-    document.title = bi('工具', 'Tools') + ' · 你好法语';
+    document.title = bi('工具', 'Tools') + bi(' · 你好法语', ' · Hello French');
     const pair = store.get('trpair', 'fr|zh-CN');
     main.innerHTML = `
       <p class="kicker" lang="fr">Outils</p><h1 style="font-size:44px">${bi('工具', 'Tools')}</h1>
@@ -1562,7 +1580,7 @@
   }
 
   function viewMe() {
-    document.title = '我的 · 打卡与邮册';
+    document.title = bi('我的 · 打卡与邮册', 'Streak & stamps');
     const log = XP.log(), g = XP.goal(), got = store.get('stamps', {});
     const book = BOOKS[0], lecons = book.units.flatMap(u => u.lecons);
     // 12-week calendar
@@ -1574,7 +1592,7 @@
     const fsOK = 'showSaveFilePicker' in window;
     main.innerHTML = `
       <p class="kicker" lang="fr">Mon carnet</p>
-      <h1 style="font-size:44px">我的打卡与邮册</h1>
+      <h1 style="font-size:44px">${bi('我的打卡与邮册', 'My streak & stamp album')}</h1>
       <div class="review-stats">
         <div><b>${s}</b><span>连续天数</span></div>
         <div><b>${XP.best()}</b><span>最长连续</span></div>
@@ -1770,10 +1788,10 @@
     const exHTML = d => `<ul class="dp-ex">${d.ex.map(([f, z]) => `<li><span lang="fr">${playBtn(f)} ${esc(f)}</span><small>${esc(z)}</small></li>`).join('')}</ul>`;
     const coHTML = d => `<ul class="dp-co">${d.co.map(([f, z]) => `<li><b lang="fr">${esc(f)}</b> ${esc(z)}</li>`).join('')}</ul>`;
     const syHTML = d => `<table class="dp-sy">${d.sy.map(([w, r, n]) => `<tr><td lang="fr">${esc(w)}</td><td class="dp-reg">${esc(r)}</td><td>${esc(n)}</td></tr>`).join('')}</table>`;
-    const tryHTML = (q, d) => `<div class="dp-try"><p class="dp-q">${bi('试着翻译', 'Translate')}：<b>${esc(q)}</b></p>
+    const tryHTML = (q, d) => `<div class="dp-try"><p class="dp-q">${bi('试着翻译', 'Translate')}${CL()}<b>${esc(q)}</b></p>
           <textarea class="answer-in" lang="fr" rows="2" autocapitalize="off" spellcheck="false" placeholder="${bi('用法语写…', 'Write in French…')}"></textarea>
           <button class="btn small dp-show">${bi('对照参考答案', 'Compare with the answer')}</button>
-          <div class="dp-ans" hidden><p lang="fr">${playBtn(d.tr.fr)} <b>${esc(d.tr.fr)}</b></p><p lang="fr" class="dp-alt">${bi('更口语', 'More casual')}：${esc(d.tr.alt)}</p><p class="dp-note">${esc(d.tr.note)}</p></div></div>`;
+          <div class="dp-ans" hidden><p lang="fr">${playBtn(d.tr.fr)} <b>${esc(d.tr.fr)}</b></p><p lang="fr" class="dp-alt">${bi('更口语', 'More casual')}${CL()}${esc(d.tr.alt)}</p><p class="dp-note">${esc(d.tr.note)}</p></div></div>`;
     const sec = (n, zh, frT, body) => `<section class="dp-sec"><h3><b>${n}</b> ${zh} <span lang="fr">${frT}</span></h3>${body}</section>`;
     const ov = document.createElement('div');
     ov.className = 'deep-ov';
@@ -1912,7 +1930,7 @@
 
   function coverHTML(book, tag = 'a') {
     return `<${tag} class="cover" ${tag === 'a' ? `href="#/${book.id}"` : ''} aria-label="${esc(book.title)}">
-      <div class="c-zh">你好<br>法语</div><div class="c-fr" lang="fr">${esc(book.fr)}</div><div class="c-num">1</div>
+      <div class="c-zh">${bi('你好<br>法语', 'Hello<br>French')}</div><div class="c-fr" lang="fr">${esc(book.fr)}</div><div class="c-num">1</div>
       <svg viewBox="0 0 200 90" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" aria-hidden="true">
         <path d="M0 88h200M8 88V52h26v36M12 52l9-12 9 12M14 60h5v6h-5zM24 60h5v6h-5zM14 72h5v6h-5zM24 72h5v6h-5z"/>
         <path d="M44 88V38h34v50M44 38l17-14 17 14M50 46h7v9h-7zM65 46h7v9h-7zM50 62h7v9h-7zM65 62h7v9h-7zM57 78h8v10h-8z"/>
@@ -1961,8 +1979,8 @@
       return parts[1] ? viewSoundLesson(parts[1], parts[2] || 'learn') : viewSounds();
     }
     if (parts[0] === 'verbes') { crumbs.innerHTML = `<span>${bi('动词词典', 'Verb dictionary')}</span>`; return viewVerbs(decodeURIComponent(parts[1] || '')); }
-    if (parts[0] === 'me') { crumbs.innerHTML = '<span>我的打卡与邮册</span>'; return viewMe(); }
-    if (parts[0] === 'review') { crumbs.innerHTML = '<span>错题本 · 每日复习</span>'; return viewReview(parts[1]); }
+    if (parts[0] === 'me') { crumbs.innerHTML = `<span>${bi('我的打卡与邮册', 'My streak & stamp album')}</span>`; return viewMe(); }
+    if (parts[0] === 'review') { crumbs.innerHTML = `<span>${bi('错题本 · 每日复习', 'Mistake book · daily review')}</span>`; return viewReview(parts[1]); }
     const book = findBook(parts[0]);
     if (!book) { location.hash = '#/'; return; }
     if (parts.length === 1) {
@@ -1997,10 +2015,10 @@
   const triesHTML = e => {
     const t = wrongTries(e); if (!t.length) return '';
     const cut = x => x.length > 60 ? x.slice(0, 58) + '…' : x;
-    return `<div class="err-tries">${bi('写成过', 'You wrote')}：${t.map(x => `<s lang="fr">${esc(cut(x))}</s>`).join('<span class="sep">·</span>')}</div>`;
+    return `<div class="err-tries">${bi('写成过', 'You wrote')}${CL()}${t.map(x => `<s lang="fr">${esc(cut(x))}</s>`).join('<span class="sep">·</span>')}</div>`;
   };
   function viewReview(sub) {
-    document.title = '错题本 · 每日复习';
+    document.title = bi('错题本 · 每日复习', 'Mistake book · daily review');
     const KIND = { word: '单词', cloze: '填空', sentence: '句子' };
     const db = SRS.all();
     const items = Object.entries(db).map(([id, e]) => ({ id, ...e }));
@@ -2073,7 +2091,7 @@
     const r = at.length ? DYS.spots(target, at, L()) : null;
     return r ? { ...r, target } : null;
   }
-  const spotLine = e => { const r = spotInfo(e); return r ? `<p class="err-spot">${bi('提醒', 'Watch')}：${esc(r.text)}</p>` : ''; };
+  const spotLine = e => { const r = spotInfo(e); return r ? `<p class="err-spot">${bi('提醒', 'Watch')}${CL()}${esc(r.text)}</p>` : ''; };
   const dysCompare = (c, typed) => window.DYS && typed && String(typed).trim() ? DYS.compare(c, typed, L()) : '';
   const dysTools = () => window.DYS ? `<button class="btn ghost small" id="dys-spell" type="button">${bi('读字母', 'Say the letters')}</button><button class="btn ghost small" id="dys-tiles" type="button">${bi('字母拼块', 'Letter tiles')}</button>` : '';
   function bindDys(box, getWord, inp) {
@@ -2277,7 +2295,7 @@
 
   function viewHome() {
     const book = BOOKS[0];
-    document.title = '你好法语 · 默写本';
+    document.title = bi('你好法语 · 默写本', 'Hello French · Cahier de dictée');
     main.innerHTML = `
       <section class="home">
         <div class="shelf">${coverHTML(book)}${soundCover()}</div>
@@ -2285,7 +2303,7 @@
           <p class="kicker" lang="fr">Cahier de dictée</p>
           <h1>${bi('今天写哪一课？', 'Which leçon today?')}</h1>
           <p>${bi('照着默写讲义整理的。法语点一下就会读。', 'Built from your dictation handouts. Tap any French to hear it.')}</p>
-          <div class="toolbar"><a class="btn" href="#/${book.id}">打开《${esc(book.title)}》</a><a class="btn ghost" href="#/sons">打开《${esc(SB().title)}》</a><a class="btn ghost" href="#/journal">写今天的法语日记</a></div>
+          <div class="toolbar"><a class="btn" href="#/${book.id}">${bi(`打开《${esc(book.title)}》`, `Open ${esc(book.title)}`)}</a><a class="btn ghost" href="#/sons">${bi(`打开《${esc(SB().title)}》`, `Open ${esc(SB().title)}`)}</a><a class="btn ghost" href="#/journal">写今天的法语日记</a></div>
           ${backupNag()}${reviewBanner()}
         </div>
       </section>`;
@@ -2299,7 +2317,7 @@
   }
 
   function viewBook(book) {
-    document.title = book.title + ' · 默写本';
+    document.title = book.title + bi(' · 默写本', ' · Dictation');
     const PARTS = ['vocab', 'phrases', 'full', 'recite'];
     main.innerHTML = `
       <div class="book-head">${coverHTML(book, 'div')}<div><p class="kicker" lang="fr">${esc(book.fr)}</p><h1>${esc(book.title)}</h1></div></div>
@@ -2318,7 +2336,7 @@
           }).join('')}</div>
         </section>`).join('')}
       <p class="footer-note">进度保存在这台设备的浏览器里。</p>
-      <p class="credit">${bi('图片来源', 'Image credits')}：<a href="https://commons.wikimedia.org/wiki/File:ARCHITECTURE_ORDERS_Greeks_Etruscan_Roman_(Doric_Ionic_Corinthian_Tuscan_Composite)_by_Paolo_Villa_ENG_edition.pdf" target="_blank" rel="noopener">柱式 Paolo Villa, CC BY-SA 4.0</a> · <a href="https://commons.wikimedia.org/wiki/Category:Urania%27s_Mirror" target="_blank" rel="noopener">Urania's Mirror, Sidney Hall 1825（公有领域）</a></p>`;
+      <p class="credit">${bi('图片来源', 'Image credits')}${CL()}<a href="https://commons.wikimedia.org/wiki/File:ARCHITECTURE_ORDERS_Greeks_Etruscan_Roman_(Doric_Ionic_Corinthian_Tuscan_Composite)_by_Paolo_Villa_ENG_edition.pdf" target="_blank" rel="noopener">${bi('柱式', 'Architectural orders')} Paolo Villa, CC BY-SA 4.0</a> · <a href="https://commons.wikimedia.org/wiki/Category:Urania%27s_Mirror" target="_blank" rel="noopener">Urania's Mirror, Sidney Hall 1825 ${bi('（公有领域）', '(public domain)')}</a></p>`;
   }
 
   const TABS = [['vocab', '词汇', 'Vocabulary'], ['phrases', '句子', 'Sentences'], ['full', '全文默写', 'Full dictation'], ['recite', '背诵', 'Recite']];
@@ -3153,7 +3171,13 @@
 
   function renderLang() {
     const el = $('#langsw'); if (!el) return;
-    el.innerHTML = [['zhen', '中英法'], ['zh', '中法'], ['en', '英法']].map(([k, t]) => `<button data-lang="${k}" aria-pressed="${L() === k}">${t}</button>`).join('');
+    el.innerHTML = [['zhen', '中英法', 'ZH · EN · FR'], ['zh', '中法', 'ZH · FR'], ['en', '英法', 'EN · FR']].map(([k, t, e]) => `<button data-lang="${k}" aria-pressed="${L() === k}">${L() === 'en' ? e : t}</button>`).join('');
+    if (L() === 'en') {
+      const set = (sel, a, v) => { const x = document.querySelector(sel); if (x) x.setAttribute(a, v); };
+      set('#crumbs', 'aria-label', 'Location'); set('#langsw', 'aria-label', 'Language mode');
+      set('#focus-btn', 'aria-label', 'Focus mode'); set('#focus-btn', 'title', 'Focus mode');
+      const bz = document.querySelector('.brand-zh'); if (bz) bz.textContent = 'Hello French';
+    }
     document.documentElement.dataset.lang = L();
     $$('button', el).forEach(b => b.onclick = () => { settings.lang = b.dataset.lang; saveSettings(); location.reload(); });
   }

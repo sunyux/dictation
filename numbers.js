@@ -37,7 +37,7 @@
     const out = [];
     if (r >= 70 && r < 80) out.push(`${r} = 60 + ${r - 60} → soixante + ${below100(r - 60)}`);
     if (r >= 80) out.push(`${r} = 4 × 20${r > 80 ? ' + ' + (r - 80) : ''} → quatre-vingt${r === 80 ? 's' : '-' + below100(r - 80)}`);
-    if (r % 10 === 1 && r > 20 && r < 80) out.push(`${r}：个位是 1 时用 « et »（${below100(r)}）| 1 in the units: « et »`);
+    if (r % 10 === 1 && r > 20 && r < 80) out.push(`${r}：个位是 1 时用 « et »（${below100(r)}） | 1 in the units: « et »`);
     if (r === 81 || r === 91) out.push(`81、91 不用 et | 81 and 91 take no « et »`);
     if (n >= 200 && n % 100 === 0 && n < 1000) out.push(`整百加 s：${below1000(n)} | round hundreds take an s`);
     if (n >= 1000) out.push(`mille 永远不加 s | mille never takes an s`);
