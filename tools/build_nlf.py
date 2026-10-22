@@ -2,8 +2,14 @@
 and tools/nlf/uN.txt (zh meaning, zh example, memory tips; one line per sheet row, same order)."""
 import json, re, os, sys
 HERE = os.path.dirname(__file__)
-OUT = os.environ.get('OUT') or os.path.join(HERE, '..', 'nlf-data.js')
-sheet = json.load(open(os.path.join(HERE, 'nlf', 'sheet.json')))
+KEY = sys.argv[1] if len(sys.argv) > 1 else 'a1'
+CFG = {'a1': dict(sheet='sheet.json', pre='u', base=100, id='nlf', level='A1', title='NLF · Road to A1', zh='NLF · 通往 A1', out='nlf-data.js'),
+       'a2': dict(sheet='b2.json', pre='a2_u', base=200, id='nlf-a2', level='A2', title='NLF · Road to A2', zh='NLF · 通往 A2', out='nlf-a2.js'),
+       'b': dict(sheet='b3.json', pre='b_u', base=300, id='nlf-b', level='B1/B2', title='NLF · Road to B1/B2', zh='NLF · 通往 B1/B2', out='nlf-b.js')}[KEY]
+sheet = json.load(open(os.path.join(HERE, 'nlf', CFG['sheet'])))
+if KEY == 'a1': sheet = {str(k): v for k, v in sheet.items()}
+else: sheet = {k.replace('Unité ', ''): v for k, v in sheet.items()}
+if KEY != 'a1': THEMES = THEMES_EN = None
 
 THEMES = {
  0: ('Les bases', '基础：问候、时间、季节'), 1: ('Se présenter', '自我介绍、爱好、国家'),
@@ -15,11 +21,12 @@ THEMES = {
 THEMES_EN = {0: 'Basics: greetings, time, seasons', 1: 'Introductions, hobbies, countries', 2: 'Family, neighbourhood, daily activities',
  3: 'Food, shopping, restaurants', 4: 'City, transport, directions', 5: 'Clothes, colours, objects', 6: 'Looks, personality, daily routine',
  7: 'Home, furniture, equipment', 8: 'Health, body, sport', 9: 'Holidays, accommodation, nature', 10: 'Work, study, campus'}
-POS = {'adj': ('形容词', 'adj.'), 'adv': ('副词', 'adv.'), 'v': ('动词', 'v.'), 'loc': ('冠词、感叹词、短语', 'loc.'),
+POS = {'interj': ('冠词、感叹词、短语', 'interj.'), 'det': ('冠词、感叹词、短语', 'dét.'), 'conj': ('介词、连词', 'conj.'), 'adj': ('形容词', 'adj.'), 'adv': ('副词', 'adv.'), 'v': ('动词', 'v.'), 'loc': ('冠词、感叹词、短语', 'loc.'),
        'prep': ('介词、连词', 'prép.'), 'pron': ('代词', 'pron.'), 'num': ('形容词', 'adj.num.'),
        'm': ('阳性名词', 'n.m.'), 'f': ('阴性名词', 'n.f.'), 'n': ('名词', 'n.'), 'pl': ('名词', 'n.pl.')}
 FIX_FR = {'Forte(e)': 'Fort(e)', 'Une étudiant(e)': 'Un(e) étudiant(e)', 'Un visioconférence / visio / zoom / appel vidéo': 'Une visioconférence / visio / zoom / appel vidéo',
-          'Une bande dessinée  (BD)': 'Une bande dessinée (BD)'}
+          'Une bande dessinée  (BD)': 'Une bande dessinée (BD)',
+          'Uncycliste': 'Un cycliste', 'Une/Une documentariste': 'Un/Une documentariste', 'Une/Une virtuose': 'Un/Une virtuose', 'Peser sur la moral': 'Peser sur le moral', 'Individualiste.': 'Individualiste', 'Intial(e)': 'Initial(e)', 'Une giffle': 'Une gifle', 'Un troupe (de théâtre)': 'Une troupe (de théâtre)', 'Renouveller': 'Renouveler', 'Un puit': 'Un puits', 'Une flux': 'Un flux', 'Grarantir': 'Garantir', 'Se pencher sura': 'Se pencher sur', 'Se réléver': 'Se révéler', 'La tranquilité': 'La tranquillité', "Le virus du voyage.": 'Le virus du voyage', 'Un(e) salarié(eà': 'Un(e) salarié(e)', 'Raconter des salades.': 'Raconter des salades', "C'est pas la mer à boire.": "C'est pas la mer à boire", 'Ça ne casse pas trois pattes à un canard.': 'Ça ne casse pas trois pattes à un canard', 'Après la pluie vient le beau temps.': 'Après la pluie vient le beau temps', 'Boulversé': 'Bouleversé', "S'inscire": "S'inscrire", 'Un maîtresse': 'Une maîtresse', 'Un abeille': 'Une abeille', 'Un discothèque / Un club / Une boîte de nuit': 'Une discothèque / Un club / Une boîte de nuit'}
 FIX_EX = {"J'ai acheté mes billets pour le concert de demain?.": "J'ai acheté mes billets pour le concert de demain."}
 ACC_EXTRA = {  # hand-set accepted answers where the sheet wording is not a plain "A / B"
  'X fois par ...': ['X fois par', 'x fois par'], 'Avoir mal à ...': ['Avoir mal à'], 'Qui ?': ['Qui'],
@@ -52,7 +59,8 @@ ACC_EXTRA = {  # hand-set accepted answers where the sheet wording is not a plai
  "L'aller / Le retour / Un aller-retour": ["L'aller", 'Le retour', 'Un aller-retour', "L'aller / Le retour / Un aller-retour"],
  'En avoir assez / En avoir marre / Ne plus en pouvoir': ['En avoir assez', 'En avoir marre', 'Ne plus en pouvoir'],
  'Un(e) plombier / plombière': ['Un plombier', 'Une plombière', 'Un plombier / plombière', 'Un(e) plombier / plombière'],
- 'Une ordonnance': None,
+ 'Une ordonnance': None, 'Des peines, des chagrins': ['Des peines', 'Des chagrins', 'Des peines, des chagrins'], "Dieu (avec un D majuscule et pas d'article)": ['Dieu'], 'Boire "cul sec"': ['Boire cul sec', 'Boire "cul sec"'],
+ 'Faire du [taille]': ['Faire du', 'Faire du 42'], 'Sortir + COD': ['Sortir'], 'Un T1, un T2, ...': ['Un T1', 'Un T2', 'Un T1, un T2'],
 }
 def clean(s): return re.sub(r'\s+', ' ', s.replace('\\', '')).strip()
 def strip_q(s): return s.replace('"', '') if s.count('"') == 2 and s[0] == '"' and s[-1] == '"' else s
@@ -60,7 +68,8 @@ def article_pos(fr, cat):
     if cat.startswith('Adj'): return 'adj'
     if cat.startswith('Adv'): return 'adv'
     if cat.startswith('Ver'): return 'v'
-    if cat.startswith(('Exp', 'For', 'Que')): return 'loc'
+    if cat.startswith(('Exp', 'For', 'Que', 'Loc')): return 'loc'
+    if cat.startswith('Con'): return 'conj'
     if cat.startswith('Pro'): return 'pron'
     if cat.startswith('Pr'): return 'prep'
     f = fr.lower()
@@ -81,6 +90,11 @@ def accept(fr):
     for part in [p.strip() for p in re.split(r'\s+/\s+', fr)]:
         out += variants(part)
     # French words like "Brésilien(ne)" -> also "Brésilienne"; handled by variants()
+    for x in list(out):   # quotes, "a/b" inside a phrase
+        out.append(x.replace('"', ''))
+        m = re.search(r'(\S*?)(\w+)/(\w+)(\S*)', x)
+        if m and ' / ' not in x:
+            out += [x[:m.start()] + m.group(1) + m.group(2) + m.group(4) + x[m.end():], x[:m.start()] + m.group(1) + m.group(3) + m.group(4) + x[m.end():]]
     out = [clean(x) for x in out if x]
     return list(dict.fromkeys(out))
 def say_of(fr):
@@ -112,15 +126,30 @@ BLANK = {'Un an': 'ans', 'Avoir': 'ai', 'Être': 'suis', 'La copine / La petite-
  'En avoir assez / En avoir marre / Ne plus en pouvoir': 'marre', 'Se sentir': 'sens', 'Sentir': 'sens',
  "L'aller / Le retour / Un aller-retour": 'aller-retour', 'Biologique': 'bio', 'Le travail / Le bureau': 'bureau',
  'Les mathématiques (les maths)': 'maths', 'Une visioconférence / visio / zoom / appel vidéo': 'visio'}
+BLANK2 = ({'Une discothèque / Un club / Une boîte de nuit': 'boîte de nuit', 'Naître': 'né', 'Ressentir': 'ressens', 'Venir': 'venir',
+ 'Un baiser / Un bisou': 'bisou', "S'asseoir": 'asseoir', 'Se souvenir': 'souviens', 'Frais / Fraîche': 'fraîche', 'Faire le fou': 'fous',
+ 'Une couette / Une couverture': 'couverture', 'Paraître': 'parais', 'Sécher': 'sèchent', 'Sortir + COD': 'sors',
+ 'Un créateur / Une créatrice (de mode)': 'créatrice', 'Une mule / Un âne': 'âne', 'Faire du [taille]': '42',
+ 'La station spatiale internationale (ISS)': 'ISS', 'Un cosmonaute / Un astronaute': 'astronaute', 'Vegan / Végan / Végane': 'végan',
+ 'Protéger': 'protège', '"Liker" / Aimer': 'liké', 'Recevoir': 'reçu', 'Suivre': 'suis', 'Faire la une / Être à la une': 'la une',
+ 'Régler (payer)': 'règle', '(Secteur) Le bien être': 'bien-être', 'Le baccalauréat (bac)': 'bac',
+ '(Secteur) Le management / Le marketing': 'marketing', 'Promettre': 'promets', 'Rater': 'raté', 'Appartenir': 'appartient', 'Posséder': 'possède'})
+BLANK2.update({'Poser (pour une photo, un dessin)': 'posé', 'Un(e) élu(e)': 'élue', 'Permettre': 'permet', 'Oser': 'osé', 'Citer': 'cité', 'Régler': 'règle',
+ 'Apercevoir': 'aperçu', 'Déployer': 'déploie', 'Emmener': "emmène", 'Émouvoir': 'ému', 'Tel / Telle': 'telle', 'La tranquillité': 'tranquilité',
+ 'Craindre': 'craint', 'Se révéler': 'rélévé', 'Se mettre à': 'mis', 'Une mémé / Une mamie': 'mamie', 'Émettre': 'émet', 'Soutenir': 'soutiens',
+ 'Le baccalauréat (le bac)': 'bac', 'Un dieu / Une déesse': 'déesse', 'Opérer': 'opère'})
 def blank_fixed(ex, w):
     i = ex.find(w)
     return None if i < 0 else ([ex[:i]] if i else []) + [{'b': w}] + ([ex[i + len(w):]] if ex[i + len(w):] else [])
 
 units = []
 tot = 0; nocloze = 0
-for u in range(11):
+if KEY != 'a1':
+    THEMES = {int(k): tuple(v[:2]) for k, v in json.load(open(os.path.join(HERE, 'nlf', CFG['pre'][:-1] + 'themes.json'), encoding='utf-8')).items()}
+    THEMES_EN = {int(k): v[2] for k, v in json.load(open(os.path.join(HERE, 'nlf', CFG['pre'][:-1] + 'themes.json'), encoding='utf-8')).items()}
+for u in sorted(int(k) for k in sheet):
     rows = sheet[str(u)][1:]
-    lines = [l.rstrip('\n').split('|') for l in open(os.path.join(HERE, 'nlf', f'u{u}.txt'), encoding='utf-8') if l.strip()]
+    lines = [l.rstrip('\n').split('|') for l in open(os.path.join(HERE, 'nlf', f"{CFG['pre']}{u}.txt"), encoding='utf-8') if l.strip()]
     assert len(lines) == len(rows), (u, len(lines), len(rows))
     vocab, text, cloze = [], [], []
     for i, (r, ln) in enumerate(zip(rows, lines), 1):
@@ -129,8 +158,9 @@ for u in range(11):
         fr = FIX_FR.get(fr, fr); fr = strip_q(fr); ex_fr = FIX_EX.get(ex_fr, ex_fr)
         if ex_fr in ('X', ''): ex_fr = ''
         if en == 'X': en = ''
+        ln += [''] * (6 - len(ln))
         zh, pos, ex_zh = ln[1], ln[2], ln[3]
-        tip_zh, tip_en = (ln[4] if len(ln) > 4 else ''), (ln[5] if len(ln) > 5 else '')
+        tip_zh, tip_en = ln[4], ln[5]
         assert len(ln) == 6, (u, i, len(ln), ln)
         p = pos or article_pos(fr, cat)
         g, pp = POS[p]
@@ -141,7 +171,7 @@ for u in range(11):
         if ex_fr:
             v['ex'] = [ex_fr, ex_zh, ex_en]
             text.append({'zh': ex_zh, 'fr': ex_fr, 'en': ex_en})
-            b = blank_fixed(ex_fr, BLANK[fr]) if fr in BLANK else blank(ex_fr, fr)
+            b = next((x for x in (blank_fixed(ex_fr, w) for w in (BLANK.get(fr), BLANK2.get(fr)) if w) if x), None) or blank(ex_fr, fr)
             if b: cloze.append(b)
             else: nocloze += 1
         if not re.search(r'[\u4e00-\u9fff]', tip_zh): tip_zh = tip_en = ''   # a tip that only repeats the word is no tip
@@ -151,11 +181,11 @@ for u in range(11):
     order = ['阳性名词', '阴性名词', '名词', '动词', '形容词', '副词', '代词', '介词、连词', '冠词、感叹词、短语']
     vocab.sort(key=lambda v: order.index(v['g']))
     fr_t, zh_t = THEMES[u]
-    units.append({'n': u, 'lecons': [{'n': 100 + u, 'title': fr_t, 'zh': zh_t, 'en': THEMES_EN[u], 'vocab': vocab, 'cloze': [['Phrases']] + cloze if False else cloze, 'text': text}]})
-book = {'id': 'nlf', 'title': 'NLF · Road to A1', 'zhTitle': 'NLF · 通往 A1', 'fr': 'Vocabulaire', 'flat': True, 'level': 'A1', 'units': units}
+    units.append({'n': u, 'lecons': [{'n': CFG['base'] + u, 'title': fr_t, 'zh': zh_t, 'en': THEMES_EN[u], 'vocab': vocab, 'cloze': [['Phrases']] + cloze if False else cloze, 'text': text}]})
+book = {'id': CFG['id'], 'title': CFG['title'], 'zhTitle': CFG['zh'], 'fr': 'Vocabulaire', 'flat': True, 'level': CFG['level'], 'units': units}
 forms = {v['fr']: {'accept': v.pop('acc'), 'say': v.pop('say')} for u in units for l in u['lecons'] for v in l['vocab']}
 js = '// Generated by tools/build_nlf.py from the "NLF - Road to A1 - Vocabulaire" sheet. Words only; the examples feed the sentence drills.\n'
-js += 'window.NLF_FORMS = ' + json.dumps(forms, ensure_ascii=False, separators=(',', ':')) + ';\n'
+js += 'Object.assign(window.NLF_FORMS = window.NLF_FORMS || {}, ' + json.dumps(forms, ensure_ascii=False, separators=(',', ':')) + ');\n'
 js += '(window.BOOKS = window.BOOKS || []).push(' + json.dumps(book, ensure_ascii=False, separators=(',', ':')) + ');\n'
-open(OUT, 'w', encoding='utf-8').write(js)
+open(os.path.join(HERE, '..', CFG['out']), 'w', encoding='utf-8').write(js)
 print('words', tot, 'sentences without blank', nocloze, 'bytes', len(js))

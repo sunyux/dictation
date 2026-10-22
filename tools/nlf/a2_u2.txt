@@ -1,0 +1,91 @@
+1|无障碍的；容易到达的|adj|这栋楼人人可以进入。
+2|正宗的|adj|这是一家正宗的餐厅。
+3|完整的；满的|adj|我的早餐很丰盛。|阴性 complète；complet 也可指「客满」|feminine complète; also "fully booked"
+4|多云的；阴的|adj|天空是阴的。|{couvrir} 覆盖 → {couvert}：天空被云覆盖|couvrir → couvert
+5|阳光明媚的|adj|天气晴朗。|{soleil} 太阳 → {ensoleillé}|soleil → ensoleillé
+6|凉爽的；新鲜的|adj|水很凉。|阴性 fraîche|feminine fraîche
+7|幸福的|adj|我今天很开心。|阴性 heureuse|feminine heureuse
+8|难以置信的|adj|这个故事太不可思议了！|{in} 不 + {croyable} 可信的|{in} not + {croyable} believable
+9|难忘的|adj|这次旅行令人难忘。|{in} 不 + {oubliable} 可忘的|{in} not + {oubliable}
+10|年轻的|adj|我弟弟很小。
+11|自由的|adj|自然公园里的动物是自由的。
+12|当地的|adj|我买本地产品。
+13|中性的|adj|这个颜色很中性。
+14|多雨的|adj|这是一个多雨的日子。|{pluie} 雨 → {pluvieux}|pluie → pluvieux
+15|每天的|adj|这是我的日常工作。|{quotidien} 来自拉丁语「每天」；le quotidien = 日常生活|le quotidien = daily life
+16|壮观的|adj|风景很壮观。
+17|典型的|adj|这是这个地区的典型菜。
+18|那时候……|loc|那时候我住在巴黎。|{époque} 时代；讲过去的故事常用，后面接未完成过去时|storytelling about the past, followed by the imperfect
+19|像神一样（非常好）|loc|他做饭像神一样好。
+20|胡闹；发疯|loc|孩子们在花园里胡闹。|{faire le fou} 字面「装疯」|literally "act the fool"
+21|度过时间|loc|和家人共度时光很重要。|passer du temps：花时间|passer du temps
+22|防晒霜|f|我涂防晒霜。|{crème} 霜 + {solaire} 太阳的|{crème} + {solaire}
+23|弹珠|pl|他在学校玩弹珠。
+24|糖果|pl|我喜欢吃糖。
+25|玩具|pl|孩子们玩玩具。
+26|香肠（萨拉米）|m|我吃干香肠。
+27|吉尼奥尔（木偶）|m|吉尼奥尔是一个著名的木偶。|法国传统木偶戏的主角（里昂）|a traditional puppet from Lyon
+28|童年|f|童年是美好的时期。|{enfant} → {enfance}|enfant → enfance
+29|留尼汪岛|f|留尼汪岛很美。
+30|热浪；酷暑|f|酷暑期间天气很热。
+31|青春；青年时期|f|他年轻时精力充沛。|{jeune} → {jeunesse}|jeune → jeunesse
+32|多数|f|大多数人同意。|{majorité} 同英语 {majority}|English majority
+33|天气（预报）|f|我在电视上看天气预报。
+34|一半|f|我吃了半个蛋糕。|{moitié} 读 [mwatje]|{moitié}
+35|海边|m|我喜欢在海边散步。
+36|天气预报|m|我在广播里听天气预报。|{bulletin} 公告 + {météo}|{bulletin} + {météo}
+37|味道；口味|m|这个蛋糕味道很好。|{goût} 读 [gu]|{goût}
+38|太阳|m|今天阳光灿烂。
+39|五种感官|pl|我们有五种感官。|{sens} 感官，读 [sɑ̃s]|{sens}
+40|颜色|pl|我喜欢所有颜色。
+41|口音|m|他有南方口音。
+42|成年人|m|这是个有责任感的成年人。
+43|相册|m|我有一本漂亮的相册。
+44|吻|m|我亲了妈妈一下。|{baiser} 亲吻；{bisou} 口语，更亲昵|bisou is more affectionate
+45|婴儿|m|宝宝在睡觉。
+46|博客|m|我在博客上写文章。
+47|冰斗（圆形谷地）|m|加瓦尔尼冰斗在山里非常有名。|{cirque} 这里是自然地貌「冰斗」，不是马戏团|natural amphitheatre (not circus)
+48|地方|m|这是个非常安静的地方。
+49|小玩意|m|这个小玩意很有用。
+50|冰箱贴|m|冰箱上有个冰箱贴。
+51|移动房屋（房车）|m|我们睡在移动房屋里。
+52|马克杯|m|我用马克杯喝咖啡。
+53|目标|m|我的目标是学习法语。|{objectif} 同英语 {objective}|English objective
+54|雷雨|m|今晚有大雷雨。
+55|钥匙扣|m|我有一个钥匙扣。
+56|暖气片|m|太冷了，我开暖气。|{radiateur} 同英语 {radiator}|English radiator
+57|岩石|m|海滩上有一块大岩石。
+58|回忆|m|我有很多童年的美好回忆。
+59|纪念品|m|我买了挪威的纪念品。
+60|火山|m|这座火山很大。
+61|青少年|n|我儿子是个青少年。
+62|海报|f|墙上有一张漂亮的海报。
+63|漫画|f|我读漫画。
+64|首都|f|巴黎是法国的首都。
+65|讨论|f|我们进行了有趣的讨论。
+66|派对；节日|f|我们办一个大派对。
+67|手办；小雕像|f|我书桌上有个小手办。
+68|森林|f|我们在森林里散步。
+69|岛|f|我们去一座岛上度假。|{île} 的 î 帽子代表曾有的 s，英语 isle|î replaces an old s
+70|脸颊|f|他脸颊上有个斑。
+71|雪橇|f|孩子们在雪地里玩雪橇。
+72|条纹水手衫|f|他穿一件蓝白相间的水手衫。|法国海军传统条纹衫|traditional French sailor shirt
+73|气味|f|这朵花味道很好闻。
+74|老人|f|我帮助一位老人。
+75|班级合照|f|我看我的班级合照。
+76|帐篷|f|我搭帐篷露营。
+77|停止；停下|v|我必须停止工作。|arrêter de + 不定式 = 停止做某事|arrêter de + infinitive
+78|缝纫|v|她学习缝纫。|je couds, nous cousons|je couds, nous cousons
+79|采摘|v|我去摘花。|je cueille（像 -er 动词）|je cueille (like -er verbs)
+80|死亡|v|没有水植物会死。
+81|讲述|v|她讲了一个美丽的故事。
+82|回去；返回|v|我要回家。
+83|笑|v|我喜欢和朋友们笑。
+84|脸红|v|他开始脸红。|{rouge} 红 → {rougir}|rouge → rougir
+85|玩得开心|v|孩子们玩得很开心。|代动词 s'amuser|reflexive
+86|坐下|v|您可以坐在这里。|s'asseoir：vous vous asseyez|vous vous asseyez
+87|记得|v|我记得那一天。|se rappeler + 直接宾语（不加 de）；口语也可 se rappeler de|se rappeler + object
+88|记得；想起|v|我记得你。|se souvenir de + 人/事|se souvenir de
+89|似乎；看起来|v|他看起来很累。
+90|闻到；感觉到|v|我在厨房里闻到一股怪味……
+91|触摸|v|请勿触摸。

@@ -1,0 +1,152 @@
+1|积极的；活跃的|adj|她工作非常积极。
+2|年长的|adj|我爷爷年纪很大了。|{âge} 年龄 → {âgé}|âge → âgé
+3|令人愉快的|adj|这是很愉快的一天。|{agréable} 来自 agréer（使满意）|from agréer
+4|布置好的；改造过的|adj|地下室布置得很好。|{aménager} 布置、改造 → {aménagé}|aménager → aménagé
+5|旧的；以前的|adj|这是一栋旧建筑。|放名词前 = 以前的：un ancien élève|before a noun = former
+6|热闹的|adj|晚上市中心很热闹。|{âme} 灵魂/{animer} 使活跃 → {animé}|animer → animé
+7|奇怪的|adj|这个声音很怪。
+8|时髦的；优雅的|adj|她穿一条很时髦的裙子。|{chic} 不变化|never changes
+9|清澈的；明亮的|adj|河水很清澈。
+10|色彩丰富的|adj|我喜欢穿颜色鲜艳的衣服。|{couleur} → {coloré}|couleur → coloré
+11|商业街的；繁华的|adj|这是一条商业街。|rue commerçante = 商业街|rue commerçante = shopping street
+12|共同的|adj|我们有一个共同的朋友。
+13|复杂的|adj|这道题太复杂了。
+14|厚的|adj|这本书很厚。|阴性 épaisse|feminine épaisse
+15|配备齐全的|adj|健身房设备齐全。|{équiper} 装备 → {équipé}|équiper → équipé
+16|必不可少的|adj|水是生命必需的。
+17|奇怪的；陌生的|adj|这是个非常奇怪的情况。
+18|外国的；外国人|adj|我喜欢学外语。|阴性 étrangère；{étranger} 也是名词「外国人」|étrangère; also a noun "foreigner"
+19|历史的；有历史意义的|adj|我们参观了历史中心。
+20|不可缺少的|adj|冬天好大衣是必需的。|{in} 不 + {dispens}able 可免除的|{in} + dispensable
+21|不寻常的；奇特的|adj|我们住在一个很特别的地方。
+22|明亮的|adj|我的公寓很明亮。|{lumière} 光 → {lumineux}|lumière → lumineux
+23|最好的|adj|他是我最好的朋友。|{meilleur} = bon 的比较级/最高级|comparative of bon
+24|带家具的|adj|我在找带家具的公寓。|{meuble} 家具 → {meublé}|meuble → meublé
+25|平均的；中等的|adj|他身高中等。
+26|正常的|adj|这完全正常。
+27|人口多的|adj|这是全国人口最多的城市。|{peuple} 人民 → {peuplé}|peuple → peuplé
+28|最糟糕的|adj|这是我一生中最糟的一天。|{pire} = mauvais 的比较级|comparative of mauvais
+29|受欢迎的；平民的|adj|他是一位很受欢迎的歌手。
+30|干燥的|adj|这里的气候很干燥。|阴性 sèche|feminine sèche
+31|独自的|adj|他一个人住。
+32|团结互助的|adj|这个项目很有互助精神。
+33|极好的|adj|从山上看风景极美。
+34|安静的|adj|这个街区非常安静。
+35|有生气的|adj|这个街区很有活力。
+36|别处|adv|我想去别的地方。
+37|更好|adv|我今天感觉好多了。|{mieux} 是副词，bon 的比较级是 meilleur|mieux = adverb; meilleur = adjective
+38|在露天；户外|loc|母鸡在户外生活。|{air libre} 自由的空气|{air libre}
+39|在……附近|loc|公园在学校附近。|{proximité} 靠近|{proximité}
+40|和……一样……|loc|他和我一样高。|aussi + 形容词 + que|aussi + adj + que
+41|和……一样多|loc|我的工作和你一样多。|autant de + 名词 + que|autant de + noun + que
+42|……的周边；郊区|loc|他们住在市郊。|{périphérie} 外围|{périphérie}
+43|大多数|loc|大多数人爱巧克力。|la plupart des + 复数名词|la plupart des + plural noun
+44|牵线；联系上|loc|我给您和主任牵个线。|{mettre en contact}|{mettre en contact}
+45|帮忙|loc|你能帮我个忙吗？|rendre un service à + 人|rendre un service à + person
+46|好门路；好主意|loc|这家餐厅是个好选择。
+47|架子|pl|我把书放在架子上。|{étagère}|{étagère}
+48|橱柜|pl|把盘子放进橱柜。|{placard}|{placard}
+49|灶台|pl|我在灶台上烧水。|{plaque} 板 + {de cuisson} 烹饪|{plaque} + {de cuisson}
+50|维修|pl|房子需要维修。|{réparation} 同英语 {repair}|{réparation}
+51|窗帘|pl|请把窗帘拉上。|{rideau}|{rideau}
+52|百叶窗；护窗板|pl|我早上打开百叶窗。|{volet}|{volet}
+53|宽带订阅|m|我办了高速宽带。|{abonnement} 订阅|{abonnement}
+54|建筑；建筑学|f|我喜欢这栋楼的建筑风格。
+55|电|f|我付了电费。
+56|外面|m|孩子们在外面玩。
+57|里面|m|下雨了，我们待在里面。
+58|结尾；末尾|f|我在等故事的结局。
+59|面积|f|总面积是一百平方米。
+60|大小；尺寸|f|你的房间多大？
+61|暖气；供暖|m|冬天开暖气。|{chaud} 热 → {chauffage}|chaud → chauffage
+62|信件|m|你今天看信了吗？
+63|开始|m|这是电影的开头。
+64|燃气|m|我用煤气做饭。
+65|房租|m|这个城市的房租很贵。
+66|家务|m|我每个星期六做家务。
+67|底楼|m|我住在一楼。
+68|杂费；物业费|pl|杂费含在房租里。|{charges} 总是复数|always plural
+69|租约|m|我签了一年的租约。
+70|船|m|我们坐船游览了一圈。
+71|画框；框架|m|我把照片放进这个相框。|{cadre} 还有「管理人员」义|{cadre} also = executive
+72|房车|m|他们开房车旅行。|{camping} 露营 + {car} 大巴|{camping} + {car}
+73|沙发床|m|我的朋友睡沙发床。
+74|购物中心|m|我去购物中心逛街。
+75|靠垫|m|椅子上有个靠垫。
+76|绿地；公园|m|我喜欢在这片绿地散步。
+77|房屋交接清单|m|我们明天做房屋交接。|{état} 状态 + {des lieux} 房屋的|{état des lieux}
+78|留学生|n|他是在法国的外国学生。
+79|水槽（厨房）|m|脏碗在水池里。
+80|车库|m|我把车停在车库。
+81|阁楼|m|阁楼里有旧东西。
+82|廉租房（HLM）|m|他在廉租房里长大。|{HLM} = habitation à loyer modéré|HLM = habitation à loyer modéré
+83|洗手池|m|我在洗手池洗手。
+84|洗碗机|m|把杯子放进洗碗机。|{lave} 洗 + {vaisselle} 餐具|{lave} + {vaisselle}
+85|地方|m|这是个迷人的地方。
+86|住所|m|我在市里找住处。
+87|休闲爱好|m|你最喜欢的休闲活动是什么？|{loisir} 常用复数 les loisirs|usually plural
+88|平方米|m|这套公寓有五十平方米。
+89|电视柜|m|电视放在电视柜上。
+90|衣帽架|m|把大衣挂在衣帽架上。|{porte} 携带 + {manteau} 外套|{porte} + {manteau}
+91|菜园|m|我们在菜园里种番茄。|{potage} 汤 → {potager}：种做汤的菜|potage → potager
+92|烘干机|m|我把衣服放进烘干机。|{sèche} 干 + {linge} 衣物|{sèche} + {linge}
+93|客厅|m|客厅里有一张大沙发。|{séjour} 本义「居住」，也指客厅|{séjour} also = stay
+94|世纪|m|我们现在在 21 世纪。|{siècle} 读 [sjɛkl]|{siècle}
+95|沙发|m|猫睡在沙发上。
+96|单间公寓|m|他住在一个小单间。
+97|一居室、两居室……|m|我和女朋友租了一套两居室。|T2 = 两个主要房间（客厅加一间卧室）|T2 = living room + one bedroom
+98|凳子|m|坐在这张凳子上。
+99|地毯|m|我给客厅买了一块地毯。
+100|抽屉|m|钥匙在第一个抽屉里。
+101|躺椅|m|我躺在阳光下的躺椅上休息。
+102|建筑师|n|我哥哥是建筑师。
+103|室友|n|我的室友很友好。
+104|居民|n|这座城市有很多居民。
+105|租户|n|租户交房租。
+106|房东；业主|n|房东卖掉了公寓。
+107|邻居|n|我的邻居很吵。
+108|活动|f|这是个非常有趣的活动。
+109|房产中介|f|我们去了房产中介。|{immobilier} 不动产|{immobilier}
+110|房产广告|f|我读到一则有意思的房源广告。
+111|衣柜|f|我的衣服在衣柜里。
+112|保险|f|公寓需要买保险。
+113|大道|f|他住在一条大道上。
+114|洗衣房|f|洗衣机在洗衣房里。
+115|船舱|f|我们的船舱小但舒适。
+116|地窖|f|我们把酒放在地窖里。
+117|合租|f|我和两个朋友合租。
+118|被子；毯子|f|我冷，拿条毯子。
+119|游轮旅行|f|他们今年夏天坐游轮。
+120|开放式厨房|f|我喜欢这个开放式厨房。|{américaine} 美式的：与客厅相通|American style: open to the living room
+121|设备齐全的厨房|f|公寓有设备齐全的厨房。
+122|入口；玄关|f|把鞋放在玄关。
+123|一代人|f|这是新一代。
+124|挂钟|f|钟指向中午。
+125|出租；租赁|f|这是度假租赁。
+126|洗衣机|f|洗衣机坏了。
+127|大都市|f|巴黎是一座大都会。
+128|优惠；报价；职位|f|我收到一份工作邀约。
+129|人|f|门口有一个人。
+130|植物|f|我买了一盆漂亮的绿植。
+131|平台|f|你可以在大学平台上注册。
+132|学生宿舍|f|她住在大学宿舍。
+133|床头柜|f|我的书在床头柜上。|{chevet} 床头；de chevet = 枕边的|{chevet}
+134|玻璃阳光房|f|我们常在阳光房里吃饭。
+135|搬家|v|我们下个月搬家。
+136|给|v|我给你一个建议。
+137|存在|v|龙不存在。
+138|管理；处理|v|他很会管理团队。
+139|送货；交付|v|邮递员明天送包裹。
+140|缺少；想念|v|这道菜缺盐。
+141|似乎；显得|v|你看起来累了。|je parais，像 connaître 变位|like connaître
+142|分享|v|我想和你分着吃这个披萨。
+143|放下；放置|v|你可以把包放在桌上。
+144|借出|v|你可以借我你的笔吗？|prêter 借出，emprunter 借入|prêter = lend; emprunter = borrow
+145|整理；收拾|v|你得整理房间。
+146|翻新|v|他们要翻新老房子。|{re} 再 + {nover}（新）= 翻新|{re} + nov (new)
+147|照看；负责|v|这个周末你能照看我的狗吗？|s'occuper de + 人/事|s'occuper de
+148|提高自身修养|v|他多读书来充实自己。|{culture} 文化 → {se cultiver}|culture → se cultiver
+149|治疗自己；保重|v|生病时要好好调养。
+150|晾干；干燥|v|衣服在外面晾着。
+151|签字|v|您得在下面签字。
+152|拿出去|v|我去倒垃圾。|sortir + 宾语时助动词用 avoir|sortir + object takes avoir
