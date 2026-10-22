@@ -1789,10 +1789,28 @@
     mic: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor"/><path d="M6 11a6 6 0 0 0 12 0M12 17v4M9 21h6" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>',
   };
   const playBtn = (text, extra = '') => `<button class="play ${extra}" data-say="${esc(text)}" aria-label="朗读" title="朗读">${ICON.play}</button>`;
+  /* NLF books keep their in-depth cards in deep-nlf/<a1|a2|b>-<zh|en>.js, loaded the first time the book is opened */
+  const DEEP_FILE = { nlf: 'a1', 'nlf-a2': 'a2', 'nlf-b': 'b' };
+  const deepLoads = {};
+  const hasDeep = fr => !!((window.DEEP && DEEP[fr]) || (window.DEEP_EN && DEEP_EN[fr]));
+  function deepNeeds(bookId) {
+    const k = DEEP_FILE[bookId]; if (!k) return [];
+    return [L() !== 'en' && k + '-zh', L() !== 'zh' && k + '-en'].filter(Boolean);
+  }
+  const deepReady = bookId => deepNeeds(bookId).every(k => deepLoads[k] === true);
+  function loadDeep(bookId) {
+    return Promise.all(deepNeeds(bookId).map(k => deepLoads[k] === true ? 0 : (deepLoads[k] = deepLoads[k] || new Promise(res => {
+      const sc = document.createElement('script');
+      sc.src = `deep-nlf/${k}.js?v=1`;
+      sc.onload = () => { deepLoads[k] = true; res(); };
+      sc.onerror = () => { deepLoads[k] = true; res(); };
+      document.head.appendChild(sc);
+    }))));
+  }
   /* ---------- in-depth word card (words-deep.js): meaning, sound, roots, examples, collocations, register, use ---------- */
   function openDeep(fr) {
     const en = L() === 'en' && window.DEEP_EN && DEEP_EN[fr];
-    const d = en || (window.DEEP && DEEP[fr]); if (!d) return;
+    const d = en || (window.DEEP && DEEP[fr]) || (window.DEEP_EN && DEEP_EN[fr]); if (!d) return;
     const cog = window.DEEP_EN && DEEP_EN[fr] && DEEP_EN[fr].cog;
     const word = fr.replace(/\s*\(pl\..*\)$/, '');
     const exHTML = d => `<ul class="dp-ex">${d.ex.map(([f, z]) => `<li><span lang="fr">${playBtn(f)} ${esc(f)}</span><small>${esc(z)}</small></li>`).join('')}</ul>`;
@@ -1978,6 +1996,15 @@
     TTS.stop(); seqToken++;
     const parts = location.hash.replace(/^#\/?/, '').split('/').filter(Boolean);
     const crumbs = $('#crumbs');
+    // NLF books: fetch their in-depth cards before the first page that shows them
+    const deepBooks = parts[0] === 'review' ? [...new Set(Object.values(SRS.all()).map(e => e.book))] : [parts[0]];
+    const deepPending = deepBooks.filter(b => DEEP_FILE[b] && !deepReady(b));
+    if (deepPending.length) {
+      const h = location.hash;
+      main.innerHTML = `<p class="deep-wait">${bi('加载中…', 'Loading…')}</p>`;
+      Promise.all(deepPending.map(loadDeep)).then(() => { if (location.hash === h) route(); });
+      return;
+    }
     // focus mode only kicks in on practice pages
     if (window.FOCUS) FOCUS.page((BOOKS.some(b => b.id === parts[0]) && parts.length >= 2) || (parts[0] === 'review' && !!parts[1]) || (parts[0] === 'sons' && parts.length >= 2));
     // curtain colour of the reading plate, by section
@@ -2074,7 +2101,7 @@
         <section class="unit"><div class="unit-title"><h2 lang="fr">${leconName(+n)}</h2><span>${list.length} 条</span></div>
         ${list.map(e => `<div class="err-row${gx(e.pos)}">
           <span class="err-kind">${KIND[e.kind]}</span>
-          <div class="err-body"><div lang="fr">${playBtn(e.kind === 'word' ? forms(e.fr).say : e.fr)} ${esc(e.fr)}${e.kind === 'word' && window.DEEP && DEEP[e.fr] ? `<button class="deep-btn" data-deep="${esc(e.fr)}" lang="zh">${bi('详解', 'In depth')}</button>` : ''}</div><div class="lzh">${e.kind === 'cloze' ? esc(e.zh) : G(e)}${e.pos ? ' · ' + esc(e.pos) : ''}</div>${triesHTML(e)}${e.kind === 'word' ? spotLine(e) : ''}</div>
+          <div class="err-body"><div lang="fr">${playBtn(e.kind === 'word' ? forms(e.fr).say : e.fr)} ${esc(e.fr)}${e.kind === 'word' && hasDeep(e.fr) ? `<button class="deep-btn" data-deep="${esc(e.fr)}" lang="zh">${bi('详解', 'In depth')}</button>` : ''}</div><div class="lzh">${e.kind === 'cloze' ? esc(e.zh) : G(e)}${e.pos ? ' · ' + esc(e.pos) : ''}</div>${triesHTML(e)}${e.kind === 'word' ? spotLine(e) : ''}</div>
           <span class="err-meta">错 ${e.wrong} 次<br>${e.due <= today ? '<b class="w-miss">&nbsp;今天&nbsp;</b>' : e.due.slice(5).replace('-', '/') + ' 复习'}</span>
           <button class="err-del" data-id="${esc(e.id)}" title="移出错题本" aria-label="移出错题本">×</button>
         </div>`).join('')}</section>`).join('')
@@ -2158,7 +2185,7 @@
         ${triesHTML(e)}
         ${(() => { const r = spotInfo(e); return r ? `<div class="lc-spot" lang="fr">${DYS.marked(r.target, r.marks)}</div>${spotLine(e)}` : ''; })()}
         ${tipBox(tip)}${word ? exBox(e) : ''}
-        ${word && window.DEEP && DEEP[e.fr] ? `<button class="deep-btn lc-deep" data-deep="${esc(e.fr)}">${bi('看详解', 'In-depth card')}</button>` : ''}
+        ${word && hasDeep(e.fr) ? `<button class="deep-btn lc-deep" data-deep="${esc(e.fr)}">${bi('看详解', 'In-depth card')}</button>` : ''}
         <div class="toolbar lc-nav">
           <button class="btn ghost" id="lr-prev" ${i ? '' : 'disabled'}>‹ ${bi('上一个', 'Back')}</button>
           <span class="spacer"></span>
@@ -2479,7 +2506,7 @@
           <div class="vrow${gx(v.pos)} ${hide ? 'hidefr' : ''} ${mst.w[v.fr] ? 'mastered' : ''} ${gender(v.pos) ? 'g-' + gender(v.pos) : ''}" data-say="${esc(forms(v.fr).say)}" data-fr="${esc(v.fr)}">
             <span class="vdrag" title="${bi('拖动调整顺序', 'Drag to reorder')}" aria-label="${bi('拖动调整顺序', 'Drag to reorder')}">⠿</span>
             <span class="play">${ICON.play}</span>
-            <span class="vfr" lang="fr">${artHint(v)}${frHTML(v.fr)}${window.DEEP && DEEP[v.fr] ? `<button class="deep-btn" data-deep="${esc(v.fr)}" lang="zh">${bi('详解', 'In depth')}</button>` : ''}</span>
+            <span class="vfr" lang="fr">${artHint(v)}${frHTML(v.fr)}${hasDeep(v.fr) ? `<button class="deep-btn" data-deep="${esc(v.fr)}" lang="zh">${bi('详解', 'In depth')}</button>` : ''}</span>
             <span class="pos">${esc(v.pos)}</span><span class="vzh">${G(v)}</span>
             ${wordTip(lecon.n, v) ? `<span class="vtip" ${showTip ? '' : 'hidden'}>${wordTip(lecon.n, v)}</span>` : ''}${v.ex ? `<span class="vex" lang="fr">${esc(v.ex[0])}<small>${L() === 'en' ? esc(v.ex[2]) : L() === 'zhen' ? esc(v.ex[1]) + ' · ' + esc(v.ex[2]) : esc(v.ex[1])}</small></span>` : ''}</div>`).join('')}</div>`).join('');
       enableDrag(pane, () => { saveOrder(ctx.book.id, lecon.n, pane); if (!$('#vreset', pane)) paneVocab(ctx, 'list'); });
