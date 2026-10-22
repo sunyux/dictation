@@ -506,3 +506,17 @@ html.dys .gx-m .syl i.sl, html.dys .gx-f .syl i.sl, html.dys .gx-p .syl i.sl { c
 .vrow.gx-m { box-shadow: inset 3px 0 0 rgba(45, 98, 166, .45); }
 .vrow.gx-f { box-shadow: inset 3px 0 0 rgba(168, 57, 143, .45); }
 .vrow.gx-p { box-shadow: inset 3px 0 0 rgba(46, 125, 79, .55); }
+
+/* home shelf: books wrap onto rows and keep a readable size (they used to shrink to ~60px) */
+.shelf { flex-wrap: wrap; gap: 22px 20px; justify-content: center; }
+.home .shelf .cover { flex: 0 0 auto; width: 176px; }
+.home { grid-template-columns: 600px 1fr; }
+@media (max-width: 1100px) { .home { grid-template-columns: 1fr; } }
+@media (max-width: 720px) {
+  .shelf { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 14px; }
+  .home .shelf .cover { width: 100%; margin: 0; padding: 22px 14px 14px 18px; }
+  .shelf .cover .c-zh { font-size: 26px; }
+  .shelf .cover .c-fr { font-size: 15px; }
+}
+.shelf .cover.nlf .c-zh { font-size: 24px; }
+@media (max-width: 720px) { .shelf .cover.nlf .c-zh { font-size: 21px; } }
