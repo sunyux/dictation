@@ -1,0 +1,89 @@
+1|好的；好吃的|adj|这个很好。|阴性 bonne；bon 读 [bɔ̃]|feminine bonne
+2|均衡的|adj|这是一顿均衡的饭。|{équilibr}é 和英语 {equilibr}ium 同源|{équilibr}é ~ equilibrium
+3|担心的|adj|我很担心。|阴性 inquiète；{in}quiet 不平静|{in} not + quiet; feminine inquiète
+4|健康的|adj|这是一顿健康的饭。|{sain}（健康）和 {saint} 读音相同，不同词|{sain} healthy vs saint holy
+5|足够|adv|我吃饱了，不饿了。|{assez} 放在形容词/动词后|{assez}
+6|流鼻涕|loc|我流鼻涕。|{nez} 鼻子 + {qui coule} 在流|{nez} + {qui coule}
+7|……疼|loc|我头疼。|avoir mal à + 身体部位：à la / au / aux|avoir mal à + body part
+8|对健康有益|loc|运动对健康有益。|{bon pour la santé}|{bon pour la santé}
+9|状态好|loc|我想保持好状态。|{forme} 形状 → 状态；être en forme|{forme}
+10|对健康有害|loc|吸烟有害健康。|{mauvais pour la santé}|{mauvais pour la santé}
+11|预约|loc|我要去预约。|{prendre rendez-vous} 约时间|{prendre rendez-vous}
+12|发烧|f|我发烧了。|{fièvre} 同英语 {fever}|English fever
+13|卡路里|pl|我计算卡路里。|{calorie} 同英语|English calorie
+14|维生素|pl|我吃维生素。|{vitamine} 同英语|English vitamin
+15|柠檬|m|我喝柠檬汁。|{citron} 柠檬；citron vert = 青柠|citron vert = lime
+16|蜂蜜|m|我喜欢蜂蜜。|{miel} 读 [mjɛl]|{miel}
+17|止咳糖浆|m|喝点糖浆。|{sirop} + {pour la toux/gorge}|{sirop} + {pour la toux}
+18|嘴|f|张开嘴。|{bouche}|{bouche}
+19|跑步|f|我喜欢跑步。|{course} 跑；{à pied} 用脚|{course à pied}
+20|频率|f|频率是多少？|{fréquence} 同英语|English frequency
+21|喉咙|f|我喉咙痛。|{gorge}|{gorge}
+22|流感|f|我得了流感。|{grippe} 流感；avoir la grippe|avoir la grippe
+23|体操|f|我做体操。|{gymnastique} 同英语 {gymnastics}|English gymnastics
+24|地掷球|f|我们玩地掷球。|{pétanque} 法国南部的球类游戏|southern French ball game
+25|胸部|f|如果胸口疼，去看医生。|{poitrine}|{poitrine}
+26|身高|f|你有多高？|{taille} 衣服尺码，也指身高|{taille} also = clothing size
+27|体温|f|我量体温。|{température} 也指体温|{température}
+28|头|f|我头疼。|{tête}；ê 的帽子表示曾有 s|ê replaces an old s
+29|美式橄榄球|m|我看美式橄榄球。|{football américain}|{football américain}
+30|身体|m|人体很复杂。|{corps} 读 [kɔʁ]，ps 不发音|{corps} [kɔʁ]
+31|自行车运动|m|我喜欢自行车运动。|{cyclisme} 同英语 {cycling}|English cycling
+32|背|m|我背疼。|{dos} 读 [do]，s 不发音|{dos} [do]
+33|额头|m|他额头很宽。|{front}|{front}
+34|柔道|m|他练柔道。|{judo} 来自日语|from Japanese
+35|鼻子|m|我流鼻涕。|{nez} 读 [ne]，z 不发音|{nez} [ne]
+36|体重|m|您多重？|{poids} 读 [pwa]，ds 不发音|{poids} [pwa]
+37|橄榄球|m|他打橄榄球。|{rugby} 同英语|English rugby
+38|网球|m|我打网球。|{tennis} 同英语|English tennis
+39|肚子|m|我肚子疼。|{ventre}|{ventre}
+40|排球|m|我打排球。|{volley} 是 volleyball 的缩写|short for volleyball
+41|瑜伽|m|我练瑜伽。|{yoga}|English yoga
+42|手臂|pl|他的手臂很长。|{bras} 读 [bʁa]，s 不发音|{bras} [bʁa]
+43|牙齿|pl|我刷牙。|{dent}；dentiste 牙医|{dent} → dentiste
+44|肩膀|pl|我肩膀疼。|{épaule}|{épaule}
+45|膝盖|pl|他膝盖疼。|{genou} 复数 genoux 加 x|plural genoux
+46|腿|pl|我腿疼。|{jambe} 读 [ʒɑ̃b]|{jambe}
+47|手|pl|把手洗干净。|{main} 阴性|{main} is feminine
+48|耳朵|pl|我耳朵疼。|{oreille} 读 [ɔʁɛj]|{oreille}
+49|脚|pl|我脚冷。|{pied}；à pied = 步行|à pied
+50|肺|pl|他肺部有问题。|{poumon}|{poumon}
+51|更衣室|pl|我去更衣室。|{vestiaire} 总是复数|plural
+52|银行家|n|我和我的银行家谈。|阴性 banquière；{banque} → {banquier}|banque → banquier
+53|营养补充剂|m|维生素 D 是一种补充剂。|{complément} 补充，同英语 {complement}|English complement
+54|医院|m|我去医院。|{hôpital} 的 h 不发音|silent h
+55|运动员；玩家|n|他是个好球员。|{jouer} 玩 → {joueur}|jouer → joueur
+56|升（容量）|m|我喝一升水。|{litre} 同英语 {litre}|English litre
+57|比赛|m|我看比赛。|{match} 同英语|English match
+58|药|m|我吃一种药。|{médicament} 药；médecin 医生|médecin = doctor
+59|米（长度）|m|他身高一米。|{mètre} 同英语 {metre}|English metre
+60|约会；预约|m|我有个预约。|{rendez-vous}：{rendez} 交给 + {vous} 你们|{rendez} + {vous}
+61|感冒|m|我感冒了。|{rhume} 感冒；rhume 读 [ʁym]|{rhume}
+62|桑拿|m|我喜欢桑拿。|{sauna} 来自芬兰语|from Finnish
+63|症状|m|这是流感的症状。|{symptôme} 同英语 {symptom}|English symptom
+64|体温计|m|体温计在哪？|{thermo} 热 + {mètre} 测量|{thermo} + {mètre}
+65|牙医|n|我去看牙医。|阴阳性同形 un/une dentiste|un/une dentiste
+66|药剂师|n|我和药剂师说话。|阴性 pharmacienne|pharmacienne
+67|医保卡|f|我有医保卡。|{carte vitale} 法国社保卡|French health card
+68|比赛；竞赛|f|这是一场大赛。|{compétition} 同英语 {competition}|English competition
+69|跳绳|f|她有一根跳绳。|{corde} 绳 + {à sauter} 用来跳|{corde} + {à sauter}
+70|处方|f|医生给我开处方。|{ordonnance}|{ordonnance}
+71|X光片|f|医生给我拍了肺部X光。|{radio} 是 radiographie 的缩写|short for radiographie
+72|健身房|f|我去健身房。|{salle} 房间 + {de sport}|{salle} + {de sport}
+73|毛巾|f|我有一条干净的毛巾。|{serviette} 毛巾；也指餐巾|also napkin
+74|带来|v|我带一个蛋糕。|{apporter} 带来（物）；人用 amener|things: apporter; people: amener
+75|学习|v|我想学法语。|j'apprends, nous apprenons|j'apprends, nous apprenons
+76|流|v|水在流。|{couler}|{couler}
+77|关闭（灯、电器）|v|我去关灯。|j'éteins, nous éteignons|j'éteins, nous éteignons
+78|打喷嚏|v|我要打喷嚏了。|{éternuer}|{éternuer}
+79|必须（需要）|v|得走了。|只有 il faut / il va falloir|only il faut / il va falloir
+80|赢|v|我们会赢。|{gagner} 也有「挣（钱）」义|{gagner} also = earn
+81|做园艺|v|我喜欢园艺。|{jardin} → {jardiner}|jardin → jardiner
+82|玩；演奏|v|我爱玩。|jouer à + 游戏；jouer de + 乐器|jouer à (games), jouer de (instruments)
+83|打扫；清洁|v|我得打扫房间。|{net} 干净 → {nettoyer}|net → nettoyer
+84|打开|v|我去开门。|j'ouvre（-er 动词变位）|j'ouvre (-er endings)
+85|呼吸|v|要呼吸。|{respirer} 同英语 {respire}|English respire
+86|感觉（自己）|v|我感觉很好。|代动词：je me sens|reflexive: je me sens
+87|闻到|v|我闻到一股怪味！|{sentir}：感觉到、闻|{sentir}
+88|咳嗽|v|我一直在咳嗽。|{tousser}；toux 咳嗽|toux → tousser
+89|使用|v|我要用手机。|{utiliser} 同英语 {utilise}|English utilise

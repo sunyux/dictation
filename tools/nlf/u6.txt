@@ -1,0 +1,96 @@
+1|恋爱的；有爱意的|adj|他恋爱了。|{amour} 爱 → {amour}eux；阴性 amoureuse|{amour} love → {amour}eux; feminine amoureuse
+2|阿拉伯的|adj|阿拉伯书法是一门艺术。|阴阳性同形；le/la arabe 也指阿拉伯人和阿拉伯语|same form for both genders
+3|笨的；傻的|adj|这条狗并不笨。|阴阳性同形；la bête 还指「野兽」|same form for both genders; la bête = animal
+4|白人的；白色的|adj|瓦妮莎·帕拉迪是白人。|阴性 blanche；也指皮肤颜色|feminine blanche
+5|金发的|adj|他是金发。|阴性 blonde|feminine blonde
+6|棕发的；深色头发的|adj|她是棕色头发。|阴性 brune|feminine brune
+7|栗色的；浅棕色头发|adj|我是浅棕色头发。|{châtain} 来自 châtaigne（栗子）；阴阳性同形|from châtaigne (chestnut)
+8|秃的|adj|我叔叔是秃头。|阴阳性同形|same form for both genders
+9|勇敢的|adj|消防员很勇敢。|{cœur} 心 → {courag}e；阴性 courageuse|{cœur} heart → {courag}e; feminine courageuse
+10|好奇的|adj|这个孩子很好奇。|{curi}eux 和英语 {curi}ous 同源；阴性 curieuse|English curious
+11|有趣的；好笑的|adj|这部电影很好笑。|{drôle} 读 [dʁol]，ô 读 [o]|{drôle} [dʁol]
+12|有活力的|adj|她非常有活力。|{dynamique} 同英语 {dynamic}|English dynamic
+13|累的|adj|我累了。|阴性 fatiguée；{fatigue} 疲劳|feminine fatiguée
+14|强壮的|adj|他很强壮。|阴性 forte；也有「大声」「强」之意|feminine forte
+15|卷曲的|adj|她的头发是卷的。|阴性 frisée|feminine frisée
+16|快乐的|adj|她总是很快乐。|阴性 gaie；也写 gaie / gaie|feminine gaie
+17|含气的|adj|佩里埃是一个气泡水品牌。|{gaz} 气体 → {gazeux}；阴性 gazeuse|{gaz} gas → {gazeux}
+18|慷慨的|adj|他很慷慨。|{généreux} 同英语 {generous}；阴性 généreuse|English generous
+19|善良的|adj|这个男孩很善良。|阴性 gentille；ll 读 [j]|feminine gentille
+20|胖的；大的|adj|这只猫很胖。|阴性 grosse；{gros} 读 [gʁo]|feminine grosse
+21|没耐心的|adj|我很不耐烦。|{im}patient：{im} 不 + {patient} 耐心|{im} not + {patient}
+22|聪明的|adj|她很聪明。|{intelligent} 同英语；阴性 intelligente|English intelligent
+23|快乐的；喜悦的|adj|我很开心。|{joie} 喜悦 → {joyeux}；阴性 joyeuse|{joie} → {joyeux}
+24|直的（头发）；光滑的|adj|她的头发是直的。|阴阳性同形|same form for both genders
+25|北非的（马格里布）|adj|他是北非人。|{Maghreb} 北非（摩洛哥、阿尔及利亚、突尼斯）|Maghreb
+26|生病的|adj|我生病了。|阴阳性同形；un malade = 病人|same form for both genders
+27|坏心的；凶的|adj|狼很凶。|阴性 méchante|feminine méchante
+28|瘦的；薄的|adj|她很瘦。|阴阳性同形|same form for both genders
+29|肌肉发达的|adj|他很结实。|{muscle} 肌肉 → {musclé}|{muscle} → {musclé}
+30|黑人的；黑色的|adj|奥马尔·西是黑人。|阴性 noire|feminine noire
+31|有耐心的|adj|要有耐心。|{patient} 同英语|English patient
+32|不含气的；平的|adj|你要无气水还是气泡水？|阴性 plate；l'eau plate = 矿泉水（不含气）|feminine plate
+33|红棕色头发的|adj|我哥哥是红头发。|阴性 rousse|feminine rousse
+34|善于交际的|adj|她很外向。|{sociable} 同英语|English sociable
+35|团结的；互助的|adj|这支团队很团结。|{solidaire} 同英语 {solidary}|solidarity
+36|压力大的|adj|我压力很大。|{stress}é 来自英语 stress|from English stress
+37|老的|adj|我的狗老了。|阴性 vieille；元音开头阳性用 vieil：un vieil homme|feminine vieille; vieil before a vowel
+38|现在|adv|我现在吃饭。|{maintenant}：{main} 手 + {tenant} 拿着 → 手上拿着 → 现在|{main} hand + {tenant} holding → "in hand" → now
+39|很少|adv|这里很少下雨。|{rare} 稀少 → {rare}ment|rare → rarement
+40|晚|adv|他回家晚。|{tard} 晚；反义 tôt|opposite of tôt
+41|早|adv|我起得早。|{tôt} 早；ô 读 [o]|{tôt}
+42|总是|adv|我总是迟到。|{toujours}：{tou} 全 + {jours} 日子|{tou} all + {jours} days
+43|几点？|loc|你几点到？|问时间：À quelle heure ?|asking the time of an event
+44|旅途愉快！|loc|法国之行愉快！|{bon} 好 + {voyage} 旅行|{bon} + {voyage}
+45|熬夜；通宵|loc|我熬了一整夜。|字面「白夜」|literally "a white night"
+46|下午|m|我下午学习。|可阴可阳，常用阳性；l'après-midi|l'après-midi
+47|夜晚|f|夜晚是黑色的。|{nuit} 夜；la nuit blanche = 熬夜|{nuit}
+48|开学；新学年|f|新学年在九月开始。|{rentrée} 来自 rentrer（回来）|from rentrer
+49|糖浆|m|我喝糖浆水。|{sirop}；兑水喝的果味糖浆|fruit syrup for mixing with water
+50|头发|pl|他的头发很短。|{cheveux} 总是复数|always plural
+51|眼睛|m|她有一双蓝眼睛。|单数 l'œil，复数 les yeux 不规则|singular l'œil, plural les yeux
+52|中午；正午|m|现在是中午。|{midi} = {mi} 中 + {di} 日|{mi} middle + {di} day
+53|午夜|m|他在午夜睡觉。|{minuit} = {mi} 中 + {nuit} 夜|{mi} + {nuit}
+54|长椅|m|我坐在长椅上。|{banc} 读 [bɑ̃]，c 不发音|{banc} [bɑ̃]
+55|票|m|我买了明天音乐会的票。|billet 用于火车/音乐会；ticket 用于地铁/小票|billet: train/concert; ticket: metro/receipt
+56|音乐会|m|音乐会很棒。|{concert} 同英语|English concert
+57|电影（动作、爱情、恐怖……）|m|我在看电影。|film d'action / d'amour / d'horreur|film d'action / d'amour / d'horreur
+58|团体；乐队|m|乐队唱得很好。|{groupe} 同英语 {group}|English group
+59|服务员|n|服务员很友好。|阳性 serveur，阴性 serveuse|serveur / serveuse
+60|高铁|m|我坐高铁。|TGV = train à grande vitesse|train à grande vitesse
+61|动物园|m|我们去动物园。|{zoo} 同英语|English zoo
+62|胡子（络腮胡）|f|他留着胡子。|{barbe}；Il a de la barbe 也可说|{barbe}
+63|小胡子|f|他留着小胡子。|{moustache} 同英语 moustache|English moustache
+64|活动|f|这是个好活动。|{activité} 同英语 {activity}|English activity
+65|漫画|f|我读漫画。|{bande} 条 + {dessinée} 画的 = 连环画；缩写 BD|{bande} + {dessinée}
+66|小时；点钟|f|我有一个小时。|{heure} 读 [œʁ]，h 不发音|{heure} [œʁ]
+67|人|f|这是个好人。|{personne} 总是阴性，即使指男人|always feminine, even for a man
+68|系列剧|f|我喜欢这部剧。|{série} 同英语 {series}|English series
+69|外出；短途游|f|这个周末你想出去玩吗？|{sortir} → {sortie}|sortir → sortie
+70|洗衣服|loc|我洗衣服。|{lessive} 洗衣液；faire la lessive 洗衣服|{lessive}
+71|慢跑|loc|他去慢跑。|faire un jogging / un footing|faire un jogging / un footing
+72|生孩子；分娩|v|她很快要生了。|{accoucher}|{accoucher}
+73|上网|loc|我喜欢上网。|aller sur internet 或 surfer sur le net|aller sur internet
+74|打开（灯、电器）|v|我开灯。|{allumer} 点亮；反义 éteindre|opposite: éteindre
+75|改变；更换|v|我想换辆车。|changer de + 名词（换……）|changer de + noun
+76|必须；应该|v|我明天得去领事馆。|je dois, tu dois, il doit, nous devons|je dois, tu dois, il doit, nous devons
+77|离开；出发|v|我去度假。|je pars, tu pars, il part|je pars, tu pars, il part
+78|哭|v|宝宝在哭。|{pleurer}，和 pleuvoir（下雨）形似但不同|not pleuvoir (to rain)
+79|提议；建议|v|我提一个想法。|{proposer} 同英语 {propose}|English propose
+80|回家；回来|v|我回家。|{rentrer} 用 être 做助动词|uses être
+81|笑|v|我们爱笑。|je ris, nous rions|je ris, nous rions
+82|坐下|v|我坐在椅子上。|je m'assois / je m'assieds|je m'assois / je m'assieds
+83|入睡|v|我很快就睡着。|je m'endors, nous nous endormons|je m'endors
+84|伸懒腰|v|猫在伸懒腰。|{s'étirer} 伸展|{s'étirer}
+85|穿衣服|v|我穿好衣服出门。|{s'habiller} = 给自己穿衣|{s'habiller}
+86|刷牙|v|我刷牙。|se brosser les dents：牙用 les，不用 mes|les dents (not mes)
+87|梳头|v|我梳头。|{coiffer} 梳 → {se coiffer}；coiffeur = 理发师|coiffeur = hairdresser
+88|上床睡觉|v|我睡得很晚。|{coucher} → {se coucher}|coucher → se coucher
+89|洗（自己）|v|我洗手。|{laver} → {se laver}|laver → se laver
+90|起床|v|我起床很快。|{lever} → {se lever}；je me lève|lever → se lever
+91|化妆|v|她在化妆。|{maquillage} 化妆品 → {se maquiller}|maquillage → se maquiller
+92|准备好|v|她在准备。|{préparer} → {se préparer}|préparer → se préparer
+93|休息|v|我星期天休息。|{repos} 休息 → {se reposer}|repos → se reposer
+94|碰面；重逢|v|我们在咖啡馆见。|{retrouver} 找回 → {se retrouver}|retrouver → se retrouver
+95|醒来|v|我七点醒。|{réveil} 闹钟 → {se réveiller}|réveil → se réveiller
+96|飞；偷|v|有人刚偷了我的手机！|{voler} 同时是「飞」和「偷」|{voler} = fly and steal

@@ -1,0 +1,88 @@
+1|亚洲的|adj|这里有很多亚洲餐厅。|{Asi}e 亚洲 → {asi}atique；国家/地区形容词小写|{Asi}e → {asi}atique; adjectives of origin are lowercase
+2|资产阶级的；中产的|adj|这是个中产阶级街区。|{bourgeois} 来自 bourg（城镇），本意「城里人」|from bourg (town) → town-dweller
+3|时髦的|adj|这个街区很时髦。|{branché} 本意「插上电的」→ 赶潮流的|literally "plugged in" → in fashion
+4|吵闹的|adj|我家的街太吵了。|{bruit} 噪音 → {bruy}ant 吵闹的|{bruit} noise → {bruy}ant
+5|安静的|adj|公园很安静。|和英语 {calm} 同源，阴阳性同形|same as English {calm}; same form for both genders
+6|单身的|adj|他是单身。|{célibat} 独身；阴阳性同形|{célibat}aire; same form for both genders
+7|怀孕的|adj|她怀孕了。|只用于女性，不加 e|only for women; no extra e
+8|高的；大的|adj|他很高。|阴性 grande；{grand}-mère 外婆也含此词|feminine grande; also inside grand-mère
+9|正常的|adj|这是平常的一天。|和英语 {normal} 一致|same as English {normal}
+10|忙的|adj|我很忙。|{occup}er 占用 → {occup}é；英语 {occup}ied|{occup}é; English {occup}ied
+11|穷的|adj|这是一个贫穷的国家。|和英语 {poor} 对应，pauvre 读 [povʁ]|say [povʁ]
+12|小的|adj|这条狗很小。|阴性 petite；t 在阴性读出|feminine petite; the t is pronounced
+13|受欢迎的|adj|这是一位很受欢迎的歌手。|和英语 {popular} 同源，阴阳性同形|same as English {popular}
+14|干净的；自己的|adj|我的房间很干净。|{propre} 同时有「干净」和「自己的」两义|{propre} = clean, and also "own"
+15|有钱的|adj|这个男人很有钱。|{riche} 和英语 {rich} 同源|same root as English {rich}
+16|脏的|adj|地面很脏。|{sale} 脏，别和 salle（房间）混；读音相同|{sale} dirty, not salle (room); same sound
+17|友好的；不错的|adj|这个街区很不错。|{sympa} 是 sympathique 的口语缩写，不变|{sympa} short for sympathique; never changes
+18|做运动|loc|他做运动。|{faire} + du/de la + 名词：做某项活动|{faire} + du/de la + activity
+19|做饭|loc|她在做饭。|{faire la cuisine}；cuisine 也有「厨房」义|cuisine = kitchen and cooking
+20|洗碗|loc|我洗碗。|{vaisselle} 是所有餐具的统称|{vaisselle} = all the dishes
+21|做家务|loc|我星期六做家务。|{ménage} 家务；常说 faire le ménage|{ménage} housework
+22|买东西；采购|loc|我们去采购。|{courses} 总是复数；faire les courses 买日用品|{courses} is plural; groceries
+23|女朋友|f|这是我的女朋友。|la meuf 是俚语，la petite-amie 较正式|la meuf is slang; la petite-amie is standard
+24|舞蹈|f|舞蹈是我的热情所在。|和英语 {danc}e 同源|same root as English {danc}e
+25|妻子|f|这是托马斯的妻子。|{femme} 既是女人也是妻子，读 [fam]|{femme} = woman and wife; say [fam]
+26|祖母；外祖母|f|我奶奶做了一个蛋糕。|{grand} + {mère}；复数 grands-mères|{grand} + {mère}
+27|散步；步行|f|步行对健康有益。|{marche} 步行，来自 marcher|{marche} from marcher
+28|母亲|f|我妈妈在家。|{mère} 读 [mɛʁ]，注意 è|{mère} [mɛʁ]; mind the è
+29|健身；肌肉训练|f|他在做肌肉训练。|{muscul}ation 来自 {muscle} 肌肉|from {muscle}
+30|游泳|f|我喜欢游泳。|{nat}ation 和英语 {nat}ation 同源|{nat}ation; compare nager
+31|男朋友|m|这是我的男朋友。|le mec 是俚语，le petit-ami 较正式|le mec is slang
+32|祖父；外祖父|m|我爷爷在看报纸。|{grand} + {père}|{grand} + {père}
+33|丈夫|m|这是朱丽叶的丈夫。|{mari} 和英语 {marry} 同源|{mari} root of marry
+34|父亲|m|我爸爸在这里工作。|{père} 读 [pɛʁ]|{père} [pɛʁ]
+35|祖父母|pl|我去看我的祖父母。|{grands-parents} 复数，grand 要加 s|{grands-parents}; both words take s
+36|父母|pl|我的父母很善良。|注意：{parents} 在法语里是「父母」，不是所有亲戚|note: parents = mum and dad, not all relatives
+37|孙子女|pl|我爱我的孙子孙女们。|{petits-enfants}：petit 要加 s|{petits-enfants}
+38|北，南，东，西|pl||{nord} 北、{sud} 南、{est} 东、{ouest} 西；est 读 [ɛst]|{nord}, {sud}, {est}, {ouest}; est is [ɛst]
+39|动物|m|我有一只宠物。|{animal} 复数 animaux|{animal} plural animaux
+40|生日；周年|m|今天是我的生日。|{anniversaire} = 年 + 回来|{anniversaire} = year + return
+41|公寓|m|我有一套漂亮的公寓。|{appartement} 两个 p，一个 t|{appartement}: two p, one t
+42|区（巴黎行政区）|m|她住在巴黎18区。|巴黎共 20 个 {arrondissement}；说「18ème」|Paris has 20 {arrondissement}s
+43|酒吧|m|他在吧台喝一杯。|和英语 {bar} 一致|same as English {bar}
+44|礼物|m|我有一份礼物给你。|{cadeau} 读 [kado]|{cadeau} [kado]
+45|蘑菇|m|这是一个红蘑菇。|{champignon} 读 [ʃɑ̃piɲɔ̃]，gn 读 [ɲ]|gn = [ɲ]
+46|舞者|n|他是个好舞者。|阳性 danseur，阴性 danseuse|danseur / danseuse
+47|蜗牛|m|我看到一只蜗牛。|{escargot} 法国名菜蜗牛|famous French dish
+48|儿子|m|他们有一个儿子。|{fils} 读 [fis]，s 要读出|{fils} [fis]; the s is pronounced
+49|兄弟|m|我有一个哥哥。|{frère} 读 [fʁɛʁ]，和英语 {fra}ternal 同源|same root as {fra}ternal
+50|蛋糕|m|我吃一块蛋糕。|复数 gâteaux；â 上的帽子表示曾有 s|plural gâteaux
+51|护士|n|护士在医院工作。|阳性 infirmier，阴性 infirmière|infirmier / infirmière
+52|乐器|m|我会演奏乐器。|{instrument} 和英语 {instrument} 一致|same as English
+53|书|m|我读一本书。|{livre} 书；les livres|{livre}
+54|地铁|m|地铁很快。|{métro} 是 métropolitain 的缩写|short for métropolitain
+55|音乐家|n|他是音乐家。|阳性 musicien，阴性 musicienne|musicien / musicienne
+56|叔叔；舅舅|m|我叔叔住在这里。|{oncle} 读 [ɔ̃kl]|{oncle} [ɔ̃kl]
+57|孙子|m|这是我的孙子。|{petit-fils}：fils 的 s 读出|{petit-fils}
+58|警察|n|警察在街上。|阳性 policier，阴性 policière|policier / policière
+59|街区|m|我的街区很安静。|{quartier} 来自 quart（四分之一）|from quart (quarter)
+60|餐厅|m|我们去餐厅。|{restaurant} 和英语 {restaurant} 一致|same as English
+61|火车|m|我坐火车。|prendre le train：坐火车|prendre le train
+62|室友|n|我的室友很友好。|(e) 表示阴阳性同形，即 un/une colocataire|un/une colocataire
+63|堂兄弟姐妹；表亲|n|我和我的表哥一起玩。|阳性 cousin，阴性 cousine|cousin / cousine
+64|花店老板|n|我在花店买花。|{fleur} 花 → {fleur}iste|{fleur} flower → {fleur}iste
+65|工程师|n|她是工程师。|阴性 ingénieure（也写 ingénieur）|ingénieure
+66|画家|n|画家画了一幅画。|阴阳性同形 un/une peintre|un/une peintre
+67|家庭|f|我有一个大家庭。|和英语 {family} 同源|same root as English {family}
+68|女儿；女孩|f|这是我的女儿。|{fille} 读 [fij]，ll 读 [j]|ll = [j]
+69|火车站|f|车站离这里很近。|{gare} 火车站|{gare}
+70|孙女|f|这是我的孙女。|{petite-fille}|{petite-fille}
+71|苹果|f|我吃一个苹果。|{pomme} 苹果；pomme de terre = 土豆|pomme de terre = potato
+72|街道|f|街道很长。|{rue} 街；和英语 {rue}（小巷）有关|{rue}
+73|姐妹|f|我有一个姐姐。|{soeur} 读 [sœʁ]，也写 sœur|{soeur} [sœʁ]
+74|姑姑；阿姨|f|我的阿姨很善良。|{tante} 读 [tɑ̃t]|{tante} [tɑ̃t]
+75|谁？|pron|这是谁？|{qui} 谁，读 [ki]|{qui} [ki]
+76|认识|v|我认识这座城市。|认识人/地方用 connaître；知道事实用 savoir|connaître: people/places; savoir: facts
+77|跳舞|v|她喜欢跳舞。|{danser} 和英语 {dance} 同源|same as English {dance}
+78|搬家|v|我明天搬家。|{dé} 离开 + {ménager}（家）= 离开家|{dé} out + ménage
+79|讨厌|v|我讨厌寒冷。|{détester} 和英语 {detest} 同源|{détest}
+80|解释|v|他讲解课程。|和英语 {explain} 同源|{expliquer}
+81|做|v|我要做一个蛋糕。|不规则：je fais, tu fais, il fait, nous faisons|je fais, tu fais, il fait, nous faisons
+82|吃|v|我们喜欢吃饭。|nous mangeons：g 后要加 e|nous mangeons; add e after g
+83|缺少；想念|v|我想你。|Tu me manques = 我想你（主语是被想的人）|Tu me manques = I miss you (the subject is the missed one)
+84|走路；运行|v|我们喜欢走路。|{marcher} 走路；机器「运转」也用|{marcher} also = to work (machines)
+85|游泳|v|我会游泳。|nous nageons：g 后要加 e|nous nageons
+86|开玩笑|v|我开玩笑呢！|{plaisanter} 来自 plaisir（乐趣）|from plaisir
+87|工作|v|我每天工作。|{travailler} 工作，和英语 {travel} 同源|English {travel} comes from the same root
+88|旅行|v|他喜欢旅行。|{voyager} 和英语 {voyage} 同源|{voyage}

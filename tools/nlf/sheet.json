@@ -1,0 +1,7206 @@
+{
+"0": [
+[
+"Catégorie",
+"Mot",
+"Exemple",
+"Traduction anglais",
+"Exemple"
+],
+[
+"Adjectif",
+"Le premier / La première",
+"C'est le premier jour du mois.",
+"The first",
+"It is the first day of the month."
+],
+[
+"Adverbe",
+"Aujourd'hui",
+"Aujourd'hui, il fait beau.",
+"Today",
+"Today, the weather is nice."
+],
+[
+"Adverbe",
+"Demain",
+"Demain, je vais au cinéma.",
+"Tomorrow",
+"Tomorrow, I am going to the movies."
+],
+[
+"Adverbe",
+"Hier",
+"Hier, j'ai mangé une pomme.",
+"Yesterday",
+"Yesterday, I ate an apple."
+],
+[
+"Formule de politesse",
+"À bientôt",
+"À bientôt, j'espère.",
+"See you soon",
+"See you soon, I hope."
+],
+[
+"Formule de politesse",
+"Au revoir",
+"Au revoir, bonne soirée !",
+"Goodbye",
+"Goodbye, have a good evening!"
+],
+[
+"Formule de politesse",
+"Bonjour",
+"Bonjour, comment tu t'appelles ?",
+"Hello / Good morning",
+"Hello, what is your name?"
+],
+[
+"Formule de politesse",
+"Bonne journée",
+"Merci, bonne journée à toi aussi !",
+"Have a good day",
+"Thank you, have a good day too!"
+],
+[
+"Formule de politesse",
+"Bonsoir",
+"Bonsoir, à demain.",
+"Good evening",
+"Good evening, see you tomorrow."
+],
+[
+"Formule de politesse",
+"Ça va ? / Ça va.",
+"Ça va bien, merci.",
+"How are you ? I'm good.",
+"I am good, thank you."
+],
+[
+"Formule de politesse",
+"Enchanté(e)",
+"Enchanté, je m'appelle Marie.",
+"Nice to meet you",
+"Nice to meet you, my name is Marie."
+],
+[
+"Formule de politesse",
+"Merci",
+"Merci pour ton aide.",
+"Thank you",
+"Thank you for your help."
+],
+[
+"Formule de politesse",
+"Merci beaucoup",
+"Merci beaucoup pour le cadeau.",
+"Thank you very much",
+"Thank you very much for the gift."
+],
+[
+"Formule de politesse",
+"S'il te plaît / S'il vous plaît",
+"Un café, s'il te plaît.",
+"Please",
+"A coffee, please."
+],
+[
+"Formule de politesse",
+"Salut",
+"Salut, ça va ?",
+"Hi / Hey / Bye",
+"Hi, how are you?"
+],
+[
+"Nom",
+"L'âge",
+"Quel est ton âge ?",
+"The age",
+"What is your age?"
+],
+[
+"Nom",
+"L'automne",
+"Les feuilles tombent en automne.",
+"The autumn / The fall",
+"Leaves fall in autumn."
+],
+[
+"Nom",
+"L'été",
+"Il fait chaud en été.",
+"The summer",
+"It is hot in summer."
+],
+[
+"Nom",
+"L'hiver",
+"Il fait froid en hiver.",
+"The winter",
+"It is cold in winter."
+],
+[
+"Nom",
+"La bise",
+"On fait la bise en France.",
+"X",
+"X"
+],
+[
+"Nom",
+"Le printemps",
+"Il y a des fleurs au printemps.",
+"The spring",
+"There are flowers in spring."
+],
+[
+"Nom",
+"Un ami",
+"C'est un bon ami.",
+"A friend",
+"He is a good friend."
+],
+[
+"Nom",
+"Un an",
+"Elle a dix ans.",
+"A year",
+"She is ten years old."
+],
+[
+"Nom",
+"Un chat",
+"Le chat dort.",
+"A cat",
+"The cat is sleeping."
+],
+[
+"Nom",
+"Un chien",
+"Le chien est petit.",
+"A dog",
+"The dog is small."
+],
+[
+"Nom",
+"Un enfant",
+"Il a un enfant.",
+"A child",
+"He has a child."
+],
+[
+"Nom",
+"Un euro",
+"Le café coûte un euro.",
+"A euro",
+"The coffee costs one euro."
+],
+[
+"Nom",
+"Un jour",
+"C'est un beau jour.",
+"A day",
+"It is a beautiful day."
+],
+[
+"Nom",
+"Un mois",
+"Février est un mois court.",
+"A month",
+"February is a short month."
+],
+[
+"Nom",
+"Une année",
+"C'est une bonne année.",
+"A year",
+"It is a good year."
+],
+[
+"Nom",
+"Une baguette",
+"J'achète une baguette.",
+"A baguette (French bread)",
+"I am buying a baguette."
+],
+[
+"Nom",
+"Une date",
+"Quelle est la date d'aujourd'hui ?",
+"A date",
+"What is today's date?"
+],
+[
+"Nom",
+"Une saison",
+"Ma saison préférée est l'été.",
+"A season",
+"My favorite season is summer."
+],
+[
+"Nom",
+"Une semaine",
+"Il y a sept jours dans une semaine.",
+"A week",
+"There are seven days in a week."
+],
+[
+"Verbe",
+"Avoir",
+"J'ai deux enfants.",
+"To have",
+"I have two children."
+],
+[
+"Verbe",
+"Être",
+"Je suis français.",
+"To be",
+"I am French."
+],
+[
+"Verbe",
+"S'appeler",
+"Je m'appelle Thomas. Tu t'appelles comment ?",
+"To be called / To name oneself",
+"My name is Thomas. What is your name?"
+]
+],
+"1": [
+[
+"Catégorie",
+"Mot",
+"Exemple",
+"Traduction anglais",
+"Exemple"
+],
+[
+"Adjectif",
+"Anglais(e)",
+"Elle est anglaise.",
+"English",
+"She is English."
+],
+[
+"Adjectif",
+"Célèbre",
+"Il est très célèbre.",
+"Famous",
+"He is very famous."
+],
+[
+"Adjectif",
+"Féminin",
+"\"Langue\" est un mot féminin.",
+"Feminine",
+"\"Langue\" is a feminine word."
+],
+[
+"Adjectif",
+"Français(e)",
+"Il est français.",
+"French",
+"He is French."
+],
+[
+"Adjectif",
+"Masculin",
+"\"Film\" est un mot masculin.",
+"Masculine",
+"\"Film\" is a masculine word."
+],
+[
+"Adjectif",
+"Préféré(e)",
+"C'est mon livre préféré.",
+"Favorite",
+"It is my favorite book."
+],
+[
+"Nom",
+"De la musique",
+"J'écoute de la musique.",
+"Music",
+"I listen to music."
+],
+[
+"Nom",
+"De la salade",
+"Je prépare de la salade.",
+"Salad",
+"I prepare salad."
+],
+[
+"Nom",
+"L'art",
+"J'aime l'art.",
+"Art",
+"I like art."
+],
+[
+"Nom",
+"L'heure",
+"Quelle heure est-il ?",
+"Time",
+"What time is it?"
+],
+[
+"Nom",
+"La France",
+"J'habite en France.",
+"France",
+"I live in France."
+],
+[
+"Nom",
+"La grammaire",
+"J'apprends la grammaire.",
+"Grammar",
+"I learn grammar."
+],
+[
+"Nom",
+"La littérature",
+"J'étudie la littérature.",
+"Literature",
+"I study literature."
+],
+[
+"Nom",
+"La poésie",
+"J'écris de la poésie.",
+"Poetry",
+"I write poetry."
+],
+[
+"Nom",
+"La prononciation",
+"La prononciation est difficile.",
+"Pronunciation",
+"The pronunciation is difficult."
+],
+[
+"Nom",
+"La randonnée",
+"J'aime la randonnée.",
+"Hiking",
+"I like hiking."
+],
+[
+"Nom",
+"La télévision",
+"Je regarde la télévision.",
+"Television",
+"I watch television."
+],
+[
+"Nom",
+"Le basket",
+"Nous jouons au basket.",
+"Basketball",
+"We play basketball."
+],
+[
+"Nom",
+"Le café",
+"Je bois du café.",
+"Coffee",
+"I drink coffee."
+],
+[
+"Nom",
+"Le chocolat",
+"J'adore le chocolat.",
+"Chocolate",
+"I love chocolate."
+],
+[
+"Nom",
+"Le cinéma",
+"Je vais au cinéma.",
+"Cinema",
+"I go to the cinema."
+],
+[
+"Nom",
+"Le cricket",
+"Ils jouent au cricket.",
+"Cricket",
+"They play cricket."
+],
+[
+"Nom",
+"Le foot",
+"Il joue au foot.",
+"Football / Soccer",
+"He plays football."
+],
+[
+"Nom",
+"Le thé",
+"Je préfère le thé.",
+"Tea",
+"I prefer tea."
+],
+[
+"Nom",
+"Le vocabulaire",
+"J'étudie le vocabulaire.",
+"Vocabulary",
+"I study vocabulary."
+],
+[
+"Nom",
+"Les devoirs",
+"Je dois faire mes devoirs.",
+"Homework",
+"I have to do my homework."
+],
+[
+"Nom",
+"Les jeux-vidéos",
+"Je joue aux jeux-vidéos.",
+"Video games",
+"I play video games."
+],
+[
+"Nom",
+"Les langues",
+"Je parle deux langues.",
+"Languages",
+"I speak two languages."
+],
+[
+"Nom",
+"Un acteur / Une actrice",
+"C'est un bon acteur.",
+"An actor / actress",
+"He is a good actor."
+],
+[
+"Nom",
+"Un aéroport",
+"Je vais à l'aéroport.",
+"An airport",
+"I go to the airport."
+],
+[
+"Nom",
+"Un auteur / Une autrice",
+"C'est mon auteur préféré.",
+"An author",
+"He is my favorite author."
+],
+[
+"Nom",
+"Un chanteur / Une chanteuse",
+"Il est chanteur.",
+"A singer",
+"He is a singer."
+],
+[
+"Nom",
+"Un film",
+"Je regarde un film.",
+"A movie",
+"I watch a movie."
+],
+[
+"Nom",
+"Un fruit",
+"Je mange un fruit.",
+"A fruit",
+"I eat a fruit."
+],
+[
+"Nom",
+"Un homme",
+"C'est un homme grand.",
+"A man",
+"He is a tall man."
+],
+[
+"Nom",
+"Un lieu de naissance",
+"Quel est ton lieu de naissance ?",
+"A place of birth",
+"What is your place of birth?"
+],
+[
+"Nom",
+"Un métier",
+"Quel est ton métier ?",
+"A job",
+"What is your job?"
+],
+[
+"Nom",
+"Un nom de famille",
+"Mon nom de famille est Martin.",
+"A last name",
+"My last name is Martin."
+],
+[
+"Nom",
+"Un numéro de téléphone",
+"Quel est ton numéro de téléphone ?",
+"A phone number",
+"What is your phone number?"
+],
+[
+"Nom",
+"Un passeport",
+"J'ai un passeport français.",
+"A passport",
+"I have a French passport."
+],
+[
+"Nom",
+"Un pays",
+"La France est un pays.",
+"A country",
+"France is a country."
+],
+[
+"Nom",
+"Un piano",
+"Je joue du piano.",
+"A piano",
+"I play the piano."
+],
+[
+"Nom",
+"Un prénom",
+"Mon prénom est Paul.",
+"A first name",
+"My first name is Paul."
+],
+[
+"Nom",
+"Un sport",
+"Je fais du sport.",
+"A sport",
+"I play sports."
+],
+[
+"Nom",
+"Un sportif / Une sportive",
+"C'est une sportive.",
+"An athlete",
+"She is an athlete."
+],
+[
+"Nom",
+"Un téléphone",
+"J'ai un nouveau téléphone.",
+"A phone",
+"I have a new phone."
+],
+[
+"Nom",
+"Un transport",
+"Je prends les transports.",
+"A transport",
+"I take transport."
+],
+[
+"Nom",
+"Une adresse",
+"Quelle est ton adresse ?",
+"An address",
+"What is your address?"
+],
+[
+"Nom",
+"Une adresse email",
+"Voici mon adresse email.",
+"An email address",
+"Here is my email address."
+],
+[
+"Nom",
+"Une application",
+"J'utilise cette application.",
+"An app",
+"I use this app."
+],
+[
+"Nom",
+"Une carte SIM",
+"J'achète une carte SIM.",
+"A SIM card",
+"I am buying a SIM card."
+],
+[
+"Nom",
+"Une date de naissance",
+"Quelle est ta date de naissance ?",
+"A date of birth",
+"What is your date of birth?"
+],
+[
+"Nom",
+"Une étudiant(e)",
+"Je suis étudiant.",
+"A student",
+"I am a student."
+],
+[
+"Nom",
+"Une femme",
+"C'est une femme forte.",
+"A woman",
+"She is a strong woman."
+],
+[
+"Nom",
+"Une nationalité",
+"Quelle est ta nationalité ?",
+"A nationality",
+"What is your nationality?"
+],
+[
+"Nom",
+"Une université",
+"J'étudie à l'université.",
+"A university",
+"I study at the university."
+],
+[
+"Nom",
+"Une ville",
+"Paris est une ville.",
+"A city",
+"Paris is a city."
+],
+[
+"Verbe",
+"Adorer",
+"J'adore ce film.",
+"To love",
+"I love this movie."
+],
+[
+"Verbe",
+"Aider",
+"Je peux t'aider.",
+"To help",
+"I can help you."
+],
+[
+"Verbe",
+"Aimer",
+"J'aime le chocolat.",
+"To like / love",
+"I like chocolate."
+],
+[
+"Verbe",
+"Arriver",
+"J'arrive demain.",
+"To arrive",
+"I arrive tomorrow."
+],
+[
+"Verbe",
+"Contacter",
+"Tu peux me contacter.",
+"To contact",
+"You can contact me."
+],
+[
+"Verbe",
+"Être né(e)",
+"Je suis né en mars.",
+"To be born",
+"I was born in March."
+],
+[
+"Verbe",
+"Étudier",
+"J'étudie à Paris.",
+"To study",
+"I study in Paris."
+],
+[
+"Verbe",
+"Habiter",
+"J'habite en France.",
+"To live",
+"I live in France."
+],
+[
+"Verbe",
+"Parler",
+"Je parle français.",
+"To speak",
+"I speak French."
+],
+[
+"Verbe",
+"Préférer",
+"Je préfère le thé.",
+"To prefer",
+"I prefer tea."
+],
+[
+"Verbe",
+"Trouver",
+"Je trouve un fruit.",
+"To find",
+"I find a fruit."
+]
+],
+"2": [
+[
+"Catégorie",
+"Mot",
+"Exemple",
+"Traduction anglais",
+"Exemple"
+],
+[
+"Adjectif",
+"Asiatique",
+"Il y a beaucoup de restaurants asiatiques ici.",
+"Asian",
+"There are many Asian restaurants here."
+],
+[
+"Adjectif",
+"Bourgeois(e)",
+"C'est un quartier bourgeois.",
+"Bourgeois / Middle-class",
+"It's a bourgeois neighborhood."
+],
+[
+"Adjectif",
+"Branché(e)",
+"Ce quartier est très branché.",
+"Trendy",
+"This neighborhood is very trendy."
+],
+[
+"Adjectif",
+"Bruyant(e)",
+"Ma rue est trop bruyante.",
+"Noisy",
+"My street is too noisy."
+],
+[
+"Adjectif",
+"Calme",
+"Le parc est calme.",
+"Calm / Quiet",
+"The park is quiet."
+],
+[
+"Adjectif",
+"Célibataire",
+"Il est célibataire.",
+"Single",
+"He is single."
+],
+[
+"Adjectif",
+"Enceinte",
+"Elle est enceinte.",
+"Pregnant",
+"She is pregnant."
+],
+[
+"Adjectif",
+"Grand(e)",
+"Il est très grand.",
+"Tall / Big",
+"He is very tall."
+],
+[
+"Adjectif",
+"Normal(e)",
+"C'est une journée normale.",
+"Normal",
+"It's a normal day."
+],
+[
+"Adjectif",
+"Occupé(e)",
+"Je suis très occupé.",
+"Busy",
+"I am very busy."
+],
+[
+"Adjectif",
+"Pauvre",
+"C'est un pays pauvre.",
+"Poor",
+"It's a poor country."
+],
+[
+"Adjectif",
+"Petit(e)",
+"Le chien est petit.",
+"Small / Little",
+"The dog is small."
+],
+[
+"Adjectif",
+"Populaire",
+"C'est un chanteur populaire.",
+"Popular",
+"He is a popular singer."
+],
+[
+"Adjectif",
+"Propre",
+"Ma chambre est propre.",
+"Clean",
+"My room is clean."
+],
+[
+"Adjectif",
+"Riche",
+"Cet homme est riche.",
+"Rich",
+"This man is rich."
+],
+[
+"Adjectif",
+"Sale",
+"Le sol est sale.",
+"Dirty",
+"The floor is dirty."
+],
+[
+"Adjectif",
+"Sympa",
+"Ce quartier est très sympa.",
+"Nice / Friendly",
+"This neighborhood is very nice."
+],
+[
+"Expression",
+"(Faire) du sport",
+"Il fait du sport.",
+"To do sports",
+"He does sports."
+],
+[
+"Expression",
+"(Faire) la cuisine",
+"Elle fait la cuisine.",
+"To cook",
+"She cooks."
+],
+[
+"Expression",
+"(Faire) la vaisselle",
+"Je fais la vaisselle.",
+"To do the dishes",
+"I do the dishes."
+],
+[
+"Expression",
+"(Faire) le ménage",
+"Je fais le ménage le samedi.",
+"To do the cleaning",
+"I do the cleaning on Saturdays."
+],
+[
+"Expression",
+"(Faire) les courses",
+"Nous faisons les courses.",
+"To do the grocery shopping",
+"We do the grocery shopping."
+],
+[
+"Nom",
+"La copine / La petite-copine / La petite-amie / La meuf",
+"C'est ma petite-amie.",
+"The girlfriend",
+"She is my girlfriend."
+],
+[
+"Nom",
+"La danse",
+"La danse est ma passion.",
+"Dance",
+"Dance is my passion."
+],
+[
+"Nom",
+"La femme",
+"C'est la femme de Thomas.",
+"The wife",
+"It's Thomas's wife."
+],
+[
+"Nom",
+"La grand-mère",
+"Ma grand-mère fait un gâteau.",
+"Grandmother",
+"My grandmother is making a cake."
+],
+[
+"Nom",
+"La marche",
+"La marche est bonne pour la santé.",
+"Walking",
+"Walking is good for health."
+],
+[
+"Nom",
+"La mère",
+"Ma mère est à la maison.",
+"Mother",
+"My mother is at home."
+],
+[
+"Nom",
+"La musculation",
+"Il fait de la musculation.",
+"Weight training / Bodybuilding",
+"He does weight training."
+],
+[
+"Nom",
+"La natation",
+"J'aime la natation.",
+"Swimming",
+"I like swimming."
+],
+[
+"Nom",
+"Le copain / Le petit-copain / Le petit-ami / Le mec",
+"C'est mon petit-ami.",
+"The boyfriend",
+"He is my boyfriend."
+],
+[
+"Nom",
+"Le grand-père",
+"Mon grand-père lit le journal.",
+"Grandfather",
+"My grandfather reads the newspaper."
+],
+[
+"Nom",
+"Le mari",
+"C'est le mari de Juliette.",
+"The husband",
+"It's Juliette's husband."
+],
+[
+"Nom",
+"Le père",
+"Mon père travaille ici.",
+"Father",
+"My father works here."
+],
+[
+"Nom",
+"Les grands-parents",
+"Je visite mes grands-parents.",
+"Grandparents",
+"I visit my grandparents."
+],
+[
+"Nom",
+"Les parents",
+"Mes parents sont gentils.",
+"Parents",
+"My parents are kind."
+],
+[
+"Nom",
+"Les petits-enfants",
+"J'aime mes petits-enfants.",
+"Grandchildren",
+"I love my grandchildren."
+],
+[
+"Nom",
+"Nord, Sud, Est, Ouest",
+"X",
+"North, South, East, West",
+"X"
+],
+[
+"Nom",
+"Un animal",
+"J'ai un animal de compagnie.",
+"An animal",
+"I have a pet."
+],
+[
+"Nom",
+"Un anniversaire",
+"C'est mon anniversaire aujourd'hui.",
+"A birthday",
+"It's my birthday today."
+],
+[
+"Nom",
+"Un appartement",
+"J'ai un bel appartement.",
+"An apartment",
+"I have a beautiful apartment."
+],
+[
+"Nom",
+"Un arrondissement",
+"Elle habite dans le 18ème arrondissement de Paris.",
+"A district / borough",
+"She lives in the 18th arrondissement of Paris."
+],
+[
+"Nom",
+"Un bar",
+"Il boit un verre au bar.",
+"A bar",
+"He is drinking a glass at the bar."
+],
+[
+"Nom",
+"Un cadeau",
+"J'ai un cadeau pour toi.",
+"A gift / A present",
+"I have a gift for you."
+],
+[
+"Nom",
+"Un champignon",
+"C'est un champignon rouge.",
+"A mushroom",
+"It's a red mushroom."
+],
+[
+"Nom",
+"Un danseur / Une danseuse",
+"C'est un bon danseur.",
+"A dancer",
+"He is a good dancer."
+],
+[
+"Nom",
+"Un escargot",
+"Je vois un escargot.",
+"A snail",
+"I see a snail."
+],
+[
+"Nom",
+"Un fils",
+"Ils ont un fils.",
+"A son",
+"They have a son."
+],
+[
+"Nom",
+"Un frère",
+"J'ai un frère.",
+"A brother",
+"I have a brother."
+],
+[
+"Nom",
+"Un gâteau",
+"Je mange un gâteau.",
+"A cake",
+"I eat a cake."
+],
+[
+"Nom",
+"Un infirmier / Une infirmière",
+"L'infirmière travaille à l'hôpital.",
+"A nurse",
+"The nurse works at the hospital."
+],
+[
+"Nom",
+"Un instrument de musique",
+"Je joue d'un instrument de musique.",
+"A musical instrument",
+"I play a musical instrument."
+],
+[
+"Nom",
+"Un livre",
+"Je lis un livre.",
+"A book",
+"I read a book."
+],
+[
+"Nom",
+"Un métro",
+"Le métro est rapide.",
+"A subway",
+"The subway is fast."
+],
+[
+"Nom",
+"Un musicien / Une musicienne",
+"Il est musicien.",
+"A musician",
+"He is a musician."
+],
+[
+"Nom",
+"Un oncle",
+"Mon oncle habite ici.",
+"An uncle",
+"My uncle lives here."
+],
+[
+"Nom",
+"Un petit-fils",
+"C'est mon petit-fils.",
+"A grandson",
+"He is my grandson."
+],
+[
+"Nom",
+"Un policier / Une policière",
+"Le policier est dans la rue.",
+"A police officer",
+"The police officer is in the street."
+],
+[
+"Nom",
+"Un quartier",
+"Mon quartier est calme.",
+"A neighborhood",
+"My neighborhood is calm."
+],
+[
+"Nom",
+"Un restaurant",
+"Nous allons au restaurant.",
+"A restaurant",
+"We are going to the restaurant."
+],
+[
+"Nom",
+"Un train",
+"Je prends le train.",
+"A train",
+"I take the train."
+],
+[
+"Nom",
+"Un(e) colocataire",
+"Mon colocataire est sympa.",
+"A roommate",
+"My roommate is nice."
+],
+[
+"Nom",
+"Un(e) cousin(e)",
+"Je joue avec mon cousin.",
+"A cousin",
+"I play with my cousin."
+],
+[
+"Nom",
+"Un(e) fleuriste",
+"J'achète des fleurs chez le fleuriste.",
+"A florist",
+"I buy flowers at the florist."
+],
+[
+"Nom",
+"Un(e) ingénieur(e)",
+"Elle est ingénieure.",
+"An engineer",
+"She is an engineer."
+],
+[
+"Nom",
+"Un(e) peintre",
+"Le peintre peint un tableau.",
+"A painter",
+"The painter is painting a picture."
+],
+[
+"Nom",
+"Une famille",
+"J'ai une grande famille.",
+"A family",
+"I have a big family."
+],
+[
+"Nom",
+"Une fille",
+"C'est ma fille.",
+"A daughter / A girl",
+"She is my daughter."
+],
+[
+"Nom",
+"Une gare",
+"La gare est près d'ici.",
+"A train station",
+"The train station is near here."
+],
+[
+"Nom",
+"Une petite-fille",
+"C'est ma petite-fille.",
+"A granddaughter",
+"She is my granddaughter."
+],
+[
+"Nom",
+"Une pomme",
+"Je mange une pomme.",
+"An apple",
+"I eat an apple."
+],
+[
+"Nom",
+"Une rue",
+"La rue est longue.",
+"A street",
+"The street is long."
+],
+[
+"Nom",
+"Une soeur",
+"J'ai une soeur.",
+"A sister",
+"I have a sister."
+],
+[
+"Nom",
+"Une tante",
+"Ma tante est gentille.",
+"An aunt",
+"My aunt is kind."
+],
+[
+"Pronom interrogatif",
+"Qui ?",
+"C'est qui ?",
+"Who?",
+"Who is it?"
+],
+[
+"Verbe",
+"Connaître",
+"Je connais cette ville.",
+"To know (someone/somewhere)",
+"I know this city."
+],
+[
+"Verbe",
+"Danser",
+"Elle aime danser.",
+"To dance",
+"She likes to dance."
+],
+[
+"Verbe",
+"Déménager",
+"Je vais déménager demain.",
+"To move (house)",
+"I am going to move tomorrow."
+],
+[
+"Verbe",
+"Détester",
+"Je déteste le froid.",
+"To hate",
+"I hate the cold."
+],
+[
+"Verbe",
+"Expliquer",
+"Il explique la leçon.",
+"To explain",
+"He explains the lesson."
+],
+[
+"Verbe",
+"Faire",
+"Je vais faire un gâteau.",
+"To do / To make",
+"I am going to make a cake."
+],
+[
+"Verbe",
+"Manger",
+"Nous aimons manger.",
+"To eat",
+"We like to eat."
+],
+[
+"Verbe",
+"Manquer",
+"Tu me manques.",
+"To miss",
+"I miss you."
+],
+[
+"Verbe",
+"Marcher",
+"Nous aimons marcher.",
+"To walk",
+"We like to walk."
+],
+[
+"Verbe",
+"Nager",
+"Je sais nager.",
+"To swim",
+"I know how to swim."
+],
+[
+"Verbe",
+"Plaisanter",
+"Je plaisante !",
+"To joke",
+"I am joking!"
+],
+[
+"Verbe",
+"Travailler",
+"Je travaille tous les jours.",
+"To work",
+"I work every day."
+],
+[
+"Verbe",
+"Voyager",
+"Il aime voyager.",
+"To travel",
+"He likes to travel."
+]
+],
+"3": [
+[
+"Catégorie",
+"Mot",
+"Exemple",
+"Traduction anglais",
+"Exemple"
+],
+[
+"Adjectif",
+"Antillais(e)",
+"La cuisine antillaise est bonne.",
+"West Indian / Caribbean",
+"Caribbean food is good."
+],
+[
+"Adjectif",
+"Argentin(e)",
+"Il est argentin.",
+"Argentinian",
+"He is Argentinian."
+],
+[
+"Adjectif",
+"Brésilien(ne)",
+"Il parle portugais brésilien.",
+"Brazilian",
+"He speaks Brazilian Portuguese."
+],
+[
+"Adjectif",
+"Cher / Chère",
+"Ce sac est très cher.",
+"Expensive",
+"This bag is very expensive."
+],
+[
+"Adjectif",
+"Chinois(e)",
+"J'apprends le chinois.",
+"Chinese",
+"I am learning Chinese."
+],
+[
+"Adjectif",
+"Coréen(ne)",
+"Le cinéma coréen est super.",
+"Korean",
+"Korean cinema is great."
+],
+[
+"Adjectif",
+"Délicieux / Délicieuse",
+"Ce gâteau est délicieux.",
+"Delicious",
+"This cake is delicious."
+],
+[
+"Adjectif",
+"Épicé(e)",
+"J'aime manger épicé.",
+"Spicy",
+"I like to eat spicy food."
+],
+[
+"Adjectif",
+"Espagnol(e)",
+"Je parle espagnol.",
+"Spanish",
+"I speak Spanish."
+],
+[
+"Adjectif",
+"Gras / Grasse",
+"La viande est trop grasse.",
+"Fatty / Greasy",
+"The meat is too fatty."
+],
+[
+"Adjectif",
+"Grec(que)",
+"Une salade grecque, s'il vous plaît.",
+"Greek",
+"A Greek salad, please."
+],
+[
+"Adjectif",
+"Indien(ne)",
+"Le thé indien est bon.",
+"Indian",
+"Indian tea is good."
+],
+[
+"Adjectif",
+"Italien(ne)",
+"J'adore la cuisine italienne.",
+"Italian",
+"I love Italian food."
+],
+[
+"Adjectif",
+"Ivoirien(ne)",
+"Elle est ivoirienne.",
+"Ivorian",
+"She is Ivorian."
+],
+[
+"Adjectif",
+"Marocain(e)",
+"Le couscous est marocain.",
+"Moroccan",
+"Couscous is Moroccan."
+],
+[
+"Adjectif",
+"Mauvais(e)",
+"Ce film est mauvais.",
+"Bad",
+"This movie is bad."
+],
+[
+"Adjectif",
+"Pas mal",
+"Ce restaurant est pas mal.",
+"Not bad",
+"This restaurant is not bad."
+],
+[
+"Adjectif",
+"Péruvien(ne)",
+"Le ceviche est péruvien.",
+"Peruvian",
+"Ceviche is Peruvian."
+],
+[
+"Adjectif",
+"Salé(e)",
+"C'est trop salé.",
+"Salty / Savory",
+"It is too salty."
+],
+[
+"Adjectif",
+"Sénégalais(e)",
+"C'est un plat sénégalais.",
+"Senegalese",
+"It is a Senegalese dish."
+],
+[
+"Adjectif",
+"Sucré(e)",
+"Je préfère le sucré.",
+"Sweet",
+"I prefer sweet things."
+],
+[
+"Adjectif",
+"Sud-africain(e)",
+"Elle est sud-africaine.",
+"South African",
+"She is South African."
+],
+[
+"Adjectif",
+"Thaïlandais(e)",
+"Il mange un plat thaïlandais.",
+"Thai",
+"He is eating a Thai dish."
+],
+[
+"Nom",
+"Bleu / Saignant / À point / Bien cuit",
+"Je voudrais mon steak à point.",
+"Blue / Rare / Medium / Well done",
+"I would like my steak medium."
+],
+[
+"Nom",
+"De l'alcool",
+"Il ne boit pas d'alcool.",
+"Alcohol",
+"He does not drink alcohol."
+],
+[
+"Nom",
+"De l'eau",
+"Je bois de l'eau tous les jours.",
+"Water",
+"I drink water every day."
+],
+[
+"Nom",
+"De l'huile",
+"J'ajoute un peu d'huile d'olive.",
+"Oil",
+"I add a little olive oil."
+],
+[
+"Nom",
+"De la bière",
+"Il boit une bière fraîche.",
+"Beer",
+"He drinks a cold beer."
+],
+[
+"Nom",
+"De la confiture",
+"Je mets de la confiture sur mon pain.",
+"Jam",
+"I put jam on my bread."
+],
+[
+"Nom",
+"De la farine",
+"Il faut de la farine pour le pain.",
+"Flour",
+"You need flour for bread."
+],
+[
+"Nom",
+"De la glace",
+"Je voudrais de la glace à la vanille.",
+"Ice cream / Ice",
+"I would like vanilla ice cream."
+],
+[
+"Nom",
+"De la mayonnaise",
+"Des frites avec de la mayonnaise.",
+"Mayonnaise",
+"Fries with mayonnaise."
+],
+[
+"Nom",
+"De la moutarde",
+"Je mets de la moutarde.",
+"Mustard",
+"I put some mustard."
+],
+[
+"Nom",
+"De la soupe",
+"Je mange de la soupe en hiver.",
+"Soup",
+"I eat soup in winter."
+],
+[
+"Nom",
+"De la viande",
+"Je ne mange pas de viande.",
+"Meat",
+"I don't eat meat."
+],
+[
+"Nom",
+"Des biscuits",
+"Les enfants mangent des biscuits.",
+"Biscuits / Cookies",
+"The children are eating cookies."
+],
+[
+"Nom",
+"Des carottes",
+"Je mange des carottes râpées.",
+"Carrots",
+"I eat grated carrots."
+],
+[
+"Nom",
+"Des cerises",
+"J'achète des cerises au marché.",
+"Cherries",
+"I buy cherries at the market."
+],
+[
+"Nom",
+"Des chips",
+"On mange des chips à l'apéritif.",
+"Chips / Crisps",
+"We eat chips as an appetizer."
+],
+[
+"Nom",
+"Des cigarettes",
+"Il achète des cigarettes.",
+"Cigarettes",
+"He buys cigarettes."
+],
+[
+"Nom",
+"Des cornichons",
+"Je mets des cornichons dans mon sandwich.",
+"Pickles / Gherkins",
+"I put pickles in my sandwich."
+],
+[
+"Nom",
+"Des crevettes",
+"J'aime manger des crevettes.",
+"Shrimp",
+"I like to eat shrimp."
+],
+[
+"Nom",
+"Des épices",
+"J'ajoute des épices dans le plat.",
+"Spices",
+"I add spices to the dish."
+],
+[
+"Nom",
+"Des fraises",
+"J'adore les tartes aux fraises.",
+"Strawberries",
+"I love strawberry tarts."
+],
+[
+"Nom",
+"Des haricots verts",
+"Je cuisine des haricots verts.",
+"Green beans",
+"I am cooking green beans."
+],
+[
+"Nom",
+"Des ingrédients",
+"Il me faut trois ingrédients pour la recette.",
+"Ingredients",
+"I need three ingredients for the recipe."
+],
+[
+"Nom",
+"Des lasagnes",
+"On mange des lasagnes ce soir.",
+"Lasagna",
+"We are eating lasagna tonight."
+],
+[
+"Nom",
+"Des macarons",
+"J'adore les macarons au chocolat.",
+"Macarons",
+"I love chocolate macarons."
+],
+[
+"Nom",
+"Des mouchoirs",
+"Tu as des mouchoirs ?",
+"Tissues",
+"Do you have tissues?"
+],
+[
+"Nom",
+"Des noix",
+"Je mange des noix avec du fromage.",
+"Walnuts / Nuts",
+"I eat walnuts with cheese."
+],
+[
+"Nom",
+"Des oignons",
+"Je pleure quand je coupe des oignons.",
+"Onions",
+"I cry when I cut onions."
+],
+[
+"Nom",
+"Des olives",
+"J'achète des olives vertes.",
+"Olives",
+"I buy green olives."
+],
+[
+"Nom",
+"Des pâtes",
+"Je mange des pâtes avec de la sauce tomate.",
+"Pasta",
+"I eat pasta with tomato sauce."
+],
+[
+"Nom",
+"Des petits pois",
+"Je mange des petits pois avec la viande.",
+"Peas",
+"I eat peas with the meat."
+],
+[
+"Nom",
+"Des pruneaux",
+"Je mange des pruneaux.",
+"Prunes",
+"I eat prunes."
+],
+[
+"Nom",
+"Des sardines",
+"Il y a des sardines dans la boîte.",
+"Sardines",
+"There are sardines in the can."
+],
+[
+"Nom",
+"Des spaghettis",
+"Les enfants aiment les spaghettis.",
+"Spaghetti",
+"Children like spaghetti."
+],
+[
+"Nom",
+"Des sushis",
+"On commande des sushis ?",
+"Sushi",
+"Shall we order sushi?"
+],
+[
+"Nom",
+"Du beurre",
+"Il n'y a plus de beurre dans le frigo.",
+"Butter",
+"There is no more butter in the fridge."
+],
+[
+"Nom",
+"Du boeuf",
+"C'est de la viande de boeuf.",
+"Beef",
+"It is beef meat."
+],
+[
+"Nom",
+"Du café",
+"Un café, s'il vous plaît.",
+"Coffee",
+"A coffee, please."
+],
+[
+"Nom",
+"Du canard",
+"Le magret de canard est délicieux.",
+"Duck",
+"Duck breast is delicious."
+],
+[
+"Nom",
+"Du chocolat",
+"Je mange un carré de chocolat.",
+"Chocolate",
+"I eat a square of chocolate."
+],
+[
+"Nom",
+"Du fromage",
+"La France est connue pour son fromage.",
+"Cheese",
+"France is known for its cheese."
+],
+[
+"Nom",
+"Du jus (de fruit)",
+"Je bois un verre de jus de pomme.",
+"Juice (fruit juice)",
+"I drink a glass of apple juice."
+],
+[
+"Nom",
+"Du lait",
+"Je bois du lait chaud le soir.",
+"Milk",
+"I drink warm milk in the evening."
+],
+[
+"Nom",
+"Du pain",
+"J'achète du pain tous les jours.",
+"Bread",
+"I buy bread every day."
+],
+[
+"Nom",
+"Du poisson",
+"Je mange du poisson le vendredi.",
+"Fish",
+"I eat fish on Fridays."
+],
+[
+"Nom",
+"Du poivre",
+"Je mets du sel et du poivre.",
+"Pepper",
+"I put salt and pepper."
+],
+[
+"Nom",
+"Du poulet",
+"On mange du poulet ce midi.",
+"Chicken",
+"We are eating chicken this noon."
+],
+[
+"Nom",
+"Du riz",
+"Je mange du riz avec le poulet.",
+"Rice",
+"I eat rice with the chicken."
+],
+[
+"Nom",
+"Du saumon",
+"Je prépare un pavé de saumon.",
+"Salmon",
+"I am preparing a salmon steak."
+],
+[
+"Nom",
+"Du sel",
+"Passe-moi le sel, s'il te plaît.",
+"Salt",
+"Pass me the salt, please."
+],
+[
+"Nom",
+"Du thé",
+"Je bois du thé le matin.",
+"Tea",
+"I drink tea in the morning."
+],
+[
+"Nom",
+"Du thon",
+"Je fais une salade au thon.",
+"Tuna",
+"I make a tuna salad."
+],
+[
+"Nom",
+"Du vin (rouge, rosé, blanc)",
+"Je bois un verre de vin rouge.",
+"Wine (red, rosé, white)",
+"I drink a glass of red wine."
+],
+[
+"Nom",
+"Du yahourt",
+"Je mange du yahourt au dessert.",
+"Yogurt",
+"I eat yogurt for dessert."
+],
+[
+"Nom",
+"L'addition",
+"L'addition, s'il vous plaît.",
+"The bill",
+"The bill, please."
+],
+[
+"Nom",
+"L'entrée",
+"Je prends une salade en entrée.",
+"The starter / appetizer",
+"I'll have a salad as a starter."
+],
+[
+"Nom",
+"La carte / Le menu",
+"Je regarde le menu.",
+"The menu",
+"I am looking at the menu."
+],
+[
+"Nom",
+"La radio",
+"J'écoute la radio dans la voiture.",
+"The radio",
+"I listen to the radio in the car."
+],
+[
+"Nom",
+"Le déjeuner",
+"Je prends mon déjeuner à midi.",
+"Lunch",
+"I have my lunch at noon."
+],
+[
+"Nom",
+"Le dessert",
+"Qu'est-ce qu'il y a pour le dessert ?",
+"Dessert",
+"What is there for dessert?"
+],
+[
+"Nom",
+"Le dîner",
+"Le dîner est prêt.",
+"Dinner",
+"Dinner is ready."
+],
+[
+"Nom",
+"Le fromager / La fromagère",
+"Le fromager me conseille un bon fromage.",
+"The cheesemonger",
+"The cheesemonger advises me a good cheese."
+],
+[
+"Nom",
+"Le petit-déjeuner",
+"Je prends mon petit-déjeuner à 8h.",
+"Breakfast",
+"I have my breakfast at 8am."
+],
+[
+"Nom",
+"Le plat",
+"Le plat du jour est bon.",
+"The dish",
+"The dish of the day is good."
+],
+[
+"Nom",
+"Le prix",
+"Quel est le prix de cette robe ?",
+"The price",
+"What is the price of this dress?"
+],
+[
+"Nom",
+"Un abricot",
+"Je mange un abricot.",
+"An apricot",
+"I eat an apricot."
+],
+[
+"Nom",
+"Un avocat",
+"L'avocat est bon pour la santé.",
+"An avocado",
+"Avocado is good for your health."
+],
+[
+"Nom",
+"Un boucher / Une bouchère",
+"Le boucher prépare la viande.",
+"A butcher",
+"The butcher prepares the meat."
+],
+[
+"Nom",
+"Un boulanger / Une boulangère",
+"Le boulanger fait du bon pain.",
+"A baker",
+"The baker makes good bread."
+],
+[
+"Nom",
+"Un burger",
+"Il mange un burger avec des frites.",
+"A burger",
+"He eats a burger with fries."
+],
+[
+"Nom",
+"Un clafoutis",
+"Ma grand-mère fait un clafoutis aux cerises.",
+"A clafoutis",
+"My grandmother makes a cherry clafoutis."
+],
+[
+"Nom",
+"Un commerce",
+"Il y a un commerce ici.",
+"A shop / A business",
+"There is a shop here."
+],
+[
+"Nom",
+"Un couteau",
+"Il me faut un couteau pour couper.",
+"A knife",
+"I need a knife to cut."
+],
+[
+"Nom",
+"Un croissant",
+"Un café et un croissant, s'il vous plaît.",
+"A croissant",
+"A coffee and a croissant, please."
+],
+[
+"Nom",
+"Un épicier / Une épicière",
+"L'épicier est très gentil.",
+"A grocer",
+"The grocer is very nice."
+],
+[
+"Nom",
+"Un gramme",
+"Ajoutez un gramme de sel.",
+"A gram",
+"Add a gram of salt."
+],
+[
+"Nom",
+"Un kebab",
+"Il achète un kebab.",
+"A kebab",
+"He is buying a kebab."
+],
+[
+"Nom",
+"Un kilo",
+"Un kilo de pommes, s'il vous plaît.",
+"A kilo",
+"A kilo of apples, please."
+],
+[
+"Nom",
+"Un kiwi",
+"Le kiwi est plein de vitamines.",
+"A kiwi",
+"The kiwi is full of vitamins."
+],
+[
+"Nom",
+"Un légume",
+"La carotte est un légume.",
+"A vegetable",
+"The carrot is a vegetable."
+],
+[
+"Nom",
+"Un marché",
+"Je vais au marché le dimanche matin.",
+"A market",
+"I go to the market on Sunday morning."
+],
+[
+"Nom",
+"Un melon",
+"Je mange un melon en été.",
+"A melon",
+"I eat a melon in summer."
+],
+[
+"Nom",
+"Un oeuf",
+"Je prépare un oeuf au plat.",
+"An egg",
+"I prepare a fried egg."
+],
+[
+"Nom",
+"Un pain au chocolat",
+"Je prends un pain au chocolat.",
+"A chocolate croissant",
+"I'll have a chocolate croissant."
+],
+[
+"Nom",
+"Un paquet de",
+"Un paquet de pâtes, s'il vous plaît.",
+"A packet of",
+"A packet of pasta, please."
+],
+[
+"Nom",
+"Un parapluie",
+"Il pleut, je prends mon parapluie.",
+"An umbrella",
+"It is raining, I take my umbrella."
+],
+[
+"Nom",
+"Un poireau",
+"Je fais une soupe avec un poireau.",
+"A leek",
+"I make a soup with a leek."
+],
+[
+"Nom",
+"Un poissonnier / Une poissonnière",
+"Le poissonnier vend des huîtres.",
+"A fishmonger",
+"The fishmonger sells oysters."
+],
+[
+"Nom",
+"Un poivron",
+"Je coupe un poivron rouge.",
+"A bell pepper",
+"I cut a red bell pepper."
+],
+[
+"Nom",
+"Un pot de",
+"Un pot de confiture, s'il vous plaît.",
+"A jar of",
+"A jar of jam, please."
+],
+[
+"Nom",
+"Un primeur",
+"J'achète mes légumes chez le primeur.",
+"A greengrocer",
+"I buy my vegetables at the greengrocer."
+],
+[
+"Nom",
+"Un steak-frite",
+"Je prends un steak-frite.",
+"Steak and fries",
+"I'll have steak and fries."
+],
+[
+"Nom",
+"Un supermarché",
+"Je fais les courses au supermarché.",
+"A supermarket",
+"I do the grocery shopping at the supermarket."
+],
+[
+"Nom",
+"Un tire-bouchon",
+"Tu as un tire-bouchon pour le vin ?",
+"A corkscrew",
+"Do you have a corkscrew for the wine?"
+],
+[
+"Nom",
+"Un verre",
+"Un verre d'eau, s'il vous plaît.",
+"A glass",
+"A glass of water, please."
+],
+[
+"Nom",
+"Un(e) commerçant(e)",
+"Ce commerçant travaille beaucoup.",
+"A shopkeeper",
+"This shopkeeper works a lot."
+],
+[
+"Nom",
+"Une assiette",
+"Je pose l'assiette sur la table.",
+"A plate",
+"I put the plate on the table."
+],
+[
+"Nom",
+"Une aubergine",
+"Je cuisine une ratatouille avec une aubergine.",
+"An eggplant / aubergine",
+"I cook a ratatouille with an eggplant."
+],
+[
+"Nom",
+"Une banane",
+"Les singes aiment les bananes.",
+"A banana",
+"Monkeys like bananas."
+],
+[
+"Nom",
+"Une boisson",
+"Vous voulez une boisson ?",
+"A drink",
+"Do you want a drink?"
+],
+[
+"Nom",
+"Une boucherie",
+"Je vais à la boucherie pour la viande.",
+"A butcher shop",
+"I go to the butcher shop for meat."
+],
+[
+"Nom",
+"Une boulangerie",
+"J'achète mon pain à la boulangerie.",
+"A bakery",
+"I buy my bread at the bakery."
+],
+[
+"Nom",
+"Une bouteille (de)",
+"Je voudrais une bouteille d'eau.",
+"A bottle (of)",
+"I would like a bottle of water."
+],
+[
+"Nom",
+"Une caisse",
+"Je paie à la caisse.",
+"A checkout / till",
+"I pay at the checkout."
+],
+[
+"Nom",
+"Une carafe (d'eau)",
+"Une carafe d'eau, s'il vous plaît.",
+"A jug (of water)",
+"A jug of water, please."
+],
+[
+"Nom",
+"Une courgette",
+"Je cuisine une courgette.",
+"A zucchini",
+"I am cooking a zucchini."
+],
+[
+"Nom",
+"Une cuillère",
+"Je prends une cuillère pour la soupe.",
+"A spoon",
+"I take a spoon for the soup."
+],
+[
+"Nom",
+"Une endive",
+"L'endive est un peu amère.",
+"An endive / chicory",
+"Endive is a bit bitter."
+],
+[
+"Nom",
+"Une épicerie",
+"Je vais à l'épicerie pour acheter du lait.",
+"A grocery store",
+"I go to the grocery store to buy milk."
+],
+[
+"Nom",
+"Une fourchette",
+"Je mange avec une fourchette.",
+"A fork",
+"I eat with a fork."
+],
+[
+"Nom",
+"Une fromagerie",
+"J'achète du fromage à la fromagerie.",
+"A cheese shop",
+"I buy cheese at the cheese shop."
+],
+[
+"Nom",
+"Une orange",
+"Je bois un jus d'orange.",
+"An orange",
+"I drink an orange juice."
+],
+[
+"Nom",
+"Une pêche",
+"Cette pêche est sucrée.",
+"A peach",
+"This peach is sweet."
+],
+[
+"Nom",
+"Une pizza",
+"On commande une pizza ce soir ?",
+"A pizza",
+"Shall we order a pizza tonight?"
+],
+[
+"Nom",
+"Une poire",
+"Cette poire est très juteuse.",
+"A pear",
+"This pear is very juicy."
+],
+[
+"Nom",
+"Une poissonnerie",
+"Je vais à la poissonnerie pour le saumon.",
+"A fish market / shop",
+"I go to the fish market for the salmon."
+],
+[
+"Nom",
+"Une pomme de terre",
+"Je coupe une pomme de terre.",
+"A potato",
+"I cut a potato."
+],
+[
+"Nom",
+"Une quiche",
+"Elle prépare une quiche.",
+"A quiche",
+"She is preparing a quiche."
+],
+[
+"Nom",
+"Une tasse",
+"Une tasse de café, s'il vous plaît.",
+"A cup",
+"A cup of coffee, please."
+],
+[
+"Nom",
+"Une tomate",
+"Je coupe une tomate pour la salade.",
+"A tomato",
+"I cut a tomato for the salad."
+],
+[
+"Verbe",
+"\"Je voudrais\"",
+"Je voudrais un café, s'il vous plaît.",
+"\"I would like\"",
+"I would like a coffee, please."
+],
+[
+"Verbe",
+"Acheter",
+"Je vais acheter du pain.",
+"To buy",
+"I am going to buy bread."
+],
+[
+"Verbe",
+"Ajouter",
+"Vous pouvez ajouter du sucre.",
+"To add",
+"You can add sugar."
+],
+[
+"Verbe",
+"Aller",
+"Je vais au supermarché.",
+"To go",
+"I go to the supermarket."
+],
+[
+"Verbe",
+"Avoir faim",
+"Je n'ai pas très faim ce matin.",
+"To be hungry",
+"I am not very hungry this morning."
+],
+[
+"Verbe",
+"Avoir la flemme de",
+"J'ai la flemme de faire du sport.",
+"To be too lazy to",
+"I am too lazy to do sports."
+],
+[
+"Verbe",
+"Boire",
+"Il faut boire beaucoup d'eau.",
+"To drink",
+"You must drink a lot of water."
+],
+[
+"Verbe",
+"Casser",
+"Il ne faut pas casser ce verre.",
+"To break",
+"You must not break this glass."
+],
+[
+"Verbe",
+"Choisir",
+"Tu dois choisir un dessert.",
+"To choose",
+"You have to choose a dessert."
+],
+[
+"Verbe",
+"Commander",
+"On va commander une pizza.",
+"To order",
+"We are going to order a pizza."
+],
+[
+"Verbe",
+"Couper",
+"Je vais couper le gâteau.",
+"To cut",
+"I will cut the cake."
+],
+[
+"Verbe",
+"Coûter",
+"Combien coûte ce livre ?",
+"To cost",
+"How much does this book cost?"
+],
+[
+"Verbe",
+"Cuisiner",
+"J'aime cuisiner pour mes amis.",
+"To cook",
+"I like to cook for my friends."
+],
+[
+"Verbe",
+"Être en retard",
+"Désolé, je vais être en retard.",
+"To be late",
+"Sorry, I will be late."
+],
+[
+"Verbe",
+"Finir",
+"Je dois finir mon travail.",
+"To finish",
+"I have to finish my work."
+],
+[
+"Verbe",
+"Grandir",
+"Les enfants grandissent vite.",
+"To grow",
+"Children grow fast."
+],
+[
+"Verbe",
+"Grossir",
+"Je ne veux pas grossir.",
+"To gain weight",
+"I don't want to gain weight."
+],
+[
+"Verbe",
+"Inviter",
+"Je vais inviter mes parents à dîner.",
+"To invite",
+"I am going to invite my parents to dinner."
+],
+[
+"Verbe",
+"Mettre",
+"Je mets la table.",
+"To put",
+"I set the table."
+],
+[
+"Verbe",
+"Partager",
+"On va partager l'addition.",
+"To share",
+"We will share the bill."
+],
+[
+"Verbe",
+"Payer (par carte, en espèces, en liquide)",
+"Je peux payer par carte ?",
+"To pay (by card, in cash)",
+"Can I pay by card?"
+],
+[
+"Verbe",
+"Préparer",
+"Je prépare le repas.",
+"To prepare",
+"I prepare the meal."
+],
+[
+"Verbe",
+"Vouloir",
+"Je veux apprendre le français.",
+"To want",
+"I want to learn French."
+]
+],
+"4": [
+[
+"Catégorie",
+"Mot",
+"Exemple",
+"Traduction anglais",
+"Exemple"
+],
+[
+"Adjectif",
+"Ancien(ne)",
+"C'est un bâtiment ancien.",
+"Old / Ancient",
+"It is an old building."
+],
+[
+"Adjectif",
+"Beau / Belle",
+"Il fait beau aujourd'hui.",
+"Beautiful / Handsome",
+"The weather is beautiful today."
+],
+[
+"Adjectif",
+"Charmant(e)",
+"Cette petite maison est charmante.",
+"Charming",
+"This little house is charming."
+],
+[
+"Adjectif",
+"Gratuit(e)",
+"L'entrée est gratuite.",
+"Free (of charge)",
+"The entrance is free."
+],
+[
+"Adjectif",
+"Intéressant(e)",
+"Ce livre est intéressant.",
+"Interesting",
+"This book is interesting."
+],
+[
+"Adjectif",
+"Joli(e)",
+"C'est une jolie fleur.",
+"Pretty",
+"It is a pretty flower."
+],
+[
+"Adjectif",
+"Local(e)",
+"Je mange de la nourriture locale.",
+"Local",
+"I eat local food."
+],
+[
+"Adjectif",
+"Pas cher/chère",
+"Ce n'est pas cher.",
+"Inexpensive / Cheap",
+"It is not expensive."
+],
+[
+"Adjectif",
+"Traditionnel(le)",
+"C'est une danse traditionnelle.",
+"Traditional",
+"It is a traditional dance."
+],
+[
+"Adjectif",
+"Vivant(e)",
+"Ce quartier est vivant.",
+"Lively / Alive",
+"This neighborhood is lively."
+],
+[
+"Adverbe",
+"Bien",
+"Je vais très bien.",
+"Good / Well",
+"I am doing very well."
+],
+[
+"Expression",
+"À pied",
+"Je vais au travail à pied.",
+"On foot",
+"I go to work on foot."
+],
+[
+"Expression",
+"Avoir chaud",
+"J'ai chaud en été.",
+"To be hot",
+"I am hot in summer."
+],
+[
+"Expression",
+"Avoir de la chance",
+"Tu as de la chance.",
+"To be lucky",
+"You are lucky."
+],
+[
+"Expression",
+"Avoir froid",
+"J'ai froid en hiver.",
+"To be cold",
+"I am cold in winter."
+],
+[
+"Expression",
+"Boire un verre",
+"On va boire un verre ?",
+"To have a drink",
+"Shall we go have a drink?"
+],
+[
+"Expression",
+"Il pleut",
+"Prends un parapluie, il pleut.",
+"It is raining",
+"Take an umbrella, it is raining."
+],
+[
+"Expression",
+"Tout droit",
+"Va tout droit.",
+"Straight ahead",
+"Go straight ahead."
+],
+[
+"Expression",
+"X fois par ...",
+"Je vais au marché deux fois par semaine.",
+"X times a ...",
+"I go to the market twice a week."
+],
+[
+"Nom",
+"Carrefour",
+"Je fais mes courses à Carrefour.",
+"Carrefour (supermarket) / Crossroads",
+"I do my grocery shopping at Carrefour."
+],
+[
+"Nom",
+"De la carbonnade",
+"Je mange de la carbonnade ce soir.",
+"Carbonnade (Flemish beef stew)",
+"I am eating carbonnade tonight."
+],
+[
+"Nom",
+"De la vanille",
+"J'aime la glace à la vanille.",
+"Vanilla",
+"I like vanilla ice cream."
+],
+[
+"Nom",
+"Des cannelés",
+"Les cannelés sont un dessert de Bordeaux.",
+"Cannelés (a French pastry)",
+"Cannelés are a dessert from Bordeaux."
+],
+[
+"Nom",
+"Des frites",
+"J'adore les frites.",
+"French fries",
+"I love french fries."
+],
+[
+"Nom",
+"Des moules",
+"Je mange des moules-frites.",
+"Mussels",
+"I eat mussels and fries."
+],
+[
+"Nom",
+"Des transports publics",
+"Je prends les transports publics.",
+"Public transportation",
+"I take public transportation."
+],
+[
+"Nom",
+"Des viennoiseries",
+"J'achète des viennoiseries à la boulangerie.",
+"Pastries / Viennoiseries",
+"I buy pastries at the bakery."
+],
+[
+"Nom",
+"Du maroilles",
+"Le maroilles est un fromage fort.",
+"Maroilles (a type of cheese)",
+"Maroilles is a strong cheese."
+],
+[
+"Nom",
+"Du rhum",
+"Il y a du rhum dans ce cocktail.",
+"Rum",
+"There is rum in this cocktail."
+],
+[
+"Nom",
+"L'Europe",
+"La France est en Europe.",
+"Europe",
+"France is in Europe."
+],
+[
+"Nom",
+"L'histoire",
+"J'aime l'histoire.",
+"History",
+"I like history."
+],
+[
+"Nom",
+"La banlieue",
+"Il habite en banlieue.",
+"The suburbs",
+"He lives in the suburbs."
+],
+[
+"Nom",
+"La banque",
+"Je dois aller à la banque.",
+"The bank",
+"I need to go to the bank."
+],
+[
+"Nom",
+"La campagne",
+"J'aime le calme de la campagne.",
+"The countryside",
+"I like the calm of the countryside."
+],
+[
+"Nom",
+"La cuisine",
+"La cuisine italienne est délicieuse.",
+"The kitchen / The cuisine",
+"Italian cuisine is delicious."
+],
+[
+"Nom",
+"La culture",
+"La culture française est riche.",
+"Culture",
+"French culture is rich."
+],
+[
+"Nom",
+"La droite",
+"Tourne à droite.",
+"The right",
+"Turn right."
+],
+[
+"Nom",
+"La gauche",
+"Tourne à gauche.",
+"The left",
+"Turn left."
+],
+[
+"Nom",
+"La mer",
+"La mer est bleue.",
+"The sea",
+"The sea is blue."
+],
+[
+"Nom",
+"La montagne",
+"Je vais à la montagne.",
+"The mountain",
+"I go to the mountain."
+],
+[
+"Nom",
+"La nourriture",
+"La nourriture est bonne ici.",
+"The food",
+"The food is good here."
+],
+[
+"Nom",
+"La plage",
+"Je vais à la plage.",
+"The beach",
+"I am going to the beach."
+],
+[
+"Nom",
+"La poste",
+"Je vais à la poste pour envoyer une lettre.",
+"The post office",
+"I go to the post office to send a letter."
+],
+[
+"Nom",
+"Le centre",
+"Le centre est ici.",
+"The center",
+"The center is here."
+],
+[
+"Nom",
+"Le centre-ville",
+"J'habite dans le centre-ville.",
+"The city center / Downtown",
+"I live in the city center."
+],
+[
+"Nom",
+"Le commissariat",
+"Le commissariat est ouvert.",
+"The police station",
+"The police station is open."
+],
+[
+"Nom",
+"Le Luxembourg",
+"Le Luxembourg est un petit pays.",
+"Luxembourg",
+"Luxembourg is a small country."
+],
+[
+"Nom",
+"Le matin",
+"Je bois un café le matin.",
+"The morning",
+"I drink a coffee in the morning."
+],
+[
+"Nom",
+"Le monde",
+"Il y trop de monde !",
+"The world / People",
+"There are too many people!"
+],
+[
+"Nom",
+"Le soir",
+"Je lis un livre le soir.",
+"The evening",
+"I read a book in the evening."
+],
+[
+"Nom",
+"Le soleil",
+"Le soleil brille.",
+"The sun",
+"The sun is shining."
+],
+[
+"Nom",
+"Le sommet",
+"Nous sommes au sommet.",
+"The summit / The top",
+"We are at the top."
+],
+[
+"Nom",
+"Le surf",
+"J'aime le surf.",
+"Surfing",
+"I like surfing."
+],
+[
+"Nom",
+"Les Jeux-Olympiques",
+"Je regarde les Jeux-Olympiques.",
+"The Olympic Games",
+"I watch the Olympic Games."
+],
+[
+"Nom",
+"Les touristes",
+"Les touristes visitent la ville.",
+"The tourists",
+"The tourists visit the city."
+],
+[
+"Nom",
+"Les vacances",
+"J'aime les vacances.",
+"The holidays / Vacation",
+"I like holidays."
+],
+[
+"Nom",
+"Un arrêt (de bus, de tram)",
+"Je descends au prochain arrêt.",
+"A stop (bus, tram)",
+"I get off at the next stop."
+],
+[
+"Nom",
+"Un ascenseur",
+"L'ascenseur est en panne.",
+"An elevator / A lift",
+"The elevator is broken."
+],
+[
+"Nom",
+"Un avion",
+"Je prends l'avion pour Paris.",
+"An airplane",
+"I take the plane to Paris."
+],
+[
+"Nom",
+"Un bâtiment",
+"Ce bâtiment est grand.",
+"A building",
+"This building is tall."
+],
+[
+"Nom",
+"Un bus",
+"J'attends le bus.",
+"A bus",
+"I am waiting for the bus."
+],
+[
+"Nom",
+"Un centre commercial",
+"Il y a beaucoup de magasins dans le centre commercial.",
+"A shopping mall",
+"There are many stores in the shopping mall."
+],
+[
+"Nom",
+"Un croque-monsieur",
+"Je commande un croque-monsieur.",
+"A croque-monsieur (grilled ham and cheese sandwich)",
+"I order a croque-monsieur."
+],
+[
+"Nom",
+"Un endroit",
+"C'est un bel endroit.",
+"A place",
+"It is a beautiful place."
+],
+[
+"Nom",
+"Un festival",
+"Je vais à un festival de musique.",
+"A festival",
+"I go to a music festival."
+],
+[
+"Nom",
+"Un jardin public",
+"Les enfants jouent dans le jardin public.",
+"A public garden / A park",
+"The children play in the public garden."
+],
+[
+"Nom",
+"Un magasin",
+"J'achète des vêtements dans ce magasin.",
+"A store / A shop",
+"I buy clothes in this store."
+],
+[
+"Nom",
+"Un magazine",
+"Je lis un magazine.",
+"A magazine",
+"I read a magazine."
+],
+[
+"Nom",
+"Un miroir",
+"Je me regarde dans le miroir.",
+"A mirror",
+"I look at myself in the mirror."
+],
+[
+"Nom",
+"Un morceau de",
+"Je voudrais un morceau de pastèque.",
+"A piece of",
+"I would like a piece of watermelon."
+],
+[
+"Nom",
+"Un musée",
+"Je visite le musée du Louvre.",
+"A museum",
+"I visit the Louvre museum."
+],
+[
+"Nom",
+"Un opéra",
+"Je vais à l'opéra ce soir.",
+"An opera",
+"I am going to the opera tonight."
+],
+[
+"Nom",
+"Un palais",
+"Le roi habite dans un palais.",
+"A palace",
+"The king lives in a palace."
+],
+[
+"Nom",
+"Un parc",
+"Je me promène dans le parc.",
+"A park",
+"I walk in the park."
+],
+[
+"Nom",
+"Un quai",
+"Le train est à quai.",
+"A platform / A dock",
+"The train is at the platform."
+],
+[
+"Nom",
+"Un scooter",
+"Il a un nouveau scooter.",
+"A scooter (motorized)",
+"He has a new scooter."
+],
+[
+"Nom",
+"Un taxi",
+"J'appelle un taxi.",
+"A taxi",
+"I call a taxi."
+],
+[
+"Nom",
+"Un téléphérique",
+"Je prends le téléphérique.",
+"A cable car",
+"I take the cable car."
+],
+[
+"Nom",
+"Un théâtre",
+"Nous allons au théâtre.",
+"A theater",
+"We are going to the theater."
+],
+[
+"Nom",
+"Un tram (tramway)",
+"Le tram est rapide.",
+"A tram (streetcar)",
+"The tram is fast."
+],
+[
+"Nom",
+"Un vélo",
+"Je fais du vélo.",
+"A bicycle / A bike",
+"I ride a bike."
+],
+[
+"Nom",
+"Un(e) artiste",
+"C'est un artiste connu.",
+"An artist",
+"He is a known artist."
+],
+[
+"Nom",
+"Un(e) habitant(e)",
+"C'est un habitant de Paris.",
+"An inhabitant / A resident",
+"He is a resident of Paris."
+],
+[
+"Nom",
+"Une bibliothèque",
+"J'étudie à la bibliothèque.",
+"A library",
+"I study at the library."
+],
+[
+"Nom",
+"Une boutique",
+"C'est une petite boutique.",
+"A boutique / A small shop",
+"It is a small shop."
+],
+[
+"Nom",
+"Une carte postale",
+"J'envoie une carte postale.",
+"A postcard",
+"I send a postcard."
+],
+[
+"Nom",
+"Une cathédrale",
+"La cathédrale est très grande.",
+"A cathedral",
+"The cathedral is very big."
+],
+[
+"Nom",
+"Une destination",
+"C'est ma destination préférée.",
+"A destination",
+"It is my favorite destination."
+],
+[
+"Nom",
+"Une direction",
+"C'est la bonne direction.",
+"A direction",
+"It is the right direction."
+],
+[
+"Nom",
+"Une école",
+"Mon enfant va à l'école.",
+"A school",
+"My child goes to school."
+],
+[
+"Nom",
+"Une église",
+"L'église est ancienne.",
+"A church",
+"The church is old."
+],
+[
+"Nom",
+"Une expérience",
+"C'est une bonne expérience.",
+"An experience",
+"It is a good experience."
+],
+[
+"Nom",
+"Une exposition",
+"C'est une exposition d'art.",
+"An exhibition",
+"It is an art exhibition."
+],
+[
+"Nom",
+"Une fontaine",
+"Il y a une fontaine dans le parc.",
+"A fountain",
+"There is a fountain in the park."
+],
+[
+"Nom",
+"Une galette",
+"Les galettes bretonnes ont souvent un oeuf et du fromage.",
+"A galette (savory crepe)",
+"Breton galettes often have an egg and cheese."
+],
+[
+"Nom",
+"Une librairie",
+"J'achète un livre à la librairie.",
+"A bookstore",
+"I buy a book at the bookstore."
+],
+[
+"Nom",
+"Une ligne (de bus, de métro)",
+"Je prends la ligne 1.",
+"A line (bus, subway)",
+"I take line 1."
+],
+[
+"Nom",
+"Une mairie",
+"La mairie est au centre-ville.",
+"A city hall / A town hall",
+"The city hall is in the city center."
+],
+[
+"Nom",
+"Une maison",
+"J'habite dans une maison.",
+"A house",
+"I live in a house."
+],
+[
+"Nom",
+"Une peinture",
+"C'est une belle peinture.",
+"A painting",
+"It is a beautiful painting."
+],
+[
+"Nom",
+"Une pharmacie",
+"Je vais à la pharmacie.",
+"A pharmacy",
+"I am going to the pharmacy."
+],
+[
+"Nom",
+"Une piscine",
+"Je nage à la piscine.",
+"A swimming pool",
+"I swim at the swimming pool."
+],
+[
+"Nom",
+"Une place",
+"J'habite près de la place Saint-Michel.",
+"A square / A place",
+"I live near Saint-Michel square."
+],
+[
+"Nom",
+"Une région",
+"C'est une belle région.",
+"A region",
+"It is a beautiful region."
+],
+[
+"Nom",
+"Une rivière",
+"Je nage dans la rivière.",
+"A river",
+"I swim in the river."
+],
+[
+"Nom",
+"Une sortie",
+"Je t'attends à la sortie du métro.",
+"An exit",
+"I am waiting for you at the subway exit."
+],
+[
+"Nom",
+"Une station de métro",
+"La station de métro est proche.",
+"A subway station",
+"The subway station is close."
+],
+[
+"Nom",
+"Une statue",
+"C'est une statue célèbre.",
+"A statue",
+"It is a famous statue."
+],
+[
+"Nom",
+"Une trottinette (électrique)",
+"Je loue une trottinette.",
+"An (electric) scooter",
+"I rent a scooter."
+],
+[
+"Nom",
+"Une université (la fac)",
+"J'étudie à l'université.",
+"A university (college)",
+"I study at the university."
+],
+[
+"Nom",
+"Une voiture",
+"Ma voiture est rouge.",
+"A car",
+"My car is red."
+],
+[
+"Nombre",
+"Cent",
+"Ça coûte cent euros.",
+"One hundred",
+"It costs one hundred euros."
+],
+[
+"Nombre",
+"Mille",
+"Il y a mille personnes.",
+"One thousand",
+"There are one thousand people."
+],
+[
+"Nombre",
+"Un milliard",
+"Il y a des milliards d'étoiles.",
+"One billion",
+"There are billions of stars."
+],
+[
+"Nombre",
+"Un million",
+"Un million d'habitants.",
+"One million",
+"One million inhabitants."
+],
+[
+"Question",
+"Combien de temps ?",
+"Combien de temps dure le film ?",
+"How much time? / How long?",
+"How long is the movie?"
+],
+[
+"Verbe",
+"Attendre",
+"J'attends le bus.",
+"To wait",
+"I am waiting for the bus."
+],
+[
+"Verbe",
+"Chercher",
+"Je cherche mes clés.",
+"To look for / To search",
+"I am looking for my keys."
+],
+[
+"Verbe",
+"Continuer",
+"Continue tout droit.",
+"To continue",
+"Continue straight ahead."
+],
+[
+"Verbe",
+"Courir",
+"Je cours tous les matins.",
+"To run",
+"I run every morning."
+],
+[
+"Verbe",
+"Descendre",
+"Je descends l'escalier.",
+"To go down / To get off",
+"I go down the stairs."
+],
+[
+"Verbe",
+"Dormir",
+"Je dors huit heures par nuit.",
+"To sleep",
+"I sleep eight hours a night."
+],
+[
+"Verbe",
+"Économiser",
+"J'économise pour les vacances.",
+"To save (money)",
+"I am saving for vacation."
+],
+[
+"Verbe",
+"Monter",
+"Je monte dans le train.",
+"To go up / To get on",
+"I get on the train."
+],
+[
+"Verbe",
+"Pouvoir",
+"Je peux t'aider.",
+"To be able to / Can",
+"I can help you."
+],
+[
+"Verbe",
+"Prendre",
+"Je prends un café.",
+"To take / To have (food/drink)",
+"I am having a coffee."
+],
+[
+"Verbe",
+"Rester",
+"Je reste à la maison ce soir.",
+"To stay",
+"I am staying home tonight."
+],
+[
+"Verbe",
+"Se déplacer",
+"C'est facile de se déplacer en ville.",
+"To get around / To move",
+"It is easy to get around the city."
+],
+[
+"Verbe",
+"Se promener",
+"Je me promène dans le parc.",
+"To take a walk / To stroll",
+"I am taking a walk in the park."
+],
+[
+"Verbe",
+"Sortir",
+"Je sors avec mes amis.",
+"To go out",
+"I am going out with my friends."
+],
+[
+"Verbe",
+"Tourner",
+"Tourne à gauche.",
+"To turn",
+"Turn left."
+],
+[
+"Verbe",
+"Venir",
+"Tu viens avec nous ?",
+"To come",
+"Are you coming with us?"
+],
+[
+"Verbe",
+"Visiter",
+"Je visite le musée.",
+"To visit",
+"I visit the museum."
+]
+],
+"5": [
+[
+"Catégorie",
+"Mot",
+"Exemple",
+"Traduction anglais",
+"Exemple"
+],
+[
+"Adjectif",
+"Blanc / Blanche",
+"La neige est blanche.",
+"White",
+"The snow is white."
+],
+[
+"Adjectif",
+"Bleu(e)",
+"Le ciel est bleu.",
+"Blue",
+"The sky is blue."
+],
+[
+"Adjectif",
+"Carré(e)",
+"Une valise carrée.",
+"Square",
+"A square suitcase."
+],
+[
+"Adjectif",
+"Chaud(e)",
+"L'eau est très chaude.",
+"Hot / Warm",
+"The water is very hot."
+],
+[
+"Adjectif",
+"Clair(e)",
+"J'aime le bleu clair.",
+"Light",
+"I like light blue."
+],
+[
+"Adjectif",
+"Classe",
+"Il est très classe dans ce costume.",
+"Classy",
+"He is very classy in this suit."
+],
+[
+"Adjectif",
+"Classique",
+"C'est un style très classique.",
+"Classic",
+"It is a very classic style."
+],
+[
+"Adjectif",
+"Confortable",
+"Ces chaussures sont très confortables.",
+"Comfortable",
+"These shoes are very comfortable."
+],
+[
+"Adjectif",
+"Court(e)",
+"Mes cheveux sont courts.",
+"Short",
+"My hair is short."
+],
+[
+"Adjectif",
+"Foncé(e)",
+"Il porte un costume bleu foncé.",
+"Dark",
+"He wears a dark blue suit."
+],
+[
+"Adjectif",
+"Froid(e)",
+"Il fait froid dehors.",
+"Cold",
+"It is cold outside."
+],
+[
+"Adjectif",
+"Gris(e)",
+"Le ciel est gris aujourd'hui.",
+"Gray",
+"The sky is gray today."
+],
+[
+"Adjectif",
+"Jaune",
+"Le soleil est jaune.",
+"Yellow",
+"The sun is yellow."
+],
+[
+"Adjectif",
+"Léger / Légère",
+"C'est une veste légère.",
+"Light (weight)",
+"It is a light jacket."
+],
+[
+"Adjectif",
+"Long / Longue",
+"Elle a une longue robe.",
+"Long",
+"She has a long dress."
+],
+[
+"Adjectif",
+"Marron",
+"Il a les yeux marron.",
+"Brown",
+"He has brown eyes."
+],
+[
+"Adjectif",
+"Moche",
+"Ce pull est un peu moche.",
+"Ugly",
+"This sweater is a bit ugly."
+],
+[
+"Adjectif",
+"Noir(e)",
+"Le chat est noir.",
+"Black",
+"The cat is black."
+],
+[
+"Adjectif",
+"Parfait(e)",
+"C'est parfait !",
+"Perfect",
+"It is perfect!"
+],
+[
+"Adjectif",
+"Rectangulaire",
+"La table est rectangulaire.",
+"Rectangular",
+"The table is rectangular."
+],
+[
+"Adjectif",
+"Rond(e)",
+"Il porte des lunettes rondes.",
+"Round",
+"He wears round glasses."
+],
+[
+"Adjectif",
+"Rose",
+"Elle a un vélo rose.",
+"Pink",
+"She has a pink bike."
+],
+[
+"Adjectif",
+"Rouge",
+"La pomme est rouge.",
+"Red",
+"The apple is red."
+],
+[
+"Adjectif",
+"Simple",
+"La recette est simple.",
+"Simple",
+"The recipe is simple."
+],
+[
+"Adjectif",
+"Vert(e)",
+"L'herbe est verte.",
+"Green",
+"The grass is green."
+],
+[
+"Adjectif",
+"Violet / Violette",
+"C'est une fleur violette.",
+"Purple",
+"It is a purple flower."
+],
+[
+"Expression",
+"À la mode",
+"Cette couleur est à la mode.",
+"Fashionable / Trendy",
+"This color is trendy."
+],
+[
+"Expression",
+"Bof !",
+"\"Tu aimes cette veste ?\" - \"Bof !\"",
+"Meh / So-so",
+"\"Do you like this jacket?\" - \"Meh!\""
+],
+[
+"Expression",
+"C'est pas donné !",
+"Ce sac coûte 200 euros, c'est pas donné !",
+"It is not cheap!",
+"This bag costs 200 euros, it is not cheap!"
+],
+[
+"Expression",
+"C'est pas grave",
+"Désolé ! - C'est pas grave.",
+"It doesn't matter / No problem",
+"Sorry! - No problem."
+],
+[
+"Expression",
+"En promotion / En solde",
+"Ces chaussures sont en solde.",
+"On sale",
+"These shoes are on sale."
+],
+[
+"Expression",
+"Joyeux anniversaire !",
+"Joyeux anniversaire pour tes 30 ans !",
+"Happy birthday!",
+"Happy birthday for your 30 years!"
+],
+[
+"Expression",
+"Plein de",
+"Il y a plein de monde.",
+"A lot of / Full of",
+"There are a lot of people."
+],
+[
+"Nom",
+"De la laine",
+"Un pull en laine.",
+"Wool",
+"A wool sweater."
+],
+[
+"Nom",
+"Des accessoires",
+"J'aime les accessoires de mode.",
+"Accessories",
+"I like fashion accessories."
+],
+[
+"Nom",
+"Des baskets",
+"Je mets mes baskets pour le sport.",
+"Sneakers",
+"I put on my sneakers for sports."
+],
+[
+"Nom",
+"Des bottes",
+"Elle a de belles bottes d'hiver.",
+"Boots",
+"She has beautiful winter boots."
+],
+[
+"Nom",
+"Des chaussettes",
+"Où sont mes chaussettes ?",
+"Socks",
+"Where are my socks?"
+],
+[
+"Nom",
+"Des chaussures",
+"Je dois acheter de nouvelles chaussures.",
+"Shoes",
+"I need to buy new shoes."
+],
+[
+"Nom",
+"Des écouteurs (sans fil)",
+"J'écoute de la musique avec mes écouteurs.",
+"Earphones (wireless)",
+"I listen to music with my earphones."
+],
+[
+"Nom",
+"Des fringues",
+"J'achète des fringues.",
+"Clothes (slang)",
+"I buy clothes."
+],
+[
+"Nom",
+"Des lunettes",
+"Je porte des lunettes pour lire.",
+"Glasses",
+"I wear glasses to read."
+],
+[
+"Nom",
+"Des lunettes de soleil",
+"Il y a du soleil, je mets mes lunettes de soleil.",
+"Sunglasses",
+"It is sunny, I put on my sunglasses."
+],
+[
+"Nom",
+"Des sous-vêtements",
+"Il achète des sous-vêtements.",
+"Underwear",
+"He is buying underwear."
+],
+[
+"Nom",
+"Des tongs / Des claquettes",
+"Je porte des tongs à la piscine.",
+"Flip-flops / Slides",
+"I wear flip-flops at the pool."
+],
+[
+"Nom",
+"Des vêtements",
+"J'achète des vêtements.",
+"Clothes",
+"I am buying clothes."
+],
+[
+"Nom",
+"Du coton",
+"Ce t-shirt est 100% coton.",
+"Cotton",
+"This t-shirt is 100% cotton."
+],
+[
+"Nom",
+"Du cuir",
+"C'est une veste en cuir.",
+"Leather",
+"It is a leather jacket."
+],
+[
+"Nom",
+"La météo",
+"La météo est belle aujourd'hui.",
+"The weather",
+"The weather is beautiful today."
+],
+[
+"Nom",
+"La pointure",
+"Tu fais quelle pointure ?",
+"The shoe size",
+"What is your shoe size?"
+],
+[
+"Nom",
+"La taille",
+"Tu fais quelle taille ?",
+"The size (clothing)",
+"What size are you?"
+],
+[
+"Nom",
+"Un chapeau",
+"Il porte un chapeau noir.",
+"A hat",
+"He is wearing a black hat."
+],
+[
+"Nom",
+"Un costume",
+"Il porte un costume pour le travail.",
+"A suit",
+"He wears a suit for work."
+],
+[
+"Nom",
+"Un débardeur",
+"Il fait chaud, je mets un débardeur.",
+"A tank top",
+"It is hot, I wear a tank top."
+],
+[
+"Nom",
+"Un degré",
+"Aujourd'hui, il fait 25°C (25 degrés).",
+"A degree",
+"Today, it is 25°C (25 degrees)."
+],
+[
+"Nom",
+"Un dessin",
+"C'est un beau dessin.",
+"A drawing",
+"It is a beautiful drawing."
+],
+[
+"Nom",
+"Un gilet",
+"Elle porte un gilet gris.",
+"A cardigan",
+"She is wearing a gray cardigan."
+],
+[
+"Nom",
+"Un imperméable / Un k-way",
+"Il pleut, je prends mon imperméable.",
+"A raincoat",
+"It is raining, I take my raincoat."
+],
+[
+"Nom",
+"Un jean",
+"J'adore ce jean.",
+"Jeans",
+"I love these jeans."
+],
+[
+"Nom",
+"Un jogging",
+"Il met un jogging pour courir.",
+"Sweatpants",
+"He puts on sweatpants to run."
+],
+[
+"Nom",
+"Un legging",
+"Elle fait du yoga en legging.",
+"Leggings",
+"She does yoga in leggings."
+],
+[
+"Nom",
+"Un maillot de bain",
+"J'ai oublié mon maillot de bain.",
+"A swimsuit",
+"I forgot my swimsuit."
+],
+[
+"Nom",
+"Un manteau",
+"J'ai un manteau chaud.",
+"A coat",
+"I have a warm coat."
+],
+[
+"Nom",
+"Un objet",
+"Quel est cet objet ?",
+"An object",
+"What is this object?"
+],
+[
+"Nom",
+"Un ordinateur (portable)",
+"Je travaille sur mon ordinateur.",
+"A computer (laptop)",
+"I work on my computer."
+],
+[
+"Nom",
+"Un pantalon",
+"Je cherche un pantalon noir.",
+"Pants",
+"I am looking for black pants."
+],
+[
+"Nom",
+"Un porte-clé",
+"J'ai perdu mon porte-clé.",
+"A keychain",
+"I lost my keychain."
+],
+[
+"Nom",
+"Un portefeuille",
+"Mon portefeuille est dans mon sac.",
+"A wallet",
+"My wallet is in my bag."
+],
+[
+"Nom",
+"Un pull",
+"J'aime ce pull en laine.",
+"A sweater",
+"I like this wool sweater."
+],
+[
+"Nom",
+"Un rayon",
+"Où est le rayon des vêtements pour enfants ?",
+"An aisle / A department",
+"Where is the children's clothing department?"
+],
+[
+"Nom",
+"Un sac",
+"Elle a un grand sac.",
+"A bag",
+"She has a big bag."
+],
+[
+"Nom",
+"Un sac à dos",
+"Je mets mes livres dans mon sac à dos.",
+"A backpack",
+"I put my books in my backpack."
+],
+[
+"Nom",
+"Un sac à main",
+"Où est mon sac à main ?",
+"A handbag",
+"Where is my handbag?"
+],
+[
+"Nom",
+"Un sac de sport",
+"Il prend son sac de sport.",
+"A gym bag",
+"He takes his gym bag."
+],
+[
+"Nom",
+"Un sandwich",
+"Je mange un sandwich à midi.",
+"A sandwich",
+"I eat a sandwich at noon."
+],
+[
+"Nom",
+"Un short",
+"Je porte un short à la plage.",
+"Shorts",
+"I wear shorts to the beach."
+],
+[
+"Nom",
+"Un sweat",
+"Il porte un sweat pour faire du sport en hiver.",
+"A sweatshirt",
+"He wears a sweatshirt to play sports in winter."
+],
+[
+"Nom",
+"Un t-shirt",
+"Je mets un t-shirt en été.",
+"A t-shirt",
+"I wear a t-shirt in summer."
+],
+[
+"Nom",
+"Une batterie",
+"Je n'ai plus de batterie.",
+"A battery",
+"I have no battery left."
+],
+[
+"Nom",
+"Une batterie externe",
+"Je peux emprunter ta batterie externe ?",
+"A power bank",
+"Can I borrow your power bank?"
+],
+[
+"Nom",
+"Une cabine d'essayage",
+"Où sont les cabines d'essayage ?",
+"A fitting room",
+"Where are the fitting rooms?"
+],
+[
+"Nom",
+"Une ceinture",
+"J'ai besoin d'une ceinture pour mon pantalon.",
+"A belt",
+"I need a belt for my pants."
+],
+[
+"Nom",
+"Une chemise",
+"C'est une belle chemise blanche.",
+"A shirt",
+"It is a beautiful white shirt."
+],
+[
+"Nom",
+"Une coque de téléphone",
+"J'ai une nouvelle coque de téléphone.",
+"A phone case",
+"I have a new phone case."
+],
+[
+"Nom",
+"Une couleur",
+"Quelle est ta couleur préférée ?",
+"A color",
+"What is your favorite color?"
+],
+[
+"Nom",
+"Une cravate",
+"Il a une cravate bleue.",
+"A tie",
+"He has a blue tie."
+],
+[
+"Nom",
+"Une écharpe",
+"Il fait froid, mets ton écharpe.",
+"A scarf",
+"It is cold, put on your scarf."
+],
+[
+"Nom",
+"Une enceinte (bluetooth)",
+"On écoute de la musique sur l'enceinte.",
+"A speaker (bluetooth)",
+"We listen to music on the speaker."
+],
+[
+"Nom",
+"Une friperie",
+"J'achète mes vêtements dans une friperie.",
+"A thrift store",
+"I buy my clothes in a thrift store."
+],
+[
+"Nom",
+"Une jupe",
+"Elle porte une jupe courte.",
+"A skirt",
+"She is wearing a short skirt."
+],
+[
+"Nom",
+"Une montre",
+"Sa montre coûte cher.",
+"A watch",
+"His/her watch is expensive."
+],
+[
+"Nom",
+"Une montre connectée",
+"J'ai acheté une montre connectée.",
+"A smartwatch",
+"I bought a smartwatch."
+],
+[
+"Nom",
+"Une photo",
+"On prend une photo ?",
+"A photo",
+"Shall we take a photo?"
+],
+[
+"Nom",
+"Une robe",
+"C'est une belle robe rouge.",
+"A dress",
+"It is a beautiful red dress."
+],
+[
+"Nom",
+"Une surprise",
+"J'ai une surprise pour toi.",
+"A surprise",
+"I have a surprise for you."
+],
+[
+"Nom",
+"Une tablette",
+"Je regarde un film sur ma tablette.",
+"A tablet",
+"I watch a movie on my tablet."
+],
+[
+"Nom",
+"Une valise",
+"Je prépare ma valise pour les vacances.",
+"A suitcase",
+"I am packing my suitcase for vacation."
+],
+[
+"Nom",
+"Une veste",
+"Il porte une veste noire.",
+"A jacket",
+"He is wearing a black jacket."
+],
+[
+"Verbe",
+"Écrire",
+"J'écris un message.",
+"To write",
+"I am writing a message."
+],
+[
+"Verbe",
+"Essayer",
+"Je voudrais essayer cette chemise.",
+"To try (on)",
+"I would like to try on this shirt."
+],
+[
+"Verbe",
+"Faire les magasins / Faire du shopping",
+"J'adore faire les magasins.",
+"To go shopping",
+"I love going shopping."
+],
+[
+"Verbe",
+"Pleuvoir",
+"Il va pleuvoir demain.",
+"To rain",
+"It is going to rain tomorrow."
+],
+[
+"Verbe",
+"Porter",
+"Je porte un manteau.",
+"To wear / To carry",
+"I am wearing a coat."
+]
+],
+"6": [
+[
+"Catégorie",
+"Mot",
+"Exemple",
+"Traduction anglais",
+"Exemple"
+],
+[
+"Adjectif",
+"Amoureux / Amoureuse",
+"Il est amoureux.",
+"In love",
+"He is in love."
+],
+[
+"Adjectif",
+"Arabe",
+"L'écriture arabe est un art.",
+"Arabic / Arab",
+"Arabic writing is an art."
+],
+[
+"Adjectif",
+"Bête",
+"Ce chien n'est pas bête.",
+"Stupid / Silly",
+"This dog is not stupid."
+],
+[
+"Adjectif",
+"Blanc / Blanche",
+"Vanessa Paradis est blanche.",
+"White",
+"Vanessa Paradis is white."
+],
+[
+"Adjectif",
+"Blond(e)",
+"Il est blond.",
+"Blond",
+"He is blond."
+],
+[
+"Adjectif",
+"Brun(e)",
+"Elle est brune.",
+"Brunette / Brown-haired",
+"She is a brunette."
+],
+[
+"Adjectif",
+"Châtain",
+"J'ai les cheveux châtains.",
+"Chestnut / Light brown",
+"I have light brown hair."
+],
+[
+"Adjectif",
+"Chauve",
+"Mon oncle est chauve.",
+"Bald",
+"My uncle is bald."
+],
+[
+"Adjectif",
+"Courageux / Courageuse",
+"Le pompier est courageux.",
+"Brave / Courageous",
+"The firefighter is brave."
+],
+[
+"Adjectif",
+"Curieux / Curieuse",
+"L'enfant est curieux.",
+"Curious",
+"The child is curious."
+],
+[
+"Adjectif",
+"Drôle",
+"Ce film est drôle.",
+"Funny",
+"This movie is funny."
+],
+[
+"Adjectif",
+"Dynamique",
+"Elle est très dynamique.",
+"Dynamic / Energetic",
+"She is very dynamic."
+],
+[
+"Adjectif",
+"Fatigué(e)",
+"Je suis fatigué.",
+"Tired",
+"I am tired."
+],
+[
+"Adjectif",
+"Forte(e)",
+"Il est très fort.",
+"Strong",
+"He is very strong."
+],
+[
+"Adjectif",
+"Frisé(e)",
+"Elle a les cheveux frisés.",
+"Curly",
+"She has curly hair."
+],
+[
+"Adjectif",
+"Gai / Gaie",
+"Elle est toujours gaie.",
+"Cheerful / Happy",
+"She is always cheerful."
+],
+[
+"Adjectif",
+"Gazeux / Gazeuse",
+"Perrier est une marque d'eau gazeuse.",
+"Sparkling / Carbonated",
+"Perrier is a brand of sparkling water."
+],
+[
+"Adjectif",
+"Généreux / Généreuse",
+"Il est généreux.",
+"Generous",
+"He is generous."
+],
+[
+"Adjectif",
+"Gentil / Gentille",
+"Le garçon est gentil.",
+"Kind / Nice",
+"The boy is nice."
+],
+[
+"Adjectif",
+"Gros / Grosse",
+"Le chat est gros.",
+"Fat / Big",
+"The cat is fat."
+],
+[
+"Adjectif",
+"Impatient(e)",
+"Je suis impatient.",
+"Impatient",
+"I am impatient."
+],
+[
+"Adjectif",
+"Intelligent(e)",
+"Elle est intelligente.",
+"Intelligent / Smart",
+"She is intelligent."
+],
+[
+"Adjectif",
+"Joyeux / Joyeuse",
+"Je suis joyeux.",
+"Joyful / Happy",
+"I am joyful."
+],
+[
+"Adjectif",
+"Lisse",
+"Ses cheveux sont lisses.",
+"Straight (hair) / Smooth",
+"Her hair is straight."
+],
+[
+"Adjectif",
+"Maghrébin(e)",
+"Il est maghrébin.",
+"North African",
+"He is North African."
+],
+[
+"Adjectif",
+"Malade",
+"Je suis malade.",
+"Sick",
+"I am sick."
+],
+[
+"Adjectif",
+"Méchant(e)",
+"Le loup est méchant.",
+"Mean / Wicked",
+"The wolf is mean."
+],
+[
+"Adjectif",
+"Mince",
+"Elle est très mince.",
+"Thin / Slim",
+"She is very thin."
+],
+[
+"Adjectif",
+"Musclé(e)",
+"Il est musclé.",
+"Muscular",
+"He is muscular."
+],
+[
+"Adjectif",
+"Noir(e)",
+"Omar Sy est noir.",
+"Black",
+"Omar Sy is black."
+],
+[
+"Adjectif",
+"Patient(e)",
+"Il faut être patient.",
+"Patient",
+"You have to be patient."
+],
+[
+"Adjectif",
+"Plat / Plate",
+"Tu préfères l'eau plate ou l'eau gazeuse ?",
+"Still / Flat",
+"Do you prefer still water or sparkling water?"
+],
+[
+"Adjectif",
+"Roux / Rousse",
+"Mon frère est roux.",
+"Redheaded",
+"My brother is redheaded."
+],
+[
+"Adjectif",
+"Sociable",
+"Elle est sociable.",
+"Sociable / Outgoing",
+"She is sociable."
+],
+[
+"Adjectif",
+"Solidaire",
+"L'équipe est solidaire.",
+"Supportive / United",
+"The team is united."
+],
+[
+"Adjectif",
+"Stressé(e)",
+"Je suis stressé.",
+"Stressed",
+"I am stressed."
+],
+[
+"Adjectif",
+"Vieux / Vieil / Vieille",
+"Mon chien est vieux.",
+"Old",
+"My dog is old."
+],
+[
+"Adverbe",
+"Maintenant",
+"Je mange maintenant.",
+"Now",
+"I am eating now."
+],
+[
+"Adverbe",
+"Rarement",
+"Il pleut rarement ici.",
+"Rarely",
+"It rarely rains here."
+],
+[
+"Adverbe",
+"Tard",
+"Il rentre tard.",
+"Late",
+"He comes home late."
+],
+[
+"Adverbe",
+"Tôt",
+"Je me lève tôt.",
+"Early",
+"I wake up early."
+],
+[
+"Adverbe",
+"Toujours",
+"Je suis toujours en retard.",
+"Always",
+"I am always late."
+],
+[
+"Expression",
+"À quelle heure ?",
+"À quelle heure tu arrives ?",
+"At what time?",
+"What time are you arriving?"
+],
+[
+"Expression",
+"Bon voyage !",
+"Bon voyage en France !",
+"Have a good trip!",
+"Have a good trip to France!"
+],
+[
+"Expression",
+"Faire une nuit blanche",
+"J'ai fait une nuit blanche.",
+"To pull an all-nighter",
+"I pulled an all-nighter."
+],
+[
+"Nom",
+"L'après-midi",
+"J'étudie l'après-midi.",
+"Afternoon",
+"I study in the afternoon."
+],
+[
+"Nom",
+"La nuit",
+"La nuit est noire.",
+"Night",
+"The night is dark."
+],
+[
+"Nom",
+"La rentrée",
+"La rentrée scolaire est en septembre.",
+"Back to school / Start of school year",
+"The start of the school year is in September."
+],
+[
+"Nom",
+"Le sirop",
+"Je bois du sirop.",
+"Syrup",
+"I drink syrup."
+],
+[
+"Nom",
+"Les cheveux",
+"Il a les cheveux courts.",
+"Hair",
+"He has short hair."
+],
+[
+"Nom",
+"L'oeil / Les yeux",
+"Elle a les yeux bleus.",
+"Eyes",
+"She has blue eyes."
+],
+[
+"Nom",
+"Midi / Le midi",
+"Il est midi.",
+"Noon / Midday",
+"It is noon."
+],
+[
+"Nom",
+"Minuit",
+"Il dort à minuit.",
+"Midnight",
+"He sleeps at midnight."
+],
+[
+"Nom",
+"Un banc",
+"Je m'assois sur le banc.",
+"A bench",
+"I sit on the bench."
+],
+[
+"Nom",
+"Un billet / Un ticket",
+"J'ai acheté mes billets pour le concert de demain?.",
+"A ticket",
+"I bought my tickets for tomorrow's concert."
+],
+[
+"Nom",
+"Un concert",
+"Le concert est super.",
+"A concert",
+"The concert is great."
+],
+[
+"Nom",
+"Un film (d'action, d'amour, d'horreur, ...)",
+"Je regarde un film.",
+"A movie (action, romance, horror, ...)",
+"I watch a movie."
+],
+[
+"Nom",
+"Un groupe",
+"Le groupe chante bien.",
+"A group / A band",
+"The band sings well."
+],
+[
+"Nom",
+"Un serveur / Une serveuse",
+"Le serveur est gentil.",
+"A waiter / A waitress",
+"The waiter is nice."
+],
+[
+"Nom",
+"Un TGV",
+"Je prends le TGV.",
+"A high-speed train",
+"I take the high-speed train."
+],
+[
+"Nom",
+"Un zoo",
+"Nous allons au zoo.",
+"A zoo",
+"We go to the zoo."
+],
+[
+"Nom",
+"Une / De la barbe",
+"Il a une barbe.",
+"A beard",
+"He has a beard."
+],
+[
+"Nom",
+"Une / De la moustache",
+"Il a une moustache.",
+"A mustache",
+"He has a mustache."
+],
+[
+"Nom",
+"Une activité",
+"C'est une bonne activité.",
+"An activity",
+"It is a good activity."
+],
+[
+"Nom",
+"Une bande dessinée  (BD)",
+"Je lis une BD.",
+"A comic book",
+"I read a comic book."
+],
+[
+"Nom",
+"Une heure",
+"J'ai une heure.",
+"An hour",
+"I have an hour."
+],
+[
+"Nom",
+"Une personne",
+"C'est une bonne personne.",
+"A person",
+"He/She is a good person."
+],
+[
+"Nom",
+"Une série",
+"J'aime cette série.",
+"A series",
+"I like this series."
+],
+[
+"Nom",
+"Une sortie",
+"Tu veux faire une sortie ce weekend ?",
+"An outing / A trip",
+"Do you want to go on an outing this weekend?"
+],
+[
+"Verbe",
+"(Faire) la lessive",
+"Je fais la lessive.",
+"To do the laundry",
+"I do the laundry."
+],
+[
+"Verbe",
+"(Faire) un jogging/footing",
+"Il fait un jogging.",
+"To go jogging",
+"He goes jogging."
+],
+[
+"Verbe",
+"Accoucher",
+"Elle va accoucher bientôt.",
+"To give birth",
+"She is going to give birth soon."
+],
+[
+"Verbe",
+"Aller sur internet",
+"J'aime aller sur internet.",
+"To go on the internet",
+"I like to go on the internet."
+],
+[
+"Verbe",
+"Allumer",
+"J'allume la lumière.",
+"To turn on",
+"I turn on the light."
+],
+[
+"Verbe",
+"Changer",
+"Je veux changer de voiture.",
+"To change",
+"I want to change cars."
+],
+[
+"Verbe",
+"Devoir",
+"Je dois aller au consulat demain.",
+"To have to / Must",
+"I must go to the consulate tomorrow."
+],
+[
+"Verbe",
+"Partir",
+"Je pars en vacances.",
+"To leave",
+"I leave on vacation."
+],
+[
+"Verbe",
+"Pleurer",
+"Le bébé pleure.",
+"To cry",
+"The baby cries."
+],
+[
+"Verbe",
+"Proposer",
+"Je propose une idée.",
+"To propose / To suggest",
+"I suggest an idea."
+],
+[
+"Verbe",
+"Rentrer",
+"Je rentre à la maison.",
+"To go home / To return",
+"I go home."
+],
+[
+"Verbe",
+"Rire",
+"Nous aimons rire.",
+"To laugh",
+"We like to laugh."
+],
+[
+"Verbe",
+"S'asseoir",
+"Je m'assois sur la chaise.",
+"To sit down",
+"I sit on the chair."
+],
+[
+"Verbe",
+"S'endormir",
+"Je m'endors vite.",
+"To fall asleep",
+"I fall asleep quickly."
+],
+[
+"Verbe",
+"S'étirer",
+"Le chat s'étire.",
+"To stretch",
+"The cat stretches."
+],
+[
+"Verbe",
+"S'habiller",
+"Je m'habille pour sortir.",
+"To get dressed",
+"I get dressed to go out."
+],
+[
+"Verbe",
+"Se brosser les dents",
+"Je me brosse les dents.",
+"To brush one's teeth",
+"I brush my teeth."
+],
+[
+"Verbe",
+"Se coiffer",
+"Je me coiffe.",
+"To do one's hair",
+"I do my hair."
+],
+[
+"Verbe",
+"Se coucher",
+"Je me couche tard.",
+"To go to bed",
+"I go to bed late."
+],
+[
+"Verbe",
+"Se laver",
+"Je me lave les mains.",
+"To wash (oneself)",
+"I wash my hands."
+],
+[
+"Verbe",
+"Se lever",
+"Je me lève vite.",
+"To get up",
+"I get up quickly."
+],
+[
+"Verbe",
+"Se maquiller",
+"Elle se maquille.",
+"To put on makeup",
+"She puts on makeup."
+],
+[
+"Verbe",
+"Se préparer",
+"Elle se prépare.",
+"To get ready",
+"She is getting ready."
+],
+[
+"Verbe",
+"Se reposer",
+"Je me repose le dimanche.",
+"To rest",
+"I rest on Sunday."
+],
+[
+"Verbe",
+"Se retrouver",
+"On se retrouve au café.",
+"To meet up",
+"We meet up at the cafe."
+],
+[
+"Verbe",
+"Se réveiller",
+"Je me réveille à 7h.",
+"To wake up",
+"I wake up at 7 AM."
+],
+[
+"Verbe",
+"Voler",
+"Quelqu'un vient de voler mon téléphone !",
+"To fly / To steal",
+"Someone just stole my phone !"
+]
+],
+"7": [
+[
+"Catégorie",
+"Mot",
+"Exemple",
+"Traduction anglais",
+"Exemple"
+],
+[
+"Expression",
+"Beurk !",
+"Beurk ! C'est dégoûtant.",
+"Yuck!",
+"Yuck! It's disgusting."
+],
+[
+"Expression",
+"En avoir assez / En avoir marre / Ne plus en pouvoir",
+"J'en ai marre ! Je n'en peux plus !",
+"To have enough / be fed up",
+"I'm fed up! I can't take it anymore!"
+],
+[
+"Expression",
+"Être un ange",
+"Merci pour ton aide, tu es un ange !",
+"To be an angel",
+"Thanks for your help, you are an angel!"
+],
+[
+"Expression",
+"Être/Tomber en panne",
+"Ma voiture est en panne.",
+"To break down",
+"My car broke down."
+],
+[
+"Expression",
+"Poser une question",
+"Je peux poser une question ?",
+"To ask a question",
+"Can I ask a question?"
+],
+[
+"Nom",
+"Des déchets",
+"Il faut jeter les déchets.",
+"Trash / waste",
+"We must throw away the trash."
+],
+[
+"Nom",
+"Des escaliers",
+"Je prends les escaliers.",
+"Stairs",
+"I take the stairs."
+],
+[
+"Nom",
+"Des toilettes",
+"Où sont les toilettes ?",
+"A toilet / Restroom",
+"Where is the restroom?"
+],
+[
+"Nom",
+"Du bruit",
+"Il y a beaucoup de bruit ici.",
+"Noise",
+"There is a lot of noise here."
+],
+[
+"Nom",
+"La cafétéria",
+"Nous mangeons à la cafétéria.",
+"The cafeteria",
+"We eat at the cafeteria."
+],
+[
+"Nom",
+"La température",
+"La température est basse aujourd'hui.",
+"The temperature",
+"The temperature is low today."
+],
+[
+"Nom",
+"Le rez-de-chaussée",
+"Il habite au rez-de-chaussée.",
+"The ground floor",
+"He lives on the ground floor."
+],
+[
+"Nom",
+"Un appareil électroménager",
+"J'achète un nouvel appareil électroménager.",
+"A household appliance",
+"I am buying a new household appliance."
+],
+[
+"Nom",
+"Un balcon",
+"Il y a des fleurs sur le balcon.",
+"A balcony",
+"There are flowers on the balcony."
+],
+[
+"Nom",
+"Un barbecue",
+"Nous faisons un barbecue dimanche.",
+"A barbecue",
+"We are having a barbecue on Sunday."
+],
+[
+"Nom",
+"Un bureau",
+"Il travaille dans son bureau.",
+"An office / desk",
+"He works in his office."
+],
+[
+"Nom",
+"Un cafard",
+"Il y a un cafard dans la cuisine !",
+"A cockroach",
+"There is a cockroach in the kitchen!"
+],
+[
+"Nom",
+"Un camion",
+"Le camion est rouge.",
+"A truck",
+"The truck is red."
+],
+[
+"Nom",
+"Un canapé",
+"Le canapé est très confortable.",
+"A sofa / couch",
+"The sofa is very comfortable."
+],
+[
+"Nom",
+"Un congélateur",
+"Il y a de la glace dans le congélateur.",
+"A freezer",
+"There is ice cream in the freezer."
+],
+[
+"Nom",
+"Un couloir",
+"Le couloir est long.",
+"A hallway / corridor",
+"The hallway is long."
+],
+[
+"Nom",
+"Un cours",
+"Le cours commence à 9h.",
+"A class / course",
+"The class starts at 9am."
+],
+[
+"Nom",
+"Un coussin",
+"Il y a un coussin sur le canapé.",
+"A cushion",
+"There is a cushion on the sofa."
+],
+[
+"Nom",
+"Un étage",
+"Mon appartement est au premier étage.",
+"A floor",
+"My apartment is on the first floor."
+],
+[
+"Nom",
+"Un fauteuil",
+"Il lit dans son fauteuil.",
+"An armchair",
+"He reads in his armchair."
+],
+[
+"Nom",
+"Un four",
+"Le gâteau est dans le four.",
+"An oven",
+"The cake is in the oven."
+],
+[
+"Nom",
+"Un frigo / Un réfrigérateur",
+"Le lait est dans le frigo.",
+"A fridge / refrigerator",
+"The milk is in the fridge."
+],
+[
+"Nom",
+"Un grille-pain",
+"Je fais du pain grillé avec le grille-pain.",
+"A toaster",
+"I make toast with the toaster."
+],
+[
+"Nom",
+"Un hall",
+"Attends-moi dans le hall de l'immeuble.",
+"A lobby / hall",
+"Wait for me in the lobby of the building."
+],
+[
+"Nom",
+"Un immeuble",
+"J'habite dans un grand immeuble.",
+"A building",
+"I live in a big building."
+],
+[
+"Nom",
+"Un journal",
+"Il lit le journal tous les matins.",
+"A newspaper",
+"He reads the newspaper every morning."
+],
+[
+"Nom",
+"Un lit",
+"Je vais au lit.",
+"A bed",
+"I am going to bed."
+],
+[
+"Nom",
+"Un local à poubelles",
+"Je mets le sac dans le local à poubelles.",
+"A trash room",
+"I put the bag in the trash room."
+],
+[
+"Nom",
+"Un local à vélo",
+"Mon vélo est dans le local à vélo.",
+"A bike room",
+"My bike is in the bike room."
+],
+[
+"Nom",
+"Un loyer",
+"Le loyer est cher.",
+"A rent",
+"The rent is expensive."
+],
+[
+"Nom",
+"Un mètre carré (m²)",
+"L'appartement fait 50 mètres carrés.",
+"A square meter (sqm)",
+"The apartment is 50 square meters."
+],
+[
+"Nom",
+"Un meuble",
+"C'est un beau meuble.",
+"A piece of furniture",
+"It is a beautiful piece of furniture."
+],
+[
+"Nom",
+"Un micro-onde",
+"Je chauffe mon plat au micro-onde.",
+"A microwave",
+"I heat my dish in the microwave."
+],
+[
+"Nom",
+"Un problème",
+"J'ai un petit problème.",
+"A problem",
+"I have a small problem."
+],
+[
+"Nom",
+"Un salon",
+"Nous regardons la télé dans le salon.",
+"A living room",
+"We watch TV in the living room."
+],
+[
+"Nom",
+"Un studio",
+"Elle loue un petit studio.",
+"A studio",
+"She rents a small studio."
+],
+[
+"Nom",
+"Un tableau",
+"C'est un beau tableau.",
+"A painting / board",
+"It is a beautiful painting."
+],
+[
+"Nom",
+"Un tapis",
+"Le chien dort sur le tapis.",
+"A rug / carpet",
+"The dog sleeps on the rug."
+],
+[
+"Nom",
+"Un(e) plombier / plombière",
+"J'appelle un plombier pour la fuite.",
+"A plumber",
+"I am calling a plumber for the leak."
+],
+[
+"Nom",
+"Un(e) propriétaire",
+"Le propriétaire est très gentil.",
+"An owner / landlord",
+"The landlord is very nice."
+],
+[
+"Nom",
+"Une armoire",
+"Mes vêtements sont dans l'armoire.",
+"A wardrobe / closet",
+"My clothes are in the wardrobe."
+],
+[
+"Nom",
+"Une bibliothèque",
+"J'ai installé une bibliothèque dans mon salon",
+"A bookcase / library",
+"I installed a bookcase in my living room."
+],
+[
+"Nom",
+"Une bouilloire",
+"L'eau bout dans la bouilloire.",
+"A kettle",
+"The water is boiling in the kettle."
+],
+[
+"Nom",
+"Une cave",
+"Le vin est dans la cave.",
+"A cellar / basement",
+"The wine is in the cellar."
+],
+[
+"Nom",
+"Une chaise",
+"Assieds-toi sur cette chaise.",
+"A chair",
+"Sit on this chair."
+],
+[
+"Nom",
+"Une chambre",
+"Je dors dans ma chambre.",
+"A bedroom",
+"I sleep in my bedroom."
+],
+[
+"Nom",
+"Une clé",
+"J'ai perdu mes clés.",
+"A key",
+"I lost my keys."
+],
+[
+"Nom",
+"Une cuisine",
+"Je prépare le repas dans la cuisine.",
+"A kitchen",
+"I prepare the meal in the kitchen."
+],
+[
+"Nom",
+"Une cuisinière",
+"C'est une cuisinière à gaz.",
+"A stove",
+"It is a gas stove."
+],
+[
+"Nom",
+"Une douche",
+"Je prends une douche le matin.",
+"A shower",
+"I take a shower in the morning."
+],
+[
+"Nom",
+"Une fenêtre",
+"Ouvre la fenêtre.",
+"A window",
+"Open the window."
+],
+[
+"Nom",
+"Une fuite (d'eau, de gaz)",
+"Il y a une fuite d'eau dans la salle de bain.",
+"A leak (water, gas)",
+"There is a water leak in the bathroom."
+],
+[
+"Nom",
+"Une laisse",
+"Tenez votre chien en laisse.",
+"A leash",
+"Keep your dog on a leash."
+],
+[
+"Nom",
+"Une lampe",
+"Allume la lampe.",
+"A lamp",
+"Turn on the lamp."
+],
+[
+"Nom",
+"Une pelouse",
+"La pelouse est verte.",
+"A lawn",
+"The lawn is green."
+],
+[
+"Nom",
+"Une pièce",
+"Cet appartement a trois pièces.",
+"A room",
+"This apartment has three rooms."
+],
+[
+"Nom",
+"Une plante (verte)",
+"J'arrose ma plante verte.",
+"A (green) plant",
+"I water my green plant."
+],
+[
+"Nom",
+"Une poêle",
+"Je cuis un œuf dans la poêle.",
+"A frying pan",
+"I cook an egg in the frying pan."
+],
+[
+"Nom",
+"Une porte",
+"Ferme la porte, s'il te plaît.",
+"A door",
+"Close the door, please."
+],
+[
+"Nom",
+"Une poubelle",
+"La poubelle est pleine.",
+"A trash can",
+"The trash can is full."
+],
+[
+"Nom",
+"Une résidence",
+"C'est une résidence calme.",
+"A residence",
+"It is a quiet residence."
+],
+[
+"Nom",
+"Une salle à manger",
+"Nous mangeons dans la salle à manger.",
+"A dining room",
+"We eat in the dining room."
+],
+[
+"Nom",
+"Une salle de bain",
+"La salle de bain est petite.",
+"A bathroom",
+"The bathroom is small."
+],
+[
+"Nom",
+"Une table",
+"Le livre est sur la table.",
+"A table",
+"The book is on the table."
+],
+[
+"Nom",
+"Une table basse",
+"Le café est sur la table basse.",
+"A coffee table",
+"The coffee is on the coffee table."
+],
+[
+"Nom",
+"Une télé (télévision)",
+"Nous avons une grande télé.",
+"A TV (television)",
+"We have a big TV."
+],
+[
+"Nom",
+"Une terrasse",
+"Nous dînons sur la terrasse.",
+"A terrace",
+"We dine on the terrace."
+],
+[
+"Préposition",
+"À gauche/droite/côté de",
+"La banque est à côté de la poste.",
+"To the left/right/next to",
+"The bank is next to the post office."
+],
+[
+"Préposition",
+"Dans",
+"Mes clés sont dans mon sac.",
+"In",
+"My keys are in my bag."
+],
+[
+"Préposition",
+"Derrière",
+"Le jardin est derrière la maison.",
+"Behind",
+"The garden is behind the house."
+],
+[
+"Préposition",
+"Devant",
+"Ma voiture est devant la maison.",
+"In front of",
+"My car is in front of the house."
+],
+[
+"Préposition",
+"Entre ... et ...",
+"Je suis assis entre Paul et Marie.",
+"Between ... and ...",
+"I am sitting between Paul and Marie."
+],
+[
+"Préposition",
+"Sous",
+"Le chien est sous la chaise.",
+"Under",
+"The dog is under the chair."
+],
+[
+"Préposition",
+"Sur",
+"Le chat est sur la table.",
+"On",
+"The cat is on the table."
+],
+[
+"Verbe",
+"\"Marcher\"",
+"La télé ne marche plus.",
+"To work / function",
+"The TV doesn't work anymore."
+],
+[
+"Verbe",
+"Brûler",
+"Attention à ne pas brûler le repas.",
+"To burn",
+"Be careful not to burn the meal."
+],
+[
+"Verbe",
+"Commencer",
+"Le film va commencer.",
+"To start / begin",
+"The movie is going to start."
+],
+[
+"Verbe",
+"Écouter",
+"J'aime écouter de la musique.",
+"To listen",
+"I like to listen to music."
+],
+[
+"Verbe",
+"Entrer",
+"Vous pouvez entrer.",
+"To enter / come in",
+"You can come in."
+],
+[
+"Verbe",
+"Fermer",
+"Ferme la porte en sortant.",
+"To close",
+"Close the door when leaving."
+],
+[
+"Verbe",
+"Fumer",
+"Il est interdit de fumer ici.",
+"To smoke",
+"It is forbidden to smoke here."
+],
+[
+"Verbe",
+"Oublier",
+"J'ai oublié mon livre.",
+"To forget",
+"I forgot my book."
+],
+[
+"Verbe",
+"Perdre",
+"J'ai peur de perdre mon téléphone.",
+"To lose",
+"I am afraid of losing my phone."
+],
+[
+"Verbe",
+"Recommencer",
+"Je dois recommencer mon travail.",
+"To start again / redo",
+"I have to redo my work."
+],
+[
+"Verbe",
+"Regarder",
+"Je regarde un film.",
+"To watch / look at",
+"I am watching a movie."
+],
+[
+"Verbe",
+"Régler",
+"Je vais régler ce problème.",
+"To sort out / adjust / pay",
+"I will sort out this problem."
+],
+[
+"Verbe",
+"Rencontrer",
+"J'aime rencontrer de nouvelles personnes.",
+"To meet",
+"I like to meet new people."
+],
+[
+"Verbe",
+"Renverser",
+"Il a renversé son verre d'eau.",
+"To spill / knock over",
+"He spilled his glass of water."
+],
+[
+"Verbe",
+"Réparer",
+"Je dois réparer mon vélo.",
+"To repair / fix",
+"I have to fix my bike."
+],
+[
+"Verbe",
+"Tenir",
+"Peux-tu tenir mon sac ?",
+"To hold",
+"Can you hold my bag?"
+],
+[
+"Verbe",
+"Trier",
+"Merci de trier vos déchets.",
+"To sort",
+"Please sort your waste."
+],
+[
+"Verbe",
+"Vapoter",
+"Beaucoup de jeunes aiment vapoter.",
+"To vape",
+"Many young people like to vape."
+]
+],
+"8": [
+[
+"Catégorie",
+"Mot",
+"Exemple",
+"Traduction anglais",
+"Exemple"
+],
+[
+"Adjectif",
+"Bon / Bonne",
+"C'est très bon.",
+"Good",
+"It is very good."
+],
+[
+"Adjectif",
+"Équilibré(e)",
+"C'est un repas équilibré.",
+"Balanced",
+"It is a balanced meal."
+],
+[
+"Adjectif",
+"Inquiet / Inquiète",
+"Je suis inquiet.",
+"Worried",
+"I am worried."
+],
+[
+"Adjectif",
+"Sain(e)",
+"C'est un repas sain.",
+"Healthy",
+"It is a healthy meal."
+],
+[
+"Adverbe",
+"Assez",
+"J'ai assez mangé, je n'ai plus faim.",
+"Enough",
+"I have eaten enough, I am no longer hungry."
+],
+[
+"Expression",
+"Avoir le nez qui coule",
+"J'ai le nez qui coule.",
+"To have a runny nose",
+"I have a runny nose."
+],
+[
+"Expression",
+"Avoir mal à ...",
+"J'ai mal à la tête.",
+"To have a pain in ...",
+"I have a headache."
+],
+[
+"Expression",
+"Bon pour la santé",
+"Le sport est bon pour la santé.",
+"Good for your health",
+"Sports are good for your health."
+],
+[
+"Expression",
+"Être en forme",
+"Je veux être en forme.",
+"To be in shape",
+"I want to be in shape."
+],
+[
+"Expression",
+"Mauvais pour la santé",
+"Fumer est mauvais pour la santé.",
+"Bad for your health",
+"Smoking is bad for your health."
+],
+[
+"Expression",
+"Prendre rendez-vous",
+"Je vais prendre rendez-vous.",
+"To make an appointment",
+"I will make an appointment."
+],
+[
+"Nom",
+"De la fièvre",
+"J'ai de la fièvre.",
+"A fever",
+"I have a fever."
+],
+[
+"Nom",
+"Des calories",
+"Je compte les calories.",
+"Calories",
+"I count calories."
+],
+[
+"Nom",
+"Des vitamines",
+"Je prends des vitamines.",
+"Vitamins",
+"I take vitamins."
+],
+[
+"Nom",
+"Du citron",
+"Je bois du jus de citron.",
+"Lemon",
+"I drink lemon juice."
+],
+[
+"Nom",
+"Du miel",
+"J'aime le miel.",
+"Honey",
+"I like honey."
+],
+[
+"Nom",
+"Du sirop pour la toux/gorge",
+"Prends du sirop.",
+"Cough syrup",
+"Take some syrup."
+],
+[
+"Nom",
+"La bouche",
+"Ouvre la bouche.",
+"The mouth",
+"Open your mouth."
+],
+[
+"Nom",
+"La course (à pied)",
+"J'aime la course à pied.",
+"Running",
+"I like running."
+],
+[
+"Nom",
+"La fréquence",
+"Quelle est la fréquence ?",
+"The frequency",
+"What is the frequency?"
+],
+[
+"Nom",
+"La gorge",
+"J'ai mal à la gorge.",
+"The throat",
+"I have a sore throat."
+],
+[
+"Nom",
+"La grippe",
+"J'ai la grippe.",
+"The flu",
+"I have the flu."
+],
+[
+"Nom",
+"La gymnastique",
+"Je fais de la gymnastique.",
+"Gymnastics",
+"I do gymnastics."
+],
+[
+"Nom",
+"La pétanque",
+"Nous jouons à la pétanque.",
+"Petanque",
+"We play petanque."
+],
+[
+"Nom",
+"La poitrine",
+"Si tu as mal dans la poitrine, va chez le docteur.",
+"The chest",
+"If your chest hurts, go to the doctor."
+],
+[
+"Nom",
+"La taille",
+"Tu fais quelle taille ?",
+"The height",
+"How tall are you?"
+],
+[
+"Nom",
+"La température",
+"Je prends ma température.",
+"The temperature",
+"I am taking my temperature."
+],
+[
+"Nom",
+"La tête",
+"J'ai mal à la tête.",
+"The head",
+"I have a headache."
+],
+[
+"Nom",
+"Le \"football américain\"",
+"Je regarde le football américain.",
+"American football",
+"I watch American football."
+],
+[
+"Nom",
+"Le corps",
+"Le corps humain est complexe.",
+"The body",
+"The human body is complex."
+],
+[
+"Nom",
+"Le cyclisme",
+"J'aime le cyclisme.",
+"Cycling",
+"I like cycling."
+],
+[
+"Nom",
+"Le dos",
+"J'ai mal au dos.",
+"The back",
+"My back hurts."
+],
+[
+"Nom",
+"Le front",
+"Il a un grand front.",
+"The forehead",
+"He has a large forehead."
+],
+[
+"Nom",
+"Le judo",
+"Il fait du judo.",
+"Judo",
+"He does judo."
+],
+[
+"Nom",
+"Le nez",
+"Mon nez coule.",
+"The nose",
+"My nose is running."
+],
+[
+"Nom",
+"Le poids",
+"Vous faites quel poids ?",
+"The weight",
+"How much do you weigh?"
+],
+[
+"Nom",
+"Le rugby",
+"Il joue au rugby.",
+"Rugby",
+"He plays rugby."
+],
+[
+"Nom",
+"Le tennis",
+"Je joue au tennis.",
+"Tennis",
+"I play tennis."
+],
+[
+"Nom",
+"Le ventre",
+"J'ai mal au ventre.",
+"The stomach",
+"My stomach hurts."
+],
+[
+"Nom",
+"Le volley(ball)",
+"Je joue au volley.",
+"Volleyball",
+"I play volleyball."
+],
+[
+"Nom",
+"Le yoga",
+"Je fais du yoga.",
+"Yoga",
+"I do yoga."
+],
+[
+"Nom",
+"Les bras",
+"Il a de longs bras.",
+"The arms",
+"He has long arms."
+],
+[
+"Nom",
+"Les dents",
+"Je me brosse les dents.",
+"The teeth",
+"I brush my teeth."
+],
+[
+"Nom",
+"Les épaules",
+"J'ai mal aux épaules.",
+"The shoulders",
+"My shoulders hurt."
+],
+[
+"Nom",
+"Les genoux",
+"Il a mal aux genoux.",
+"The knees",
+"His knees hurt."
+],
+[
+"Nom",
+"Les jambes",
+"J'ai mal aux jambes.",
+"The legs",
+"My legs hurt."
+],
+[
+"Nom",
+"Les mains",
+"Lave-toi les mains.",
+"The hands",
+"Wash your hands."
+],
+[
+"Nom",
+"Les oreilles",
+"J'ai mal aux oreilles.",
+"The ears",
+"My ears hurt."
+],
+[
+"Nom",
+"Les pieds",
+"J'ai froid aux pieds.",
+"The feet",
+"My feet are cold."
+],
+[
+"Nom",
+"Les poumons",
+"Il a un problème aux poumons.",
+"The lungs",
+"He has a problem with his lungs."
+],
+[
+"Nom",
+"Les vestiaires",
+"Je vais aux vestiaires.",
+"The locker room",
+"I go to the locker room."
+],
+[
+"Nom",
+"Un banquier / Une banquière",
+"Je parle à mon banquier.",
+"A banker",
+"I talk to my banker."
+],
+[
+"Nom",
+"Un complément (alimentaire)",
+"La vitamine D est un complément alimentaire.",
+"A dietary supplement",
+"Vitamin D is a dietary supplement."
+],
+[
+"Nom",
+"Un hôpital",
+"Je vais à l'hôpital.",
+"A hospital",
+"I am going to the hospital."
+],
+[
+"Nom",
+"Un joueur / Une joueuse",
+"C'est un bon joueur.",
+"A player",
+"He is a good player."
+],
+[
+"Nom",
+"Un litre",
+"Je bois un litre d'eau.",
+"A liter",
+"I drink a liter of water."
+],
+[
+"Nom",
+"Un match",
+"Je regarde le match.",
+"A match",
+"I watch the match."
+],
+[
+"Nom",
+"Un médicament",
+"Je prends un médicament.",
+"A medicine",
+"I take a medicine."
+],
+[
+"Nom",
+"Un mètre",
+"Il mesure un mètre.",
+"A meter",
+"He measures one meter."
+],
+[
+"Nom",
+"Un rendez-vous",
+"J'ai un rendez-vous.",
+"An appointment",
+"I have an appointment."
+],
+[
+"Nom",
+"Un rhume",
+"J'ai attrapé un rhume.",
+"A cold",
+"I caught a cold."
+],
+[
+"Nom",
+"Un sauna",
+"J'aime le sauna.",
+"A sauna",
+"I like the sauna."
+],
+[
+"Nom",
+"Un symptôme",
+"C'est un symptôme de la grippe.",
+"A symptom",
+"It is a flu symptom."
+],
+[
+"Nom",
+"Un thermomètre",
+"Où est le thermomètre ?",
+"A thermometer",
+"Where is the thermometer?"
+],
+[
+"Nom",
+"Un(e) dentiste",
+"Je vais chez le dentiste.",
+"A dentist",
+"I am going to the dentist."
+],
+[
+"Nom",
+"Un(e) pharmacien(ne)",
+"Je parle au pharmacien.",
+"A pharmacist",
+"I speak to the pharmacist."
+],
+[
+"Nom",
+"Une carte vitale",
+"J'ai ma carte vitale.",
+"A health insurance card",
+"I have my health insurance card."
+],
+[
+"Nom",
+"Une compétition",
+"C'est une grande compétition.",
+"A competition",
+"It is a big competition."
+],
+[
+"Nom",
+"Une corde à sauter",
+"Elle a une corde à sauter.",
+"A jump rope",
+"She has a jump rope."
+],
+[
+"Nom",
+"Une ordonnance",
+"Le docteur me donne une ordonnance.",
+"A prescription",
+"The doctor gives me a prescription."
+],
+[
+"Nom",
+"Une radio",
+"Le docteur m'a fait une radio des poumons.",
+"An X-ray",
+"The doctor took an X-ray of my lungs."
+],
+[
+"Nom",
+"Une salle de sport",
+"Je vais à la salle de sport.",
+"A gym",
+"I go to the gym."
+],
+[
+"Nom",
+"Une serviette",
+"J'ai une serviette propre.",
+"A towel",
+"I have a clean towel."
+],
+[
+"Verbe",
+"Apporter",
+"Je vais apporter un gâteau.",
+"To bring",
+"I will bring a cake."
+],
+[
+"Verbe",
+"Apprendre",
+"Je veux apprendre le français.",
+"To learn",
+"I want to learn French."
+],
+[
+"Verbe",
+"Couler",
+"L'eau coule.",
+"To flow / To run",
+"The water is flowing."
+],
+[
+"Verbe",
+"Éteindre",
+"Je vais éteindre la lumière.",
+"To turn off",
+"I will turn off the light."
+],
+[
+"Verbe",
+"Éternuer",
+"Je vais éternuer.",
+"To sneeze",
+"I am going to sneeze."
+],
+[
+"Verbe",
+"Falloir",
+"Il va falloir partir.",
+"To be necessary",
+"It will be necessary to leave."
+],
+[
+"Verbe",
+"Gagner",
+"Nous allons gagner.",
+"To win",
+"We are going to win."
+],
+[
+"Verbe",
+"Jardiner",
+"J'aime jardiner.",
+"To garden",
+"I like to garden."
+],
+[
+"Verbe",
+"Jouer",
+"J'aime jouer.",
+"To play",
+"I like to play."
+],
+[
+"Verbe",
+"Nettoyer",
+"Je dois nettoyer ma chambre.",
+"To clean",
+"I have to clean my room."
+],
+[
+"Verbe",
+"Ouvrir",
+"Je vais ouvrir la porte.",
+"To open",
+"I will open the door."
+],
+[
+"Verbe",
+"Respirer",
+"Il faut respirer.",
+"To breathe",
+"You have to breathe."
+],
+[
+"Verbe",
+"Se sentir",
+"Je me sens bien.",
+"To feel",
+"I feel good."
+],
+[
+"Verbe",
+"Sentir",
+"Je sens une odeur bizarre !",
+"To smell",
+"I smell a strange odor!"
+],
+[
+"Verbe",
+"Tousser",
+"Je n'arrête pas de tousser.",
+"To cough",
+"I can't stop coughing."
+],
+[
+"Verbe",
+"Utiliser",
+"Je vais utiliser mon téléphone.",
+"To use",
+"I will use my phone."
+]
+],
+"9": [
+[
+"Catégorie",
+"Mot",
+"Exemple",
+"Traduction anglais",
+"Exemple"
+],
+[
+"Adjectif",
+"Biologique",
+"Ces tomates sont \"bio\".",
+"Organic",
+"These tomatoes are organic."
+],
+[
+"Adjectif",
+"Chimique",
+"C'est un produit chimique.",
+"Chemical",
+"It is a chemical product."
+],
+[
+"Adjectif",
+"Compris(e)",
+"Le petit-déjeuner est compris dans le prix de la chambre.",
+"Included",
+"Breakfast is included in the room price."
+],
+[
+"Adjectif",
+"Écologique",
+"C'est un produit écologique.",
+"Ecological / Eco-friendly",
+"It is an eco-friendly product."
+],
+[
+"Adjectif",
+"Lent(e)",
+"Cet ordinateur est lent.",
+"Slow",
+"This computer is slow."
+],
+[
+"Adjectif",
+"Meilleur(e)",
+"C'est le meilleur restaurant de la ville.",
+"Better / Best",
+"It is the best restaurant in the city."
+],
+[
+"Adjectif",
+"Rapide",
+"Ce train est très rapide.",
+"Fast / Quick",
+"This train is very fast."
+],
+[
+"Adjectif",
+"Sportif / Sportive",
+"Mon frère est très sportif.",
+"Athletic / Sporty",
+"My brother is very sporty."
+],
+[
+"Expression",
+"Une vue sur ... (la mer, la montagne, ...)",
+"J'ai une chambre avec vue sur la mer.",
+"A view of ... (the sea, the mountain, ...)",
+"I have a room with a view of the sea."
+],
+[
+"Nom",
+"De l'herbe",
+"L'herbe est verte.",
+"Grass",
+"The grass is green."
+],
+[
+"Nom",
+"Des fruits de mer",
+"Nous mangeons des fruits de mer au restaurant.",
+"Seafood",
+"We are eating seafood at the restaurant."
+],
+[
+"Nom",
+"L'aller / Le retour / Un aller-retour",
+"Je voudrais un billet aller-retour, s'il vous plaît.",
+"One-way / Return / A round trip",
+"I would like a round-trip ticket, please."
+],
+[
+"Nom",
+"L'Alsace",
+"L'Alsace est une région de France.",
+"Alsace",
+"Alsace is a region of France."
+],
+[
+"Nom",
+"L'arrivée",
+"L'arrivée du train est à 10h.",
+"The arrival",
+"The train's arrival is at 10 AM."
+],
+[
+"Nom",
+"La choucroute",
+"J'aime manger de la choucroute.",
+"Sauerkraut",
+"I like eating sauerkraut."
+],
+[
+"Nom",
+"La Corse",
+"Nous passons nos vacances en Corse.",
+"Corsica",
+"We are spending our holidays in Corsica."
+],
+[
+"Nom",
+"La première/seconde classe",
+"Les billets en première classe sont plus chers.",
+"First/second class",
+"First-class tickets are more expensive."
+],
+[
+"Nom",
+"La Suisse",
+"La Suisse est un beau pays.",
+"Switzerland",
+"Switzerland is a beautiful country."
+],
+[
+"Nom",
+"La ville",
+"J'habite dans une grande ville.",
+"The city / The town",
+"I live in a big city."
+],
+[
+"Nom",
+"Le ciel",
+"Le ciel est bleu aujourd'hui.",
+"The sky",
+"The sky is blue today."
+],
+[
+"Nom",
+"Le départ",
+"Le départ est prévu demain.",
+"The departure",
+"The departure is scheduled for tomorrow."
+],
+[
+"Nom",
+"Le/la wifi",
+"Le wifi ne marche pas.",
+"Wi-Fi",
+"The Wi-Fi is not working."
+],
+[
+"Nom",
+"Un arbre",
+"Cet arbre est très grand.",
+"A tree",
+"This tree is very tall."
+],
+[
+"Nom",
+"Un bateau",
+"Le bateau est sur l'eau.",
+"A boat",
+"The boat is on the water."
+],
+[
+"Nom",
+"Un camping",
+"L'été, nous allons au camping.",
+"A campsite",
+"In summer, we go to the campsite."
+],
+[
+"Nom",
+"Un canapé-lit / Un clic-clac",
+"Mon ami dort sur le canapé-lit.",
+"A sofa bed",
+"My friend sleeps on the sofa bed."
+],
+[
+"Nom",
+"Un canard",
+"Le canard nage dans l'eau.",
+"A duck",
+"The duck is swimming in the water."
+],
+[
+"Nom",
+"Un car",
+"Un car est un bus longue distance.",
+"A coach / A long-distance bus",
+"A coach is a long-distance bus."
+],
+[
+"Nom",
+"Un champ",
+"Le tracteur est dans le champ.",
+"A field",
+"The tractor is in the field."
+],
+[
+"Nom",
+"Un chemin",
+"Nous marchons sur le chemin.",
+"A path",
+"We are walking on the path."
+],
+[
+"Nom",
+"Un cheval",
+"Elle monte sur un cheval.",
+"A horse",
+"She rides a horse."
+],
+[
+"Nom",
+"Un hébergement",
+"Cet hébergement est très confortable.",
+"An accommodation",
+"This accommodation is very comfortable."
+],
+[
+"Nom",
+"Un hôtel",
+"Nous dormons dans un hôtel.",
+"A hotel",
+"We are sleeping in a hotel."
+],
+[
+"Nom",
+"Un lac",
+"Nous nous baignons dans le lac.",
+"A lake",
+"We are swimming in the lake."
+],
+[
+"Nom",
+"Un lapin",
+"Le lapin court vite.",
+"A rabbit",
+"The rabbit runs fast."
+],
+[
+"Nom",
+"Un lit simple/double",
+"Je voudrais une chambre avec un lit double.",
+"A single/double bed",
+"I would like a room with a double bed."
+],
+[
+"Nom",
+"Un logement",
+"Je cherche un logement pour ce soir.",
+"An accommodation",
+"I am looking for an accommodation for tonight."
+],
+[
+"Nom",
+"Un oiseau",
+"L'oiseau vole dans le ciel.",
+"A bird",
+"The bird is flying in the sky."
+],
+[
+"Nom",
+"Un parking",
+"Ma voiture est dans le parking.",
+"A parking lot / A car park",
+"My car is in the parking lot."
+],
+[
+"Nom",
+"Un poisson",
+"Le poisson nage dans le lac.",
+"A fish",
+"The fish is swimming in the lake."
+],
+[
+"Nom",
+"Un souvenir",
+"J'ai de très bons souvenirs de vacances.",
+"A memory / A souvenir",
+"I have very good holiday memories."
+],
+[
+"Nom",
+"Un van",
+"Nous partons voyager en van.",
+"A van",
+"We are going traveling in a van."
+],
+[
+"Nom",
+"Un village",
+"Mon grand-père habite dans un petit village.",
+"A village",
+"My grandfather lives in a small village."
+],
+[
+"Nom",
+"Une aventure",
+"C'est une grande aventure.",
+"An adventure",
+"It's a great adventure."
+],
+[
+"Nom",
+"Une boîte aux lettres",
+"Il y a une lettre dans la boîte aux lettres.",
+"A mailbox",
+"There is a letter in the mailbox."
+],
+[
+"Nom",
+"Une chambre d'hôte",
+"J'ai réservé une chambre d'hôte à la campagne.",
+"A bed and breakfast / A guest room",
+"I booked a bed and breakfast in the countryside."
+],
+[
+"Nom",
+"Une destination",
+"Avez-vous choisi une destination de vacances ?",
+"A destination",
+"Have you chosen a holiday destination?"
+],
+[
+"Nom",
+"Une ferme",
+"Il y a des animaux dans la ferme.",
+"A farm",
+"There are animals on the farm."
+],
+[
+"Nom",
+"Une fleur",
+"Cette fleur est belle.",
+"A flower",
+"This flower is beautiful."
+],
+[
+"Nom",
+"Une lettre",
+"J'écris une lettre à ma mère.",
+"A letter",
+"I am writing a letter to my mother."
+],
+[
+"Nom",
+"Une location",
+"Nous avons pris une location au bord de la mer.",
+"A rental",
+"We took a rental by the sea."
+],
+[
+"Nom",
+"Une poule",
+"La poule pond un œuf.",
+"A hen / A chicken",
+"The hen lays an egg."
+],
+[
+"Nom",
+"Une tente",
+"Il dort dans une tente.",
+"A tent",
+"He sleeps in a tent."
+],
+[
+"Nom",
+"Une vache",
+"La vache mange de l'herbe.",
+"A cow",
+"The cow is eating grass."
+],
+[
+"Nom",
+"Une voie",
+"Le train va partir de la voie n°4.",
+"A track / A platform",
+"The train will leave from platform 4."
+],
+[
+"Verbe",
+"Bronzer",
+"J'aime bronzer sur la plage.",
+"To tan / To sunbathe",
+"I like to sunbathe on the beach."
+],
+[
+"Verbe",
+"Conduire",
+"Il sait conduire.",
+"To drive",
+"He knows how to drive."
+],
+[
+"Verbe",
+"Échanger",
+"Je veux échanger mon billet.",
+"To exchange",
+"I want to exchange my ticket."
+],
+[
+"Verbe",
+"Faire du tourisme",
+"Nous aimons faire du tourisme.",
+"To go sightseeing",
+"We like to go sightseeing."
+],
+[
+"Verbe",
+"Goûter",
+"Tu veux goûter ce gâteau ?",
+"To taste / To try",
+"Do you want to taste this cake?"
+],
+[
+"Verbe",
+"Louer",
+"Nous allons louer une voiture.",
+"To rent",
+"We are going to rent a car."
+],
+[
+"Verbe",
+"Mourir",
+"Les plantes vont mourir sans eau.",
+"To die",
+"The plants will die without water."
+],
+[
+"Verbe",
+"Naître",
+"Mon fils va naître en mai.",
+"To be born",
+"My son will be born in May."
+],
+[
+"Verbe",
+"Prendre une photo/vidéo",
+"Je vais prendre une photo.",
+"To take a picture/video",
+"I am going to take a picture."
+],
+[
+"Verbe",
+"Réserver",
+"Je voudrais réserver une table pour deux.",
+"To book / To reserve",
+"I would like to book a table for two."
+],
+[
+"Verbe",
+"Retourner",
+"Je dois retourner à la maison.",
+"To return / To go back",
+"I have to go back home."
+],
+[
+"Verbe",
+"Revenir",
+"Il va revenir demain.",
+"To come back",
+"He will come back tomorrow."
+],
+[
+"Verbe",
+"Se baigner",
+"Nous allons nous baigner à la mer.",
+"To swim / To bathe",
+"We are going to swim in the sea."
+],
+[
+"Verbe",
+"Skier",
+"Nous allons skier cet hiver.",
+"To ski",
+"We are going to ski this winter."
+],
+[
+"Verbe",
+"Surfer",
+"Il aime surfer sur les vagues.",
+"To surf",
+"He likes surfing on the waves."
+]
+],
+"10": [
+[
+"Catégorie",
+"Mot",
+"Exemple",
+"Traduction anglais",
+"Exemple"
+],
+[
+"Adjectif",
+"Difficile",
+"Ce travail est difficile.",
+"Difficult / Hard",
+"This work is difficult."
+],
+[
+"Adjectif",
+"Facile",
+"L'exercice est facile.",
+"Easy",
+"The exercise is easy."
+],
+[
+"Adjectif",
+"Handicapé(e)",
+"Il est handicapé.",
+"Disabled",
+"He is disabled."
+],
+[
+"Adjectif",
+"Indépendant(e)",
+"Elle est indépendante.",
+"Independent",
+"She is independent."
+],
+[
+"Adjectif",
+"Nouveau / Nouvel / Nouvelle",
+"J'ai un nouveau téléphone.",
+"New",
+"I have a new phone."
+],
+[
+"Adjectif",
+"Organisé(e)",
+"Il est très organisé.",
+"Organized",
+"He is very organized."
+],
+[
+"Adverbe",
+"Longtemps",
+"J'attends depuis longtemps.",
+"For a long time",
+"I have been waiting for a long time."
+],
+[
+"Expression",
+"Gagner de l'argent",
+"Il veut gagner de l'argent.",
+"To earn money",
+"He wants to earn money."
+],
+[
+"Nom",
+"Des horaires",
+"Quelles sont vos horaires de travail ?",
+"Schedule / Hours",
+"What are your working hours?"
+],
+[
+"Nom",
+"Des produits de beauté",
+"Elle achète des produits de beauté.",
+"Beauty products",
+"She buys beauty products."
+],
+[
+"Nom",
+"Du papier toilette",
+"Il n'y a plus de papier toilette.",
+"Toilet paper",
+"There is no more toilet paper."
+],
+[
+"Nom",
+"Du télétravail",
+"Je fais du télétravail.",
+"Teleworking / Working from home",
+"I am working from home."
+],
+[
+"Nom",
+"L'économie",
+"L'économie est intéressante.",
+"Economics",
+"Economics is interesting."
+],
+[
+"Nom",
+"L'informatique",
+"J'aime l'informatique.",
+"Computer science",
+"I like computer science."
+],
+[
+"Nom",
+"L'organisation",
+"L'organisation est bonne.",
+"Organization",
+"The organization is good."
+],
+[
+"Nom",
+"L'UNICEF",
+"Elle travaille pour l'UNICEF.",
+"UNICEF",
+"She works for UNICEF."
+],
+[
+"Nom",
+"La pharmacie",
+"Il fait des études de pharmacie.",
+"Pharmacy",
+"He is studying pharmacy."
+],
+[
+"Nom",
+"Le design",
+"Il étudie le design.",
+"Design",
+"He studies design."
+],
+[
+"Nom",
+"Le journalisme",
+"Elle étudie le journalisme.",
+"Journalism",
+"She studies journalism."
+],
+[
+"Nom",
+"Le lycée",
+"Il est au lycée.",
+"High school",
+"He is in high school."
+],
+[
+"Nom",
+"Le travail / Le bureau",
+"Je dois aller au bureau.",
+"Work / Office",
+"I have to go to the office."
+],
+[
+"Nom",
+"Les mathématiques (les maths)",
+"J'aime les maths.",
+"Mathematics (math)",
+"I like math."
+],
+[
+"Nom",
+"Les sciences",
+"Elle étudie les sciences.",
+"Science",
+"She studies science."
+],
+[
+"Nom",
+"Un agriculteur / Une agricultrice",
+"Il est agriculteur.",
+"Farmer",
+"He is a farmer."
+],
+[
+"Nom",
+"Un amphithéâtre",
+"Le cours est dans l'amphithéâtre.",
+"Lecture hall",
+"The class is in the lecture hall."
+],
+[
+"Nom",
+"Un campus",
+"Le campus est grand.",
+"Campus",
+"The campus is big."
+],
+[
+"Nom",
+"Un chauffeur",
+"Le chauffeur de bus est là.",
+"Driver",
+"The bus driver is here."
+],
+[
+"Nom",
+"Un comédien / Une comédienne",
+"Elle est comédienne.",
+"Actor / Actress",
+"She is an actress."
+],
+[
+"Nom",
+"Un diplôme",
+"J'ai mon diplôme.",
+"Diploma / Degree",
+"I have my degree."
+],
+[
+"Nom",
+"Un directeur / Une directrice",
+"Le directeur est sympa.",
+"Director / Principal",
+"The director is nice."
+],
+[
+"Nom",
+"Un email / courriel",
+"J'envoie un email.",
+"Email",
+"I am sending an email."
+],
+[
+"Nom",
+"Un informaticien / Une informaticienne",
+"Il est informaticien.",
+"IT specialist",
+"He is an IT specialist."
+],
+[
+"Nom",
+"Un master",
+"Il fait un master.",
+"Master's degree",
+"He is doing a master's degree."
+],
+[
+"Nom",
+"Un métier / Un travail",
+"C'est un bon métier.",
+"Job / Profession",
+"It is a good job."
+],
+[
+"Nom",
+"Un poste",
+"J'ai un nouveau poste.",
+"Position / Job",
+"I have a new position."
+],
+[
+"Nom",
+"Un restaurant universitaire",
+"Je mange au restaurant universitaire.",
+"University cafeteria",
+"I eat at the university cafeteria."
+],
+[
+"Nom",
+"Un salaire",
+"Le salaire est bon.",
+"Salary",
+"The salary is good."
+],
+[
+"Nom",
+"Un secrétariat",
+"Le secrétariat est ouvert.",
+"Secretariat / Office",
+"The office is open."
+],
+[
+"Nom",
+"Un stage",
+"Il fait un stage.",
+"Internship",
+"He is doing an internship."
+],
+[
+"Nom",
+"Un vendeur / Une vendeuse",
+"Le vendeur est occupé.",
+"Seller / Shop assistant",
+"The shop assistant is busy."
+],
+[
+"Nom",
+"Un visioconférence / visio / zoom / appel vidéo",
+"J'ai une visio à 10h.",
+"Videoconference / Video call",
+"I have a video call at 10 AM."
+],
+[
+"Nom",
+"Un voyage",
+"J'aime le voyage.",
+"Trip / Journey",
+"I like the trip."
+],
+[
+"Nom",
+"Un(e) collègue",
+"Mon collègue est sympa.",
+"Colleague",
+"My colleague is nice."
+],
+[
+"Nom",
+"Un(e) journaliste",
+"Il est journaliste.",
+"Journalist",
+"He is a journalist."
+],
+[
+"Nom",
+"Un(e) libraire",
+"Le libraire est gentil.",
+"Bookseller",
+"The bookseller is nice."
+],
+[
+"Nom",
+"Un(e) photographe",
+"Elle est photographe.",
+"Photographer",
+"She is a photographer."
+],
+[
+"Nom",
+"Une année de césure",
+"Il fait une année de césure.",
+"Gap year",
+"He is taking a gap year."
+],
+[
+"Nom",
+"Une entrée",
+"Où est l'entrée de ce bâtiment ?",
+"Entrance",
+"Where is the entrance of this building?"
+],
+[
+"Nom",
+"Une entreprise",
+"C'est une grande entreprise.",
+"Company",
+"It is a big company."
+],
+[
+"Nom",
+"Une équipe",
+"C'est une bonne équipe.",
+"Team",
+"It is a good team."
+],
+[
+"Nom",
+"Une formation",
+"Je fais une formation.",
+"Training / Course",
+"I am doing a training course."
+],
+[
+"Nom",
+"Une licence",
+"Elle a une licence en droit.",
+"Bachelor's degree",
+"She has a bachelor's degree in law."
+],
+[
+"Nom",
+"Une pause",
+"Je fais une pause.",
+"Break",
+"I am taking a break."
+],
+[
+"Nom",
+"Une personne âgée",
+"J'aide une personne âgée.",
+"Elderly person",
+"I help an elderly person."
+],
+[
+"Nom",
+"Une résidence (étudiante)",
+"Il habite dans une résidence.",
+"Student residence / Dormitory",
+"He lives in a dormitory."
+],
+[
+"Nom",
+"Une réunion",
+"J'ai une réunion ce matin.",
+"Meeting",
+"I have a meeting this morning."
+],
+[
+"Nom",
+"Une salle de classe/cours",
+"La salle de classe est petite.",
+"Classroom",
+"The classroom is small."
+],
+[
+"Préposition",
+"Depuis",
+"J'habite ici depuis un an.",
+"Since / For",
+"I have lived here for a year."
+],
+[
+"Préposition",
+"Pendant",
+"Il dort pendant le cours.",
+"During",
+"He sleeps during the class."
+],
+[
+"Verbe",
+"Découvrir",
+"Je veux découvrir le monde.",
+"To discover",
+"I want to discover the world."
+],
+[
+"Verbe",
+"Discuter",
+"Nous aimons discuter.",
+"To discuss / To chat",
+"We like to chat."
+],
+[
+"Verbe",
+"Durer",
+"Ce film dure longtemps.",
+"To last",
+"This movie lasts a long time."
+],
+[
+"Verbe",
+"Lire",
+"J'aime lire des livres.",
+"To read",
+"I like to read books."
+],
+[
+"Verbe",
+"Organiser",
+"Nous allons organiser une fête.",
+"To organize",
+"We are going to organize a party."
+],
+[
+"Verbe",
+"Présenter",
+"Je vais présenter mon projet.",
+"To present",
+"I am going to present my project."
+],
+[
+"Verbe",
+"Téléphoner (à)",
+"Je dois téléphoner à ma mère.",
+"To call",
+"I have to call my mother."
+],
+[
+"Verbe",
+"Terminer",
+"Je dois terminer mon travail.",
+"To finish",
+"I have to finish my work."
+],
+[
+"Verbe",
+"Vivre",
+"Elle veut vivre à Paris.",
+"To live",
+"She wants to live in Paris."
+]
+]
+}

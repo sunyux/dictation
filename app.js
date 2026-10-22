@@ -102,9 +102,13 @@
   }).observe(document.body, { childList: true, subtree: true, characterData: true });
   // attach English glosses to the book data
   (function () {
-    if (L() === 'en') { for (const b of BOOKS) b.title = 'Hello French 1'; if (window.SOUNDS) window.SOUNDS.title = 'French sounds'; }
+    if (L() === 'en') { for (const b of BOOKS) if (!b.flat) b.title = 'Hello French 1'; if (window.SOUNDS) window.SOUNDS.title = 'French sounds'; }
     const EV = window.EN_V || {}, ET = window.EN_T || {};
     for (const b of BOOKS) for (const u of b.units) for (const l of u.lecons) {
+      if (b.flat) {   // the NLF book carries its own English; only the leçon theme switches language
+        if (L() === 'en') { l.zh = l.en || l.zh; b.zhTitle = b.title; }
+        continue;
+      }
       l.vocab.forEach(v => { v.en = EV[l.n + ':' + v.fr] || EV[v.fr] || ''; });
       l.text.forEach((r, k) => { const e = (ET[l.n] || [])[k] || ''; if (r.h) r.hen = e; else r.en = e; });
     }
@@ -183,6 +187,9 @@
     13: ['Gare', 'clock'], 14: ['Londres', 'bigben'], 15: ['Dimanche', 'racket'], 16: ['Piscine', 'swim'],
     17: ['Crêpes', 'pan'], 18: ['Val d\'Isère', 'skis'], 19: ['Barcelone', 'letter'], 20: ['Fêtes', 'firework'],
     21: ['Interdit', 'nosmoke'], 22: ['Annonce', 'notice'], 23: ['Cadeau', 'gift'], 24: ['Entretien', 'briefcase'],
+    // NLF · Road to A1 (units 0–10 are numbered 100–110)
+    100: ['Bonjour', 'face'], 101: ['Passeport', 'letter'], 102: ['Famille', 'house'], 103: ['Marché', 'pan'], 104: ['Ville', 'bigben'],
+    105: ['Boutique', 'dress'], 106: ['Portrait', 'easel'], 107: ['Logis', 'window'], 108: ['Santé', 'swim'], 109: ['Vacances', 'boat'], 110: ['Bureau', 'briefcase'],
   };
   const GLYPH = {
     tower: 'M50 12 L42 88 M50 12 L58 88 M44 62 H56 M46 44 H54 M38 88 Q50 70 62 88 M50 6 V12',
@@ -250,18 +257,18 @@
   };
   // the stamp's line drawing, used as the picture on each leçon card
   function lessonArt(n) {
-    const g = STAMPS[n] && GLYPH[STAMPS[n][1]];
+    const g = (STAMPS[n] || STAMPS[100 + n % 11]) && GLYPH[(STAMPS[n] || STAMPS[100 + n % 11])[1]];
     if (!g) return window.SKY_ART ? window.SKY_ART(n - 1) : '';
     return `<svg class="sky-art stamp-art" viewBox="0 0 100 96" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${g}"/></svg>`;
   }
   function stampSVG(n, kind, on) {
-    const [city, g] = STAMPS[n] || ['Leçon ' + n, 'house'];
+    const [city, g] = STAMPS[n] || STAMPS[100 + n % 11] || ['Leçon ' + n, 'house'];
     // engraved stamp frame (blue for vocabulary, red for the text); the leçon's drawing goes inside
     return `<svg viewBox="0 0 100 113" class="stamp ${on ? 'on' : ''} ${kind}" aria-label="${esc(city)}">
       <image href="img/stamp-${kind}.webp" width="100" height="113" preserveAspectRatio="none"/>
       <g transform="translate(26 17) scale(.48)" class="st-glyph"><path d="${GLYPH[g]}"/></g>
       <text x="50" y="80" class="st-city">${esc(city)}</text>
-      <text x="50" y="88" class="st-sub">${kind === 'v' ? 'VOCABULAIRE' : 'TEXTE'} · ${n}</text>
+      <text x="50" y="88" class="st-sub">${kind === 'v' ? 'VOCABULAIRE' : 'TEXTE'} · ${n >= 100 ? 'U' + (n % 100) : n}</text>
     </svg>`;
   }
   // called after mastery changes: award stamps when a part of a leçon is complete
@@ -270,12 +277,12 @@
     if (!f) return;
     const st = MASTER.stats(book, f.lecon), got = store.get('stamps', {});
     const hp = $('.lecon-head .prog'); if (hp && location.hash.includes(`/${n}`)) hp.outerHTML = progHTML(b, f.lecon, true);
-    for (const [k, done, label] of [['v', st.vocabDone, '词汇'], ['t', st.textDone, '课文']]) {
+    for (const [k, done, label] of [['v', st.vocabDone, '词汇'], ['t', st.textDone && !b.flat, '课文']]) {
       const id = `${book}:${n}:${k}`;
       if (done && !got[id]) {
         got[id] = dayStr(); store.set('stamps', got);
-        XP.gain(k === 'v' ? 20 : 30, `Leçon ${n} ${label}通过`);
-        celebrate(`Leçon ${n} ${label}通过`, '一枚新邮票贴进了你的邮册。', stampSVG(n, k, true));
+        XP.gain(k === 'v' ? 20 : 30, `${leconName(n)} ${label}通过`);
+        celebrate(`${leconName(n)} ${label}通过`, '一枚新邮票贴进了你的邮册。', stampSVG(n, k, true));
       }
     }
   }
@@ -505,7 +512,7 @@
   // colour class for a word: plural green, masculine blue, feminine magenta
   const gx = pos => /pl\./.test(String(pos || '')) ? ' gx-p' : gender(pos) === 'm' ? ' gx-m' : gender(pos) === 'f' ? ' gx-f' : '';
   function artHint(v) {
-    const g = gender(v.pos); if (!g) return '';
+    const g = gender(v.pos); if (!g || (window.NLF_FORMS && window.NLF_FORMS[v.fr])) return '';
     const pl = /pl\./.test(v.pos), vow = /^[aeiouyhâàéèêëîïôûœ]/i.test(v.fr);
     const a = pl ? 'des · les' : g === 'm' ? (vow ? "un · l'" : 'un · le') : (vow ? "une · l'" : 'une · la');
     return `<span class="art-hint" aria-hidden="true">${a}</span>`;
@@ -1174,7 +1181,7 @@
     const lec = { n: 0, title: 'Mon carnet', zh: '生词本', vocab: MINE.all().map(w => ({ ...w, g: bi('我的生词', 'My words') })), text: [], cloze: null };
     return { book: { id: 'mine', title: bi('生词本', 'My words'), units: [{ n: 0, lecons: [lec] }] }, lecon: lec };
   };
-  const leconName = n => n === 0 ? bi('生词本', 'My words') : 'Leçon ' + n;
+  const leconName = n => n === 0 ? bi('生词本', 'My words') : n >= 100 ? 'Unité ' + (n % 100) : 'Leçon ' + n;
   const favBtn = w => `<button class="fav ${MINE.has(w.fr) ? 'on' : ''}" data-fav="${esc(JSON.stringify({ fr: w.fr, zh: w.zh || '', en: w.en || '', pos: w.pos || '', from: w.from || '' }))}" title="${bi('收藏到生词本', 'Save to my words')}" aria-label="${bi('收藏到生词本', 'Save to my words')}">${MINE.has(w.fr) ? '★' : '☆'}</button>`;
   document.addEventListener('click', e => {
     const b = e.target.closest('[data-fav]');
@@ -1583,6 +1590,7 @@
     document.title = bi('我的 · 打卡与邮册', 'Streak & stamps');
     const log = XP.log(), g = XP.goal(), got = store.get('stamps', {});
     const book = BOOKS[0], lecons = book.units.flatMap(u => u.lecons);
+    const flatBooks = BOOKS.filter(b => b.flat), flatLecons = flatBooks.flatMap(b => b.units.flatMap(u => u.lecons.map(l => ({ b, l }))));
     // 12-week calendar
     const days = []; const d = new Date(); d.setDate(d.getDate() - 83 - ((d.getDay() + 6) % 7 === 6 ? 0 : 0));
     for (let i = 0; i < 84; i++) { days.push(dayStr(d)); d.setDate(d.getDate() + 1); }
@@ -1598,7 +1606,7 @@
         <div><b>${XP.best()}</b><span>最长连续</span></div>
         <div><b>${XP.today().xp}<small>/${g}</small></b><span>今日分数</span></div>
         <div><b>${XP.total()}</b><span>总分</span></div>
-        <div><b>${stampCount}<small>/${lecons.length * 2}</small></b><span>邮票</span></div>
+        <div><b>${stampCount}<small>/${lecons.length * 2 + flatLecons.length}</small></b><span>邮票</span></div>
       </div>
       <div class="toolbar"><span class="kbd">每日目标</span>${[20, 30, 50, 80].map(x => `<button class="mode" data-goal="${x}" aria-pressed="${x === g}">${x} 分</button>`).join('')}</div>
       <p class="hint-text">怎么得分：单词第一次写对 +2，新掌握一个词 +3，句子/课文一行全对 +3，填空每空 +1，复习答对 +3，变位答对 +1；一课词汇通过 +20、课文通过 +30。达到每日目标就算打卡。</p>
@@ -1608,6 +1616,7 @@
       </section>
       <section class="unit"><div class="unit-title"><h2>邮册</h2><span>每课词汇通过、课文通过各得一枚</span></div>
         <div class="album">${lecons.map(l => `<div class="album-cell"><div class="pair">${stampSVG(l.n, 'v', got[`${book.id}:${l.n}:v`])}${stampSVG(l.n, 't', got[`${book.id}:${l.n}:t`])}</div><a href="#/${book.id}/${l.n}" lang="fr">Leçon ${l.n}</a></div>`).join('')}</div>
+        ${flatLecons.length ? `<div class="album nlf-album">${flatLecons.map(({ b, l }) => `<div class="album-cell"><div class="pair">${stampSVG(l.n, 'v', got[`${b.id}:${l.n}:v`])}</div><a href="#/${b.id}/${l.n}" lang="fr">Unité ${l.n % 100}</a></div>`).join('')}</div>` : ''}
       </section>
       <section class="unit"><div class="unit-title"><h2>云同步</h2><span>手机和电脑共用进度</span></div><div id="cloud"></div></section>
       <section class="unit" id="backup"><div class="unit-title"><h2>保存与恢复</h2></div>
@@ -1665,6 +1674,7 @@
     return base + suf;
   }
   function forms(fr) {
+    const nf = window.NLF_FORMS && window.NLF_FORMS[fr]; if (nf) return nf;
     let s = fr.replace(/[¹²³*]/g, '').trim();
     const acc = new Set([s]);
     let say = s, m;
@@ -1929,6 +1939,13 @@
   const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.random() * (i + 1) | 0; [a[i], a[j]] = [a[j], a[i]]; } return a; };
 
   function coverHTML(book, tag = 'a') {
+    if (book.flat) return `<${tag} class="cover sons nlf" ${tag === 'a' ? `href="#/${book.id}"` : ''} aria-label="${esc(book.title)}">
+      <div class="c-zh">${bi('通往<br>' + (book.level || 'A1'), 'Road<br>to ' + (book.level || 'A1'))}</div><div class="c-fr" lang="fr">${esc(book.fr)}</div><div class="c-num" lang="fr">${esc(book.level || 'A1')}</div>
+      <svg viewBox="0 0 200 90" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" aria-hidden="true">
+        <path d="M0 86 Q60 70 100 78 T200 60"/><path d="M0 90 Q70 76 110 84 T200 70" stroke-width=".7"/>
+        <path d="M40 74V40M40 40l-12 8M40 40l12 8M40 52l-9 7M40 52l9 7"/><path d="M120 70V30M120 30l-14 10M120 30l14 10M120 46l-11 9M120 46l11 9"/>
+        <path d="M168 20q6-8 12 0q-6 8-12 0z" stroke-width=".8"/>
+      </svg></${tag}>`;
     return `<${tag} class="cover" ${tag === 'a' ? `href="#/${book.id}"` : ''} aria-label="${esc(book.title)}">
       <div class="c-zh">${bi('你好<br>法语', 'Hello<br>French')}</div><div class="c-fr" lang="fr">${esc(book.fr)}</div><div class="c-num">1</div>
       <svg viewBox="0 0 200 90" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" aria-hidden="true">
@@ -2140,7 +2157,7 @@
         ${e.wrong ? `<p class="kbd">${bi(`写错过 ${e.wrong} 次`, `Missed ${e.wrong} times`)}</p>` : ''}
         ${triesHTML(e)}
         ${(() => { const r = spotInfo(e); return r ? `<div class="lc-spot" lang="fr">${DYS.marked(r.target, r.marks)}</div>${spotLine(e)}` : ''; })()}
-        ${tipBox(tip)}
+        ${tipBox(tip)}${word ? exBox(e) : ''}
         ${word && window.DEEP && DEEP[e.fr] ? `<button class="deep-btn lc-deep" data-deep="${esc(e.fr)}">${bi('看详解', 'In-depth card')}</button>` : ''}
         <div class="toolbar lc-nav">
           <button class="btn ghost" id="lr-prev" ${i ? '' : 'disabled'}>‹ ${bi('上一个', 'Back')}</button>
@@ -2277,7 +2294,7 @@
       $('#fb', box).innerHTML = `<div class="feedback ${good ? 'ok' : 'bad'}"><span class="lab">${lab}</span>
         <div class="ans${gx(e.pos)}" lang="fr">${playBtn(say)}<span>${html}</span></div>
         ${!good && !giveUp && e.kind === 'word' && r !== 'accent' ? dysCompare(answerOf(e), val) : ''}
-        ${e.kind === 'word' ? tipBox(e.pos === '变位' ? verbTip(e.zh.split(' · ')[0].replace(/^(se |s')/, '')) : wordTip(e.n, e)) : ''}
+        ${e.kind === 'word' ? tipBox(e.pos === '变位' ? verbTip(e.zh.split(' · ')[0].replace(/^(se |s')/, '')) : wordTip(e.n, e)) + exBox(e) : ''}
         ${good ? '' : `<p class="copy-note" id="copy-note">${bi('照着上面的正确答案，在输入框里抄一遍', 'Copy the right answer above into the box once')}
           <button class="btn ghost small" id="copy-skip">${bi('跳过', 'Skip')}</button></p>`}</div>`;
       TTS.say(say);
@@ -2298,12 +2315,12 @@
     document.title = bi('你好法语 · 默写本', 'Hello French · Cahier de dictée');
     main.innerHTML = `
       <section class="home">
-        <div class="shelf">${coverHTML(book)}${soundCover()}</div>
+        <div class="shelf">${coverHTML(book)}${soundCover()}${BOOKS.filter(b => b.flat).map(b => coverHTML(b)).join('')}</div>
         <div class="home-text">
           <p class="kicker" lang="fr">Cahier de dictée</p>
           <h1>${bi('今天写哪一课？', 'Which leçon today?')}</h1>
           <p>${bi('照着默写讲义整理的。法语点一下就会读。', 'Built from your dictation handouts. Tap any French to hear it.')}</p>
-          <div class="toolbar"><a class="btn" href="#/${book.id}">${bi(`打开《${esc(book.title)}》`, `Open ${esc(book.title)}`)}</a><a class="btn ghost" href="#/sons">${bi(`打开《${esc(SB().title)}》`, `Open ${esc(SB().title)}`)}</a><a class="btn ghost" href="#/journal">写今天的法语日记</a></div>
+          <div class="toolbar"><a class="btn" href="#/${book.id}">${bi(`打开《${esc(book.title)}》`, `Open ${esc(book.title)}`)}</a><a class="btn ghost" href="#/sons">${bi(`打开《${esc(SB().title)}》`, `Open ${esc(SB().title)}`)}</a>${BOOKS.filter(b => b.flat).map(b => `<a class="btn ghost" href="#/${b.id}">${bi(`打开《${esc(b.zhTitle || b.title)}》`, `Open ${esc(b.title)}`)}</a>`).join('')}<a class="btn ghost" href="#/journal">写今天的法语日记</a></div>
           ${backupNag()}${reviewBanner()}
         </div>
       </section>`;
@@ -2313,22 +2330,22 @@
     const st = MASTER.stats(book.id, l);
     const bar = (label, a, b, done) => `<div class="pbar ${done ? 'done' : ''}"><span class="pl">${label}</span>
       <span class="pt"><i style="width:${b ? a / b * 100 : 0}%"></i></span><span class="pn">${done ? '通过' : `${a}/${b}`}</span></div>`;
-    return `<div class="prog ${big ? 'big' : ''}">${bar('词汇', st.words, st.totalWords, st.vocabDone)}${bar('课文', st.lines, st.totalLines, st.textDone)}</div>`;
+    return `<div class="prog ${big ? 'big' : ''}">${bar('词汇', st.words, st.totalWords, st.vocabDone)}${book.flat ? '' : bar('课文', st.lines, st.totalLines, st.textDone)}</div>`;
   }
 
   function viewBook(book) {
     document.title = book.title + bi(' · 默写本', ' · Dictation');
     const PARTS = ['vocab', 'phrases', 'full', 'recite'];
     main.innerHTML = `
-      <div class="book-head">${coverHTML(book, 'div')}<div><p class="kicker" lang="fr">${esc(book.fr)}</p><h1>${esc(book.title)}</h1></div></div>
+      <div class="book-head">${coverHTML(book, 'div')}<div><p class="kicker" lang="fr">${esc(book.fr)}</p><h1>${esc(L() === 'en' ? book.title : (book.zhTitle || book.title))}</h1></div></div>
       ${reviewBanner()}
       ${book.units.map(u => `
         <section class="unit">
-          <div class="unit-title"><h2 lang="fr">Unité ${u.n}</h2><span>Leçon ${u.lecons[0].n}–${u.lecons[u.lecons.length - 1].n}</span></div>
+          <div class="unit-title"><h2 lang="fr">Unité ${u.n}</h2>${book.flat ? '' : `<span>Leçon ${u.lecons[0].n}–${u.lecons[u.lecons.length - 1].n}</span>`}</div>
           <div class="lecons">${u.lecons.map(l => {
             const p = getProg(book.id, l.n);
             return `<a class="lecon-card" href="#/${book.id}/${l.n}">${lessonArt(l.n)}
-              <div class="n" lang="fr">Leçon ${l.n}</div>
+              <div class="n" lang="fr">${book.flat ? 'Unité ' + (l.n % 100) : 'Leçon ' + l.n}</div>
               <h3 lang="fr">${esc(l.title)}</h3>
               <div class="zh">${esc(l.zh)}</div>
               ${progHTML(book, l)}
@@ -2339,16 +2356,17 @@
       <p class="credit">${bi('图片来源', 'Image credits')}${CL()}<a href="https://commons.wikimedia.org/wiki/File:ARCHITECTURE_ORDERS_Greeks_Etruscan_Roman_(Doric_Ionic_Corinthian_Tuscan_Composite)_by_Paolo_Villa_ENG_edition.pdf" target="_blank" rel="noopener">${bi('柱式', 'Architectural orders')} Paolo Villa, CC BY-SA 4.0</a> · <a href="https://commons.wikimedia.org/wiki/Category:Urania%27s_Mirror" target="_blank" rel="noopener">Urania's Mirror, Sidney Hall 1825 ${bi('（公有领域）', '(public domain)')}</a></p>`;
   }
 
-  const TABS = [['vocab', '词汇', 'Vocabulary'], ['phrases', '句子', 'Sentences'], ['full', '全文默写', 'Full dictation'], ['recite', '背诵', 'Recite']];
+  const ALLTABS = [['vocab', '词汇', 'Vocabulary'], ['phrases', '句子', 'Sentences'], ['full', '全文默写', 'Full dictation'], ['recite', '背诵', 'Recite']];
   function viewLecon(book, unit, lecon, tab) {
+    const TABS = book.flat ? ALLTABS.filter(t => t[0] === 'vocab' || t[0] === 'phrases') : ALLTABS;
     if (!TABS.some(t => t[0] === tab)) tab = 'vocab';
-    document.title = `Leçon ${lecon.n} · ${lecon.title}`;
+    document.title = `${leconName(lecon.n)} · ${lecon.title}`;
     const all = book.units.flatMap(u => u.lecons);
     const idx = all.indexOf(lecon);
     const prev = all[idx - 1], next = all[idx + 1];
     main.innerHTML = `
       <header class="lecon-head">
-        <p class="kicker" lang="fr">Unité ${unit.n} · Leçon ${lecon.n}</p>
+        <p class="kicker" lang="fr">${book.flat ? 'Unité ' + unit.n : `Unité ${unit.n} · Leçon ${lecon.n}`}</p>
         <h1 lang="fr">${esc(lecon.title)}</h1>
         <div class="zh">${esc(lecon.zh)}</div>
         ${progHTML(book, lecon, true)}
@@ -2356,9 +2374,9 @@
       <nav class="tabs" role="tablist">${TABS.map((t, i) => `<button class="tab" role="tab" aria-selected="${t[0] === tab}" data-tab="${t[0]}"><b>${i + 1}</b>${bi(t[1], t[2])}</button>`).join('')}</nav>
       <section id="pane"></section>
       <div class="toolbar" style="margin-top:40px">
-        ${prev ? `<a class="btn ghost small" href="#/${book.id}/${prev.n}">‹ Leçon ${prev.n}</a>` : ''}
+        ${prev ? `<a class="btn ghost small" href="#/${book.id}/${prev.n}">‹ ${leconName(prev.n)}</a>` : ''}
         <span class="spacer"></span>
-        ${next ? `<a class="btn ghost small" href="#/${book.id}/${next.n}">Leçon ${next.n} ›</a>` : ''}
+        ${next ? `<a class="btn ghost small" href="#/${book.id}/${next.n}">${leconName(next.n)} ›</a>` : ''}
       </div>
       <div class="toolbar" style="justify-content:center"><button class="btn ghost small" id="worksheet">${bi('打印这一课的默写纸', 'Print a worksheet for this leçon')}</button>
         <button class="btn ghost small" id="worksheet-pdf">${bi('下载默写纸 PDF', 'Download the worksheet as PDF')}</button></div>`;
@@ -2463,7 +2481,7 @@
             <span class="play">${ICON.play}</span>
             <span class="vfr" lang="fr">${artHint(v)}${frHTML(v.fr)}${window.DEEP && DEEP[v.fr] ? `<button class="deep-btn" data-deep="${esc(v.fr)}" lang="zh">${bi('详解', 'In depth')}</button>` : ''}</span>
             <span class="pos">${esc(v.pos)}</span><span class="vzh">${G(v)}</span>
-            ${wordTip(lecon.n, v) ? `<span class="vtip" ${showTip ? '' : 'hidden'}>${wordTip(lecon.n, v)}</span>` : ''}</div>`).join('')}</div>`).join('');
+            ${wordTip(lecon.n, v) ? `<span class="vtip" ${showTip ? '' : 'hidden'}>${wordTip(lecon.n, v)}</span>` : ''}${v.ex ? `<span class="vex" lang="fr">${esc(v.ex[0])}<small>${L() === 'en' ? esc(v.ex[2]) : L() === 'zhen' ? esc(v.ex[1]) + ' · ' + esc(v.ex[2]) : esc(v.ex[1])}</small></span>` : ''}</div>`).join('')}</div>`).join('');
       enableDrag(pane, () => { saveOrder(ctx.book.id, lecon.n, pane); if (!$('#vreset', pane)) paneVocab(ctx, 'list'); });
       const rs = $('#vreset', pane); if (rs) rs.onclick = e => { e.preventDefault(); store.set(orderKey(ctx.book.id, lecon.n), null); paneVocab(ctx, 'list'); };
       $('#vtip').onchange = e => { store.set('vtip', e.target.checked); $$('.vtip', pane).forEach(t => t.hidden = !e.target.checked); };
@@ -2596,7 +2614,7 @@
         ${!good && !giveUp && r !== 'accent' ? dysCompare(closest(v.fr, inp.value), inp.value) : ''}
         ${r === 'accent' ? `<span class="lab acc-note">${bi('拼写正确，注意标出的重音符号', 'Spelling is right — check the marked accents')}</span>` : ''}
         ${test && missN ? `<span class="lab">${toBook ? bi(`首测已经错了 ${missN} 次，加入错题本了`, `Missed ${missN} times in first tests — added to the mistake book`) : missN >= 3 ? bi('已经在错题本里了', 'Already in the mistake book') : bi(`首测错了 ${missN} 次（错满 3 次会进错题本）`, `Missed ${missN} times in first tests (3 puts it in the mistake book)`)}</span>` : ''}
-        ${tipBox(wordTip(ctx.lecon.n, v))}</div>`;
+        ${tipBox(wordTip(ctx.lecon.n, v))}${exBox(v)}</div>`;
       TTS.say(forms(v.fr).say);
       if (good && !hintN) setTimeout(() => { if (answered && queue[i] === v) { i++; draw(); } }, wordTip(ctx.lecon.n, v) ? 1800 : 1100);
     };
@@ -2723,13 +2741,19 @@
   function wordTip(n, v) {
     const pick = T => T[n + ':' + v.fr] || T[v.fr];
     const fmt = t => esc(t).replace(/\{([^}]+)\}/g, '<b lang="fr">$1</b>');
-    const zh = pick(window.TIPS || {}), en = pick(window.TIPS_EN || {});
+    const zh = 'tip' in v ? v.tip : pick(window.TIPS || {}), en = 'tipEn' in v ? v.tipEn : pick(window.TIPS_EN || {});
     if (L() === 'en' && en) return fmt(en);
     if (L() === 'zhen' && zh && en) return fmt(zh) + `<span class="tip-en" lang="en">${fmt(en)}</span>`;
     if (zh) return fmt(zh);
     return v.pos && v.pos.startsWith('v') && conjugate(v.fr) ? verbTip(v.fr) : '';
   }
   const tipBox = html => html ? `<div class="tip"><span class="tip-lab">记忆提示</span>${html}</div>` : '';
+  // the example sentence that comes with a word of the NLF book
+  const exBox = v => {
+    if (!v || !v.ex) return '';
+    const tr = L() === 'en' ? esc(v.ex[2]) : L() === 'zhen' ? esc(v.ex[1]) + `<span class="en-gloss" lang="en">${esc(v.ex[2])}</span>` : esc(v.ex[1]);
+    return `<div class="ex-line"><span class="ex-fr" lang="fr">${playBtn(v.ex[0])} ${esc(v.ex[0])}</span><span class="ex-tr">${tr}</span></div>`;
+  };
 
   const isSpecial = fr => !!IRREG[fr.replace(/\s*\((s'|se)\)/, '').trim()];
   const lessonVerbs = lecon => lecon.vocab.filter(v => v.pos.startsWith('v') && conjugate(v.fr)).map(v => ({ ...v, n: lecon.n }))

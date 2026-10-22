@@ -584,3 +584,12 @@ html.tw #j-text { font-family: "Special Elite", monospace !important; font-size:
 .j-item.on { border-color: var(--ink); }
 .j-item small { color: var(--ink-2); }
 @media (max-width: 860px) { .journal { grid-template-columns: 1fr; } .j-hints { position: static; max-height: none; } }
+
+/* NLF book: the example sentence that goes with a word */
+.vex { grid-column: 3 / -1; font: 15px/1.5 var(--serif); color: var(--ink); margin-top: -2px; }
+.vex small { display: block; font: 13px/1.5 var(--zh); color: var(--ink-2); }
+.ex-line { margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--line, rgba(0,0,0,.2)); text-align: left; }
+.ex-line .ex-fr { display: block; font: 18px/1.5 var(--serif); }
+.ex-line .ex-tr { display: block; font: 14px/1.5 var(--zh); color: var(--ink-2); margin-top: 2px; }
+.nlf-album { margin-top: 18px; }
+.cover.nlf .c-num { letter-spacing: .02em; }

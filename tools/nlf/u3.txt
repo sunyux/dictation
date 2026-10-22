@@ -1,0 +1,166 @@
+1|安的列斯的；加勒比的|adj|安的列斯菜很好吃。|{Antilles} 安的列斯群岛（法属加勒比）|{Antilles} = the French Caribbean islands
+2|阿根廷的|adj|他是阿根廷人。|国名 Argentine → {argentin}|Argentine → {argentin}
+3|巴西的|adj|他说巴西葡萄牙语。|Brésil → {brésil}ien|Brésil → {brésil}ien
+4|贵的|adj|这个包很贵。|阴性 chère；{cher} 也有「亲爱的」义|feminine chère; also means "dear"
+5|中国的；中文|adj|我在学中文。|语言名用阳性：le chinois；国家 la Chine|language = le chinois; country = la Chine
+6|韩国的|adj|韩国电影很棒。|Corée → {coréen}|Corée → {coréen}
+7|美味的|adj|这个蛋糕很好吃。|阴性 délicieuse；和英语 {delicious} 同源|feminine délicieuse; same root as English
+8|辣的|adj|我喜欢吃辣。|{épice} 香料 → {épicé} 加了香料的|{épice} spice → {épicé}
+9|西班牙的；西班牙语|adj|我说西班牙语。|Espagne → {espagnol}|Espagne → {espagnol}
+10|油腻的；肥的|adj|肉太肥了。|阴性 grasse；gras 读 [gʁɑ]|feminine grasse
+11|希腊的|adj|请给我一份希腊沙拉。|阴性 grecque，注意 -que|feminine grecque
+12|印度的|adj|印度茶很好喝。|Inde → {indien}|Inde → {indien}
+13|意大利的|adj|我喜欢意大利菜。|Italie → {italien}|Italie → {italien}
+14|科特迪瓦的|adj|她是科特迪瓦人。|Côte d'Ivoire → {ivoirien}|from Côte d'Ivoire
+15|摩洛哥的|adj|库斯库斯是摩洛哥的。|Maroc → {marocain}|Maroc → {marocain}
+16|坏的；差的|adj|这部电影很烂。|阴性 mauvaise；{mauvais} 读 [movɛ]|feminine mauvaise
+17|不错|adj|这家餐厅还不错。|{pas mal} 字面「不坏」，意思是「还行/不错」|literally "not bad"
+18|秘鲁的|adj|酸橘汁腌鱼是秘鲁的。|Pérou → {péruvien}|Pérou → {péruvien}
+19|咸的|adj|太咸了。|{sel} 盐 → {salé}；也指咸口（与甜口相对）|{sel} salt → {salé}
+20|塞内加尔的|adj|这是一道塞内加尔菜。|Sénégal → {sénégalais}|Sénégal → {sénégalais}
+21|甜的|adj|我更喜欢甜的。|{sucre} 糖 → {sucré}|{sucre} sugar → {sucré}
+22|南非的|adj|她是南非人。|{sud} 南 + {africain}|{sud} south + {africain}
+23|泰国的|adj|他吃一道泰国菜。|Thaïlande → {thaïlandais}|Thaïlande → {thaïlandais}
+24|蓝（极生）/ 三分熟 / 五分熟 / 全熟|m|我想要五分熟的牛排。|牛排熟度：bleu 极生 → saignant 三分 → à point 五分 → bien cuit 全熟|steak doneness: bleu → saignant → à point → bien cuit
+25|酒精|m|他不喝酒。|{alcool} 和英语 {alcohol} 同源|same as English {alcohol}
+26|水|f|我每天喝水。|{eau} 读 [o]，三个字母一个音|{eau} = [o]
+27|油|f|我加一点橄榄油。|{huile} 读 [ɥil]，h 不发音|{huile}; h silent
+28|啤酒|f|他喝一杯冰啤酒。|{bière} 读 [bjɛʁ]|{bière}
+29|果酱|f|我在面包上抹果酱。|{confiture} 和英语 {confiture} 同源|{confiture}
+30|面粉|f|做面包需要面粉。|{farine} 和英语 {farina} 同源|English {farina}
+31|冰淇淋；冰|f|我想要香草冰淇淋。|{glace} 同时是冰和冰淇淋；也有「镜子」义|{glace} = ice, ice cream, also mirror
+32|蛋黄酱|f|薯条配蛋黄酱。|{mayonnaise} 和英语一致|same as English
+33|芥末酱|f|我加芥末酱。|{moutarde} 和英语 {mustard} 同源|English {mustard}
+34|汤|f|我冬天喝汤。|{soupe} 和英语 {soup} 同源|English {soup}
+35|肉|f|我不吃肉。|{viande} 肉；否定句里 de la → de|negation: de la → de
+36|饼干|pl|孩子们吃饼干。|{biscuit} 和英语 {biscuit} 同源|English {biscuit}
+37|胡萝卜|pl|我吃胡萝卜丝。|{carotte} 读 [kaʁɔt]|{carotte}
+38|樱桃|pl|我在市场买樱桃。|{cerise} 读 [səʁiz]|{cerise}
+39|薯片|pl|开胃时吃薯片。|{chips} 来自英语|from English chips
+40|香烟|pl|他买香烟。|{cigarette} 同英语|same as English
+41|小黄瓜；酸黄瓜|pl|我在三明治里加酸黄瓜。|{cornichon} 酸黄瓜|{cornichon}
+42|虾|pl|我喜欢吃虾。|{crevette} 虾|{crevette}
+43|香料|pl|我在菜里加香料。|{épice} 和英语 {spice} 同源|English {spice}
+44|草莓|pl|我爱草莓派。|{fraise} 草莓|{fraise}
+45|四季豆|pl|我煮四季豆。|{haricot} + {vert} 绿色|{haricot} bean + {vert} green
+46|配料|pl|这个食谱需要三种配料。|{ingrédient} 同英语 {ingredient}|English ingredient
+47|千层面|pl|今晚我们吃千层面。|{lasagnes} 同意大利语|from Italian
+48|马卡龙|pl|我爱巧克力马卡龙。|{macaron} 法式甜点|French pastry
+49|纸巾|pl|你有纸巾吗？|{mouchoir} 来自 moucher（擤鼻涕）|from moucher
+50|核桃；坚果|pl|我配奶酪吃核桃。|{noix} 读 [nwa]|{noix} [nwa]
+51|洋葱|pl|切洋葱时我会流泪。|{oignon} 读 [ɔɲɔ̃]，oi 读 [ɔ]|oi = [ɔ]
+52|橄榄|pl|我买绿橄榄。|{olive} 同英语|same as English
+53|意面|pl|我吃番茄酱意面。|{pâtes} 总是复数|always plural
+54|豌豆|pl|我吃豌豆配肉。|{petit} 小 + {pois} 豆|{petit} small + {pois} pea
+55|梅干；李子干|pl|我吃梅干。|{pruneau} 是干李子|dried plum
+56|沙丁鱼|pl|盒子里有沙丁鱼。|{sardine} 同英语 {sardine}|English sardine
+57|意大利面条|pl|孩子们爱吃意面。|{spaghetti} 来自意大利语|from Italian
+58|寿司|pl|我们点寿司吧？|{sushi} 来自日语|from Japanese
+59|黄油|m|冰箱里没有黄油了。|{beurre} 读 [bœʁ]|{beurre}
+60|牛肉|m|这是牛肉。|{boeuf} 读 [bœf]，复数 [bø]|{boeuf} [bœf]; plural [bø]
+61|咖啡|m|请给我一杯咖啡。|{café} 咖啡|{café}
+62|鸭肉|m|鸭胸肉很好吃。|{canard} 鸭|{canard}
+63|巧克力|m|我吃一块巧克力。|{chocolat}|{chocolat}
+64|奶酪|m|法国以奶酪闻名。|{fromage} 来自 forme（形状，模具）|from forme (mould)
+65|果汁|m|我喝一杯苹果汁。|{jus} 读 [ʒy]，s 不发音|{jus} [ʒy]
+66|牛奶|m|晚上我喝热牛奶。|{lait} 读 [lɛ]|{lait} [lɛ]
+67|面包|m|我每天买面包。|{pain} 读 [pɛ̃]|{pain} [pɛ̃]
+68|鱼|m|我星期五吃鱼。|{poisson} 鱼；{poison} 毒药，别混|{poisson} fish; {poison} (no 's') = poison
+69|胡椒|m|我放盐和胡椒。|{poivre} 胡椒|{poivre}
+70|鸡肉|m|今天中午吃鸡肉。|{poulet} 鸡|{poulet}
+71|米饭|m|我吃米饭配鸡肉。|{riz} 读 [ʁi]，z 不发音|{riz} [ʁi]
+72|三文鱼|m|我做一块三文鱼。|{saumon} 读 [somɔ̃]|{saumon}
+73|盐|m|请把盐递给我。|{sel} 读 [sɛl]|{sel}
+74|茶|m|我早上喝茶。|{thé}|{thé}
+75|金枪鱼|m|我做金枪鱼沙拉。|{thon} 读 [tɔ̃]，th 读 [t]|{thon} [tɔ̃]
+76|葡萄酒（红、桃红、白）|m|我喝一杯红酒。|{vin} 读 [vɛ̃]；rouge / rosé / blanc|{vin} [vɛ̃]
+77|酸奶|m|甜点我吃酸奶。|也可写 yaourt，读 [jauʁt]|also spelled yaourt
+78|账单|f|请买单。|{addition} 本意「加法」→ 加起来的账|{addition} = addition (sum) → the bill
+79|前菜|f|前菜我点沙拉。|{entrée} 进来 → 入口 → 第一道菜|{entrée} = entrance → first course
+80|菜单|f|我看菜单。|{la carte} 或 {le menu}：套餐和菜单都叫 menu|la carte / le menu
+81|收音机|f|我在车里听广播。|{radio} 同英语|same as English
+82|午饭|m|我中午吃午饭。|{déjeuner}：déjeuner 也是动词「吃午饭」|also a verb: to have lunch
+83|甜点|m|甜点有什么？|{dessert} 两个 s，别和 désert（沙漠）混|{dessert} (two s) vs désert
+84|晚饭|m|晚饭好了。|{dîner} 晚饭/晚上吃饭|{dîner}
+85|奶酪商|n|奶酪商给我推荐好奶酪。|{fromage} → {fromager}|{fromage} → {fromager}
+86|早餐|m|我八点吃早餐。|{petit} 小 + {déjeuner} 午饭|{petit} + {déjeuner}
+87|菜；盘|m|今日套餐很好吃。|{plat} 菜；plat du jour = 今日特色菜|plat du jour
+88|价格|m|这条裙子多少钱？|{prix} 读 [pʁi]；还有「奖」义|{prix} also = prize
+89|杏子|m|我吃一个杏子。|{abricot} 和英语 {apricot} 同源|English {apricot}
+90|牛油果；律师|m|牛油果有益健康。|{avocat} 同时是牛油果和律师|{avocat} = avocado and lawyer
+91|屠夫|n|屠夫在处理肉。|{boucher} 屠夫，阴性 bouchère|boucher / bouchère
+92|面包师|n|面包师做好面包。|{boulanger} 面包师，阴性 boulangère|boulanger / boulangère
+93|汉堡|m|他吃汉堡配薯条。|{burger} 同英语|same as English
+94|克拉芙缇（樱桃烤布丁）|m|奶奶做樱桃克拉芙缇。|{clafoutis} 法国传统甜点|French dessert
+95|商店；生意|m|这里有一家商店。|{commerce} 同英语 {commerce}|English commerce
+96|刀|m|我需要一把刀来切。|{couteau} 读 [kuto]；复数 couteaux|{couteau}; plural couteaux
+97|羊角面包|m|请来一杯咖啡和羊角面包。|{croissant} 本意「新月」|literally "crescent"
+98|杂货商|n|杂货店老板人很好。|{épicier} 来自 épice（香料）|from épice
+99|克（重量）|m|加一克盐。|{gramme} 同英语 {gram}|English gram
+100|烤肉卷|m|他买一个烤肉卷。|{kebab} 来自土耳其语|from Turkish
+101|公斤|m|请给我一公斤苹果。|{kilo} 是 kilogramme 的缩写|short for kilogramme
+102|猕猴桃|m|猕猴桃富含维生素。|{kiwi} 同英语|same as English
+103|蔬菜|m|胡萝卜是一种蔬菜。|{légume} 蔬菜|{légume}
+104|市场|m|星期天早上我去市场。|{marché} 和英语 {market} 同源|English {market}
+105|甜瓜|m|夏天我吃甜瓜。|{melon} 同英语|same as English
+106|蛋|m|我煎一个荷包蛋。|{oeuf} 读 [œf]，复数 [ø]|{oeuf} [œf]; plural [ø]
+107|巧克力面包|m|我买一个巧克力面包。|{pain} 面包 + {au chocolat}|{pain au chocolat}
+108|一包|m|请来一包意面。|{un paquet de} + 名词，不带冠词|{un paquet de} + noun
+109|雨伞|m|下雨了，我带伞。|{para} 防 + {pluie} 雨 = 防雨|{para} against + {pluie} rain
+110|韭葱|m|我用韭葱做汤。|{poireau} 读 [pwaʁo]|{poireau}
+111|鱼贩|n|鱼贩卖牡蛎。|{poisson} → {poissonnier}|{poisson} → {poissonnier}
+112|甜椒|m|我切一个红甜椒。|{poivron} 来自 poivre（胡椒）|from poivre
+113|一罐|m|请来一罐果酱。|{pot} 罐子；un pot de + 名词|{pot} jar
+114|蔬果商|m|我在蔬果店买蔬菜。|{primeur} 卖早熟蔬果的人|greengrocer
+115|牛排配薯条|m|我点牛排配薯条。|{steak-frite} 法国国民菜|a French classic
+116|超市|m|我在超市买东西。|{super} + {marché}|{super} + {marché}
+117|开瓶器|m|你有开红酒的开瓶器吗？|{tire} 拉 + {bouchon} 瓶塞|{tire} pull + {bouchon} cork
+118|杯子|m|请来一杯水。|{verre} 玻璃；也指玻璃杯|{verre} = glass
+119|店主；商贩|n|这位店主很勤奋。|{commerçant}，阴性 commerçante|commerçant / commerçante
+120|盘子|f|我把盘子放在桌上。|{assiette} 读 [asjɛt]|{assiette}
+121|茄子|f|我用茄子做蔬菜杂烩。|{aubergine} 同英语 {aubergine}|English aubergine
+122|香蕉|f|猴子喜欢香蕉。|{banane} 同英语|English banana
+123|饮料|f|您想要饮料吗？|{boisson} 来自 boire（喝）|from boire
+124|肉店|f|我去肉店买肉。|{boucher} → {boucherie}|boucher → boucherie
+125|面包店|f|我在面包店买面包。|{boulanger} → {boulangerie}|boulanger → boulangerie
+126|瓶|f|我想要一瓶水。|{bouteille} 读 [butɛj]|{bouteille}
+127|收银台|f|我在收银台付款。|{caisse} 收银台；也指箱子|{caisse}
+128|水壶（一壶水）|f|请来一壶水。|法国餐馆免费提供 carafe d'eau|free in French restaurants
+129|西葫芦|f|我做一个西葫芦。|{courgette} 西葫芦|{courgette}
+130|勺子|f|我用勺子喝汤。|{cuillère} 读 [kɥijɛʁ]|{cuillère}
+131|菊苣|f|菊苣有点苦。|{endive} 菊苣|{endive}
+132|杂货店|f|我去杂货店买牛奶。|{épice} → {épicerie}|épice → épicerie
+133|叉子|f|我用叉子吃饭。|{fourchette} 叉子|{fourchette}
+134|奶酪店|f|我在奶酪店买奶酪。|{fromage} → {fromagerie}|fromage → fromagerie
+135|橙子|f|我喝一杯橙汁。|{orange} 同英语|English orange
+136|桃子|f|这个桃子很甜。|{pêche} 桃子；也指「钓鱼」|{pêche} = peach / fishing
+137|比萨|f|今晚点个比萨好吗？|{pizza} 同英语|English pizza
+138|梨|f|这个梨很多汁。|{poire} 读 [pwaʁ]|{poire}
+139|鱼店|f|我去鱼店买三文鱼。|{poisson} → {poissonnerie}|poisson → poissonnerie
+140|土豆|f|我切一个土豆。|{pomme} 苹果 + {de terre} 土地 = 土里的苹果|{pomme} apple + {de terre} of earth
+141|法式咸派|f|她做一个咸派。|{quiche} 法国洛林地方的派|from Lorraine
+142|杯（带柄）|f|请来一杯咖啡。|{tasse} 带柄的杯|{tasse}
+143|西红柿|f|我切一个西红柿做沙拉。|{tomate} 同英语 {tomato}|English tomato
+144|我想要|v|我想要一杯咖啡。|比 je veux 更礼貌，来自 vouloir 的条件式|more polite than je veux (conditional of vouloir)
+145|买|v|我要去买面包。|j'achète, nous achetons|j'achète, nous achetons
+146|加；添加|v|您可以加糖。|{ajouter} 和英语 {adjoin} 同源|English adjoin
+147|去|v|我去超市。|je vais, tu vas, il va, nous allons, vous allez, ils vont|je vais, tu vas, il va, nous allons, vous allez, ils vont
+148|饿|loc|我今天早上不太饿。|用 avoir 不用 être：j'ai faim|uses avoir, not être
+149|懒得……|loc|我懒得做运动。|{flemme} 口语，意为懒|colloquial
+150|喝|v|要多喝水。|je bois, nous buvons|je bois, nous buvons
+151|打破；弄坏|v|别把这个杯子打碎了。|{casser}，破碎的杯子 verre cassé|{casser}
+152|选择|v|你得选一个甜点。|{choisir}：-ir 动词，nous choisissons|choisir: nous choisissons
+153|点（菜）；订购|v|我们点一个比萨吧。|{commander} 点餐、下单|{commander}
+154|切|v|我来切蛋糕。|{couper}|{couper}
+155|价格为；花费|v|这本书多少钱？|{coûter} 和英语 {cost} 同源|English cost
+156|烹饪|v|我喜欢给朋友做饭。|{cuisine} 厨房 → {cuisiner}|cuisine → cuisiner
+157|迟到|loc|对不起，我要迟到了。|{retard} 迟；être en retard|être en retard
+158|完成；结束|v|我得完成工作。|finir：-ir 动词|finir
+159|长大|v|孩子们长得很快。|{grand} → {grandir}|grand → grandir
+160|变胖|v|我不想变胖。|{gros} 胖 → {grossir}|gros → grossir
+161|邀请|v|我要邀请父母来吃晚饭。|{inviter} 和英语 {invite} 同源|English invite
+162|放；穿|v|我摆桌子。|je mets, nous mettons|je mets, nous mettons
+163|分享|v|我们来分摊账单。|{partager}：nous partageons|nous partageons
+164|付款（刷卡、现金）|v|我可以刷卡吗？|{payer} par carte / en espèces / en liquide|par carte / en espèces / en liquide
+165|准备|v|我准备饭菜。|{préparer} 和英语 {prepare} 同源|English prepare
+166|想要|v|我想学法语。|je veux, tu veux, il veut, nous voulons|je veux, tu veux, il veut, nous voulons

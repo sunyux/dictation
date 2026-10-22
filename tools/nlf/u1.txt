@@ -1,0 +1,68 @@
+1|英国的；英国人|adj|她是英国人。|{anglais} 和 {Angl}e-（盎格鲁）同源；阴性 anglaise|{anglais} English; feminine anglaise
+2|著名的||他非常有名。|和英语 {cele}brated 同源，阴阳性同形|same root as English {cele}brated; same form for both genders
+3|阴性的||「langue」是阴性词。|{fém}inin 和英语 {fem}inine 同源；阴性 féminine|{fém}inin = English {fem}inine
+4|法国的；法国人|adj|他是法国人。|形容词语言名小写：français；阴性 française|lowercase for the adjective/language: français; feminine française
+5|阳性的||「film」是阳性词。|{mas}culin 和英语 {mas}culine 同源|{mas}culin = English {mas}culine
+6|最喜欢的||这是我最喜欢的书。|{pré}féré = 前 + 选择，过去分词作形容词|{pré}féré = pre- + fer (carry) → "carried first" → favourite
+7|音乐|f|我听音乐。|表示「一些」用 de la，不可数|de la = "some", for uncountable nouns
+8|沙拉|f|我做沙拉。|和英语 {salad} 同源|same root as English {salad}
+9|艺术|m|我喜欢艺术。|{l'art} 以元音开头所以缩写；art 的 t 不发音|l' because of the vowel; final t silent
+10|时间；钟点|f|现在几点了？|h 不发音，{l'heure} 读 [lœʁ]|silent h: [lœʁ]
+11|法国|f|我住在法国。|国名带 la/le：la France；「在法国」用 en France|country names take an article; "in France" = en France
+12|语法|f|我学语法。|和英语 {gramm}ar 同源|same root as English {gramm}ar
+13|文学|f|我学习文学。|和英语 {liter}ature 同源|same root as English {liter}ature
+14|诗歌|f|我写诗。|{poésie} 和英语 {poe}try 同源|same root as English {poe}try
+15|发音|f|发音很难。|{prononc}er 发音 → {prononc}iation|{prononc}er (to pronounce) → {prononc}iation
+16|徒步|f|我喜欢徒步。|{randonnée} 来自古法语 randon「急促」|from old French randon, "rush"
+17|电视|f|我看电视。|{télé}vision 和英语 {tele}vision 同源；口语 la télé|same as English {tele}vision; short form la télé
+18|篮球|m|我们打篮球。|英语 {basket}ball 的前半；打球用 jouer au|from English basket(ball); play = jouer au
+19|咖啡|m|我喝咖啡。|{café} 同时是咖啡和咖啡馆|{café} means coffee and café
+20|巧克力|m|我爱巧克力。|和英语 {chocolat}e 同源，结尾 t 不发音|same root as English {chocolat}e; final t silent
+21|电影院；电影|m|我去电影院。|和英语 {cinema} 同源，读 [sinema]|same as English {cinema}
+22|板球|m|他们打板球。|英国运动，借词|a borrowed British sport
+23|足球|m|他踢足球。|{foot} 来自英语 football；踢球 jouer au foot|{foot} borrowed from English football
+24|茶|m|我更喜欢茶。|th 读 [t]，读作 [te]|th reads as [t]: [te]
+25|词汇|m|我学习词汇。|{vocabul}aire 和英语 {vocabul}ary 同源|same root as English {vocabul}ary
+26|作业|pl|我得做作业。|总是复数：les devoirs；devoir 还有「必须」|always plural; devoir also means "must"
+27|电子游戏|pl|我玩电子游戏。|复数：jouer aux jeux-vidéos|plural; jouer aux + plural
+28|语言|pl|我会说两种语言。|单数 la langue，langue 也是「舌头」|singular la langue; also means "tongue"
+29|演员|n|他是个好演员。|阳性 acteur，阴性 actrice，和英语 {act}or 同源|acteur / actrice, same root as English {act}or
+30|机场|m|我去机场。|{aéro}port = {aéro} 空气 + {port} 港口|{aéro}port = air + port
+31|作家|n|他是我最喜欢的作家。|阳性 auteur，阴性 autrice（也有人用 auteure）|auteur / autrice (also auteure)
+32|歌手|n|他是歌手。|阳性 chanteur，阴性 chanteuse；{chant}er 唱歌|chanteur / chanteuse, from {chant}er (to sing)
+33|电影|m|我看一部电影。|和英语 {film} 一致，阳性|same as English {film}, masculine
+34|水果|m|我吃一个水果。|和英语 {fruit} 一致，t 不发音|same as English {fruit}; the t is silent
+35|男人|m|他是一个高个子男人。|h 不发音；复数 {hommes}|silent h; plural {hommes}
+36|出生地|m|你的出生地是哪里？|{lieu} 地方 + {de naissance} 出生的|{lieu} place + {de naissance} of birth
+37|职业|m|你做什么工作？|{métier} 职业；问职业：Quel est ton métier ?|{métier} = trade or job
+38|姓|m|我姓马丁。|{nom de famille} = 家庭的名字|{nom de famille} = family name
+39|电话号码|m|你的电话号码是多少？|{numéro} 号码 + {de téléphone}|{numéro} number + {de téléphone}
+40|护照|m|我有法国护照。|{passe} 通过 + {port} 港口|{passe} pass + {port} port
+41|国家|m|法国是一个国家。|{pays} 读 [pei]，s 不发音|say [pei]; s silent
+42|钢琴|m|我弹钢琴。|弹乐器用 jouer du piano|instruments take jouer du
+43|名字|m|我叫保罗。|{pré}nom = 在姓之前的名字|{pré}nom = the name before the surname
+44|运动|m|我做运动。|和英语 {sport} 一致，t 读出|same as English {sport}
+45|运动员|n|她是运动员。|阳性 sportif，阴性 sportive|sportif / sportive
+46|电话|m|我有一部新手机。|{télé} 远 + {phone} 声音|{télé} far + {phone} sound
+47|交通工具；交通|m|我乘坐公共交通。|复数常用：les transports|usually plural: les transports
+48|地址|f|你的地址是什么？|{adresse} 和英语 {address} 同源，只有一个 d|{adresse} = {address} with one d
+49|电子邮箱|f|这是我的电子邮箱。|{adresse} + {email}（也可写 courriel）|{adresse} + {email}
+50|应用程序|f|我用这个应用。|和英语 {app}lication 同源；口语 une appli|same as English {app}lication; short form une appli
+51|SIM 卡|f|我买一张 SIM 卡。|{carte} 卡片 + SIM|{carte} card + SIM
+52|出生日期|f|你的出生日期是什么时候？|{date} 日期 + {de naissance}|{date} date + {de naissance}
+53|大学生|n|我是大学生。|阳性 étudiant，阴性 étudiante；{étud}ier 学习|étudiant / étudiante, from {étud}ier
+54|女人|f|这是一位坚强的女人。|femme 读 [fam]，不是 [fɛm]|femme is read [fam]
+55|国籍|f|你的国籍是什么？|{nation}alité 和英语 {nation}ality 同源|same root as English {nation}ality
+56|大学|f|我在大学学习。|和英语 {univers}ity 同源|same root as English {univers}ity
+57|城市|f|巴黎是一座城市。|{ville} 读 [vil]，ll 读 [l]|say [vil]; ll = [l]
+58|热爱|v|我很喜欢这部电影。|{ador}er 和英语 {ador}e 同源，-er 动词|same root as English {ador}e; regular -er verb
+59|帮助|v|我可以帮你。|{aid}er 和英语 {aid} 同源|same root as English {aid}
+60|喜欢；爱|v|我喜欢巧克力。|aimer 最常用：j'aime, tu aimes|j'aime, tu aimes
+61|到达|v|我明天到。|{arriv}er 和英语 {arriv}e 同源|same root as English {arriv}e
+62|联系|v|你可以联系我。|{contact}er 和英语 {contact} 同源|same root as English {contact}
+63|出生|v|我是三月出生的。|用 être né(e) 表示，阴性加 e；je suis né|use être né; add e for women: née
+64|学习|v|我在巴黎学习。|{étud}ier 和英语 {stud}y 同源|same root as English {stud}y
+65|居住|v|我住在法国。|h 不发音：j'habite；和英语 {inhab}it 同源|silent h; same root as English {inhab}it
+66|说|v|我说法语。|{parl}er 和英语 {parl}ance、{parl}iament 同源|same root as English {parl}iament
+67|更喜欢|v|我更喜欢茶。|{pré}férer = 优先 + 带；和英语 {prefer} 同源|same root as English {prefer}
+68|找到|v|我找到一个水果。|{trouv}er 找到；和 se trouver（位于）有关|{trouv}er; se trouver = to be located

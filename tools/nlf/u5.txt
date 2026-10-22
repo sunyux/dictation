@@ -1,0 +1,103 @@
+1|白色的|adj|雪是白色的。|阴性 blanche；颜色形容词要和名词性数一致|colours agree with the noun; feminine blanche
+2|蓝色的|adj|天空是蓝色的。|阴性 bleue|feminine bleue
+3|方形的|adj|一个方形的行李箱。|{carré} 方形；和英语 {square} 对应|{carré} = square
+4|热的；暖的|adj|水很烫。|阴性 chaude；描述天气用 il fait chaud|feminine chaude
+5|浅色的；清楚的|adj|我喜欢浅蓝色。|bleu clair = 浅蓝；{clair} 也有「清楚」义|bleu clair = light blue; clair also = clear
+6|有档次的；有型的|adj|他穿这套西装很有型。|口语，不变化|colloquial; never changes
+7|经典的|adj|这是很经典的风格。|{classique} 同英语 {classic}|English classic
+8|舒服的|adj|这双鞋很舒服。|{confort}able 同英语 {comfort}able|English comfortable
+9|短的|adj|我的头发很短。|阴性 courte|feminine courte
+10|深色的|adj|他穿一套深蓝色西装。|bleu foncé = 深蓝|bleu foncé = dark blue
+11|冷的|adj|外面很冷。|阴性 froide|feminine froide
+12|灰色的|adj|今天天空是灰色的。|阴性 grise|feminine grise
+13|黄色的|adj|太阳是黄色的。|阴阳性同形|same form for both genders
+14|轻的|adj|这是一件轻薄夹克。|阴性 légère；léger 读 [leʒe]|feminine légère
+15|长的|adj|她有一条长裙。|阴性 longue，注意 -gue|feminine longue
+16|棕色的|adj|他的眼睛是棕色的。|颜色名词转形容词，不变：les yeux marron|never changes: les yeux marron
+17|丑的|adj|这件毛衣有点难看。|口语，阴阳性同形|colloquial; same form for both genders
+18|黑色的|adj|猫是黑色的。|阴性 noire|feminine noire
+19|完美的|adj|太完美了！|阴性 parfaite；和英语 {perfect} 同源|English perfect
+20|长方形的|adj|桌子是长方形的。|{rectangul}aire 同英语 {rectangul}ar|English rectangular
+21|圆的|adj|他戴着圆眼镜。|阴性 ronde|feminine ronde
+22|粉红色的|adj|她有一辆粉红色自行车。|不变化：rose|invariable
+23|红色的|adj|苹果是红色的。|阴阳性同形|same for both genders
+24|简单的|adj|食谱很简单。|{simple} 同英语|English simple
+25|绿色的|adj|草是绿色的。|阴性 verte|feminine verte
+26|紫色的|adj|这是一朵紫色的花。|阴性 violette|feminine violette
+27|时髦的|loc|这个颜色很流行。|{la mode} 流行|{la mode}
+28|一般般|loc|「你喜欢这件夹克吗？」「一般吧！」|口语感叹词，表示不太满意|colloquial; not impressed
+29|可不便宜！|loc|这个包 200 欧元，可不便宜！|字面「不是白送的」|literally "it's not given away"
+30|没关系|loc|对不起！——没关系。|{grave} 严重 → c'est pas grave = 不严重|grave = serious
+31|打折|loc|这双鞋在打折。|{solde} 减价；les soldes = 换季大减价|les soldes = sales season
+32|生日快乐！|loc|三十岁生日快乐！|{joyeux} 快乐 + {anniversaire} 生日|{joyeux} + {anniversaire}
+33|很多；充满|loc|有好多人。|口语：plein de + 名词|colloquial: plein de + noun
+34|羊毛|f|一件羊毛衫。|{laine} 读 [lɛn]|{laine}
+35|配饰|pl|我喜欢时尚配饰。|{accessoire} 同英语 {accessory}|English accessory
+36|运动鞋|pl|我穿运动鞋运动。|{basket} 来自 basket-ball|from basket-ball
+37|靴子|pl|她有一双漂亮的冬靴。|{botte} 靴子|{botte}
+38|袜子|pl|我的袜子在哪里？|{chaussette} 来自 chausse（鞋袜）|{chaussette}
+39|鞋|pl|我得买新鞋。|{chaussure}|{chaussure}
+40|耳机（无线）|pl|我用耳机听音乐。|{écouter} 听 → {écouteurs}|écouter → écouteurs
+41|衣服（俚语）|pl|我去买衣服。|口语，正式说 vêtements|colloquial; formal: vêtements
+42|眼镜|pl|我戴眼镜看书。|{lunettes} 总是复数|always plural
+43|太阳镜|pl|有太阳，我戴墨镜。|{lunettes} + {de soleil}|{lunettes} + {de soleil}
+44|内衣|pl|他买内衣。|{sous} 在……下 + {vêtements} 衣服|{sous} under + {vêtements}
+45|人字拖；拖鞋|pl|我在泳池穿拖鞋。|{tongs} 人字拖|{tongs}
+46|衣服|pl|我买衣服。|{vêtement} 衣服；总是用复数|{vêtement}
+47|棉|m|这件 T 恤是纯棉的。|{coton} 同英语 {cotton}|English cotton
+48|皮革|m|这是一件皮夹克。|{cuir} 读 [kɥiʁ]|{cuir}
+49|天气预报|f|今天天气很好。|{météo} = 天气预报；la météo|{météo}
+50|鞋码|f|你穿多大码的鞋？|{pointure} 专指鞋码，衣服用 taille|pointure = shoes; taille = clothes
+51|尺码|f|你穿什么尺码？|{taille}；也指「身高」|{taille} also = height
+52|帽子|m|他戴一顶黑色帽子。|{chapeau} 读 [ʃapo]；复数 chapeaux|{chapeau}
+53|西装|m|他穿西装上班。|{costume} 也指「戏服」|{costume}
+54|背心|m|天气很热，我穿背心。|{débardeur}|{débardeur}
+55|度|m|今天 25 度。|{degré} 同英语 {degree}|English degree
+56|图画；素描|m|这是一幅漂亮的画。|{dessin} 来自 dessiner（画画）|from dessiner
+57|开衫|m|她穿一件灰色开衫。|{gilet}|{gilet}
+58|雨衣|m|下雨了，我拿雨衣。|{imper}méable = 不透水 {im} + {perméable}|{im} not + {perméable}
+59|牛仔裤|m|我喜欢这条牛仔裤。|{jean} 同英语 jeans，法语单数|singular in French
+60|运动裤|m|他穿运动裤跑步。|{jogging} 来自英语|from English
+61|打底裤|m|她穿打底裤做瑜伽。|{legging} 来自英语|from English
+62|泳衣|m|我忘了带泳衣。|{maillot} + {de bain} 洗澡/游泳|{maillot} + {de bain}
+63|大衣|m|我有一件暖和的大衣。|{manteau} 读 [mɑ̃to]|{manteau}
+64|物品|m|这是什么东西？|{objet} 同英语 {object}|English object
+65|电脑（笔记本）|m|我用电脑工作。|{ordinateur}，笔记本 ordinateur portable|ordinateur portable
+66|裤子|m|我在找黑裤子。|{pantalon} 单数，一条裤子|singular in French
+67|钥匙扣|m|我丢了钥匙扣。|{porte} 携带 + {clé} 钥匙|{porte} carry + {clé} key
+68|钱包|m|我的钱包在包里。|{porte} + {feuille}（纸）|{porte} + {feuille}
+69|毛衣|m|我喜欢这件羊毛衫。|{pull} 来自 pull-over|from pull-over
+70|货架；部门|m|儿童服装区在哪里？|{rayon}；超市的货架/部门|shelf or department
+71|包|m|她有一个大包。|{sac}|{sac}
+72|背包|m|我把书放进背包。|{sac} + {à dos}（在背上）|{sac} + {à dos}
+73|手提包|m|我的手提包在哪里？|{sac} + {à main}（用手）|{sac} + {à main}
+74|运动包|m|他拿起他的运动包。|{sac} + {de sport}|{sac} + {de sport}
+75|三明治|m|我中午吃三明治。|{sandwich} 同英语|English sandwich
+76|短裤|m|我在海滩穿短裤。|{short} 同英语|English shorts
+77|卫衣|m|他冬天穿卫衣运动。|{sweat} 是 sweat-shirt 的缩写|short for sweat-shirt
+78|T 恤|m|夏天我穿 T 恤。|{t-shirt} 同英语|English t-shirt
+79|电池；电量|f|我没电了。|{batterie} 同英语 {battery}|English battery
+80|充电宝|f|我可以借你的充电宝吗？|{batterie} + {externe}|{batterie} + {externe}
+81|试衣间|f|试衣间在哪里？|{cabine} 小间 + {d'essayage} 试穿|{cabine} + {d'essayage}
+82|腰带|f|我的裤子需要一条腰带。|{ceinture}|{ceinture}
+83|衬衫|f|这是一件漂亮的白衬衫。|{chemise}|{chemise}
+84|手机壳|f|我有一个新手机壳。|{coque} 硬壳 + {de téléphone}|{coque} + {de téléphone}
+85|颜色|f|你最喜欢的颜色是什么？|{couleur} 同英语 {colour}|English colour
+86|领带|f|他有一条蓝色领带。|{cravate}|{cravate}
+87|围巾|f|天冷，戴上你的围巾。|{écharpe}|{écharpe}
+88|音箱（蓝牙）|f|我们用音箱听音乐。|{enceinte} 还有「怀孕的」之意|enceinte also = pregnant
+89|旧货店|f|我在旧货店买衣服。|{friperie} 二手衣店|second-hand clothes shop
+90|裙子|f|她穿一条短裙。|{jupe}|{jupe}
+91|手表|f|他的表很贵。|{montre} 来自 montrer（显示）|from montrer
+92|智能手表|f|我买了一块智能手表。|{montre} + {connectée} 联网的|{montre} + {connectée}
+93|照片|f|我们拍张照吧？|{photo} 同英语|English photo
+94|连衣裙|f|这是一条漂亮的红裙子。|{robe}|{robe}
+95|惊喜|f|我有个惊喜给你。|{surprise} 同英语|English surprise
+96|平板电脑|f|我在平板上看电影。|{tablette} 小桌板|{tablette}
+97|行李箱|f|我为假期收拾行李。|{valise}|{valise}
+98|夹克|f|他穿黑色夹克。|{veste}|{veste}
+99|写|v|我写一条消息。|j'écris, nous écrivons|j'écris, nous écrivons
+100|试穿；尝试|v|我想试穿这件衬衫。|{essayer} 同英语 {essay}（尝试）|English essay
+101|逛街|v|我喜欢逛街。|{faire les magasins} 或 {faire du shopping}|two ways to say it
+102|下雨|v|明天会下雨。|il pleut / il va pleuvoir|il pleut / il va pleuvoir
+103|穿；戴；携带|v|我穿着大衣。|{porter} 穿戴，也有「拿」「搬」|{porter} = wear, carry

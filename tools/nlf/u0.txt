@@ -1,0 +1,37 @@
+1|第一个|adj|这是这个月的第一天。|{premier} 第一，和英语 {prim}e、{prim}ary 同源；阴性 première|{premier} first, same root as English {prim}e and {prim}ary; feminine première
+2|今天||今天天气很好。|{au} 在 + {jour} 日子 + {d'hui}（今日）= 在今天的日子里|{au} on + {jour} day + {d'hui} (this day) → today
+3|明天||明天我要去看电影。|{de}main 来自拉丁 de mane「到早晨」→ 明天早上之后的那天|{demain} comes from Latin de mane, "by morning" → tomorrow
+4|昨天||昨天我吃了一个苹果。|读作 [jɛʁ]，和英语 {yes}terday 开头相似|say [jɛʁ]; sounds like the start of English {yes}terday
+5|回头见||回头见，希望如此。|{à} 到 + {bientôt}（很快）= 很快再见|{à} until + {bientôt} soon → see you soon
+6|再见||再见，晚上愉快！|{au} 到 + {revoir}（再见面）= 直到再见|{au} until + {revoir} seeing again → goodbye
+7|你好；早上好||你好，你叫什么名字？|{bon} 好 + {jour} 日子 = 好日子|{bon} good + {jour} day = good day
+8|祝你今天愉快||谢谢，你也祝你今天愉快！|{bonne} 好的（阴性）+ {journée} 一整天|{bonne} good (feminine) + {journée} the whole day
+9|晚上好||晚上好，明天见。|{bon} 好 + {soir} 晚上 = 晚上好；下午6点以后用|{bon} good + {soir} evening; used after about 6 pm
+10|你好吗？/ 我很好。||我很好，谢谢。|一个短语两个用法：问句 Ça va ?，答句 Ça va.|One phrase, two jobs: a question (Ça va ?) and an answer (Ça va.)
+11|很高兴认识你||很高兴认识你，我叫玛丽。|女生可写 enchantée，读音相同|a woman may write enchantée; it sounds the same
+12|谢谢||谢谢你的帮助。|读作 [mɛʁsi]，和英语 {mercy}（怜悯）同源|say [mɛʁsi]; same root as English {mercy}
+13|非常感谢||非常感谢你的礼物。|{beaucoup} = {beau} 美 + {coup} 一下 → 很多|{beaucoup} = {beau} fine + {coup} blow → a lot
+14|请||请给我一杯咖啡。|{te} 对朋友（tu），{vous} 对不认识的人；本意 si il te plaît「如果你愿意」|{te} for a friend (tu), {vous} for formal; literally "if it pleases you"
+15|嗨；拜拜||嗨，你好吗？|非正式，见面和告别都能说|informal; works for both hello and bye
+16|年龄||你多大了？|以元音开头，所以 le 缩成 {l'}；和英语 {age} 同源|starts with a vowel so le shrinks to {l'}; same root as English {age}
+17|秋天|m|树叶在秋天掉落。|{automne} 里 m 不发音，读 [otɔn]；季节名都是阳性|the m is silent: [otɔn]; all four seasons are masculine
+18|夏天|m|夏天很热。|读 [ete]；注意和 été（être 的过去分词）同形|say [ete]; same spelling as été (past participle of être)
+19|冬天|m|冬天很冷。|h 不发音，读 [ivɛʁ]；和英语 {hiber}nate 同源|silent h: [ivɛʁ]; same root as English {hiber}nate
+20|贴面吻（见面礼）|f|在法国人们互相贴面吻。|{faire la bise} 贴脸颊亲吻问候，这里的「亲」不是亲嘴|{faire la bise} = greet with cheek kisses
+21|春天|m|春天有花开。|{printemps} = {prin} 第一 + {temps} 时间 → 一年之始|{printemps} = {prin} first + {temps} time → first part of the year
+22|朋友|m|他是一个好朋友。|{ami} 和 {ami}cal（友好的）同根；阴性 une amie|{ami} same root as {ami}cable; feminine une amie
+23|年|m|她十岁。|说年龄用 avoir…ans；an 读 [ɑ̃]，不发 n|age uses avoir…ans; an is [ɑ̃], no n
+24|猫|m|猫在睡觉。|ch 读 [ʃ]，结尾 t 不发音；阴性 une chatte|ch = [ʃ], final t silent; feminine une chatte
+25|狗|m|这条狗很小。|读 [ʃjɛ̃]；ch 读 [ʃ]，en 读 [ɛ̃]|say [ʃjɛ̃]
+26|孩子|m|他有一个孩子。|复数 {enfants}，末尾 s 不读；和英语 {infant} 同源|plural {enfants}, final s silent; same root as English {infant}
+27|欧元|m|咖啡一欧元。|读 [øʁo]；和英语 {euro} 一致|say [øʁo]; same as English {euro}
+28|天；一天|m|这是美好的一天。|{jour} 白天，和英语 {jour}nal、{jour}ney 同源|{jour} day, same root as English {jour}nal and {jour}ney
+29|月|m|二月是个很短的月份。|{mois} 读 [mwa]，s 不发音|say [mwa]; s silent
+30|一年（强调时长）|f|这是美好的一年。|{année} 强调一整年的过程，an 只表数量|{année} stresses the year as a stretch of time; an is just the count
+31|法棍面包|f|我买一根法棍。|{baguette} 本意「小棍子」，和 {bag}uette 同源|{baguette} = little stick
+32|日期|f|今天是几号？|和英语 {date} 一致|same as English {date}
+33|季节|f|我最喜欢的季节是夏天。|{saison} 和英语 {season} 同源|same root as English {season}
+34|星期；周|f|一个星期有七天。|{semaine} 来自拉丁 septimana（七）|{semaine} comes from Latin septimana (seven)
+35|有|v|我有两个孩子。|最重要的动词之一：j'ai, tu as, il a, nous avons, vous avez, ils ont|key verb: j'ai, tu as, il a, nous avons, vous avez, ils ont
+36|是|v|我是法国人。|je suis, tu es, il est, nous sommes, vous êtes, ils sont|je suis, tu es, il est, nous sommes, vous êtes, ils sont
+37|名叫|v|我叫托马斯。你叫什么名字？|代动词：je m'appelle, tu t'appelles, il s'appelle|reflexive: je m'appelle, tu t'appelles, il s'appelle

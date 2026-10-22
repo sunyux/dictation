@@ -1,0 +1,97 @@
+1|呕！恶心！|loc|呕！真恶心。|拟声感叹词，表示厌恶|an interjection of disgust
+2|受够了；忍无可忍|loc|我受够了！我受不了了！|三种说法：en avoir assez / en avoir marre（口语）/ ne plus en pouvoir|three ways: en avoir assez / en avoir marre (colloquial) / ne plus en pouvoir
+3|是个天使（心地善良）|loc|谢谢你帮忙，你真是天使！|{ange} 天使，夸人的说法|{ange} angel; a compliment
+4|抛锚；出故障|loc|我的车抛锚了。|{panne} 故障；être en panne / tomber en panne|{panne} breakdown
+5|提问|loc|我可以问个问题吗？|{poser} 放 + {une question}|{poser} put + {une question}
+6|垃圾；废物|pl|要扔掉垃圾。|{déchets} 总是复数|always plural
+7|楼梯|pl|我走楼梯。|{escalier} 复数 escaliers；常用复数|{escaliers} often plural
+8|厕所|pl|厕所在哪里？|{toilettes} 总是复数|always plural
+9|噪音|m|这里很吵。|{bruit} 读 [bʁɥi]，t 不发音|{bruit} [bʁɥi]
+10|自助餐厅|f|我们在食堂吃饭。|{cafétéria} 同英语 {cafeteria}|English cafeteria
+11|温度|f|今天气温很低。|{température} 同英语 {temperature}|English temperature
+12|底楼（一楼）|m|他住在一楼。|{rez} 与地面齐平 + {de chaussée} 路面|{rez} level + {de chaussée} roadway
+13|家用电器|m|我买了一件新家电。|{appareil} 设备 + {électroménager} 家用电器|{appareil} + {électroménager}
+14|阳台|m|阳台上有花。|{balcon} 同英语 {balcony}|English balcony
+15|烧烤|m|星期天我们烧烤。|{barbecue} 同英语|English barbecue
+16|办公室；书桌|m|他在他的办公室工作。|{bureau} 办公室也指书桌|office and desk
+17|蟑螂|m|厨房里有一只蟑螂！|{cafard} 蟑螂；avoir le cafard = 情绪低落|avoir le cafard = feel down
+18|卡车|m|卡车是红色的。|{camion}|{camion}
+19|沙发|m|沙发很舒服。|{canapé} 沙发，也指开胃小点|{canapé}
+20|冰柜|m|冷冻柜里有冰淇淋。|{congeler} 冷冻 → {congélateur}|congeler → congélateur
+21|走廊|m|走廊很长。|{couloir} 读 [kulwaʁ]|{couloir}
+22|课；课程|m|课九点开始。|{cours} 课，s 不发音|{cours}
+23|靠垫|m|沙发上有个靠垫。|{coussin} 读 [kusɛ̃]|{coussin}
+24|楼层|m|我的公寓在二楼。|法国一楼叫 rez-de-chaussée，所以 premier étage = 二楼|premier étage = 2nd floor in English count
+25|扶手椅|m|他坐在扶手椅里看书。|{fauteuil} 读 [fotœj]|{fauteuil}
+26|烤箱|m|蛋糕在烤箱里。|{four} 读 [fuʁ]|{four}
+27|冰箱|m|牛奶在冰箱里。|frigo 是口语，réfrigérateur 正式|frigo = colloquial
+28|烤面包机|m|我用烤面包机烤面包。|{grille} 烤 + {pain} 面包|{grille} + {pain}
+29|大厅|m|在楼里的大厅等我。|{hall} 同英语 {hall}|English hall
+30|楼房；大楼|m|我住在一栋大楼里。|{immeuble} 公寓楼|apartment building
+31|报纸；日记|m|他每天早上读报。|{journal}：日 jour 的派生|from jour
+32|床|m|我去睡觉。|aller au lit = 去睡觉|aller au lit
+33|垃圾房|m|我把垃圾袋放进垃圾房。|{local} 房间 + {à poubelles}|{local} + {à poubelles}
+34|自行车房|m|我的自行车在车库。|{local} + {à vélo}|{local} + {à vélo}
+35|房租|m|房租很贵。|{loyer} 读 [lwaje]|{loyer}
+36|平方米|m|这套公寓有 50 平方米。|{mètre carré}，写作 m²|written m²
+37|家具|m|这是一件漂亮的家具。|{meuble} 家具，一件；法语单数|one piece of furniture
+38|微波炉|m|我用微波炉热饭。|{micro} 微 + {onde} 波|{micro} + {onde}
+39|问题|m|我有个小问题。|{problème} 以 -e 结尾但是阳性|{problème} is masculine
+40|客厅|m|我们在客厅看电视。|{salon} 客厅；也指「沙龙」「展会」|{salon}
+41|单间公寓|m|她租了一个小单间。|{studio} 同英语 {studio}|English studio
+42|画；黑板|m|这是一幅美丽的画。|{tableau}：画、黑板、表格都叫它|painting, board, table
+43|地毯|m|狗睡在地毯上。|{tapis} 读 [tapi]，s 不发音|{tapis}
+44|水管工|n|我叫水管工来修漏水。|阴性 plombière；{plomb} 铅 → {plombier}|{plomb} lead → {plombier}
+45|房东；业主|n|房东人很好。|{propre}（自己的）→ {propriétaire}|{propre} own → {propriétaire}
+46|衣柜|f|我的衣服在衣柜里。|{armoire}|{armoire}
+47|书柜；图书馆|f|我在客厅装了一个书柜。|{bibliothèque} 书柜和图书馆|bookcase and library
+48|水壶（烧水）|f|水在壶里烧开了。|{bouillir} 沸腾 → {bouilloire}|bouillir → bouilloire
+49|地窖；地下室|f|酒放在地窖里。|{cave} 地窖|{cave}
+50|椅子|f|坐在这把椅子上。|{chaise} 读 [ʃɛz]|{chaise}
+51|卧室|f|我在卧室睡觉。|{chambre} 卧室；{chambre} 读 [ʃɑ̃bʁ]|{chambre}
+52|钥匙|f|我丢了钥匙。|{clé} 也写 clef|{clé} also clef
+53|厨房|f|我在厨房做饭。|{cuisine} 厨房，也指烹饪|{cuisine}
+54|炉灶|f|这是一个燃气灶。|{cuisinière} 灶具|{cuisinière}
+55|淋浴|f|我早上冲澡。|{douche} 同英语 {douche}（来自法语）|English douche
+56|窗户|f|打开窗户。|{fenêtre}|{fenêtre}
+57|漏（水、气）|f|浴室漏水了。|{fuite} 漏；fuir 逃跑/漏|from fuir
+58|牵狗绳|f|请牵好您的狗。|en laisse = 用绳牵着|en laisse
+59|灯|f|开灯。|{lampe} 同英语 {lamp}|English lamp
+60|草坪|f|草坪是绿的。|{pelouse}|{pelouse}
+61|房间；一间|f|这套公寓有三个房间。|{pièce} 房间；3 pièces 指客厅加卧室等|3 pièces = 3 main rooms
+62|绿植|f|我给绿植浇水。|{plante} 同英语 {plant}|English plant
+63|平底锅|f|我用平底锅煎蛋。|{poêle} 读 [pwal]|{poêle}
+64|门|f|请关上门。|{porte}|{porte}
+65|垃圾桶|f|垃圾桶满了。|{poubelle} 来自人名 Poubelle（巴黎市长）|named after Mr Poubelle
+66|住宅区；公寓|f|这是一个安静的住宅区。|{résidence} 同英语 {residence}|English residence
+67|餐厅（家里）|f|我们在餐厅吃饭。|{salle} 房间 + {à manger}|{salle} + {à manger}
+68|浴室|f|浴室很小。|{salle} + {de bain}|{salle} + {de bain}
+69|桌子|f|书在桌子上。|{table} 同英语|English table
+70|茶几|f|咖啡放在茶几上。|{table} + {basse} 矮的|{table} + {basse}
+71|电视|f|我们有一台大电视。|télé 是 télévision 的缩写|short for télévision
+72|露台|f|我们在露台吃晚饭。|{terrasse}|{terrasse}
+73|在……左边/右边/旁边|prep|银行在邮局旁边。|à gauche de / à droite de / à côté de|à gauche de / à droite de / à côté de
+74|在……里|prep|我的钥匙在包里。|{dans} + 冠词 + 名词|{dans} + article + noun
+75|在……后面|prep|花园在房子后面。|{derrière}|{derrière}
+76|在……前面|prep|我的车在房子前面。|{devant}|{devant}
+77|在……和……之间|prep|我坐在保罗和玛丽之间。|{entre} … {et} …|{entre} … {et} …
+78|在……下面|prep|狗在椅子下面。|{sous}|{sous}
+79|在……上面|prep|猫在桌子上。|{sur} 读 [syʁ]|{sur}
+80|运转；起作用|v|电视坏了（不运转了）。|机器 marcher = 能用；marcher 还有走路义|marcher = to walk and to work
+81|烧；烧焦|v|小心别把饭烧焦了。|{brûler} ，û 的帽子表示 s 已省略|û replaces an old s
+82|开始|v|电影要开始了。|je commence, nous commençons|nous commençons (ç)
+83|听|v|我喜欢听音乐。|{écouter} 不用介词|no preposition
+84|进入|v|您可以进来。|{entrer} 用 être 做助动词|uses être
+85|关|v|出去时把门关上。|{fermer}；反义 ouvrir|opposite: ouvrir
+86|吸烟|v|这里禁止吸烟。|{fumer}；il est interdit de fumer|il est interdit de fumer
+87|忘记|v|我忘了带书。|{oublier} 忘；反义 se souvenir|oublier
+88|丢失；输|v|我怕丢手机。|je perds, nous perdons|je perds, nous perdons
+89|重新开始|v|我得重做我的工作。|{re} 再 + {commencer}|{re} + {commencer}
+90|看|v|我在看电影。|{regarder} 不用介词|no preposition
+91|处理；解决；付款|v|我来解决这个问题。|{régler} 调整、解决、付账|adjust, sort out, pay
+92|遇见|v|我喜欢认识新朋友。|{rencontrer} 遇见（第一次）|{rencontrer}
+93|打翻；洒|v|他打翻了水杯。|{renverser}|{renverser}
+94|修理|v|我得修自行车。|{réparer} 同英语 {repair}|English repair
+95|拿着；握着|v|你能帮我拿一下包吗？|je tiens, nous tenons|je tiens, nous tenons
+96|分类|v|请把垃圾分类。|{trier} 分类，垃圾分类用|sorting waste
+97|吸电子烟|v|很多年轻人爱抽电子烟。|{vapoter} 来自 vapeur（蒸汽）|from vapeur

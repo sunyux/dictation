@@ -1,0 +1,68 @@
+1|困难的|adj|这份工作很难。|{difficile} 同英语 {difficult}；反义 facile|opposite: facile
+2|容易的|adj|练习很容易。|{facile} 和英语 {facile}/{facil}itate 同源|related to English facilitate
+3|残疾的|adj|他有残疾。|{handicapé} 阴阳性同形，h 不发音|silent h
+4|独立的|adj|她很独立。|{indépendant} 同英语 {independent}|English independent
+5|新的|adj|我有一部新手机。|阳性 nouveau；元音前 nouvel；阴性 nouvelle|nouveau / nouvel (vowel) / nouvelle
+6|有条理的|adj|他很有条理。|{organis}é 同英语 {organis}ed|English organised
+7|很久|adv|我等了很久。|{long} 长 + {temps} 时间|{long} + {temps}
+8|赚钱|loc|他想赚钱。|{gagner} 赢/赚 + {de l'argent} 钱|{gagner} + {de l'argent}
+9|时间表；工作时间|pl|你们的工作时间是什么？|{horaires} 复数，也指火车时刻表|plural; also timetable
+10|美容产品|pl|她买美容产品。|{produit} 产品 + {de beauté} 美容的|{produit} + {de beauté}
+11|厕纸|m|没有厕纸了。|{papier} 纸 + {toilette}|{papier} + {toilette}
+12|远程办公|m|我远程办公。|{télé} 远 + {travail} 工作|{télé} + {travail}
+13|经济；经济学|f|经济学很有趣。|{économie} 同英语 {economy}|English economy
+14|信息学；计算机科学|f|我喜欢计算机科学。|{informatique} 来自 information + automatique|information + automatique
+15|组织|f|组织得很好。|{organisation} 同英语|English organisation
+16|联合国儿童基金会|f|她为联合国儿童基金会工作。|{l'UNICEF}，缩写词也带冠词|acronyms take an article
+17|药学|f|他学药学。|{pharmacie} 药店，也指药学|pharmacy and pharmacology
+18|设计|m|他学设计。|{design} 同英语|English design
+19|新闻学|m|她学新闻。|{journal} 报纸 → {journalisme}|journal → journalisme
+20|高中|m|他读高中。|{lycée} 法国的高中|French high school
+21|工作；办公室|m|我得去办公室。|{travail} 工作；{bureau} 办公室|{travail} / {bureau}
+22|数学|pl|我喜欢数学。|{maths} 总是复数|always plural
+23|科学|pl|她学科学。|{sciences} 常用复数|usually plural
+24|农民|n|他是农民。|阴性 agricultrice；{agricult}eur ~ {agricult}ure 农业|{agri}culteur ~ agriculture
+25|阶梯教室|m|课在阶梯教室。|{amphi} 周围 + {théâtre} 剧场；口语 amphi|short: un amphi
+26|校园|m|校园很大。|{campus} 同英语|English campus
+27|司机|m|公交司机在这里。|{chauffeur} 来自 chauffer（加热、烧炉）|from chauffer
+28|演员（喜剧演员）|n|她是演员。|阴性 comédienne；comédien 泛指演员|comédienne
+29|文凭；学位|m|我拿到了文凭。|{diplôme} 同英语 {diploma}|English diploma
+30|主任；校长；总监|n|校长人很好。|阴性 directrice；{direct}eur 同英语 {direct}or|English director
+31|电子邮件|m|我发一封邮件。|un email 或 un courriel（魁北克说法）|courriel = Québec term
+32|信息技术员|n|他是 IT 工作者。|阴性 informaticienne|informaticienne
+33|硕士|m|他读硕士。|{master} 同英语 {master}|English master's
+34|职业；工作|m|这是份好工作。|un métier / un travail|un métier / un travail
+35|职位；岗位|m|我有新职位。|{poste} 职位；也指邮局 la poste（阴性）|poste m. = position; la poste = post office
+36|大学食堂|m|我在大学食堂吃饭。|缩写 RU 或 resto U|short: resto U
+37|工资|m|工资不错。|{salaire} 同英语 {salary}|English salary
+38|秘书处；办公室|m|办公室开门了。|{secrétaire} 秘书 → {secrétariat}|secrétaire → secrétariat
+39|实习|m|他在实习。|{stage}；faire un stage|faire un stage
+40|售货员|n|售货员很忙。|阴性 vendeuse；{vendre} 卖 → {vendeur}|vendre → vendeur
+41|视频会议|m|我十点有个视频会议。|口语 la visio；法语里 visioconférence 阴性（句子中用 un）|colloquial: la visio
+42|旅行|m|我喜欢旅行。|{voyage} 同英语 {voyage}|English voyage
+43|同事|n|我的同事很友好。|阴阳性同形|same form for both genders
+44|记者|n|他是记者。|{journal} → {journaliste}|journal → journaliste
+45|书商|n|书商很友好。|{libr}aire ~ {livre} 书|{livre} → libraire
+46|摄影师|n|她是摄影师。|{photo}graphe 同英语 {photo}grapher|English photographer
+47|间隔年|f|他休学一年。|{césure} 暂停，休学期|gap
+48|入口|f|这栋楼的入口在哪里？|{entrer} 进入 → {entrée}|entrer → entrée
+49|公司|f|这是一家大公司。|{entreprise} 来自 entreprendre（从事）|from entreprendre
+50|团队|f|这是一支好团队。|{équipe}|{équipe}
+51|培训；教育|f|我在参加培训。|{former} 培养 → {formation}|former → formation
+52|学士学位|f|她有法学学士学位。|{licence} 学士；也指许可证|licence = bachelor's degree
+53|休息|f|我休息一下。|{pause} 同英语 {pause}|English pause
+54|老年人|f|我帮助一位老人。|{personne âgée}：personne 永远是阴性|personne is always feminine
+55|学生宿舍|f|他住在宿舍。|{résidence} + {étudiante}|{résidence} + {étudiante}
+56|会议|f|今早我有个会议。|{réunion} 同英语 {reunion}|English reunion
+57|教室|f|教室很小。|{salle} 房间 + {de classe}|{salle} + {de classe}
+58|自从；已经（持续）|prep|我在这里住了一年了。|depuis + 现在时：持续到现在的时间|depuis + present: still going on
+59|在……期间|prep|他在上课期间睡觉。|{pendant} 用于一段时间|{pendant}
+60|发现|v|我想探索世界。|{dé} 去除 + {couvrir} 覆盖 = 揭开|{dé} + {couvrir}
+61|讨论；聊天|v|我们喜欢聊天。|{discuter} 同英语 {discuss}|English discuss
+62|持续|v|这部电影持续很久。|{durer} 同英语 {endure}|English endure
+63|读|v|我喜欢读书。|je lis, nous lisons|je lis, nous lisons
+64|组织；安排|v|我们要办一个派对。|{organiser} 同英语 {organise}|English organise
+65|介绍；展示|v|我要介绍我的项目。|{présenter} 同英语 {present}|English present
+66|打电话（给）|v|我得给妈妈打电话。|téléphoner à + 人|téléphoner à + person
+67|结束；完成|v|我得完成工作。|{terminer}：和 finir 近义|synonym of finir
+68|生活；活着|v|她想住在巴黎。|je vis, nous vivons|je vis, nous vivons

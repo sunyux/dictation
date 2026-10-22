@@ -1,0 +1,70 @@
+1|有机的|adj|这些番茄是有机的。|口语缩写 bio|short form: bio
+2|化学的|adj|这是化学产品。|{chimique} 同英语 {chemical}|English chemical
+3|包含在内的|adj|早餐含在房价里。|{compris} 是 comprendre（包含/理解）的过去分词|past participle of comprendre
+4|环保的|adj|这是环保产品。|{écologique} 同英语 {ecological}|English ecological
+5|慢的|adj|这台电脑很慢。|阴性 lente|feminine lente
+6|更好的；最好的|adj|这是全城最好的餐厅。|{meilleur} = bon 的比较级，不能说 plus bon|comparative of bon: never "plus bon"
+7|快的|adj|这列火车很快。|{rapide} 同英语 {rapid}|English rapid
+8|爱运动的|adj|我哥哥很爱运动。|{sport} → {sportif}；阴性 sportive|sport → sportif
+9|有……景观|loc|我的房间有海景。|avec vue sur + 名词|avec vue sur + noun
+10|草|f|草是绿的。|{herbe}；h 不发音|silent h
+11|海鲜|pl|我们在餐厅吃海鲜。|{fruits} 果实 + {de mer} 海的|{fruits} + {de mer}
+12|去程 / 回程 / 往返|m|我要一张往返票。|{aller} 去 + {retour} 回|{aller} + {retour}
+13|阿尔萨斯|f|阿尔萨斯是法国的一个大区。|地名带冠词：l'Alsace|place with article
+14|到达|f|火车十点到。|{arriver} → {arrivée}|arriver → arrivée
+15|酸菜|f|我喜欢吃酸菜。|{choucroute} 阿尔萨斯名菜|Alsatian dish
+16|科西嘉岛|f|我们在科西嘉度假。|{la Corse}：在科西嘉 en Corse|en Corse
+17|头等舱/二等舱|f|头等舱的票更贵。|première / seconde classe|première / seconde classe
+18|瑞士|f|瑞士是个美丽的国家。|{la Suisse}：在瑞士 en Suisse|en Suisse
+19|城市|f|我住在大城市。|{ville}|{ville}
+20|天空|m|今天天空是蓝色的。|{ciel} 读 [sjɛl]；复数 cieux 或 ciels|{ciel} [sjɛl]
+21|出发|m|出发定在明天。|{partir} → {départ}|partir → départ
+22|无线网|m|Wi-Fi 不能用。|le wifi 或 la wifi 都可以|either gender
+23|树|m|这棵树很高。|{arbre} 读 [aʁbʁ]|{arbre}
+24|船|m|船在水上。|{bateau}|{bateau}
+25|露营地|m|夏天我们去露营。|{camping} 同英语|English camping
+26|沙发床|m|我的朋友睡沙发床。|{canapé} + {lit}；clic-clac 是口语|{canapé} + {lit}
+27|鸭子|m|鸭子在水里游。|{canard}|{canard}
+28|长途大巴|m|长途大巴是远距离的公交车。|{car} 长途客车，与 bus 不同|{car} long-distance coach
+29|田野|m|拖拉机在田里。|{champ} 读 [ʃɑ̃]|{champ}
+30|小路|m|我们在小路上走。|{chemin} 路|{chemin}
+31|马|m|她骑在马上。|{cheval} 复数 chevaux|plural chevaux
+32|住宿|m|这个住所很舒服。|{héberger} 提供住宿 → {hébergement}|héberger → hébergement
+33|酒店|m|我们住在酒店里。|{hôtel} 的 h 不发音|silent h
+34|湖|m|我们在湖里游泳。|{lac}|{lac}
+35|兔子|m|兔子跑得很快。|{lapin}|{lapin}
+36|单人/双人床|m|我想要一间双人床的房间。|lit simple / lit double|lit simple / lit double
+37|住处|m|我想找今晚的住处。|{loger} 住 → {logement}|loger → logement
+38|鸟|m|鸟在天空飞。|{oiseau} 读 [wazo]|{oiseau} [wazo]
+39|停车场|m|我的车在停车场。|{parking} 来自英语|from English
+40|鱼|m|鱼在湖里游。|{poisson}|{poisson}
+41|回忆；纪念品|m|我有很多度假的美好回忆。|{souvenir} 回忆/纪念品；se souvenir 记得|souvenir = memory / keepsake
+42|面包车；露营车|m|我们开面包车去旅行。|{van} 来自英语|from English
+43|村庄|m|我爷爷住在小村庄里。|{village} 同英语|English village
+44|冒险|f|这是一次大冒险。|{aventure} 同英语 {adventure}|English adventure
+45|信箱|f|信箱里有一封信。|{boîte} 盒子 + {aux lettres} 信的|{boîte} + {aux lettres}
+46|民宿|f|我订了乡间民宿。|{chambre d'hôte}|{chambre d'hôte}
+47|目的地|f|您选好度假目的地了吗？|{destination}|English destination
+48|农场|f|农场里有动物。|{ferme}；fermer 是「关」，别混|fermer = to close
+49|花|f|这朵花很美。|{fleur}|{fleur}
+50|信|f|我给妈妈写信。|{lettre} 同英语 {letter}|English letter
+51|租赁|f|我们在海边租了房子。|{louer} → {location}|louer → location
+52|母鸡|f|母鸡下蛋。|{poule}|{poule}
+53|帐篷|f|他睡在帐篷里。|{tente} 同英语 {tent}|English tent
+54|母牛|f|牛在吃草。|{vache}|{vache}
+55|站台；轨道|f|火车从四号站台出发。|{voie} 读 [vwa]|{voie}
+56|晒黑|v|我喜欢在海滩晒太阳。|{bronzer}|{bronzer}
+57|驾驶|v|他会开车。|je conduis, nous conduisons|je conduis, nous conduisons
+58|交换；换|v|我想换我的票。|{échanger} 同英语 {exchange}|English exchange
+59|观光|loc|我们喜欢观光旅游。|{faire du tourisme}|{faire du tourisme}
+60|尝；品尝|v|你想尝尝这个蛋糕吗？|{goûter}；le goûter 是下午点心|le goûter = afternoon snack
+61|租|v|我们要租一辆车。|{louer} 租入或租出|{louer} to rent
+62|死|v|没有水植物会死。|je meurs, nous mourons|je meurs, nous mourons
+63|出生|v|我的儿子五月出生。|不规则：naître / il naît|irregular: naître
+64|拍照/拍视频|loc|我来拍张照片。|{prendre} + une photo / une vidéo|prendre une photo
+65|预订|v|我想订两人桌。|{réserver} 同英语 {reserve}|English reserve
+66|返回|v|我得回家。|{retourner} 用 être 做助动词|uses être
+67|回来|v|他明天回来。|像 venir：je reviens|like venir: je reviens
+68|游泳；洗澡|v|我们去海里游泳。|代动词 se baigner|reflexive
+69|滑雪|v|今年冬天我们去滑雪。|{skier} 同英语 {ski}|English ski
+70|冲浪|v|他喜欢在浪上冲浪。|{surfer} 同英语 {surf}|English surf
