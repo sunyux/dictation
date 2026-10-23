@@ -1767,17 +1767,30 @@
         || fr.find(v => /premium|enhanced|amélie|amelie|thomas|google/i.test(v.name))
         || fr[0] || this.voices[0] || null;
     },
-    say(text, onend) {
+    say(text, onend, retried = false) {
       if (!this.ok) { onend && onend(); return; }
+      if (!this.voice) this.pick();
+      const my = this.tok = (this.tok || 0) + 1;
       speechSynthesis.cancel();
       const u = new SpeechSynthesisUtterance(text.replace(/^–\s*/, '').replace(/…/g, ', ').replace(/[¹²³*]/g, ''));
-      u.lang = 'fr-FR'; if (this.voice) u.voice = this.voice;
+      u.lang = 'fr-FR'; if (this.voice && !retried) u.voice = this.voice;
       u.rate = settings.rate;
       u.volume = settings.volume;
-      let done = false;
+      let done = false, started = false;
       const fin = () => { if (!done) { done = true; onend && onend(); } };
-      u.onend = fin; u.onerror = fin;
-      speechSynthesis.speak(u);
+      u.onstart = () => { started = true; };
+      u.onend = fin;
+      // a chosen voice that fails (offline network voice, revoked, …): try once with the browser's default French voice
+      u.onerror = e => {
+        if (!retried && my === this.tok && e && e.error !== 'canceled' && e.error !== 'interrupted') { done = true; this.voice = null; this.say(text, onend, true); } else fin();
+      };
+      // some browsers drop speak() when it comes right after cancel(), or leave the queue paused
+      setTimeout(() => {
+        if (my !== this.tok || done) return;
+        if (speechSynthesis.paused) speechSynthesis.resume();
+        speechSynthesis.speak(u);
+        setTimeout(() => { if (my === this.tok && !done && !started && !speechSynthesis.speaking && !speechSynthesis.pending && !retried) { done = true; this.voice = null; this.say(text, onend, true); } }, 1500);
+      }, 60);
     },
     stop() { if (this.ok) speechSynthesis.cancel(); },
   };
