@@ -1701,6 +1701,9 @@
     const a = norm(input); if (!a) return 'empty';
     const acc = forms(fr).accept.map(norm);
     if (acc.includes(a)) return 'ok';
+    // a one-word answer typed with stray spaces (e.g. "au jourd'hui", copied from the syllable display)
+    const sq = x => x.replace(/\s+/g, '');
+    if (a.includes(' ') && acc.some(x => !x.includes(' ') && x === sq(a))) return 'ok';
     if (acc.map(strip).includes(strip(a))) return settings.lenient ? 'ok' : 'accent';
     return 'bad';
   }
