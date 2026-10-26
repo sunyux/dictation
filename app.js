@@ -176,7 +176,7 @@
         vocabDone: words === lecon.vocab.length, textDone: lines === totalLines };
     },
   };
-  // a word that is in the mistake book only counts as mastered once its reviews are finished
+  // (written right in a drill = mastered; the mistake book keeps its own schedule, see wordDrill)
   const inReview = (book, n, fr) => { const e = SRS.all()[SRS.id({ book, n, kind: 'word', fr })]; return e && !e.done; };
 
   /* ---------- rewards: XP, daily goal, streak, stamps ---------- */
@@ -2649,8 +2649,11 @@
           if (tm[v.fr] >= 3 && !inReview(bk, ln, v.fr)) { SRS.miss(it, giveUp ? '' : inp.value); toBook = true; }
           missN = tm[v.fr];
         }
-      } else if (test || !inReview(bk, ln, v.fr)) MASTER.word(bk, ln, v.fr);
-      else SRS.hit(it);
+      } else {
+        // written right without a hint: mastered now; a word that is also in the mistake book keeps its review schedule
+        MASTER.word(bk, ln, v.fr);
+        if (!test && inReview(bk, ln, v.fr)) SRS.hit(it);
+      }
       fb.innerHTML = `<div class="feedback ${r}">
         <span class="lab">${good ? (hintN ? '对了（用了提示）' : '完全正确') : r === 'accent' ? '差一点：注意重音符号' : giveUp ? '答案' : '不对，正确答案是'}</span>
         <div class="ans${gx(v.pos)}" lang="fr">${playBtn(forms(v.fr).say)} ${r === 'accent' ? accentDiff(inp.value.trim(), v.fr) : frHTML(v.fr)}</div>
