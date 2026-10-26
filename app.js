@@ -2552,12 +2552,16 @@
       }
       if (mode === 'test') {
         const st = MASTER.stats(ctx.book.id, lecon);
+        const saved = store.get(`ftest:${ctx.book.id}:${lecon.n}`, null);
         box.innerHTML = `<div class="drill summary"><p class="kicker" lang="fr">Premier test</p>
           <h2 style="font-size:30px;margin-bottom:10px">本课词汇首测</h2>
           <p class="hint-text" style="margin:0 0 18px">把这一课 ${lecon.vocab.length} 个词全部默写一遍，不能用提示。<br>写对的直接算掌握，以后不用再复习；写错的<b>不进错题本</b>，之后在「默写」里练，第一次就写对也算掌握。同一个词在首测里累计错满 3 次，会自动加入错题本。</p>
           ${st.test ? `<p class="kbd">上次首测：${st.test}</p>` : ''}
-          <button class="btn" id="go">${st.test ? '再测一次' : '开始首测'}</button></div>`;
-        $('#go', box).onclick = () => wordDrill(ctx, box, 'test', lecon.vocab);
+          ${saved ? `<p class="kbd" style="margin-bottom:10px">${bi(`有一场没做完的首测：${saved.i} / ${saved.q.length}`, `An unfinished first test: ${saved.i} / ${saved.q.length}`)}</p>
+            <button class="btn" id="resume">${bi('继续首测', 'Continue the test')}</button> ` : ''}
+          <button class="btn ${saved ? 'ghost' : ''}" id="go">${saved ? bi('重新开始', 'Start over') : st.test ? '再测一次' : '开始首测'}</button></div>`;
+        $('#go', box).onclick = () => { store.set(`ftest:${ctx.book.id}:${lecon.n}`, null); wordDrill(ctx, box, 'test', lecon.vocab); };
+        if (saved) $('#resume', box).onclick = () => wordDrill(ctx, box, 'test', lecon.vocab, true);
       } else {
         const m = MASTER.get(ctx.book.id, lecon.n);
         const onlyNew = store.get('vonlynew', true);
@@ -2572,14 +2576,23 @@
     bindModes(pane, m => paneVocab(ctx, m));
   }
 
-  function wordDrill(ctx, box, mode, words) {
+  function wordDrill(ctx, box, mode, words, resume = false) {
     const order = store.get('vorder', 'shuffle');
     const mine = orderedVocab(ctx.book.id, ctx.lecon);
     let queue = order === 'shuffle' ? shuffle(words) : words.slice().sort((a, b) => mine.indexOf(a) - mine.indexOf(b));
     let i = 0, wrong = [], firstTry = 0, answered = false, hintN = 0;
     const test = mode === 'test', auto = store.get('vauto', false);
+    // the first test can be paused and continued later: progress is kept per leçon
+    const fkey = `ftest:${ctx.book.id}:${ctx.lecon.n}`;
+    const saveT = (at = i) => { if (test) store.set(fkey, { q: queue.map(v => v.fr), i: at, firstTry, wrong: wrong.map(v => v.fr) }); };
+    if (test && resume) {
+      const sv = store.get(fkey, null), by = new Map(words.map(v => [v.fr, v]));
+      const q = sv ? sv.q.map(f => by.get(f)).filter(Boolean) : [];
+      if (sv && q.length === sv.q.length) { queue = q; i = Math.min(sv.i, q.length); firstTry = sv.firstTry || 0; wrong = (sv.wrong || []).map(f => by.get(f)).filter(Boolean); }
+    }
     const draw = () => {
       if (i >= queue.length) return done();
+      saveT();
       const v = queue[i]; answered = false; hintN = 0;
       box.innerHTML = `<div class="drill">
         <div class="count">${i + 1} / ${queue.length}</div>
@@ -2592,6 +2605,7 @@
           <button class="btn ghost small" id="skip">${bi('不会，看答案', 'Show answer')}</button>
           <button class="btn ghost small stuck-btn" id="stuck">${bi('卡住了', 'I\'m stuck')}</button>
           ${dysTools()}
+          ${test ? `<button class="btn ghost small" id="pause">${bi('暂停', 'Pause')}</button>` : ''}
           <span class="spacer"></span>
           <span class="kbd"><kbd>Enter</kbd> 检查 / 下一个</span>
         </div>
@@ -2603,7 +2617,7 @@
       const inp = $('#ans', box);
       inp.focus();
       if (auto) setTimeout(() => TTS.say(forms(v.fr).say), 200);
-      $('#vauto', box).onchange = e => { store.set('vauto', e.target.checked); wordDrill(ctx, box, mode, words); };
+      $('#vauto', box).onchange = e => { store.set('vauto', e.target.checked); wordDrill(ctx, box, mode, words, test); };
       inp.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); answered ? (i++, draw()) : check(); } };
       if (!test) $('#hint', box).onclick = () => {
         const target = forms(v.fr).accept[0];
@@ -2611,6 +2625,7 @@
         inp.value = target.slice(0, hintN); inp.focus();
       };
       $('#skip', box).onclick = () => check(true);
+      if (test) $('#pause', box).onclick = () => { saveT(answered ? i + 1 : i); paneVocab(ctx, 'test'); };
       // "I'm stuck": first a nudge (sound + first letter), then put the word at the end of this round
       let stuckN = 0;
       $('#stuck', box).onclick = () => {
@@ -2624,7 +2639,7 @@
         else check(true);
       };
       bindDys(box, () => forms(v.fr).accept.find(x => !/[(/]/.test(x)) || forms(v.fr).accept[0], inp);
-      $('#ord', box).onclick = e => { e.preventDefault(); store.set('vorder', order === 'shuffle' ? 'book' : 'shuffle'); wordDrill(ctx, box, mode, words); };
+      $('#ord', box).onclick = e => { e.preventDefault(); store.set('vorder', order === 'shuffle' ? 'book' : 'shuffle'); wordDrill(ctx, box, mode, words, test); };
     };
     const check = (giveUp = false) => {
       const v = queue[i], inp = $('#ans', box);
@@ -2665,6 +2680,7 @@
       if (good && !hintN) setTimeout(() => { if (answered && queue[i] === v) { i++; draw(); } }, wordTip(ctx.lecon.n, v) ? 1800 : 1100);
     };
     const done = () => {
+      if (test) store.set(fkey, null);
       if (test) { const m = MASTER.get(ctx.book.id, ctx.lecon.n); m.test = dayStr(); MASTER.put(ctx.book.id, ctx.lecon.n, m); }
       const st = MASTER.stats(ctx.book.id, ctx.lecon);
       const score = firstTry / queue.length;
