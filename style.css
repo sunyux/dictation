@@ -580,6 +580,9 @@ html.tw #j-text { font-family: "Special Elite", monospace !important; font-size:
 .j-issues span { font: 13px var(--zh); color: var(--ink-2); }
 .j-backtext { font: 16px/1.7 var(--zh); white-space: pre-wrap; }
 .j-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; }
+.j-item-wrap { position: relative; display: grid; }
+.j-item-wrap .j-item { padding-right: 34px; }
+.j-del { position: absolute; top: 4px; right: 6px; }
 .j-item { display: grid; text-decoration: none; color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: 3px; padding: 8px 12px; }
 .j-item.on { border-color: var(--ink); }
 .j-item small { color: var(--ink-2); }

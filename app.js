@@ -1379,6 +1379,9 @@
     all() { return store.get('journal', {}); },
     get(d) { return this.all()[d] || null; },
     put(d, e) { const a = this.all(); a[d] = { ...e, updated: new Date().toISOString() }; store.set('journal', a); },
+    del(d) { const a = this.all(); delete a[d]; store.set('journal', a); },
+    // entries are kept per day AND topic: "2026-10-25~moi"; older entries are keyed by the date alone
+    parse(k) { const [date, pid] = k.split('~'); return { key: k, date, pid: pid || (this.get(k) || {}).prompt || '' }; },
   };
   const P2 = a => Array.isArray(a) ? (L() === 'en' ? a[1] : L() === 'zhen' ? `${a[0]}<span class="en-gloss" lang="en">${esc(a[1])}</span>` : a[0]) : a;
   const promptOf = id => (window.JOURNAL_PROMPTS || []).find(p => p.id === id);
@@ -1439,17 +1442,26 @@
   }
 
   function viewJournal(day) {
-    const today = dayStr(), d = day || today, entry = JR.get(d) || {};
-    let pid = entry.prompt || (d === today ? store.get('jprompt:' + today, '') : '') || todaysPrompt().id;
+    const today = dayStr(), k0 = day ? decodeURIComponent(day) : '';
+    let d, pid;
+    if (k0) { const j = JR.parse(k0); d = j.date; pid = j.pid; } else { d = today; pid = store.get('jprompt:' + today, ''); }
+    if (!promptOf(pid)) pid = todaysPrompt().id;
+    const ekey = k0 && !k0.includes('~') ? k0 : `${d}~${pid}`, entry = JR.get(ekey) || {};
     const p = () => promptOf(pid) || todaysPrompt();
     document.title = bi('法语日记', 'Journal') + ' · ' + d;
-    const all = JR.all(), days = Object.keys(all).sort().reverse();
     const words = s => tokens(s || '').length;
+    // saved entries, newest first (empty ones are never kept)
+    const listHTML = () => {
+      const all = JR.all(), keys = Object.keys(all).filter(k => (all[k].text || '').trim()).sort((a, b) => (all[b].updated || b).localeCompare(all[a].updated || a));
+      return keys.length ? `<div class="unit-title"><h2>${bi('以前的日记', 'Past entries')}</h2><span>${keys.length}</span></div>
+        <div class="j-list">${keys.map(k => { const j = JR.parse(k); return `<div class="j-item-wrap"><a href="#/journal/${encodeURIComponent(k)}" class="j-item ${k === ekey ? 'on' : ''}"><b>${esc(j.date)}</b><span lang="fr">${esc((promptOf(j.pid) || {}).fr || '')}</span><small>${words(all[k].text)} ${bi('词', 'words')}</small></a>
+          <button class="err-del j-del" data-k="${esc(k)}" title="${bi('删除这篇', 'Delete this entry')}" aria-label="${bi('删除这篇', 'Delete this entry')}">×</button></div>`; }).join('')}</div>` : '';
+    };
     main.innerHTML = `
       <p class="kicker" lang="fr">Mon journal</p><h1>${bi('法语日记', 'French journal')}</h1>
       <div class="journal">
         <div class="j-page">
-          <div class="j-date"><span lang="fr">${esc(d)}</span>${d !== today ? `<a href="#/journal" class="btn ghost small">${bi('回到今天', 'Today')}</a>` : ''}</div>
+          <div class="j-date"><span lang="fr">${esc(d)}</span>${k0 ? `<a href="#/journal" class="btn ghost small">${bi('回到今天', 'Today')}</a>` : ''}</div>
           <div class="j-prompt"><b lang="fr">${esc(p().fr)}</b><span>${P2(p().t)}</span>
             <select id="j-pick">${(window.JOURNAL_PROMPTS || []).map(x => `<option value="${x.id}" ${x.id === p().id ? 'selected' : ''}>${esc(x.fr)}</option>`).join('')}</select></div>
           <textarea id="j-text" lang="fr" spellcheck="false" autocapitalize="sentences" placeholder="${bi('用法语写几句……点右边的句子开头可以直接插入。', 'Write a few sentences in French… tap a starter on the right to insert it.')}">${esc(entry.text || '')}</textarea>
@@ -1457,7 +1469,8 @@
             <button class="btn ghost small" id="j-read">${ICON.play} ${bi('朗读', 'Read aloud')}</button>
             <button class="btn ghost small" id="j-back">${bi('回译成中文', 'Translate back')}</button>
             <button class="btn ghost small" id="j-pdf">PDF</button>
-            <button class="btn" id="j-check">${bi('检查', 'Check')}</button></div>
+            <button class="btn" id="j-check">${bi('检查', 'Check')}</button>
+            <button class="btn" id="j-save">${bi('保存', 'Save')}</button></div>
           <div id="j-res"></div>
         </div>
         <aside class="j-hints">
@@ -1468,18 +1481,28 @@
           <section><h3>${bi('怎么说？', 'How do I say…?')}</h3><div class="j-how"><input id="j-q" class="typed-recite" placeholder="${bi('输入中文或英文', 'Chinese or English')}"><button class="btn small" id="j-qgo">→ FR</button></div><div id="j-qres" class="j-qres"></div></section>
         </aside>
       </div>
-      ${days.length ? `<section class="unit"><div class="unit-title"><h2>${bi('以前的日记', 'Past entries')}</h2><span>${days.length}</span></div>
-        <div class="j-list">${days.map(k => `<a href="#/journal/${k}" class="j-item ${k === d ? 'on' : ''}"><b>${k}</b><span lang="fr">${esc((promptOf(all[k].prompt) || {}).fr || '')}</span><small>${words(all[k].text)} ${bi('词', 'words')}</small></a>`).join('')}</div></section>` : ''}`;
+      <section class="unit" id="j-listwrap">${listHTML()}</section>`;
     const ta = $('#j-text', main), count = $('#j-count', main), res = $('#j-res', main);
+    const wrap = $('#j-listwrap', main);
+    const bindList = () => {
+      $$('.j-del', wrap).forEach(b => b.onclick = () => {
+        if (!confirm(bi('删除这篇日记？删除后不能恢复。', 'Delete this entry? This cannot be undone.'))) return;
+        JR.del(b.dataset.k);
+        if (b.dataset.k === ekey) { ta.value = ''; save(); } else { wrap.innerHTML = listHTML(); bindList(); }
+      });
+    };
     const save = () => {
-      JR.put(d, { prompt: p().id, text: ta.value });
+      if (ta.value.trim()) JR.put(ekey, { prompt: p().id, text: ta.value }); else JR.del(ekey);
+      wrap.innerHTML = listHTML(); bindList();
       const n = words(ta.value);
       count.textContent = bi(`${n} 个词`, `${n} words`) + (n >= 20 ? ' ✓' : bi(' · 写满 20 个词算一篇', ' · 20 words make an entry'));
       if (n >= 20 && d === today && !store.get('jxp:' + today)) { store.set('jxp:' + today, 1); XP.gain(10, bi('写了一篇日记', 'Journal entry')); }
     };
     let t; ta.oninput = () => { clearTimeout(t); t = setTimeout(save, 500); };
     save();
-    $('#j-pick', main).onchange = e => { pid = e.target.value; if (d === today) store.set('jprompt:' + today, pid); JR.put(d, { prompt: pid, text: ta.value }); viewJournal(day); };
+    $('#j-save', main).onclick = () => { clearTimeout(t); save(); toast('✓', ta.value.trim() ? bi('已保存', 'Saved') : bi('还没有内容', 'Nothing to save yet')); };
+    // each topic has its own page: switching keeps what was written here and opens that topic's entry
+    $('#j-pick', main).onchange = e => { clearTimeout(t); save(); store.set('jprompt:' + today, e.target.value); location.hash = `#/journal/${encodeURIComponent(today + '~' + e.target.value)}`; };
     $('.journal', main).addEventListener('click', e => {
       const b = e.target.closest('.j-ins'); if (!b) return;
       const s = b.dataset.ins, pos = ta.selectionStart ?? ta.value.length, before = ta.value.slice(0, pos), after = ta.value.slice(pos);
