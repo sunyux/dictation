@@ -527,16 +527,18 @@
   /* ---------- accent bar: typewriter keys, number shortcuts and e/ → é composing ---------- */
   const ACCENTS = {
     keys: ['é', 'è', 'ê', 'ë', 'à', 'â', 'ù', 'û', 'ç', 'œ'],
+    extra: ["'", 'î', 'ô'],   // no number shortcut; the apostrophe is missing on some phone keyboards
     // composing pairs (only in single-word answers, where "donc," etc. can't occur)
     pairs: { 'e/': 'é', 'e\\': 'è', 'e^': 'ê', 'e"': 'ë', 'a\\': 'à', 'a^': 'â', 'u\\': 'ù', 'u^': 'û', 'c,': 'ç', 'oe': 'œ', 'i^': 'î', 'o^': 'ô' },
     el: null, target: null,
     // which inputs get the bar; "word" ones also get the number keys and composing
-    fits: el => el && el.matches && el.matches('.answer-in[lang="fr"], .cloze-in, .full-in, #typed'),
+    fits: el => el && el.matches && el.matches('.answer-in[lang="fr"], .cloze-in, .full-in, #typed, #j-text'),
     isWord: el => el.matches('input.answer-in[lang="fr"], .cloze-in'),
     init() {
       const bar = this.el = document.createElement('div');
       bar.className = 'acc-bar'; bar.hidden = true; bar.setAttribute('role', 'toolbar'); bar.setAttribute('aria-label', 'accents');
-      bar.innerHTML = this.keys.map((k, i) => `<button type="button" class="acc-key" data-k="${k}" tabindex="-1"><small>${(i + 1) % 10}</small>${k}</button>`).join('');
+      bar.innerHTML = this.keys.map((k, i) => `<button type="button" class="acc-key" data-k="${k}" tabindex="-1"><small>${(i + 1) % 10}</small>${k}</button>`).join('')
+        + this.extra.map(k => `<button type="button" class="acc-key" data-k="${k}" tabindex="-1" aria-label="${k === "'" ? 'apostrophe' : k}">${k}</button>`).join('');
       document.body.appendChild(bar);
       // keep focus in the input when a key is pressed
       bar.addEventListener('pointerdown', e => e.preventDefault());
