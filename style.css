@@ -596,3 +596,10 @@ html.tw #j-text { font-family: "Special Elite", monospace !important; font-size:
 .ex-line .ex-tr { display: block; font: 14px/1.5 var(--zh); color: var(--ink-2); margin-top: 2px; }
 .nlf-album { margin-top: 18px; }
 .cover.nlf .c-num { letter-spacing: .02em; }
+/* verb practice: whole-table mode */
+.vp-table { display: grid; gap: 8px; margin: 14px 0; }
+.vp-row { display: grid; grid-template-columns: 110px 1fr; gap: 10px; align-items: center; }
+.vp-row .cp { color: var(--ink-2); font-family: var(--serif); text-align: right; }
+.vp-row .answer-in { margin: 0; }
+.vp-row .cloze-fix { grid-column: 2; }
+@media (max-width: 560px) { .vp-row { grid-template-columns: 84px 1fr; } }

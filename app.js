@@ -730,6 +730,7 @@
     main.innerHTML = `
       <p class="kicker" lang="fr">Les verbes</p>
       <h1 style="font-size:44px">${bi('动词词典', 'Verb dictionary')}</h1>
+      <div class="toolbar"><a class="btn" href="#/verbes/practice">${bi('动词练习 · 动词错题本', 'Verb practice · mistake book')}${VSRS.due().length ? ` (${VSRS.due().length})` : ''}</a></div>
       <p class="hint-text" style="margin-top:8px">${bi('现在时、复合过去时、未完成过去时、简单将来时。蓝色是规则词尾，红色是特殊变化；点任意一行听发音。', 'Present, passé composé, imparfait and futur simple. Blue = regular ending, red = special form; tap any line to hear it.')}</p>
       <div class="verb-page">
         <aside class="verb-list">
@@ -769,6 +770,174 @@
     $$('[data-kind]', main).forEach(b => b.onclick = () => { kind = b.dataset.kind; store.set('vdfilter', kind); $$('[data-kind]', main).forEach(x => x.setAttribute('aria-pressed', x === b)); apply(); });
     apply();
     show(sel);
+  }
+
+  /* ---------- 动词练习 + 动词错题本: own mistake book for conjugations (same 1·2·4·7·15 day schedule) ---------- */
+  const VSRS = {
+    all() { return store.get('vsrs', {}); },
+    save(db) { store.set('vsrs', db); },
+    id: q => `${q.verb}|${q.t}|${q.i}`,
+    miss(q, typed = '') {
+      const db = this.all(), id = this.id(q), old = db[id] || { right: 0, wrong: 0, first: dayStr() };
+      let tries = old.tries || [];
+      const t = String(typed || '').trim();
+      if (t && !tries.some(x => x.t === t)) tries = [{ t, d: dayStr() }, ...tries].slice(0, 3);
+      db[id] = { ...old, verb: q.verb, t: q.t, i: q.i, box: 0, due: addDays(1), wrong: old.wrong + 1, last: dayStr(), done: false, tries };
+      this.save(db);
+    },
+    // a right answer only moves the schedule on when the item was due
+    hit(q) {
+      const db = this.all(), e = db[this.id(q)];
+      if (!e || e.done || e.due > dayStr()) return;
+      e.right++; e.last = dayStr(); e.box = Math.min(e.box + 1, GAPS.length);
+      if (e.box >= GAPS.length) e.done = true; else e.due = addDays(GAPS[e.box]);
+      this.save(db);
+    },
+    remove(id) { const db = this.all(); delete db[id]; this.save(db); },
+    active() { return Object.entries(this.all()).filter(([, e]) => !e.done).map(([id, e]) => ({ id, ...e })); },
+    due() { const t = dayStr(); return this.active().filter(e => e.due <= t); },
+  };
+  const VP_PERSON = ["je / j'", 'tu', 'il / elle / on', 'nous', 'vous', 'ils / elles'];
+  const vpLine = q => { const c = window.VERBDICT.get(q.verb); return c ? c.lines[q.t][q.i] : ''; };
+  const vpSay = line => line.replace('il/elle/on', 'il').replace('ils/elles', 'ils');
+  // "il/elle/on est" → il est · elle est · on est · est
+  function vpAccept(line) {
+    const m = line.match(/^(je |j'|tu |il\/elle\/on |nous |vous |ils\/elles )(.*)$/), subj = m ? m[1] : '', rest = m ? m[2] : line;
+    const subs = subj === 'il/elle/on ' ? ['il ', 'elle ', 'on '] : subj === 'ils/elles ' ? ['ils ', 'elles '] : [subj];
+    return [...subs.map(s => s + rest), rest];
+  }
+  function vpCheck(val, line) {
+    const a = norm(val); if (!a) return 'empty';
+    const acc = vpAccept(line).map(norm);
+    if (acc.includes(a)) return 'ok';
+    if (acc.map(strip).includes(strip(a))) return settings.lenient ? 'ok' : 'accent';
+    return 'bad';
+  }
+  const vpTense = id => window.VERBDICT.TENSES.find(x => x.id === id);
+  const vpMean = c => L() === 'en' ? c.en : c.zh;
+  const vpDefaults = { verbs: ['être', 'avoir', 'faire'], tenses: ['present'], mode: 'one' };
+  const vpPref = () => ({ ...vpDefaults, ...store.get('vprefs', {}) });
+
+  function viewVerbPractice() {
+    const D = window.VERBDICT;
+    if (!D) { main.innerHTML = '<p class="notice">动词词典没有加载。</p>'; return; }
+    document.title = bi('动词练习', 'Verb practice') + bi(' · 你好法语', ' · Hello French');
+    let pref = vpPref();
+    const irregular = D.list().filter(v => { const c = D.get(v); return c.special.present + c.special.pc + c.special.imparfait + c.special.futur > 0; })
+      .sort((a, b) => (['être', 'avoir', 'faire', 'aller'].indexOf(b) + 1) - (['être', 'avoir', 'faire', 'aller'].indexOf(a) + 1) || a.localeCompare(b, 'fr'));
+    const draw = () => {
+      const act = VSRS.active(), due = VSRS.due(), doneN = Object.values(VSRS.all()).filter(e => e.done).length, today = dayStr();
+      const pickN = pref.verbs.length * pref.tenses.length * 6;
+      main.innerHTML = `
+        <p class="kicker" lang="fr">Les verbes</p>
+        <h1 style="font-size:44px">${bi('动词练习', 'Verb practice')}</h1>
+        <div class="toolbar"><a class="btn ghost small" href="#/verbes">‹ ${bi('动词词典', 'Verb dictionary')}</a></div>
+        <p class="hint-text" style="margin-top:8px">${bi('写错的变位会进「动词错题本」：第二天出现，答对后隔 2、4、7、15 天再复习，连续答对 5 次就算掌握。', 'Wrong forms go to the verb mistake book: back tomorrow, then after 2, 4, 7 and 15 days; 5 right answers in a row and it is learned.')}</p>
+        <div class="review-stats">
+          <div><b>${due.length}</b><span>${bi('今天到期', 'Due today')}</span></div>
+          <div><b>${act.length}</b><span>${bi('还在复习', 'In review')}</span></div>
+          <div><b>${doneN}</b><span>${bi('已掌握', 'Learned')}</span></div>
+        </div>
+        <div class="toolbar">${due.length ? `<button class="btn" id="vp-due">${bi(`开始今天的复习（${due.length}）`, `Review today's mistakes (${due.length})`)}</button>` : `<span class="btn ghost" aria-disabled="true">${bi('今天没有要复习的', 'Nothing due today')}</span>`}
+          ${act.length && !due.length ? `<button class="btn ghost" id="vp-early">${bi('提前复习全部', 'Review all early')}</button>` : ''}</div>
+        <section class="unit"><div class="unit-title"><h2>${bi('自己选着练', 'Choose what to practise')}</h2></div>
+          <p class="kbd" style="margin:0 0 6px">${bi('动词', 'Verbs')}</p>
+          <div class="modes"><button class="mode" data-set="efa" aria-pressed="${pref.verbs.join() === 'être,avoir,faire'}">être · avoir · faire</button>
+            <button class="mode" data-set="irr" aria-pressed="${pref.verbs.length === irregular.length}">${bi('全部不规则', 'All irregular')} ${irregular.length}</button></div>
+          <div class="modes">${irregular.map(v => `<button class="mode" data-v="${esc(v)}" aria-pressed="${pref.verbs.includes(v)}" lang="fr">${esc(v)}</button>`).join('')}</div>
+          <p class="kbd" style="margin:10px 0 6px">${bi('时态', 'Tenses')}</p>
+          <div class="modes">${D.TENSES.map(t => `<button class="mode" data-t="${t.id}" aria-pressed="${pref.tenses.includes(t.id)}">${esc(t.fr)} <small>${esc(bi(t.zh, t.en))}</small></button>`).join('')}</div>
+          <p class="kbd" style="margin:10px 0 6px">${bi('方式', 'Style')}</p>
+          <div class="modes"><button class="mode" data-m="one" aria-pressed="${pref.mode === 'one'}">${bi('一题一题写', 'One form at a time')}</button>
+            <button class="mode" data-m="table" aria-pressed="${pref.mode === 'table'}">${bi('整张变位表', 'Whole table')}</button></div>
+          <div class="toolbar" style="margin-top:14px"><button class="btn" id="vp-go" ${pickN ? '' : 'disabled'}>${bi('开始练习', 'Start')}${pickN ? ` · ${pref.mode === 'one' ? pickN : pref.verbs.length * pref.tenses.length}` : ''}</button></div>
+        </section>
+        <section class="unit"><div class="unit-title"><h2>${bi('动词错题本', 'Verb mistake book')}</h2><span>${act.length}</span></div>
+          ${act.length ? act.sort((a, b) => a.due.localeCompare(b.due)).map(e => { const line = vpLine(e), t = vpTense(e.t); return `<div class="err-row">
+            <span class="err-kind">${esc(t.fr)}</span>
+            <div class="err-body"><div lang="fr">${playBtn(vpSay(line))} ${esc(line)}</div><div class="lzh"><span lang="fr">${esc(e.verb)}</span> · ${esc(VP_PERSON[e.i])} · ${esc(vpMean(D.get(e.verb)))}</div>${(e.tries || []).length ? `<p class="err-tries">${bi('写成过', 'You wrote')}${CL()}${e.tries.map(x => `<s lang="fr">${esc(x.t)}</s>`).join(' ')}</p>` : ''}</div>
+            <span class="err-meta">${bi('错', 'Missed')} ${e.wrong}<br>${e.due <= today ? `<b class="w-miss">&nbsp;${bi('今天', 'Today')}&nbsp;</b>` : e.due.slice(5).replace('-', '/')}</span>
+            <button class="err-del" data-id="${esc(e.id)}" title="${bi('移出错题本', 'Remove')}" aria-label="${bi('移出错题本', 'Remove')}">×</button></div>`; }).join('')
+            : `<p class="notice">${bi('动词错题本还是空的。练几遍，写错的变位会自动出现在这里。', 'No verb mistakes yet. Practise a few rounds — wrong forms appear here automatically.')}</p>`}</section>`;
+      const save = () => store.set('vprefs', pref);
+      const toggle = (arr, x) => arr.includes(x) ? arr.filter(y => y !== x) : [...arr, x];
+      $$('[data-v]', main).forEach(b => b.onclick = () => { pref.verbs = toggle(pref.verbs, b.dataset.v); save(); draw(); });
+      $$('[data-t]', main).forEach(b => b.onclick = () => { pref.tenses = toggle(pref.tenses, b.dataset.t); save(); draw(); });
+      $$('[data-m]', main).forEach(b => b.onclick = () => { pref.mode = b.dataset.m; save(); draw(); });
+      $$('[data-set]', main).forEach(b => b.onclick = () => { pref.verbs = b.dataset.set === 'efa' ? ['être', 'avoir', 'faire'] : irregular.slice(); save(); draw(); });
+      $$('.err-del', main).forEach(b => b.onclick = () => { VSRS.remove(b.dataset.id); draw(); });
+      const run = (qs, title) => { main.innerHTML = `<div class="toolbar"><button class="btn ghost small" id="vp-back">‹ ${bi('返回', 'Back')}</button></div><div id="drill"></div>`; $('#vp-back', main).onclick = draw; vpDrill($('#drill', main), qs, title, draw); };
+      if ($('#vp-due', main)) $('#vp-due', main).onclick = () => run(shuffle(due.map(e => ({ verb: e.verb, t: e.t, i: e.i }))), 'review');
+      if ($('#vp-early', main)) $('#vp-early', main).onclick = () => run(shuffle(act.map(e => ({ verb: e.verb, t: e.t, i: e.i }))), 'review');
+      $('#vp-go', main).onclick = () => {
+        if (pref.mode === 'table') return run(shuffle(pref.verbs.flatMap(v => pref.tenses.map(t => ({ verb: v, t })))), 'table');
+        run(shuffle(pref.verbs.flatMap(v => pref.tenses.flatMap(t => [0, 1, 2, 3, 4, 5].map(i => ({ verb: v, t, i }))))), 'one');
+      };
+    };
+    draw();
+  }
+
+  // one form per question, or (kind 'table') a whole table per question
+  function vpDrill(box, queue, kind, back) {
+    const D = window.VERBDICT, table = kind === 'table';
+    let i = 0, right = 0, answered = false, wrong = [];
+    const head = q => `<span lang="fr">${esc(q.verb)}</span> · ${esc(bi(vpTense(q.t).zh, vpTense(q.t).en))}`;
+    const draw = () => {
+      if (i >= queue.length) {
+        box.innerHTML = `<div class="drill summary"><p class="kicker" lang="fr">Bilan</p><div class="score">${right} / ${queue.length}</div>
+          ${wrong.length ? `<ul>${wrong.map(q => `<li><span lang="fr">${table ? esc(q.verb) : esc(vpLine(q))}</span><span class="w-zh">${esc(vpTense(q.t).fr)}</span></li>`).join('')}</ul>` : `<p>${bi('全部正确，很棒。', 'All right — well done.')}</p>`}
+          <div class="drill-actions" style="justify-content:center">${wrong.length ? `<button class="btn" id="again-wrong">${bi('只练错的', 'Only the wrong ones')}</button>` : ''}<button class="btn ghost" id="vp-end">${bi('回到动词练习', 'Back to verb practice')}</button></div></div>`;
+        $('#vp-end', box).onclick = back;
+        if (wrong.length) $('#again-wrong', box).onclick = () => vpDrill(box, shuffle(wrong), kind, back);
+        return;
+      }
+      const q = queue[i], c = D.get(q.verb); answered = false;
+      if (table) {
+        const lines = c.lines[q.t];
+        box.innerHTML = `<div class="drill"><div class="count">${i + 1} / ${queue.length}</div><div class="bar"><i style="width:${i / queue.length * 100}%"></i></div>
+          <div class="prompt"><div class="pzh">${head(q)}</div><div class="ppos">${esc(vpMean(c))}</div></div>
+          <div class="vp-table">${lines.map((l, k) => `<label class="vp-row"><span class="cp">${esc(VP_PERSON[k])}</span><input class="answer-in" data-k="${k}" lang="fr" autocomplete="off" autocapitalize="off" spellcheck="false"></label>`).join('')}</div>
+          <div class="drill-actions"><button class="btn" id="vp-check">${bi('检查', 'Check')}</button><button class="btn ghost small" id="skip">${bi('不会，看答案', 'Show answers')}</button></div><div id="fb"></div></div>`;
+        const ins = $$('.vp-table input', box); ins[0].focus();
+        ins.forEach((inp, k) => inp.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); answered ? (i++, draw()) : (ins[k + 1] ? ins[k + 1].focus() : check()); } });
+        const check = (give = false) => {
+          if (answered) { i++; draw(); return; }
+          answered = true; let good = 0;
+          ins.forEach((inp, k) => {
+            const line = c.lines[q.t][k], r = give ? 'bad' : vpCheck(inp.value, line), qq = { verb: q.verb, t: q.t, i: k };
+            inp.classList.add(r === 'ok' ? 'ok' : r === 'accent' ? 'accent' : 'bad'); inp.readOnly = true;
+            if (r === 'ok') { good++; VSRS.hit(qq); } else { VSRS.miss(qq, give ? '' : inp.value); inp.insertAdjacentHTML('afterend', `<span class="cloze-fix" lang="fr">${esc(line)}</span>`); }
+          });
+          if (good === 6) right++; else wrong.push(q);
+          XP.gain(good, bi('变位正确', 'Conjugation right'));
+          TTS.say(c.lines[q.t].map(vpSay).join(', '));
+          $('#vp-check', box).textContent = bi('下一个', 'Next') + ' ›';
+        };
+        $('#vp-check', box).onclick = () => check(); $('#skip', box).onclick = () => check(true);
+        return;
+      }
+      const line = vpLine(q);
+      box.innerHTML = `<div class="drill"><div class="count">${i + 1} / ${queue.length}</div><div class="bar"><i style="width:${i / queue.length * 100}%"></i></div>
+        <div class="prompt"><div class="pzh" lang="fr" style="font-family:var(--serif)">${esc(q.verb)} · <b>${esc(VP_PERSON[q.i])}</b></div><div class="ppos">${esc(vpMean(c))} · ${esc(vpTense(q.t).fr)} <small>${esc(bi(vpTense(q.t).zh, vpTense(q.t).en))}</small></div></div>
+        <input class="answer-in" id="ans" lang="fr" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="${bi('例如：nous parlons', 'e.g. nous parlons')}">
+        <div class="drill-actions"><button class="btn ghost small" id="skip">${bi('不会，看答案', 'Show answer')}</button><span class="spacer"></span><span class="kbd"><kbd>Enter</kbd> ${bi('检查 / 下一个', 'check / next')}</span></div>
+        <div id="fb"></div></div>`;
+      const inp = $('#ans', box); inp.focus();
+      const check = (give = false) => {
+        const val = inp.value; if (!val.trim() && !give) return;
+        answered = true;
+        const r = give ? 'bad' : vpCheck(val, line), good = r === 'ok';
+        if (good) { right++; VSRS.hit(q); XP.gain(1, bi('变位正确', 'Conjugation right')); } else { VSRS.miss(q, give ? '' : val); wrong.push(q); }
+        $('#fb', box).innerHTML = `<div class="feedback ${good ? 'ok' : r === 'accent' ? 'accent' : 'bad'}"><span class="lab">${good ? bi('正确', 'Right') : r === 'accent' ? bi('差一点：注意重音符号', 'Almost — check the accents') : bi('正确答案', 'The answer')}</span>
+          <div class="ans" lang="fr">${playBtn(vpSay(line))} ${esc(line)}</div>${!good && !give && val.trim() ? dysCompare(line, val.trim()) : ''}
+          <div class="tip"><span class="tip-lab">${bi('记忆提示', 'Tip')}</span>${verbTip(q.verb)}</div></div>`;
+        TTS.say(vpSay(line));
+        if (good) setTimeout(() => { if (answered && queue[i] === q) { i++; draw(); } }, 1400);
+      };
+      inp.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); answered ? (i++, draw()) : check(); } };
+      $('#skip', box).onclick = () => check(true);
+    };
+    draw();
   }
 
   /* ---------- 《法语发音》: the pronunciation book ---------- */
@@ -2063,6 +2232,7 @@
       crumbs.innerHTML = `<a href="#/sons">${esc(SB().title)}</a>`;
       return parts[1] ? viewSoundLesson(parts[1], parts[2] || 'learn') : viewSounds();
     }
+    if (parts[0] === 'verbes' && parts[1] === 'practice') { crumbs.innerHTML = `<span>${bi('动词练习', 'Verb practice')}</span>`; return viewVerbPractice(); }
     if (parts[0] === 'verbes') { crumbs.innerHTML = `<span>${bi('动词词典', 'Verb dictionary')}</span>`; return viewVerbs(decodeURIComponent(parts[1] || '')); }
     if (parts[0] === 'me') { crumbs.innerHTML = `<span>${bi('我的打卡与邮册', 'My streak & stamp album')}</span>`; return viewMe(); }
     if (parts[0] === 'review') { crumbs.innerHTML = `<span>${bi('错题本 · 每日复习', 'Mistake book · daily review')}</span>`; return viewReview(parts[1]); }
@@ -2124,6 +2294,7 @@
       <p class="kicker" lang="fr">Révision du jour</p>
       <h1 style="font-size:44px">错题本</h1>
       <p class="hint-text" style="margin-top:8px">练习里写错、用了提示或背漏的内容会自动记下来。第二天出现在这里；答对后隔 2、4、7、15 天再复习，连续答对 5 次就算掌握。答错会重新从明天开始。</p>
+      <div class="toolbar"><a class="btn ghost small" href="#/verbes/practice">${bi('动词错题本', 'Verb mistake book')}${VSRS.due().length ? ` · ${VSRS.due().length}` : ''} ›</a></div>
       <div class="review-stats">
         <div><b>${due.length}</b><span>今天到期</span></div>
         <div><b>${active.length}</b><span>还在复习</span></div>
