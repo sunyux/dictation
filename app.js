@@ -804,7 +804,7 @@
   function vpAccept(line) {
     const m = line.match(/^(je |j'|tu |il\/elle\/on |nous |vous |ils\/elles )(.*)$/), subj = m ? m[1] : '', rest = m ? m[2] : line;
     const subs = subj === 'il/elle/on ' ? ['il ', 'elle ', 'on '] : subj === 'ils/elles ' ? ['ils ', 'elles '] : [subj];
-    return [...subs.map(s => s + rest), rest];
+    return [...subs.map(s => s + rest), rest, line];   // `line` itself too: the answer shown reads "il/elle/on est"
   }
   function vpCheck(val, line) {
     const a = norm(val); if (!a) return 'empty';
@@ -899,19 +899,45 @@
           <div class="vp-table">${lines.map((l, k) => `<label class="vp-row"><span class="cp">${esc(VP_PERSON[k])}</span><input class="answer-in" data-k="${k}" lang="fr" autocomplete="off" autocapitalize="off" spellcheck="false"></label>`).join('')}</div>
           <div class="drill-actions"><button class="btn" id="vp-check">${bi('检查', 'Check')}</button><button class="btn ghost small" id="skip">${bi('不会，看答案', 'Show answers')}</button></div><div id="fb"></div></div>`;
         const ins = $$('.vp-table input', box); ins[0].focus();
-        ins.forEach((inp, k) => inp.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); answered ? (i++, draw()) : (ins[k + 1] ? ins[k + 1].focus() : check()); } });
+        let stage = 'ask', pend = [];
+        ins.forEach((inp, k) => inp.onkeydown = e => {
+          if (e.key !== 'Enter') return;
+          e.preventDefault();
+          if (stage === 'done') { i++; draw(); return; }
+          const nxt = stage === 'copy' ? pend.find(x => x.compareDocumentPosition(inp) & Node.DOCUMENT_POSITION_PRECEDING) : ins[k + 1];
+          nxt ? nxt.focus() : check();
+        });
+        const strictOk = (val, line) => vpAccept(line).map(norm).includes(norm(val));
         const check = (give = false) => {
-          if (answered) { i++; draw(); return; }
-          answered = true; let good = 0;
+          if (stage === 'done') { i++; draw(); return; }
+          if (stage === 'copy') {
+            // wrong rows were cleared: each has to be copied right before going on
+            pend.forEach(inp => {
+              if (inp.readOnly) return;
+              if (strictOk(inp.value, c.lines[q.t][+inp.dataset.k])) { inp.classList.remove('bad', 'accent', 'shake'); inp.classList.add('ok', 'copied'); inp.readOnly = true; }
+              else { inp.classList.remove('shake'); void inp.offsetWidth; inp.classList.add('shake'); }
+            });
+            const left = pend.filter(x => !x.readOnly);
+            if (left.length) { left[0].focus(); return; }
+            stage = 'done'; $('#vp-check', box).textContent = bi('下一个', 'Next') + ' ›'; $('#skip', box).disabled = true;
+            return;
+          }
+          let good = 0;
           ins.forEach((inp, k) => {
             const line = c.lines[q.t][k], r = give ? 'bad' : vpCheck(inp.value, line), qq = { verb: q.verb, t: q.t, i: k };
-            inp.classList.add(r === 'ok' ? 'ok' : r === 'accent' ? 'accent' : 'bad'); inp.readOnly = true;
-            if (r === 'ok') { good++; VSRS.hit(qq); } else { VSRS.miss(qq, give ? '' : inp.value); inp.insertAdjacentHTML('afterend', `<span class="cloze-fix" lang="fr">${esc(line)}</span>`); }
+            if (r === 'ok') { good++; VSRS.hit(qq); inp.classList.add('ok'); inp.readOnly = true; }
+            else { VSRS.miss(qq, give ? '' : inp.value); inp.classList.add(r === 'accent' ? 'accent' : 'bad'); inp.insertAdjacentHTML('afterend', `<span class="cloze-fix" lang="fr">${esc(line)}</span>`); pend.push(inp); }
           });
           if (good === 6) right++; else wrong.push(q);
           XP.gain(good, bi('变位正确', 'Conjugation right'));
           TTS.say(c.lines[q.t].map(vpSay).join(', '));
-          $('#vp-check', box).textContent = bi('下一个', 'Next') + ' ›';
+          if (!pend.length) { stage = 'done'; $('#vp-check', box).textContent = bi('下一个', 'Next') + ' ›'; return; }
+          // clear the wrong spellings; the right form has to be typed in before moving on
+          stage = 'copy'; $('#skip', box).disabled = true;
+          pend.forEach(inp => { inp.value = ''; inp.placeholder = bi('抄一遍正确答案…', 'Copy the right answer…'); });
+          pend[0].focus();
+          $('#vp-check', box).textContent = bi('检查抄写', 'Check my copies');
+          $('#fb', box).innerHTML = `<p class="copy-note">${bi('红色的写错了：照着旁边的正确答案，把它们抄一遍才能继续', 'The red ones were wrong — copy the right forms next to them to go on')}</p>`;
         };
         $('#vp-check', box).onclick = () => check(); $('#skip', box).onclick = () => check(true);
         return;
@@ -923,6 +949,13 @@
         <div class="drill-actions"><button class="btn ghost small" id="skip">${bi('不会，看答案', 'Show answer')}</button><span class="spacer"></span><span class="kbd"><kbd>Enter</kbd> ${bi('检查 / 下一个', 'check / next')}</span></div>
         <div id="fb"></div></div>`;
       const inp = $('#ans', box); inp.focus();
+      let stage = 'ask';
+      // after a mistake: copy the right answer before moving on
+      const copyCheck = () => {
+        if (!vpAccept(line).map(norm).includes(norm(inp.value))) { inp.classList.remove('shake'); void inp.offsetWidth; inp.classList.add('shake'); return; }
+        stage = 'done'; answered = true; inp.classList.add('copied'); inp.readOnly = true;
+        const n = $('#copy-note', box); if (n) n.innerHTML = `✓ ${bi('好，就是这个样子。按 Enter 继续', 'That\'s the one. Press Enter to go on')}`;
+      };
       const check = (give = false) => {
         const val = inp.value; if (!val.trim() && !give) return;
         answered = true;
@@ -930,11 +963,13 @@
         if (good) { right++; VSRS.hit(q); XP.gain(1, bi('变位正确', 'Conjugation right')); } else { VSRS.miss(q, give ? '' : val); wrong.push(q); }
         $('#fb', box).innerHTML = `<div class="feedback ${good ? 'ok' : r === 'accent' ? 'accent' : 'bad'}"><span class="lab">${good ? bi('正确', 'Right') : r === 'accent' ? bi('差一点：注意重音符号', 'Almost — check the accents') : bi('正确答案', 'The answer')}</span>
           <div class="ans" lang="fr">${playBtn(vpSay(line))} ${esc(line)}</div>${!good && !give && val.trim() ? dysCompare(line, val.trim()) : ''}
-          <div class="tip"><span class="tip-lab">${bi('记忆提示', 'Tip')}</span>${verbTip(q.verb)}</div></div>`;
+          <div class="tip"><span class="tip-lab">${bi('记忆提示', 'Tip')}</span>${verbTip(q.verb)}</div>
+          ${good ? '' : `<p class="copy-note" id="copy-note">${bi('照着上面的正确答案，在输入框里抄一遍才能继续', 'Copy the right answer above into the box to go on')}</p>`}</div>`;
         TTS.say(vpSay(line));
         if (good) setTimeout(() => { if (answered && queue[i] === q) { i++; draw(); } }, 1400);
+        else { stage = 'copy'; answered = false; inp.value = ''; inp.placeholder = bi('抄一遍正确答案…', 'Copy the right answer…'); inp.focus(); $('#skip', box).disabled = true; }
       };
-      inp.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); answered ? (i++, draw()) : check(); } };
+      inp.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); if (stage === 'copy') copyCheck(); else answered ? (i++, draw()) : check(); } };
       $('#skip', box).onclick = () => check(true);
     };
     draw();
