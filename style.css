@@ -603,3 +603,17 @@ html.tw #j-text { font-family: "Special Elite", monospace !important; font-size:
 .vp-row .answer-in { margin: 0; }
 .vp-row .cloze-fix { grid-column: 2; }
 @media (max-width: 560px) { .vp-row { grid-template-columns: 84px 1fr; } }
+
+/* flashcards */
+.fc-card { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 26px 22px; min-height: 180px; margin: 14px 0; cursor: pointer; text-align: center; display: grid; gap: 14px; align-content: center; }
+.fc-card .fc-mean { font-size: 30px; }
+.fc-fr { font: 600 34px/1.3 var(--serif); }
+.fc-back { border-top: 1px dashed var(--line); padding-top: 16px; display: grid; gap: 12px; justify-items: center; }
+.fc-back .tip, .fc-back .ex-line { width: 100%; text-align: left; }
+.fc-flip { justify-content: center; }
+.fc-rate { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.fc-rate .btn { display: grid; gap: 2px; padding: 10px 6px; text-align: center; position: relative; }
+.fc-rate .btn small { font-size: 12px; opacity: .75; }
+.fc-rate .btn kbd { position: absolute; top: 3px; left: 5px; font: 9px "Courier New", monospace; opacity: .5; }
+.fc-r0 { border-color: var(--red); } .fc-r0 b { color: var(--red); }
+@media (max-width: 560px) { .fc-rate { grid-template-columns: repeat(2, 1fr); } .fc-fr { font-size: 28px; } }

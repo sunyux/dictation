@@ -772,6 +772,117 @@
     show(sel);
   }
 
+  /* ---------- 闪卡: flashcards on a spaced schedule (again today · 1 · 3 · 7 · 14 · 30 days), for every word, not only mistakes ---------- */
+  const FC = {
+    GAP: [0, 1, 3, 7, 14, 30],
+    all() { return store.get('fc', {}); },
+    id: (b, n, fr) => `${b}|${n}|${fr}`,
+    // r: 0 forgot · 1 hard · 2 good · 3 easy
+    next(e, r) {
+      const b = e ? e.b : 0, top = this.GAP.length - 1;
+      const nb = r === 0 ? 0 : r === 1 ? Math.max(1, b - 1) : Math.min(top, b + (r === 3 ? 2 : 1) + (e ? 0 : r === 3 ? 1 : 0));
+      return { b: nb, d: nb ? addDays(this.GAP[nb]) : dayStr(), n: (e ? e.n : 0) + 1 };
+    },
+    rate(id, r) { const db = this.all(); db[id] = this.next(db[id], r); store.set('fc', db); },
+    days: (e, r) => FC.GAP[FC.next(e, r).b],
+    due() { const t = dayStr(); return Object.entries(this.all()).filter(([, e]) => e.d <= t).map(([id]) => id); },
+    // cards of one leçon: what is due first, then new words, at most `cap` per round
+    lessonItems(book, lecon, cap = 20) {
+      const db = this.all(), t = dayStr(), mk = v => ({ id: this.id(book.id, lecon.n, v.fr), book: book.id, n: lecon.n, v });
+      const due = lecon.vocab.filter(v => db[this.id(book.id, lecon.n, v.fr)] && db[this.id(book.id, lecon.n, v.fr)].d <= t).map(mk);
+      const fresh = lecon.vocab.filter(v => !db[this.id(book.id, lecon.n, v.fr)]).map(mk);
+      return { due, fresh, round: [...shuffle(due), ...fresh].slice(0, cap) };
+    },
+  };
+  const fcWhen = (e, r) => { const d = FC.days(e, r); return d ? bi(`${d} 天后`, d === 1 ? 'in 1 day' : `in ${d} days`) : bi('今天再来', 'again today'); };
+
+  function fcRun(box, items, onEnd) {
+    const dir = () => store.get('fcdir', 'zh2fr');
+    let queue = items.slice(), i = 0, flipped = false;
+    const tally = [0, 0, 0, 0];
+    const draw = () => {
+      if (i >= queue.length) {
+        const n = tally.reduce((a, b) => a + b, 0);
+        box.innerHTML = `<div class="drill summary"><p class="kicker" lang="fr">Bilan</p><div class="score">${n}</div>
+          <p>${bi('张卡片过了一遍', 'cards done')} · ${bi('忘了', 'Forgot')} ${tally[0]} · ${bi('模糊', 'Hard')} ${tally[1]} · ${bi('记得', 'Good')} ${tally[2]} · ${bi('很熟', 'Easy')} ${tally[3]}</p>
+          <p class="hint-text">${bi('「忘了」的卡片今天稍后还会再出现；其他的会按间隔再来。', 'Cards you forgot come back later today; the others return after their interval.')}</p>
+          <div class="drill-actions" style="justify-content:center"><button class="btn" id="fc-end">${bi('完成', 'Done')}</button></div></div>`;
+        $('#fc-end', box).onclick = onEnd;
+        return;
+      }
+      const it = queue[i], v = it.v, d = dir(), e = FC.all()[it.id]; flipped = false;
+      const fr = `<div class="fc-fr${gx(v.pos)}" lang="fr">${playBtn(forms(v.fr).say, 'big')} ${artHint(v)}<b>${frHTML(v.fr)}</b></div>`;
+      const mean = `<div class="pmean fc-mean">${MEAN(v)}</div><div class="ppos"><span class="pos ${gender(v.pos) ? 'g-' + gender(v.pos) : ''}">${esc(v.pos)}</span>${v.g ? ' · ' + esc(tr(v.g)) : ''}</div>`;
+      const front = d === 'zh2fr' ? mean : d === 'fr2zh' ? fr : `<div class="fc-listen">${playBtn(forms(v.fr).say, 'big')}<div class="ppos">${bi('听一听，想想是哪个词', 'Listen — which word is it?')}</div></div>`;
+      const back = (d === 'zh2fr' ? fr : d === 'fr2zh' ? mean : fr + mean) + tipBox(wordTip(it.n, v)) + exBox(v)
+        + (hasDeep(v.fr) ? `<button class="deep-btn lc-deep" data-deep="${esc(v.fr)}">${bi('看详解', 'In-depth card')}</button>` : '');
+      box.innerHTML = `<div class="drill fc">
+        <div class="count">${i + 1} / ${queue.length}</div><div class="bar"><i style="width:${i / queue.length * 100}%"></i></div>
+        <div class="fc-card" id="fc-card" tabindex="0"><div class="fc-front">${front}</div>
+          <div class="fc-back" id="fc-back" hidden>${back}</div></div>
+        <div class="toolbar fc-flip"><button class="btn" id="fc-show">${bi('看答案', 'Show answer')} <kbd>Space</kbd></button></div>
+        <div class="fc-rate" id="fc-rate" hidden>${[0, 1, 2, 3].map(r => `<button class="btn fc-r${r}" data-r="${r}"><b>${[bi('忘了', 'Forgot'), bi('模糊', 'Hard'), bi('记得', 'Good'), bi('很熟', 'Easy')][r]}</b><small>${fcWhen(e, r)}</small><kbd>${r + 1}</kbd></button>`).join('')}</div>
+        <div class="kbd" style="margin-top:12px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">${bi('卡片方向', 'Direction')}：
+          ${[['zh2fr', bi('意思 → 法语', 'Meaning → French')], ['fr2zh', bi('法语 → 意思', 'French → meaning')], ['listen', bi('听音 → 法语', 'Sound → French')]].map(([k, l]) => `<button class="mode" data-d="${k}" aria-pressed="${d === k}">${l}</button>`).join('')}</div></div>`;
+      $$('[data-d]', box).forEach(b => b.onclick = () => { store.set('fcdir', b.dataset.d); draw(); });
+      if (d !== 'zh2fr') setTimeout(() => TTS.say(forms(v.fr).say), 200);
+      const flip = () => {
+        if (flipped) return; flipped = true;
+        $('#fc-back', box).hidden = false; $('#fc-rate', box).hidden = false; $('.fc-flip', box).hidden = true;
+        if (d === 'zh2fr') TTS.say(forms(v.fr).say);
+      };
+      const rate = r => {
+        if (!flipped) return;
+        FC.rate(it.id, r); tally[r]++;
+        if (r >= 2) XP.gain(1, bi('闪卡', 'Flashcard'));
+        if (r === 0) queue.splice(Math.min(queue.length, i + 4), 0, it);   // comes back a few cards later
+        i++; draw();
+      };
+      $('#fc-show', box).onclick = flip;
+      $('#fc-card', box).onclick = e => { if (!e.target.closest('button')) flip(); };
+      $$('[data-r]', box).forEach(b => b.onclick = () => rate(+b.dataset.r));
+      box._fc = { flip, rate };
+    };
+    const key = e => {
+      if (!box.isConnected) return document.removeEventListener('keydown', key);
+      if (document.querySelector('.deep-ov') || /INPUT|TEXTAREA/.test(document.activeElement.tagName) || !box._fc || i >= queue.length) return;
+      if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); if (!flipped) box._fc.flip(); }
+      else if (/^[1-4]$/.test(e.key)) { e.preventDefault(); box._fc.rate(+e.key - 1); }
+    };
+    document.addEventListener('keydown', key);
+    draw();
+  }
+
+  // the flashcard tab of one leçon
+  function fcLesson(ctx, box) {
+    const { due, fresh, round } = FC.lessonItems(ctx.book, ctx.lecon);
+    const total = ctx.lecon.vocab.length, seen = total - fresh.length;
+    box.innerHTML = `<div class="drill summary"><p class="kicker" lang="fr">Cartes</p><h2 style="font-size:30px;margin-bottom:10px">${bi('单词闪卡', 'Word flashcards')}</h2>
+      <p class="hint-text" style="margin:0 0 14px">${bi('看到意思，想一想法语怎么说，再翻面对答案，按记得的程度点一个按钮：忘了的今天还会再出现，记得的隔 1、3、7、14、30 天再来。不用打字，一次 20 张。', 'See the meaning, try to recall the French, flip the card and press how well you knew it. Forgotten cards come back today; the rest return after 1, 3, 7, 14, 30 days. No typing — 20 cards a round.')}</p>
+      <p class="kbd">${bi(`这一课 ${total} 个词：已经学过 ${seen} 个，今天到期 ${due.length} 个，还没看过 ${fresh.length} 个`, `${total} words: ${seen} studied, ${due.length} due today, ${fresh.length} not seen yet`)}</p>
+      ${round.length ? `<button class="btn" id="fc-go">${bi(`开始（${round.length} 张）`, `Start (${round.length} cards)`)}</button>`
+        : `<p class="notice">${bi('今天这一课的闪卡都做完了 ✓', 'All of this leçon\'s cards are done for today ✓')}</p><button class="btn ghost" id="fc-all">${bi('不管日程，全部再过一遍', 'Go through all of them anyway')}</button>`}</div>`;
+    const go = items => fcRun(box, items, () => fcLesson(ctx, box));
+    if ($('#fc-go', box)) $('#fc-go', box).onclick = () => go(round);
+    if ($('#fc-all', box)) $('#fc-all', box).onclick = () => go(shuffle(ctx.lecon.vocab.map(v => ({ id: FC.id(ctx.book.id, ctx.lecon.n, v.fr), book: ctx.book.id, n: ctx.lecon.n, v }))).slice(0, 20));
+  }
+
+  // today's cards from every book
+  function viewCards() {
+    document.title = bi('今日闪卡', 'Flashcards today') + bi(' · 你好法语', ' · Hello French');
+    const ids = FC.due(), items = [];
+    for (const id of ids) {
+      const [bid, n, ...rest] = id.split('|'), fr = rest.join('|'), book = findBook(bid), f = book && findLecon(book, +n), v = f && f.lecon.vocab.find(x => x.fr === fr);
+      if (v) items.push({ id, book: bid, n: +n, v });
+    }
+    const round = shuffle(items).slice(0, 30), books = [...new Set(items.map(x => x.book))];
+    main.innerHTML = `<p class="kicker" lang="fr">Cartes</p><h1 style="font-size:44px">${bi('今日闪卡', 'Flashcards today')}</h1>
+      <div class="review-stats"><div><b>${items.length}</b><span>${bi('今天到期', 'Due today')}</span></div><div><b>${Object.keys(FC.all()).length}</b><span>${bi('学过的卡片', 'Cards studied')}</span></div></div>
+      <div id="drill">${round.length ? `<div class="toolbar"><button class="btn" id="fc-go">${bi(`开始（${round.length} 张）`, `Start (${round.length} cards)`)}</button></div>`
+        : `<p class="notice">${bi('今天没有到期的闪卡。到某一课的「词汇 → 闪卡」里开始新的一组吧。', 'No cards due today. Start a new round in any leçon under Vocabulary → Flashcards.')}</p>`}</div>`;
+    if (round.length) $('#fc-go', main).onclick = () => Promise.all(books.map(loadDeep)).then(() => fcRun($('#drill', main), round, viewCards));
+  }
+
   /* ---------- 动词练习 + 动词错题本: own mistake book for conjugations (same 1·2·4·7·15 day schedule) ---------- */
   const VSRS = {
     all() { return store.get('vsrs', {}); },
@@ -2270,6 +2381,7 @@
     if (parts[0] === 'verbes' && parts[1] === 'practice') { crumbs.innerHTML = `<span>${bi('动词练习', 'Verb practice')}</span>`; return viewVerbPractice(); }
     if (parts[0] === 'verbes') { crumbs.innerHTML = `<span>${bi('动词词典', 'Verb dictionary')}</span>`; return viewVerbs(decodeURIComponent(parts[1] || '')); }
     if (parts[0] === 'me') { crumbs.innerHTML = `<span>${bi('我的打卡与邮册', 'My streak & stamp album')}</span>`; return viewMe(); }
+    if (parts[0] === 'cards') { crumbs.innerHTML = `<span>${bi('今日闪卡', 'Flashcards today')}</span>`; return viewCards(); }
     if (parts[0] === 'review') { crumbs.innerHTML = `<span>${bi('错题本 · 每日复习', 'Mistake book · daily review')}</span>`; return viewReview(parts[1]); }
     const book = findBook(parts[0]);
     if (!book) { location.hash = '#/'; return; }
@@ -2594,7 +2706,7 @@
           <p class="kicker" lang="fr">Cahier de dictée</p>
           <h1>${bi('今天写哪一课？', 'Which leçon today?')}</h1>
           <p>${bi('照着默写讲义整理的。法语点一下就会读。', 'Built from your dictation handouts. Tap any French to hear it.')}</p>
-          <div class="toolbar"><a class="btn" href="#/${book.id}">${bi(`打开《${esc(book.title)}》`, `Open ${esc(book.title)}`)}</a><a class="btn ghost" href="#/sons">${bi(`打开《${esc(SB().title)}》`, `Open ${esc(SB().title)}`)}</a>${BOOKS.filter(b => b.flat).map(b => `<a class="btn ghost" href="#/${b.id}">${bi(`打开《${esc(b.zhTitle || b.title)}》`, `Open ${esc(b.title)}`)}</a>`).join('')}<a class="btn ghost" href="#/journal">写今天的法语日记</a></div>
+          <div class="toolbar"><a class="btn" href="#/${book.id}">${bi(`打开《${esc(book.title)}》`, `Open ${esc(book.title)}`)}</a><a class="btn ghost" href="#/sons">${bi(`打开《${esc(SB().title)}》`, `Open ${esc(SB().title)}`)}</a>${BOOKS.filter(b => b.flat).map(b => `<a class="btn ghost" href="#/${b.id}">${bi(`打开《${esc(b.zhTitle || b.title)}》`, `Open ${esc(b.title)}`)}</a>`).join('')}${FC.due().length ? `<a class="btn" href="#/cards">${bi('今日闪卡', 'Flashcards')} (${FC.due().length})</a>` : ''}<a class="btn ghost" href="#/journal">写今天的法语日记</a></div>
           ${backupNag()}${reviewBanner()}
         </div>
       </section>`;
@@ -2737,7 +2849,7 @@
     if (mode === 'listen') { mode = 'write'; store.set('vauto', true); }
     const { lecon, pane } = ctx;
     store.set('vmode', mode);
-    const head = modeBar([['list', bi('浏览', 'Browse')], ['learn', bi('先学一遍', 'Study first')], ['test', bi('首测', 'First test')], ['write', bi('默写', 'Dictation')], ['conj', bi('动词变位', 'Conjugation')]], mode);
+    const head = modeBar([['list', bi('浏览', 'Browse')], ['learn', bi('先学一遍', 'Study first')], ['cards', bi('闪卡', 'Flashcards')], ['test', bi('首测', 'First test')], ['write', bi('默写', 'Dictation')], ['conj', bi('动词变位', 'Conjugation')]], mode);
     if (mode === 'list') {
       const groups = [];
       orderedVocab(ctx.book.id, lecon).forEach(v => { let g = groups.find(x => x.g === v.g); if (!g) groups.push(g = { g: v.g, items: [] }); g.items.push(v); });
@@ -2776,6 +2888,7 @@
       if (mode === 'conj') { pane.innerHTML = head + '<div id="drill"></div>'; bindModes(pane, m => paneVocab(ctx, m)); return conjPane(ctx, $('#drill', pane)); }
       pane.innerHTML = head + '<div id="drill"></div>';
       const box = $('#drill', pane);
+      if (mode === 'cards') { bindModes(pane, m => paneVocab(ctx, m)); return fcLesson(ctx, box); }
       if (mode === 'learn') {
         bindModes(pane, m => paneVocab(ctx, m));
         const items = lecon.vocab.filter(v => !/^\*/.test(v.fr) || true).map(v => ({ ...v, kind: 'word', book: ctx.book.id, n: lecon.n }));
