@@ -617,3 +617,18 @@ html.tw #j-text { font-family: "Special Elite", monospace !important; font-size:
 .fc-rate .btn kbd { position: absolute; top: 3px; left: 5px; font: 9px "Courier New", monospace; opacity: .5; }
 .fc-r0 { border-color: var(--red); } .fc-r0 b { color: var(--red); }
 @media (max-width: 560px) { .fc-rate { grid-template-columns: repeat(2, 1fr); } .fc-fr { font-size: 28px; } }
+
+/* memory tricks + picture */
+.mem-box { display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: start; margin: 12px 0 4px; padding: 12px 14px; background: var(--card); border: 1px solid var(--line); border-radius: 8px; text-align: left; }
+.mem-box:not(:has(.mem-img)) { grid-template-columns: 1fr; }
+.mem-img { margin: 0; width: 150px; }
+.mem-img img { display: block; width: 150px; max-height: 150px; object-fit: cover; border-radius: 6px; background: #eee; }
+.mem-img figcaption { font: 10px var(--zh); opacity: .6; text-align: right; margin-top: 2px; }
+.mem-img figcaption a { color: inherit; }
+.mem-rows p { margin: 0 0 8px; font: 15px/1.55 var(--zh); }
+.mem-rows p:last-child { margin: 0; }
+.mem-rows b { display: block; font-size: 12px; color: var(--ink-2); letter-spacing: .04em; }
+@media (max-width: 560px) { .mem-box { grid-template-columns: 1fr; } .mem-img, .mem-img img { width: 100%; max-height: 190px; } }
+.vmem[hidden] { display: none; }
+.vmem .mem-box { margin: 4px 0 6px; }
+.mem-btn { margin-left: 6px; }

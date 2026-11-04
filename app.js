@@ -2147,11 +2147,12 @@
   const playBtn = (text, extra = '') => `<button class="play ${extra}" data-say="${esc(text)}" aria-label="朗读" title="朗读">${ICON.play}</button>`;
   /* NLF books keep their in-depth cards in deep-nlf/<a1|a2|b>-<zh|en>.js, loaded the first time the book is opened */
   const DEEP_FILE = { nlf: 'a1', 'nlf-a2': 'a2', 'nlf-b': 'b' };
+  const MEM_FILES = new Set(['a1']);   // books that also have pictures + memory tricks (deep-nlf/<k>-mem.js)
   const deepLoads = {};
   const hasDeep = fr => !!((window.DEEP && DEEP[fr]) || (window.DEEP_EN && DEEP_EN[fr]));
   function deepNeeds(bookId) {
     const k = DEEP_FILE[bookId]; if (!k) return [];
-    return [L() !== 'en' && k + '-zh', L() !== 'zh' && k + '-en'].filter(Boolean);
+    return [L() !== 'en' && k + '-zh', L() !== 'zh' && k + '-en', MEM_FILES.has(k) && k + '-mem'].filter(Boolean);
   }
   const deepReady = bookId => deepNeeds(bookId).every(k => deepLoads[k] === true);
   function loadDeep(bookId) {
@@ -2216,6 +2217,15 @@
     if (!b) return;
     e.stopPropagation(); e.preventDefault();
     openDeep(b.dataset.deep);
+  }, true);
+
+  // 🖼 Memory button on a vocabulary row: show / hide its picture and memory tricks
+  document.addEventListener('click', e => {
+    const b = e.target.closest('[data-mem]');
+    if (!b) return;
+    e.stopPropagation(); e.preventDefault();
+    const m = b.closest('.vrow').querySelector('.vmem');
+    if (m) m.hidden = !m.hidden;
   }, true);
 
   // one global handler for every [data-say] button
@@ -2865,9 +2875,9 @@
           <div class="vrow${gx(v.pos)} ${hide ? 'hidefr' : ''} ${mst.w[v.fr] ? 'mastered' : ''} ${gender(v.pos) ? 'g-' + gender(v.pos) : ''}" data-say="${esc(forms(v.fr).say)}" data-fr="${esc(v.fr)}">
             <span class="vdrag" title="${bi('拖动调整顺序', 'Drag to reorder')}" aria-label="${bi('拖动调整顺序', 'Drag to reorder')}">⠿</span>
             <span class="play">${ICON.play}</span>
-            <span class="vfr" lang="fr">${artHint(v)}${frHTML(v.fr)}${hasDeep(v.fr) ? `<button class="deep-btn" data-deep="${esc(v.fr)}" lang="zh">${bi('详解', 'In depth')}</button>` : ''}</span>
+            <span class="vfr" lang="fr">${artHint(v)}${frHTML(v.fr)}${hasDeep(v.fr) ? `<button class="deep-btn" data-deep="${esc(v.fr)}" lang="zh">${bi('详解', 'In depth')}</button>` : ''}${window.MEM && MEM[v.fr] ? `<button class="deep-btn mem-btn" data-mem lang="zh">${MEM[v.fr].i ? '🖼 ' : '💡 '}${bi('记忆', 'Memory')}</button>` : ''}</span>
             <span class="pos">${esc(v.pos)}</span><span class="vzh">${G(v)}</span>
-            ${wordTip(lecon.n, v) ? `<span class="vtip" ${showTip ? '' : 'hidden'}>${wordTip(lecon.n, v)}</span>` : ''}${v.ex ? `<span class="vex" lang="fr">${esc(v.ex[0])}<small>${L() === 'en' ? esc(v.ex[2]) : L() === 'zhen' ? esc(v.ex[1]) + ' · ' + esc(v.ex[2]) : esc(v.ex[1])}</small></span>` : ''}</div>`).join('')}</div>`).join('');
+            ${wordTip(lecon.n, v) ? `<span class="vtip" ${showTip ? '' : 'hidden'}>${wordTip(lecon.n, v)}</span>` : ''}${window.MEM && MEM[v.fr] ? `<span class="vtip vmem" hidden>${memBox(v)}</span>` : ''}${v.ex ? `<span class="vex" lang="fr">${esc(v.ex[0])}<small>${L() === 'en' ? esc(v.ex[2]) : L() === 'zhen' ? esc(v.ex[1]) + ' · ' + esc(v.ex[2]) : esc(v.ex[1])}</small></span>` : ''}</div>`).join('')}</div>`).join('');
       enableDrag(pane, () => { saveOrder(ctx.book.id, lecon.n, pane); if (!$('#vreset', pane)) paneVocab(ctx, 'list'); });
       const rs = $('#vreset', pane); if (rs) rs.onclick = e => { e.preventDefault(); store.set(orderKey(ctx.book.id, lecon.n), null); paneVocab(ctx, 'list'); };
       $('#vtip').onchange = e => { store.set('vtip', e.target.checked); $$('.vtip', pane).forEach(t => t.hidden = !e.target.checked); };
@@ -3155,10 +3165,20 @@
   }
   const tipBox = html => html ? `<div class="tip"><span class="tip-lab">记忆提示</span>${html}</div>` : '';
   // the example sentence that comes with a word of the NLF book
+  // picture (Wikipedia) + memory tricks: sound-alike hook, root link, picture sentence
+  const memBox = v => {
+    const m = v && window.MEM && MEM[v.fr]; if (!m) return '';
+    const x = L() === 'en' ? m.e : m.z;
+    const rows = [['🔊', bi('谐音', 'Sounds like'), x.h], ['🔗', bi('词根联想', 'Link'), x.r], ['🎬', bi('想象一下', 'Picture it'), x.s]].filter(r => r[2]);
+    return `<div class="mem-box">${m.i ? `<figure class="mem-img"><img src="${esc(m.i.u)}" alt="${esc(v.fr)}" loading="lazy" referrerpolicy="no-referrer"><figcaption><a href="https://en.wikipedia.org/wiki/${esc(m.i.w)}" target="_blank" rel="noopener">Wikipedia</a></figcaption></figure>` : ''}
+      <div class="mem-rows">${rows.map(([ic, lab, t]) => `<p><b>${ic} ${esc(lab)}</b> ${esc(t)}</p>`).join('')}</div></div>`;
+  };
   const exBox = v => {
-    if (!v || !v.ex) return '';
+    if (!v) return '';
+    const mem = memBox(v);
+    if (!v.ex) return mem;
     const tr = L() === 'en' ? esc(v.ex[2]) : L() === 'zhen' ? esc(v.ex[1]) + `<span class="en-gloss" lang="en">${esc(v.ex[2])}</span>` : esc(v.ex[1]);
-    return `<div class="ex-line"><span class="ex-fr" lang="fr">${playBtn(v.ex[0])} ${esc(v.ex[0])}</span><span class="ex-tr">${tr}</span></div>`;
+    return mem + `<div class="ex-line"><span class="ex-fr" lang="fr">${playBtn(v.ex[0])} ${esc(v.ex[0])}</span><span class="ex-tr">${tr}</span></div>`;
   };
 
   const isSpecial = fr => !!IRREG[fr.replace(/\s*\((s'|se)\)/, '').trim()];
