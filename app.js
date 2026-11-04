@@ -966,7 +966,7 @@
         <section class="unit"><div class="unit-title"><h2>${bi('动词错题本', 'Verb mistake book')}</h2><span>${act.length}</span></div>
           ${act.length ? act.sort((a, b) => a.due.localeCompare(b.due)).map(e => { const line = vpLine(e), t = vpTense(e.t); return `<div class="err-row">
             <span class="err-kind">${esc(t.fr)}</span>
-            <div class="err-body"><div lang="fr">${playBtn(vpSay(line))} ${esc(line)}</div><div class="lzh"><span lang="fr">${esc(e.verb)}</span> · ${esc(VP_PERSON[e.i])} · ${esc(vpMean(D.get(e.verb)))}</div>${(e.tries || []).length ? `<p class="err-tries">${bi('写成过', 'You wrote')}${CL()}${e.tries.map(x => `<s lang="fr">${esc(x.t)}</s>`).join(' ')}</p>` : ''}</div>
+            <div class="err-body"><div lang="fr">${playBtn(vpSay(line))} ${esc(line)}</div><div class="lzh"><span lang="fr">${esc(e.verb)}</span> · ${esc(VP_PERSON[e.i])} · ${esc(vpMean(D.get(e.verb)))}</div>${(e.tries || []).length ? `<p class="err-tries">${bi('写成过', 'You wrote')}${CL()}${e.tries.map(x => `<s lang="fr">${esc(x.t)}</s>`).join(' ')}</p>` : ''}${verbTip(e.verb) ? `<div class="err-tip">${verbTip(e.verb)}</div>` : ''}</div>
             <span class="err-meta">${bi('错', 'Missed')} ${e.wrong}<br>${e.due <= today ? `<b class="w-miss">&nbsp;${bi('今天', 'Today')}&nbsp;</b>` : e.due.slice(5).replace('-', '/')}</span>
             <button class="err-del" data-id="${esc(e.id)}" title="${bi('移出错题本', 'Remove')}" aria-label="${bi('移出错题本', 'Remove')}">×</button></div>`; }).join('')
             : `<p class="notice">${bi('动词错题本还是空的。练几遍，写错的变位会自动出现在这里。', 'No verb mistakes yet. Practise a few rounds — wrong forms appear here automatically.')}</p>`}</section>`;
@@ -2429,6 +2429,17 @@
     const cut = x => x.length > 60 ? x.slice(0, 58) + '…' : x;
     return `<div class="err-tries">${bi('写成过', 'You wrote')}${CL()}${t.map(x => `<s lang="fr">${esc(cut(x))}</s>`).join('<span class="sep">·</span>')}</div>`;
   };
+  // tips under a mistake-book row: the word's own memory tip (always visible) and, on tap, picture + memory tricks + example
+  function errTipHTML(e) {
+    const v = realV(e), tip = e.pos === '变位' ? verbTip(e.zh.split(' · ')[0].replace(/^(se |s')/, '')) : wordTip(e.n, v), more = e.pos === '变位' ? '' : exBox(v);
+    return (tip ? `<div class="err-tip">${tip}</div>` : '') + (more ? `<button class="deep-btn" data-errmore type="button">${bi('图片 · 记忆窍门', 'Picture · memory tricks')}</button><div class="err-more" hidden>${more}</div>` : '');
+  }
+  document.addEventListener('click', e => {
+    const b = e.target.closest('[data-errmore]');
+    if (!b) return;
+    e.stopPropagation(); e.preventDefault();
+    const m = b.nextElementSibling; if (m) m.hidden = !m.hidden;
+  }, true);
   function viewReview(sub) {
     document.title = bi('错题本 · 每日复习', 'Mistake book · daily review');
     const KIND = { word: '单词', cloze: '填空', sentence: '句子' };
@@ -2470,7 +2481,7 @@
         <section class="unit"><div class="unit-title"><h2 lang="fr">${leconName(+n)}</h2><span>${list.length} 条</span></div>
         ${list.map(e => `<div class="err-row${gx(e.pos)}">
           <span class="err-kind">${KIND[e.kind]}</span>
-          <div class="err-body"><div lang="fr">${playBtn(e.kind === 'word' ? forms(e.fr).say : e.fr)} ${esc(e.fr)}${e.kind === 'word' && hasDeep(e.fr) ? `<button class="deep-btn" data-deep="${esc(e.fr)}" lang="zh">${bi('详解', 'In depth')}</button>` : ''}</div><div class="lzh">${e.kind === 'cloze' ? esc(e.zh) : G(e)}${e.pos ? ' · ' + esc(e.pos) : ''}</div>${triesHTML(e)}${e.kind === 'word' ? spotLine(e) : ''}</div>
+          <div class="err-body"><div lang="fr">${playBtn(e.kind === 'word' ? forms(e.fr).say : e.fr)} ${esc(e.fr)}${e.kind === 'word' && hasDeep(e.fr) ? `<button class="deep-btn" data-deep="${esc(e.fr)}" lang="zh">${bi('详解', 'In depth')}</button>` : ''}</div><div class="lzh">${e.kind === 'cloze' ? esc(e.zh) : G(e)}${e.pos ? ' · ' + esc(e.pos) : ''}</div>${triesHTML(e)}${e.kind === 'word' ? spotLine(e) : ''}${e.kind === 'word' ? errTipHTML(e) : ''}</div>
           <span class="err-meta">错 ${e.wrong} 次<br>${e.due <= today ? '<b class="w-miss">&nbsp;今天&nbsp;</b>' : e.due.slice(5).replace('-', '/') + ' 复习'}</span>
           <button class="err-del" data-id="${esc(e.id)}" title="移出错题本" aria-label="移出错题本">×</button>
         </div>`).join('')}</section>`).join('')
@@ -2545,7 +2556,7 @@
       }
       const e = items[i], word = e.kind === 'word';
       const say = word ? forms(e.fr).say : e.fr;
-      const tip = word ? wordTip(e.n, e) : '';
+      const tip = word ? wordTip(e.n, realV(e)) : '';
       box.innerHTML = `<div class="drill learn-card ${word && gender(e.pos) ? 'g-' + gender(e.pos) : ''}${word ? gx(e.pos) : ''}">
         <div class="prog-line"><span class="kbd">${i + 1} / ${items.length}</span><span class="kbd" lang="fr">${esc(leconName(e.n))}</span></div>
         <div class="lc-fr" lang="fr">${playBtn(say)} ${word ? artHint(e) : ''}<b>${word ? frHTML(e.fr) : esc(e.fr)}</b></div>
@@ -2553,7 +2564,7 @@
         ${e.wrong ? `<p class="kbd">${bi(`写错过 ${e.wrong} 次`, `Missed ${e.wrong} times`)}</p>` : ''}
         ${triesHTML(e)}
         ${(() => { const r = spotInfo(e); return r ? `<div class="lc-spot" lang="fr">${DYS.marked(r.target, r.marks)}</div>${spotLine(e)}` : ''; })()}
-        ${tipBox(tip)}${word ? exBox(e) : ''}
+        ${tipBox(tip)}${word ? exBox(realV(e)) : ''}
         ${word && hasDeep(e.fr) ? `<button class="deep-btn lc-deep" data-deep="${esc(e.fr)}">${bi('看详解', 'In-depth card')}</button>` : ''}
         <div class="toolbar lc-nav">
           <button class="btn ghost" id="lr-prev" ${i ? '' : 'disabled'}>‹ ${bi('上一个', 'Back')}</button>
@@ -2690,7 +2701,7 @@
       $('#fb', box).innerHTML = `<div class="feedback ${good ? 'ok' : 'bad'}"><span class="lab">${lab}</span>
         <div class="ans${gx(e.pos)}" lang="fr">${playBtn(say)}<span>${html}</span></div>
         ${!good && !giveUp && e.kind === 'word' && r !== 'accent' ? dysCompare(answerOf(e), val) : ''}
-        ${e.kind === 'word' ? tipBox(e.pos === '变位' ? verbTip(e.zh.split(' · ')[0].replace(/^(se |s')/, '')) : wordTip(e.n, e)) + exBox(e) : ''}
+        ${e.kind === 'word' ? tipBox(e.pos === '变位' ? verbTip(e.zh.split(' · ')[0].replace(/^(se |s')/, '')) : wordTip(e.n, realV(e))) + exBox(realV(e)) : ''}
         ${good ? '' : `<p class="copy-note" id="copy-note">${bi('照着上面的正确答案，在输入框里抄一遍', 'Copy the right answer above into the box once')}
           <button class="btn ghost small" id="copy-skip">${bi('跳过', 'Skip')}</button></p>`}</div>`;
       TTS.say(say);
@@ -3163,6 +3174,12 @@
     if (zh) return fmt(zh);
     return v.pos && v.pos.startsWith('v') && conjugate(v.fr) ? verbTip(v.fr) : '';
   }
+  // a mistake-book item only stores fr / zh / en / pos: look up the real vocabulary entry (own tip, example) for tips and memory aids
+  const realV = e => {
+    if (!e || e.kind !== 'word' || e.pos === '变位') return e;
+    const b = findBook(e.book), f = b && findLecon(b, e.n), v = f && f.lecon.vocab.find(x => x.fr === e.fr);
+    return v || e;
+  };
   const tipBox = html => html ? `<div class="tip"><span class="tip-lab">记忆提示</span>${html}</div>` : '';
   // the example sentence that comes with a word of the NLF book
   // picture (Wikipedia) + memory tricks: sound-alike hook, root link, picture sentence

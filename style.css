@@ -632,3 +632,8 @@ html.tw #j-text { font-family: "Special Elite", monospace !important; font-size:
 .vmem[hidden] { display: none; }
 .vmem .mem-box { margin: 4px 0 6px; }
 .mem-btn { margin-left: 6px; }
+
+.err-tip { font: 14px/1.55 var(--zh); color: var(--ink-2); margin-top: 6px; }
+.err-tip b { color: var(--red); font-family: var(--serif); }
+.err-more[hidden] { display: none; }
+.err-body .deep-btn[data-errmore] { margin: 6px 0 0; }
