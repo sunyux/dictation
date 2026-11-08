@@ -2147,7 +2147,7 @@
   const playBtn = (text, extra = '') => `<button class="play ${extra}" data-say="${esc(text)}" aria-label="朗读" title="朗读">${ICON.play}</button>`;
   /* NLF books keep their in-depth cards in deep-nlf/<a1|a2|b>-<zh|en>.js, loaded the first time the book is opened */
   const DEEP_FILE = { nlf: 'a1', 'nlf-a2': 'a2', 'nlf-b': 'b' };
-  const MEM_FILES = new Set(['a1']);   // books that also have pictures + memory tricks (deep-nlf/<k>-mem.js)
+  const MEM_FILES = new Set(['a1', 'a2']);   // books that also have pictures + memory tricks (deep-nlf/<k>-mem.js)
   const deepLoads = {};
   const hasDeep = fr => !!((window.DEEP && DEEP[fr]) || (window.DEEP_EN && DEEP_EN[fr]));
   function deepNeeds(bookId) {
