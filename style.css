@@ -637,3 +637,28 @@ html.tw #j-text { font-family: "Special Elite", monospace !important; font-size:
 .err-tip b { color: var(--red); font-family: var(--serif); }
 .err-more[hidden] { display: none; }
 .err-body .deep-btn[data-errmore] { margin: 6px 0 0; }
+
+/* ---- Meaning quiz (选意思): French word, four meanings to pick from ---- */
+.choose-prompt { text-align: center; padding: 8px 0 14px; }
+.choose-prompt .q-fr { font: 600 clamp(30px, 7vw, 44px)/1.2 var(--display); display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; }
+.choose-prompt .ppos { display: flex; justify-content: center; margin-top: 6px; }
+.q-ex { font: 500 clamp(15px, 3.6vw, 18px)/1.45 var(--serif); color: var(--ink-2); margin: 10px 0 0; }
+.q-ex .play { transform: scale(.85); }
+.opts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 6px 0 12px; }
+.opt { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 10px; padding: 14px 16px; min-height: 64px; font: 500 21px/1.3 var(--serif); cursor: pointer; transition: border-color .15s, background .15s, transform .15s; }
+.opt:hover:not(:disabled) { border-color: var(--ink-2); transform: translateY(-1px); }
+.opt-n { flex: none; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; background: var(--paper-2); color: var(--ink-2); font: 600 14px var(--serif); }
+.opt-t { min-width: 0; }
+.opt .en-gloss { font-size: 15px; }
+.opt:disabled { cursor: default; pointer-events: none; color: var(--ink); }   /* a tap on a lit-up option must not be swallowed */
+.opt.right { background: var(--wash-green); border-color: var(--green); }
+.opt.right .opt-n { background: var(--green); color: var(--paper); }
+.opt.wrong { background: var(--wash-red); border-color: var(--red); }
+.opt.wrong .opt-n { background: var(--red); color: var(--paper); }
+.opt.right::after, .opt.wrong::after { margin-left: auto; font: 700 22px/1 var(--serif); }
+.opt.right::after { content: "✓"; color: var(--green); }
+.opt.wrong::after { content: "✗"; color: var(--red); }
+@media (max-width: 560px) { .opts { grid-template-columns: 1fr; } }
+.skip-row { text-align: center; margin: 4px 0 8px; }
+.tricky-opt { display: flex; gap: 8px; align-items: center; justify-content: center; margin: 4px auto 12px; max-width: 460px; text-align: left; }
+.mq-mean { font-size: 20px; margin: 4px 0 8px; }

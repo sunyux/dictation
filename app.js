@@ -2870,7 +2870,7 @@
     if (mode === 'listen') { mode = 'write'; store.set('vauto', true); }
     const { lecon, pane } = ctx;
     store.set('vmode', mode);
-    const head = modeBar([['list', bi('浏览', 'Browse')], ['learn', bi('先学一遍', 'Study first')], ['cards', bi('闪卡', 'Flashcards')], ['test', bi('首测', 'First test')], ['write', bi('默写', 'Dictation')], ['conj', bi('动词变位', 'Conjugation')]], mode);
+    const head = modeBar([['list', bi('浏览', 'Browse')], ['learn', bi('先学一遍', 'Study first')], ['cards', bi('闪卡', 'Flashcards')], ['choose', bi('选意思', 'Meaning quiz')], ['test', bi('首测', 'First test')], ['write', bi('默写', 'Dictation')], ['conj', bi('动词变位', 'Conjugation')]], mode);
     if (mode === 'list') {
       const groups = [];
       orderedVocab(ctx.book.id, lecon).forEach(v => { let g = groups.find(x => x.g === v.g); if (!g) groups.push(g = { g: v.g, items: [] }); g.items.push(v); });
@@ -2910,6 +2910,7 @@
       pane.innerHTML = head + '<div id="drill"></div>';
       const box = $('#drill', pane);
       if (mode === 'cards') { bindModes(pane, m => paneVocab(ctx, m)); return fcLesson(ctx, box); }
+      if (mode === 'choose') { bindModes(pane, m => paneVocab(ctx, m)); return meaningQuiz(ctx, box); }
       if (mode === 'learn') {
         bindModes(pane, m => paneVocab(ctx, m));
         const items = lecon.vocab.filter(v => !/^\*/.test(v.fr) || true).map(v => ({ ...v, kind: 'word', book: ctx.book.id, n: lecon.n }));
@@ -3067,6 +3068,150 @@
       if (w.length) $('#again-wrong', box).onclick = () => { queue = shuffle(w); i = 0; wrong = []; firstTry = 0; draw(); };
     };
     draw();
+  }
+
+  /* ----- Meaning quiz: see the French word, pick its meaning (4 choices; the wrong ones are look-alike words) -----
+     Recognition only: it does not mark words as mastered and does not feed the mistake book (writing does that).
+     Progress is saved after every answer (nh:mquiz:<book>:<n>), so it can be paused and continued. */
+  const mqCore = fr => norm(fr).split(' / ')[0].replace(/\([^)]*\)/g, '').replace(/^(le |la |les |l'|un |une |des |du |de la |de l'|d'|un\(e\) )/, '').trim();
+  // two meanings that would both be a fair answer (same text, one inside the other, a shared long word)
+  const mqSame = (a, b) => {
+    const x = norm(a), y = norm(b);
+    if (!x || !y || x === y || x.includes(y) || y.includes(x)) return true;
+    const w = s => s.split(/[\s/,;()（）、，；·]+/).filter(Boolean), wa = w(x), wb = w(y);
+    return wa.some(t => t.length > 3 && wb.includes(t));
+  };
+  const mqLabel = x => { const en = L() === 'zhen' ? (enFill(x).en || '') : ''; return esc(Gt(x)) + (en ? `<span class="en-gloss" lang="en">${esc(en)}</span>` : ''); };
+  function meaningQuiz(ctx, box) {
+    const { book, lecon } = ctx;
+    const key = `mquiz:${book.id}:${lecon.n}`, lastKey = `mquiz-last:${book.id}:${lecon.n}`;
+    const items = lecon.vocab.filter((v, k, a) => Gt(v) && a.findIndex(x => x.fr === v.fr) === k);
+    const by = new Map(items.map(v => [v.fr, v]));
+    const allOf = bk => (bk.units || []).flatMap(u => u.lecons.flatMap(l => l.vocab.filter(v => Gt(v)).map(v => ({ ...v, n: l.n }))));
+    const pool = [...items.map(v => ({ ...v, n: lecon.n })), ...allOf(book).filter(v => !by.has(v.fr) || v.n !== lecon.n)];
+    let wide = null;   // every book: only when this one has too few different meanings
+    const exQ = v => (!store.get('mqex', true) || !v.ex || !v.ex[0] ? '' : `<div class="q-ex" lang="fr">${playBtn(v.ex[0])} ${esc(v.ex[0])}</div>`);
+
+    // three wrong answers that look like real candidates: same group / type / unit, similar spelling
+    const options = v => {
+      const mine = Gt(v), a = mqCore(v.fr), tricky = store.get('tricky', true);
+      const rank = list => tricky
+        ? list.filter(x => x.fr !== v.fr).map(x => {
+          const c = mqCore(x.fr), d = lev(a, c);
+          let sc = Math.random() * 2;
+          if (x.g && x.g === v.g) sc += 3;
+          if (x.pos && x.pos === v.pos) sc += 2;
+          if (x.n === v.n) sc += 2;
+          if (d <= 2) sc += 5; else if (d <= 3) sc += 2;
+          let p = 0; while (p < a.length && p < c.length && a[p] === c[p]) p++;
+          if (p >= 4) sc += 3; else if (p >= 3) sc += 1;
+          if (a.length > 4 && c.length > 4 && a.slice(-4) === c.slice(-4)) sc += 1.5;
+          return [sc, x];
+        }).sort((p, q) => q[0] - p[0]).map(t => t[1])
+        : [...shuffle(list.filter(x => x.fr !== v.fr && x.pos === v.pos)), ...shuffle(list.filter(x => x.fr !== v.fr && x.pos !== v.pos))];
+      const seen = [mine], pick = [];
+      const take = list => { for (const x of list) { const m = Gt(x); if (pick.length >= 3) break; if (!m || seen.some(s => mqSame(s, m))) continue; seen.push(m); pick.push(x); } };
+      take(rank(pool));
+      if (pick.length < 3) { wide = wide || BOOKS.flatMap(allOf); take(shuffle(wide)); }
+      return shuffle([v, ...pick]);
+    };
+
+    function run(st, persist) {
+      const total = st.q.length, auto = store.get('vauto', false);
+      let answered = false, offKeys = null, gen = 0;
+      const save = () => { if (persist) store.set(key, st); };
+      const prevC = cleanup; cleanup = () => { offKeys && offKeys(); prevC && prevC(); };
+      const leave = () => { gen++; offKeys && offKeys(); offKeys = null; meaningQuiz(ctx, box); };   // gen++: a pending "next question" timer must not redraw over the intro
+      const draw = () => {
+        offKeys && offKeys(); offKeys = null; gen++;
+        if (st.i >= total) return finish();
+        save();
+        const v = by.get(st.q[st.i]), opts = options(v), mygen = gen;
+        answered = false;
+        box.innerHTML = `<div class="drill">
+          <div class="count">${st.i + 1} / ${total}${persist ? ` <span class="kbd">· ${bi('已保存', 'saved')}</span>` : ''}</div>
+          <div class="bar"><i style="width:${st.i / total * 100}%"></i></div>
+          <div class="prompt choose-prompt${gx(v.pos)}"><div class="q-fr" lang="fr">${playBtn(forms(v.fr).say)} <b>${frHTML(v.fr)}</b></div>
+            <div class="ppos"><span class="pos ${gender(v.pos) ? 'g-' + gender(v.pos) : ''}">${esc(v.pos || '')}</span></div>${exQ(v)}</div>
+          <div class="opts">${opts.map((o, k) => `<button class="opt" data-k="${k}"><span class="opt-n">${k + 1}</span><span class="opt-t">${mqLabel(o)}</span></button>`).join('')}</div>
+          <div class="skip-row"><button class="btn ghost small" id="mq-idk">${bi('不会，看答案', "I don't know · show it")}</button></div>
+          <div class="drill-actions"><button class="btn ghost small" id="mq-pause">${persist ? bi('暂停', 'Pause') : bi('退出', 'Leave')}</button><span class="spacer"></span>
+            <span class="kbd"><kbd>1</kbd>–<kbd>4</kbd> ${bi('选择', 'choose')} · <kbd>Enter</kbd> ${bi('下一个', 'next')}</span></div>
+          <div id="fb"></div></div>`;
+        if (auto) setTimeout(() => { if (gen === mygen && box.isConnected) TTS.say(forms(v.fr).say); }, 200);
+        const choose = k => {
+          if (answered) return; answered = true;
+          const good = opts[k] === v;
+          $$('.opt', box).forEach((b, j) => { b.disabled = true; b.classList.toggle('right', opts[j] === v); b.classList.toggle('wrong', j === k && !good); });
+          $('#mq-idk', box).disabled = true;
+          (good ? st.ok : st.bad).push(v.fr); st.i++; save();
+          if (good) { XP.gain(1, bi('选意思答对', 'Meaning quiz')); setTimeout(() => { if (gen === mygen && box.isConnected) draw(); }, 650); return; }
+          $('#fb', box).innerHTML = `<div class="feedback bad">
+            <span class="lab">${k < 0 ? bi('答案', 'Answer') : bi('不对，正确答案是', 'Not quite — the answer is')}</span>
+            <div class="ans${gx(v.pos)}" lang="fr">${playBtn(forms(v.fr).say)} ${frHTML(v.fr)}</div>
+            <div class="mq-mean">${mqLabel(v)}</div>
+            ${tipBox(wordTip(lecon.n, v))}${exBox(v)}
+            <div class="drill-actions"><button class="btn small" id="mq-next">${st.i >= total ? bi('看结果', 'See the result') : bi('下一个 ›', 'Next ›')}</button></div></div>`;
+          $('#mq-next', box).onclick = draw; $('#mq-next', box).focus({ preventScroll: true });
+          TTS.say(forms(v.fr).say);
+        };
+        $$('.opt', box).forEach(b => b.onclick = () => choose(+b.dataset.k));
+        $('#mq-idk', box).onclick = () => choose(-1);
+        $('#mq-pause', box).onclick = leave;
+        const keys = e => {
+          if (!box.isConnected) return document.removeEventListener('keydown', keys);
+          if (/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName) || e.metaKey || e.ctrlKey || e.altKey) return;
+          if (e.key >= '1' && e.key <= '4' && +e.key <= opts.length) { e.preventDefault(); choose(+e.key - 1); }
+          else if (e.key === 'Enter' && answered) { e.preventDefault(); draw(); }
+        };
+        document.addEventListener('keydown', keys);
+        offKeys = () => document.removeEventListener('keydown', keys);
+      };
+      const finish = () => {
+        const score = Math.round(st.ok.length / Math.max(1, total) * 100);
+        let bonus = 0;
+        if (persist) { store.set(key, null); store.set(lastKey, { score, date: dayStr() }); bonus = learnBonus('mq:' + book.id + ':' + lecon.n, 3); }
+        const missed = st.bad.map(f => by.get(f)).filter(Boolean);
+        box.innerHTML = `<div class="drill summary"><p class="kicker" lang="fr">Bilan</p>
+          <div class="score">${score}%</div>
+          <p>${bi(`${total} 个里选对 ${st.ok.length} 个${bonus ? ` · 完成奖励 +${bonus} 分` : ''}`, `${st.ok.length} of ${total} right${bonus ? ` · +${bonus} points for finishing` : ''}`)}</p>
+          ${missed.length ? `<ul>${missed.map(v => `<li><span lang="fr">${playBtn(forms(v.fr).say)} ${esc(v.fr)}</span><span class="w-zh">${mqLabel(v)}</span></li>`).join('')}</ul>
+            <p class="kbd">${bi('这个测验不算掌握，也不进错题本。要把它们记牢，去「默写」里写。', 'This quiz does not count as mastered and does not add to the mistake book. To learn these, write them in Dictation.')}</p>` : `<p>${bi('全部选对，很棒。', 'Every word right. Great work!')}</p>`}
+          <div class="drill-actions" style="justify-content:center">
+            ${missed.length ? `<button class="btn" id="mq-missed">${bi(`只练选错的（${missed.length}）`, `Quiz the misses (${missed.length})`)}</button>` : ''}
+            <button class="btn ${missed.length ? 'ghost' : ''}" id="mq-again">${bi('再测一次', 'Quiz again')}</button>
+            <button class="btn ghost" id="mq-first">${bi('去首测', 'Go to the first test')}</button></div></div>`;
+        const m = $('#mq-missed', box); if (m) m.onclick = () => run({ q: shuffle(missed.map(v => v.fr)), i: 0, ok: [], bad: [] }, false);
+        $('#mq-again', box).onclick = () => run({ q: shuffle(items.map(v => v.fr)), i: 0, ok: [], bad: [] }, true);
+        $('#mq-first', box).onclick = () => paneVocab(ctx, 'test');
+      };
+      draw();
+    }
+
+    // intro: start / continue
+    let saved = store.get(key, null);
+    if (saved && !(Array.isArray(saved.q) && saved.i < saved.q.length && saved.q.every(f => by.has(f)))) saved = null;
+    const last = store.get(lastKey, null);
+    if (!items.length) { box.innerHTML = `<div class="drill summary"><p>${bi('这一课没有可测的词。', 'No words to quiz in this unit.')}</p></div>`; return; }
+    box.innerHTML = `<div class="drill summary test-intro">
+      <p class="kicker" lang="fr">Quiz de sens</p>
+      <h2 style="font-size:30px;margin-bottom:10px">${bi('选意思', 'Meaning quiz')}</h2>
+      <p class="hint-text" style="margin:0 0 18px">${bi(`看到法语词，从 4 个选项里选出它的意思，这一课 ${items.length} 个词，不用打字。错的选项是长得像的词，要看仔细。<br>这个测验只测你认不认识意思，<b>不算掌握，也不进错题本</b>；记住拼写要靠「默写」。`,
+        `You see a French word and pick its meaning from 4 choices: all ${items.length} words of this unit, no typing. The wrong choices are look-alike words, so read carefully.<br>This quiz only checks that you know the meaning: it does <b>not</b> count as mastered and does not add to the mistake book. Spelling is learned in Dictation.`)}</p>
+      ${last ? `<p class="kbd">${bi('上次：', 'Last time: ')}${last.score}% · ${last.date}</p>` : ''}
+      ${saved ? `<p class="kbd" style="margin-bottom:10px">${bi(`有一场没做完的：${saved.i} / ${saved.q.length}`, `An unfinished quiz: ${saved.i} / ${saved.q.length}`)}</p>` : ''}
+      <label class="kbd tricky-opt"><input type="checkbox" id="mq-ex" ${store.get('mqex', true) ? 'checked' : ''}> ${bi('在每个词下面显示一个例句', 'Show a small example sentence under each word')}</label>
+      <label class="kbd tricky-opt"><input type="checkbox" id="mq-tricky" ${store.get('tricky', true) ? 'checked' : ''}> ${bi('难一点：错的选项是拼写相近的词', 'Tricky choices: wrong answers are similar words')}</label>
+      <label class="kbd tricky-opt"><input type="checkbox" id="mq-auto" ${store.get('vauto', false) ? 'checked' : ''}> ${bi('每题自动朗读', 'Say each word out loud automatically')}</label>
+      <div class="drill-actions" style="justify-content:center">
+        ${saved ? `<button class="btn" id="mq-go">${bi('继续', 'Continue')}</button><button class="btn ghost" id="mq-new">${bi('重新开始', 'Start over')}</button>` : `<button class="btn" id="mq-go">${bi('开始', 'Start')}</button>`}
+      </div></div>`;
+    $('#mq-ex', box).onchange = e => store.set('mqex', e.target.checked);
+    $('#mq-tricky', box).onchange = e => store.set('tricky', e.target.checked);
+    $('#mq-auto', box).onchange = e => store.set('vauto', e.target.checked);
+    const fresh = () => ({ q: shuffle(items.map(v => v.fr)), i: 0, ok: [], bad: [] });
+    $('#mq-go', box).onclick = () => run(saved || fresh(), true);
+    const nw = $('#mq-new', box); if (nw) nw.onclick = () => run(fresh(), true);
   }
 
   /* ----- verb conjugation (présent) ----- */
