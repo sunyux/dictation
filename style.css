@@ -258,9 +258,12 @@ kbd { font: 12px ui-monospace, monospace; border: 1px solid var(--line); border-
 .tips-all summary { cursor: pointer; }
 .vtip { grid-column: 3 / -1; font: 14px/1.55 var(--zh); color: var(--ink-2); margin-top: -4px; }
 .vtip b, .tip b { color: var(--red); font-family: var(--serif); font-size: 1.08em; }
-.prog { display: grid; gap: 5px; margin-top: 12px; }
-.prog.big { max-width: 380px; margin-top: 16px; }
-.pbar { display: grid; grid-template-columns: 2.4em 1fr auto; gap: 8px; align-items: center; font: 13px var(--zh); color: var(--ink-2); }
+.prog { display: grid; grid-template-columns: auto 1fr auto; gap: 5px 8px; align-items: center; margin-top: 12px; }
+.prog.big { max-width: 400px; margin-top: 16px; }
+.pbar { display: contents; font: 13px var(--zh); color: var(--ink-2); }   /* rows share the three columns, so the bars line up */
+.pbar .pl { white-space: nowrap; }
+.pbar.mq .pt i { background: var(--amber); }   /* the Meaning-quiz bar has its own colour */
+html.mono .pbar.mq .pt i { background: #888; }
 .pt { height: 6px; background: var(--paper-2); border-radius: 3px; overflow: hidden; }
 .pt i { display: block; height: 100%; background: var(--blue); border-radius: 3px; transition: width .4s; }
 .pbar.done .pt i { background: var(--green); }

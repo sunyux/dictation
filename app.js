@@ -167,12 +167,15 @@
     put(book, n, m) { store.set(this.key(book, n), m); },
     word(book, n, fr, on = true) { const m = this.get(book, n), was = !!m.w[fr]; on ? (m.w[fr] = m.w[fr] || dayStr()) : delete m.w[fr]; this.put(book, n, m); if (on && !was) { XP.gain(3, '新掌握 ' + fr); checkStamps(book, n); } },
     line(book, n, k) { const m = this.get(book, n), was = !!m.t[k]; m.t[k] = m.t[k] || dayStr(); this.put(book, n, m); if (!was) { XP.gain(3, '课文掌握一行'); checkStamps(book, n); } },
+    // Meaning quiz: the last answer for a word decides (m.k). Separate from m.w (written right), so it never counts as mastered.
+    know(book, n, fr, on) { const m = this.get(book, n); m.k = m.k || {}; if (!!m.k[fr] === on) return; on ? (m.k[fr] = dayStr()) : delete m.k[fr]; this.put(book, n, m); },
     stats(book, lecon) {
       const m = this.get(book, lecon.n);
+      const known = lecon.vocab.filter(v => m.k && m.k[v.fr]).length;
       const words = lecon.vocab.filter(v => m.w[v.fr]).length;
       const lines = lecon.text.filter((r, k) => !r.h && m.t[k]).length;
       const totalLines = lecon.text.filter(r => !r.h).length;
-      return { words, totalWords: lecon.vocab.length, lines, totalLines, test: m.test,
+      return { words, known, totalWords: lecon.vocab.length, lines, totalLines, test: m.test,
         vocabDone: words === lecon.vocab.length, textDone: lines === totalLines };
     },
   };
@@ -2735,10 +2738,13 @@
 
   function progHTML(book, l, big = false) {
     const st = MASTER.stats(book.id, l);
-    const bar = (label, a, b, done) => `<div class="pbar ${done ? 'done' : ''}"><span class="pl">${label}</span>
+    const bar = (label, a, b, done, cls = '', tip = '') => `<div class="pbar ${cls} ${done ? 'done' : ''}"><span class="pl" ${tip ? `title="${esc(tip)}"` : ''}>${label}</span>
       <span class="pt"><i style="width:${b ? a / b * 100 : 0}%"></i></span><span class="pn">${done ? '通过' : `${a}/${b}`}</span></div>`;
-    return `<div class="prog ${big ? 'big' : ''}">${bar('词汇', st.words, st.totalWords, st.vocabDone)}${book.flat ? '' : bar('课文', st.lines, st.totalLines, st.textDone)}</div>`;
+    // two bars for the words: the Meaning quiz (you know what it means) and typing (you can write it: this one decides 通过)
+    return `<div class="prog ${big ? 'big' : ''}">${bar(bi('选意思', 'Meaning'), st.known, st.totalWords, false, 'mq', bi('在「选意思」里选对了意思的词', 'Words whose meaning you picked right in the Meaning quiz'))}${bar(bi('默写', 'Dictation'), st.words, st.totalWords, st.vocabDone, '', bi('默写、首测里写对的词（全部写对才算通过）', 'Words you wrote correctly in Dictation / First test (all of them = passed)'))}${book.flat ? '' : bar('课文', st.lines, st.totalLines, st.textDone)}</div>`;
   }
+  // refresh the unit header's bars right away (after a Meaning-quiz answer)
+  const refreshProg = (book, lecon) => { const hp = $('.lecon-head .prog'); if (hp) hp.outerHTML = progHTML(book, lecon, true); };
 
   function viewBook(book) {
     document.title = book.title + bi(' · 默写本', ' · Dictation');
@@ -3145,6 +3151,7 @@
           $$('.opt', box).forEach((b, j) => { b.disabled = true; b.classList.toggle('right', opts[j] === v); b.classList.toggle('wrong', j === k && !good); });
           $('#mq-idk', box).disabled = true;
           (good ? st.ok : st.bad).push(v.fr); st.i++; save();
+          MASTER.know(book.id, lecon.n, v.fr, good); refreshProg(book, lecon);   // lights the "Meaning" bar; never marks the word as mastered
           if (good) { XP.gain(1, bi('选意思答对', 'Meaning quiz')); setTimeout(() => { if (gen === mygen && box.isConnected) draw(); }, 650); return; }
           $('#fb', box).innerHTML = `<div class="feedback bad">
             <span class="lab">${k < 0 ? bi('答案', 'Answer') : bi('不对，正确答案是', 'Not quite — the answer is')}</span>
@@ -3196,8 +3203,8 @@
     box.innerHTML = `<div class="drill summary test-intro">
       <p class="kicker" lang="fr">Quiz de sens</p>
       <h2 style="font-size:30px;margin-bottom:10px">${bi('选意思', 'Meaning quiz')}</h2>
-      <p class="hint-text" style="margin:0 0 18px">${bi(`看到法语词，从 4 个选项里选出它的意思，这一课 ${items.length} 个词，不用打字。错的选项是长得像的词，要看仔细。<br>这个测验只测你认不认识意思，<b>不算掌握，也不进错题本</b>；记住拼写要靠「默写」。`,
-        `You see a French word and pick its meaning from 4 choices: all ${items.length} words of this unit, no typing. The wrong choices are look-alike words, so read carefully.<br>This quiz only checks that you know the meaning: it does <b>not</b> count as mastered and does not add to the mistake book. Spelling is learned in Dictation.`)}</p>
+      <p class="hint-text" style="margin:0 0 18px">${bi(`看到法语词，从 4 个选项里选出它的意思，这一课 ${items.length} 个词，不用打字。错的选项是长得像的词，要看仔细。<br>选对的词会点亮上面的「选意思」进度条，但<b>不算掌握，也不进错题本</b>；「默写」那条进度条只看你写对的词，记住拼写要靠默写。`,
+        `You see a French word and pick its meaning from 4 choices: all ${items.length} words of this unit, no typing. The wrong choices are look-alike words, so read carefully.<br>Right answers fill the "Meaning" bar above, but they do <b>not</b> count as mastered and do not add to the mistake book. The "Dictation" bar only counts words you wrote correctly: spelling is learned there.`)}</p>
       ${last ? `<p class="kbd">${bi('上次：', 'Last time: ')}${last.score}% · ${last.date}</p>` : ''}
       ${saved ? `<p class="kbd" style="margin-bottom:10px">${bi(`有一场没做完的：${saved.i} / ${saved.q.length}`, `An unfinished quiz: ${saved.i} / ${saved.q.length}`)}</p>` : ''}
       <label class="kbd tricky-opt"><input type="checkbox" id="mq-ex" ${store.get('mqex', true) ? 'checked' : ''}> ${bi('在每个词下面显示一个例句', 'Show a small example sentence under each word')}</label>
