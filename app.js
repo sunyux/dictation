@@ -3134,7 +3134,7 @@
         save();
         const v = by.get(st.q[st.i]), opts = options(v), mygen = gen;
         answered = false;
-        box.innerHTML = `<div class="drill">
+        box.innerHTML = `<div class="drill mq-card">
           <div class="count">${st.i + 1} / ${total}${persist ? ` <span class="kbd">· ${bi('已保存', 'saved')}</span>` : ''}</div>
           <div class="bar"><i style="width:${st.i / total * 100}%"></i></div>
           <div class="prompt choose-prompt${gx(v.pos)}"><div class="q-fr" lang="fr">${playBtn(forms(v.fr).say)} <b>${frHTML(v.fr)}</b></div>
@@ -3179,7 +3179,7 @@
         let bonus = 0;
         if (persist) { store.set(key, null); store.set(lastKey, { score, date: dayStr() }); bonus = learnBonus('mq:' + book.id + ':' + lecon.n, 3); }
         const missed = st.bad.map(f => by.get(f)).filter(Boolean);
-        box.innerHTML = `<div class="drill summary"><p class="kicker" lang="fr">Bilan</p>
+        box.innerHTML = `<div class="drill summary mq-card"><p class="kicker" lang="fr">Bilan</p>
           <div class="score">${score}%</div>
           <p>${bi(`${total} 个里选对 ${st.ok.length} 个${bonus ? ` · 完成奖励 +${bonus} 分` : ''}`, `${st.ok.length} of ${total} right${bonus ? ` · +${bonus} points for finishing` : ''}`)}</p>
           ${missed.length ? `<ul>${missed.map(v => `<li><span lang="fr">${playBtn(forms(v.fr).say)} ${esc(v.fr)}</span><span class="w-zh">${mqLabel(v)}</span></li>`).join('')}</ul>
@@ -3200,7 +3200,7 @@
     if (saved && !(Array.isArray(saved.q) && saved.i < saved.q.length && saved.q.every(f => by.has(f)))) saved = null;
     const last = store.get(lastKey, null);
     if (!items.length) { box.innerHTML = `<div class="drill summary"><p>${bi('这一课没有可测的词。', 'No words to quiz in this unit.')}</p></div>`; return; }
-    box.innerHTML = `<div class="drill summary test-intro">
+    box.innerHTML = `<div class="drill summary test-intro mq-card">
       <p class="kicker" lang="fr">Quiz de sens</p>
       <h2 style="font-size:30px;margin-bottom:10px">${bi('选意思', 'Meaning quiz')}</h2>
       <p class="hint-text" style="margin:0 0 18px">${bi(`看到法语词，从 4 个选项里选出它的意思，这一课 ${items.length} 个词，不用打字。错的选项是长得像的词，要看仔细。<br>选对的词会点亮上面的「选意思」进度条，但<b>不算掌握，也不进错题本</b>；「默写」那条进度条只看你写对的词，记住拼写要靠默写。`,

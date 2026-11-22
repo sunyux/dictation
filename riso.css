@@ -521,3 +521,12 @@ html.dys .gx-m .syl i.sl, html.dys .gx-f .syl i.sl, html.dys .gx-p .syl i.sl { c
 }
 .shelf .cover.nlf .c-zh { font-size: 24px; }
 @media (max-width: 720px) { .shelf .cover.nlf .c-zh { font-size: 21px; } }
+
+/* focus mode · Meaning quiz: the whole question is ONE lit card; everything around it dims (no reading ruler on top of it) */
+html.focusing .mq-card {
+  position: relative; z-index: 60; margin: 14px 0; padding: 22px 22px 18px;
+  background: var(--card); border: 2px solid var(--gold, #a8823a); border-radius: 18px;
+  box-shadow: 0 0 0 5px rgba(232, 195, 122, .5), 0 0 0 100vmax rgba(15, 14, 12, .66);
+}
+html.focusing:has(.mq-card) .focus-ruler { display: none !important; }
+@media (max-width: 560px) { html.focusing .mq-card { padding: 16px 14px 14px; border-radius: 14px; } }
