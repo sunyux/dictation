@@ -665,3 +665,22 @@ html.tw #j-text { font-family: "Special Elite", monospace !important; font-size:
 .skip-row { text-align: center; margin: 4px 0 8px; }
 .tricky-opt { display: flex; gap: 8px; align-items: center; justify-content: center; margin: 4px auto 12px; max-width: 460px; text-align: left; }
 .mq-mean { font-size: 20px; margin: 4px 0 8px; }
+/* picture choices: the words that have a Wikipedia photo are answered by picking the picture; the French word + meaning appear on the photo after answering */
+.opt.pic { position: relative; display: block; padding: 6px; min-height: 0; overflow: hidden; }
+.opt.pic img { display: block; width: 100%; aspect-ratio: 4 / 3; max-height: 200px; object-fit: cover; border-radius: 7px; background: var(--paper-2); }
+.opt.pic .opt-n { position: absolute; top: 12px; left: 12px; z-index: 1; box-shadow: 0 1px 4px rgba(0,0,0,.28); }
+.opt.pic.right::after, .opt.pic.wrong::after { position: absolute; top: 11px; right: 12px; margin: 0; width: 28px; height: 28px; display: grid; place-items: center; border-radius: 50%; background: rgba(255,253,246,.94); font-size: 19px; }
+.opt.pic .opt-cap { display: none; }
+.opts.done .opt.pic:not(.nopic) .opt-cap { position: absolute; left: 6px; right: 6px; bottom: 6px; display: flex; flex-direction: column; gap: 1px; padding: 14px 7px 5px; border-radius: 0 0 7px 7px; background: linear-gradient(rgba(24,20,14,0), rgba(24,20,14,.86) 60%); color: #fff; text-align: left; }
+/* riso.css adds +2px to every [lang=fr], so the size is set on the caption and the word comes out 2px larger */
+.opt .opt-cap { font-size: clamp(11px, 2.9vw, 15px); line-height: 1.2; }
+.opt .opt-cap b { font-family: var(--serif); font-weight: 600; letter-spacing: 0; text-transform: none; font-variant: normal; overflow-wrap: anywhere; }
+.opt .opt-cap small { font: 500 clamp(11px, 2.8vw, 14px)/1.25 var(--serif); opacity: .94; }
+.opt-cap .en-gloss { font-size: inherit; color: inherit; }
+.opt.pic.nopic { padding: 14px 16px; min-height: 64px; display: flex; align-items: center; gap: 12px; }
+.opt.pic.nopic .opt-n { position: static; box-shadow: none; }
+@media (max-width: 560px) { .opts.pics { grid-template-columns: 1fr 1fr; gap: 8px; } .opt.pic img { max-height: 150px; } .opt.pic .opt-n { top: 10px; left: 10px; width: 24px; height: 24px; font-size: 13px; } }
+.mq-picked { border-top: 1px dashed var(--line); margin-top: 10px; padding-top: 8px; }
+.mq-pk-row { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 14px; }
+.mq-pk-fr { font: 600 clamp(21px, 5vw, 25px)/1.2 var(--display); display: inline-flex; align-items: center; gap: 8px; }
+.mq-pk-mean { font-size: 18px; color: var(--ink-2); }

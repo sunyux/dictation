@@ -3088,6 +3088,7 @@
     return wa.some(t => t.length > 3 && wb.includes(t));
   };
   const mqLabel = x => { const en = L() === 'zhen' ? (enFill(x).en || '') : ''; return esc(Gt(x)) + (en ? `<span class="en-gloss" lang="en">${esc(en)}</span>` : ''); };
+  const mqPic = w => { const m = window.MEM && MEM[w.fr]; return m && m.i && m.i.u ? m.i : null; };   // the Wikipedia photo of a word (A1 / A2 books), if it has one
   function meaningQuiz(ctx, box) {
     const { book, lecon } = ctx;
     const key = `mquiz:${book.id}:${lecon.n}`, lastKey = `mquiz-last:${book.id}:${lecon.n}`;
@@ -3099,7 +3100,8 @@
     const exQ = v => (!store.get('mqex', true) || !v.ex || !v.ex[0] ? '' : `<div class="q-ex" lang="fr">${playBtn(v.ex[0])} ${esc(v.ex[0])}</div>`);
 
     // three wrong answers that look like real candidates: same group / type / unit, similar spelling
-    const options = v => {
+    // pics: the choices are photos (only words that have one, never two photos of the same thing); falls back to text when there are too few
+    const options = (v, pics = false) => {
       const mine = Gt(v), a = mqCore(v.fr), tricky = store.get('tricky', true);
       const rank = list => tricky
         ? list.filter(x => x.fr !== v.fr).map(x => {
@@ -3115,12 +3117,21 @@
           return [sc, x];
         }).sort((p, q) => q[0] - p[0]).map(t => t[1])
         : [...shuffle(list.filter(x => x.fr !== v.fr && x.pos === v.pos)), ...shuffle(list.filter(x => x.fr !== v.fr && x.pos !== v.pos))];
-      const seen = [mine], pick = [];
-      const take = list => { for (const x of list) { const m = Gt(x); if (pick.length >= 3) break; if (!m || seen.some(s => mqSame(s, m))) continue; seen.push(m); pick.push(x); } };
-      take(rank(pool));
+      const seen = [mine], pick = [], imgs = pics ? [mqPic(v).u, mqPic(v).w] : [];
+      const take = list => {
+        for (const x of list) {
+          const m = Gt(x); if (pick.length >= 3) break;
+          if (!m || seen.some(s => mqSame(s, m))) continue;
+          if (pics) { const p = mqPic(x); if (!p || imgs.includes(p.u) || imgs.includes(p.w)) continue; imgs.push(p.u, p.w); }
+          seen.push(m); pick.push(x);
+        }
+      };
+      take(rank(pics ? pool.filter(mqPic) : pool));
+      if (pics && pick.length < 3) return options(v, false);
       if (pick.length < 3) { wide = wide || BOOKS.flatMap(allOf); take(shuffle(wide)); }
-      return shuffle([v, ...pick]);
+      return { list: shuffle([v, ...pick]), pics };
     };
+    const usePics = v => store.get('mqpic', true) && !!mqPic(v);
 
     function run(st, persist) {
       const total = st.q.length, auto = store.get('vauto', false);
@@ -3132,14 +3143,19 @@
         offKeys && offKeys(); offKeys = null; gen++;
         if (st.i >= total) return finish();
         save();
-        const v = by.get(st.q[st.i]), opts = options(v), mygen = gen;
+        const v = by.get(st.q[st.i]), mygen = gen;
+        const { list: opts, pics } = options(v, usePics(v));
         answered = false;
+        const optHTML = (o, k) => {
+          if (!pics) return `<button class="opt" data-k="${k}"><span class="opt-n">${k + 1}</span><span class="opt-t">${mqLabel(o)}</span></button>`;
+          return `<button class="opt pic" data-k="${k}" aria-label="${bi('图片', 'Picture')} ${k + 1}"><span class="opt-n">${k + 1}</span><img src="${esc(mqPic(o).u)}" alt="" loading="eager" referrerpolicy="no-referrer"><span class="opt-cap"><b lang="fr">${esc(o.fr)}</b><small>${mqLabel(o)}</small></span></button>`;
+        };
         box.innerHTML = `<div class="drill mq-card">
           <div class="count">${st.i + 1} / ${total}${persist ? ` <span class="kbd">· ${bi('已保存', 'saved')}</span>` : ''}</div>
           <div class="bar"><i style="width:${st.i / total * 100}%"></i></div>
           <div class="prompt choose-prompt${gx(v.pos)}"><div class="q-fr" lang="fr">${playBtn(forms(v.fr).say)} <b>${frHTML(v.fr)}</b></div>
             <div class="ppos"><span class="pos ${gender(v.pos) ? 'g-' + gender(v.pos) : ''}">${esc(v.pos || '')}</span></div>${exQ(v)}</div>
-          <div class="opts">${opts.map((o, k) => `<button class="opt" data-k="${k}"><span class="opt-n">${k + 1}</span><span class="opt-t">${mqLabel(o)}</span></button>`).join('')}</div>
+          <div class="opts${pics ? ' pics' : ''}">${opts.map(optHTML).join('')}</div>
           <div class="skip-row"><button class="btn ghost small" id="mq-idk">${bi('不会，看答案', "I don't know · show it")}</button></div>
           <div class="drill-actions"><button class="btn ghost small" id="mq-pause">${persist ? bi('暂停', 'Pause') : bi('退出', 'Leave')}</button><span class="spacer"></span>
             <span class="kbd"><kbd>1</kbd>–<kbd>4</kbd> ${bi('选择', 'choose')} · <kbd>Enter</kbd> ${bi('下一个', 'next')}</span></div>
@@ -3149,20 +3165,29 @@
           if (answered) return; answered = true;
           const good = opts[k] === v;
           $$('.opt', box).forEach((b, j) => { b.disabled = true; b.classList.toggle('right', opts[j] === v); b.classList.toggle('wrong', j === k && !good); });
+          $('.opts', box).classList.add('done');   // photo choices reveal their French word + meaning once answered
           $('#mq-idk', box).disabled = true;
           (good ? st.ok : st.bad).push(v.fr); st.i++; save();
           MASTER.know(book.id, lecon.n, v.fr, good); refreshProg(book, lecon);   // lights the "Meaning" bar; never marks the word as mastered
-          if (good) { XP.gain(1, bi('选意思答对', 'Meaning quiz')); setTimeout(() => { if (gen === mygen && box.isConnected) draw(); }, 650); return; }
+          if (good) { XP.gain(1, bi('选意思答对', 'Meaning quiz')); setTimeout(() => { if (gen === mygen && box.isConnected) draw(); }, pics ? 1200 : 650); return; }   // photo choices stay a bit longer so the captions can be read
           $('#fb', box).innerHTML = `<div class="feedback bad">
             <span class="lab">${k < 0 ? bi('答案', 'Answer') : bi('不对，正确答案是', 'Not quite — the answer is')}</span>
             <div class="ans${gx(v.pos)}" lang="fr">${playBtn(forms(v.fr).say)} ${frHTML(v.fr)}</div>
             <div class="mq-mean">${mqLabel(v)}</div>
+            ${k >= 0 ? `<div class="mq-picked"><span class="lab">${pics ? bi('你选的图片是', 'The picture you picked shows') : bi('你选的意思其实是这个词', 'What you picked is the meaning of')}</span>
+              <div class="mq-pk-row"><span class="mq-pk-fr" lang="fr">${playBtn(forms(opts[k].fr).say)} ${frHTML(opts[k].fr)}</span><span class="mq-pk-mean">${mqLabel(opts[k])}</span></div></div>` : ''}
             ${tipBox(wordTip(lecon.n, v))}${exBox(v)}
             <div class="drill-actions"><button class="btn small" id="mq-next">${st.i >= total ? bi('看结果', 'See the result') : bi('下一个 ›', 'Next ›')}</button></div></div>`;
           $('#mq-next', box).onclick = draw; $('#mq-next', box).focus({ preventScroll: true });
           TTS.say(forms(v.fr).say);
         };
         $$('.opt', box).forEach(b => b.onclick = () => choose(+b.dataset.k));
+        // a photo that will not load (offline, blocked) turns that choice back into its text meaning
+        $$('.opt.pic img', box).forEach(im => im.onerror = () => {
+          const b = im.closest('.opt'); if (!b) return;
+          const t = document.createElement('span'); t.className = 'opt-t'; t.innerHTML = mqLabel(opts[+b.dataset.k]);
+          im.replaceWith(t); b.classList.add('nopic');
+        });
         $('#mq-idk', box).onclick = () => choose(-1);
         $('#mq-pause', box).onclick = leave;
         const keys = e => {
@@ -3209,6 +3234,7 @@
       ${saved ? `<p class="kbd" style="margin-bottom:10px">${bi(`有一场没做完的：${saved.i} / ${saved.q.length}`, `An unfinished quiz: ${saved.i} / ${saved.q.length}`)}</p>` : ''}
       <label class="kbd tricky-opt"><input type="checkbox" id="mq-ex" ${store.get('mqex', true) ? 'checked' : ''}> ${bi('在每个词下面显示一个例句', 'Show a small example sentence under each word')}</label>
       <label class="kbd tricky-opt"><input type="checkbox" id="mq-tricky" ${store.get('tricky', true) ? 'checked' : ''}> ${bi('难一点：错的选项是拼写相近的词', 'Tricky choices: wrong answers are similar words')}</label>
+      ${items.some(mqPic) ? `<label class="kbd tricky-opt"><input type="checkbox" id="mq-pic" ${store.get('mqpic', true) ? 'checked' : ''}> ${bi('有照片的词：选项用图片（选图）', 'Words that have a photo: choose the picture')}</label>` : ''}
       <label class="kbd tricky-opt"><input type="checkbox" id="mq-auto" ${store.get('vauto', false) ? 'checked' : ''}> ${bi('每题自动朗读', 'Say each word out loud automatically')}</label>
       <div class="drill-actions" style="justify-content:center">
         ${saved ? `<button class="btn" id="mq-go">${bi('继续', 'Continue')}</button><button class="btn ghost" id="mq-new">${bi('重新开始', 'Start over')}</button>` : `<button class="btn" id="mq-go">${bi('开始', 'Start')}</button>`}
@@ -3216,6 +3242,7 @@
     $('#mq-ex', box).onchange = e => store.set('mqex', e.target.checked);
     $('#mq-tricky', box).onchange = e => store.set('tricky', e.target.checked);
     $('#mq-auto', box).onchange = e => store.set('vauto', e.target.checked);
+    const picToggle = $('#mq-pic', box); if (picToggle) picToggle.onchange = e => store.set('mqpic', e.target.checked);
     const fresh = () => ({ q: shuffle(items.map(v => v.fr)), i: 0, ok: [], bad: [] });
     $('#mq-go', box).onclick = () => run(saved || fresh(), true);
     const nw = $('#mq-new', box); if (nw) nw.onclick = () => run(fresh(), true);
