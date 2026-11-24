@@ -2464,7 +2464,7 @@
     main.innerHTML = `
       <p class="kicker" lang="fr">Révision du jour</p>
       <h1 style="font-size:44px">错题本</h1>
-      <p class="hint-text" style="margin-top:8px">练习里写错、用了提示或背漏的内容会自动记下来。第二天出现在这里；答对后隔 2、4、7、15 天再复习，连续答对 5 次就算掌握。答错会重新从明天开始。</p>
+      <p class="hint-text" style="margin-top:8px">练习里写错、选意思选错、用了提示或背漏的内容会自动记下来。第二天出现在这里；答对后隔 2、4、7、15 天再复习，连续答对 5 次就算掌握。答错会重新从明天开始。</p>
       <div class="toolbar"><a class="btn ghost small" href="#/verbes/practice">${bi('动词错题本', 'Verb mistake book')}${VSRS.due().length ? ` · ${VSRS.due().length}` : ''} ›</a></div>
       <div class="review-stats">
         <div><b>${due.length}</b><span>今天到期</span></div>
@@ -3169,6 +3169,8 @@
           $('#mq-idk', box).disabled = true;
           (good ? st.ok : st.bad).push(v.fr); st.i++; save();
           MASTER.know(book.id, lecon.n, v.fr, good); refreshProg(book, lecon);   // lights the "Meaning" bar; never marks the word as mastered
+          // a wrong pick (or "I don't know") goes to the mistake book, to be written out tomorrow; a right pick never changes mastery or the review schedule
+          if (!good) SRS.miss({ book: book.id, n: lecon.n, kind: 'word', fr: v.fr, zh: v.zh, en: v.en, pos: v.pos });
           if (good) { XP.gain(1, bi('选意思答对', 'Meaning quiz')); setTimeout(() => { if (gen === mygen && box.isConnected) draw(); }, pics ? 1200 : 650); return; }   // photo choices stay a bit longer so the captions can be read
           $('#fb', box).innerHTML = `<div class="feedback bad">
             <span class="lab">${k < 0 ? bi('答案', 'Answer') : bi('不对，正确答案是', 'Not quite — the answer is')}</span>
@@ -3176,6 +3178,7 @@
             <div class="mq-mean">${mqLabel(v)}</div>
             ${k >= 0 ? `<div class="mq-picked"><span class="lab">${pics ? bi('你选的图片是', 'The picture you picked shows') : bi('你选的意思其实是这个词', 'What you picked is the meaning of')}</span>
               <div class="mq-pk-row"><span class="mq-pk-fr" lang="fr">${playBtn(forms(opts[k].fr).say)} ${frHTML(opts[k].fr)}</span><span class="mq-pk-mean">${mqLabel(opts[k])}</span></div></div>` : ''}
+            <span class="lab mq-booked">${bi('已加入错题本：明天复习，要把这个词写出来', 'Added to the mistake book: tomorrow you will write this word out')}</span>
             ${tipBox(wordTip(lecon.n, v))}${exBox(v)}
             <div class="drill-actions"><button class="btn small" id="mq-next">${st.i >= total ? bi('看结果', 'See the result') : bi('下一个 ›', 'Next ›')}</button></div></div>`;
           $('#mq-next', box).onclick = draw; $('#mq-next', box).focus({ preventScroll: true });
@@ -3208,7 +3211,7 @@
           <div class="score">${score}%</div>
           <p>${bi(`${total} 个里选对 ${st.ok.length} 个${bonus ? ` · 完成奖励 +${bonus} 分` : ''}`, `${st.ok.length} of ${total} right${bonus ? ` · +${bonus} points for finishing` : ''}`)}</p>
           ${missed.length ? `<ul>${missed.map(v => `<li><span lang="fr">${playBtn(forms(v.fr).say)} ${esc(v.fr)}</span><span class="w-zh">${mqLabel(v)}</span></li>`).join('')}</ul>
-            <p class="kbd">${bi('这个测验不算掌握，也不进错题本。要把它们记牢，去「默写」里写。', 'This quiz does not count as mastered and does not add to the mistake book. To learn these, write them in Dictation.')}</p>` : `<p>${bi('全部选对，很棒。', 'Every word right. Great work!')}</p>`}
+            <p class="kbd">${bi('这些词已经进了错题本，明天复习时要写出来。这个测验不算掌握，要记牢拼写去「默写」里写。', 'These words are now in the mistake book: tomorrow you will write them out. This quiz does not count as mastered; spelling is learned in Dictation.')}</p>` :`<p>${bi('全部选对，很棒。', 'Every word right. Great work!')}</p>`}
           <div class="drill-actions" style="justify-content:center">
             ${missed.length ? `<button class="btn" id="mq-missed">${bi(`只练选错的（${missed.length}）`, `Quiz the misses (${missed.length})`)}</button>` : ''}
             <button class="btn ${missed.length ? 'ghost' : ''}" id="mq-again">${bi('再测一次', 'Quiz again')}</button>
@@ -3228,8 +3231,8 @@
     box.innerHTML = `<div class="drill summary test-intro mq-card">
       <p class="kicker" lang="fr">Quiz de sens</p>
       <h2 style="font-size:30px;margin-bottom:10px">${bi('选意思', 'Meaning quiz')}</h2>
-      <p class="hint-text" style="margin:0 0 18px">${bi(`看到法语词，从 4 个选项里选出它的意思，这一课 ${items.length} 个词，不用打字。错的选项是长得像的词，要看仔细。<br>选对的词会点亮上面的「选意思」进度条，但<b>不算掌握，也不进错题本</b>；「默写」那条进度条只看你写对的词，记住拼写要靠默写。`,
-        `You see a French word and pick its meaning from 4 choices: all ${items.length} words of this unit, no typing. The wrong choices are look-alike words, so read carefully.<br>Right answers fill the "Meaning" bar above, but they do <b>not</b> count as mastered and do not add to the mistake book. The "Dictation" bar only counts words you wrote correctly: spelling is learned there.`)}</p>
+      <p class="hint-text" style="margin:0 0 18px">${bi(`看到法语词，从 4 个选项里选出它的意思，这一课 ${items.length} 个词，不用打字。错的选项是长得像的词，要看仔细。<br>选对的词会点亮上面的「选意思」进度条，但<b>不算掌握</b>；<b>选错的词会进错题本</b>，之后要写出来复习。「默写」那条进度条只看你写对的词，记住拼写要靠默写。`,
+        `You see a French word and pick its meaning from 4 choices: all ${items.length} words of this unit, no typing. The wrong choices are look-alike words, so read carefully.<br>Right answers fill the "Meaning" bar above, but they do <b>not</b> count as mastered. <b>Wrong answers go into the mistake book</b>, where you write the word out to review it. The "Dictation" bar only counts words you wrote correctly: spelling is learned there.`)}</p>
       ${last ? `<p class="kbd">${bi('上次：', 'Last time: ')}${last.score}% · ${last.date}</p>` : ''}
       ${saved ? `<p class="kbd" style="margin-bottom:10px">${bi(`有一场没做完的：${saved.i} / ${saved.q.length}`, `An unfinished quiz: ${saved.i} / ${saved.q.length}`)}</p>` : ''}
       <label class="kbd tricky-opt"><input type="checkbox" id="mq-ex" ${store.get('mqex', true) ? 'checked' : ''}> ${bi('在每个词下面显示一个例句', 'Show a small example sentence under each word')}</label>

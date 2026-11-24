@@ -684,3 +684,4 @@ html.tw #j-text { font-family: "Special Elite", monospace !important; font-size:
 .mq-pk-row { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 14px; }
 .mq-pk-fr { font: 600 clamp(21px, 5vw, 25px)/1.2 var(--display); display: inline-flex; align-items: center; gap: 8px; }
 .mq-pk-mean { font-size: 18px; color: var(--ink-2); }
+.feedback .mq-booked { margin: 10px 0 2px; color: var(--red); font-weight: 600; }
