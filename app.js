@@ -2150,7 +2150,7 @@
   const playBtn = (text, extra = '') => `<button class="play ${extra}" data-say="${esc(text)}" aria-label="朗读" title="朗读">${ICON.play}</button>`;
   /* NLF books keep their in-depth cards in deep-nlf/<a1|a2|b>-<zh|en>.js, loaded the first time the book is opened */
   const DEEP_FILE = { nlf: 'a1', 'nlf-a2': 'a2', 'nlf-b': 'b' };
-  const MEM_FILES = new Set(['a1', 'a2']);   // books that also have pictures + memory tricks (deep-nlf/<k>-mem.js)
+  const MEM_FILES = new Set(['a1', 'a2', 'b']);   // books that also have pictures + memory tricks (deep-nlf/<k>-mem.js)
   const deepLoads = {};
   const hasDeep = fr => !!((window.DEEP && DEEP[fr]) || (window.DEEP_EN && DEEP_EN[fr]));
   function deepNeeds(bookId) {
@@ -2161,7 +2161,7 @@
   function loadDeep(bookId) {
     return Promise.all(deepNeeds(bookId).map(k => deepLoads[k] === true ? 0 : (deepLoads[k] = deepLoads[k] || new Promise(res => {
       const sc = document.createElement('script');
-      sc.src = `deep-nlf/${k}.js?v=1`;
+      sc.src = `deep-nlf/${k}.js?v=${k.endsWith('-mem') ? 2 : 1}`;   // memory files were rebuilt without diagram-like pictures
       sc.onload = () => { deepLoads[k] = true; res(); };
       sc.onerror = () => { deepLoads[k] = true; res(); };
       document.head.appendChild(sc);
@@ -3135,7 +3135,7 @@
 
     function run(st, persist) {
       const total = st.q.length, auto = store.get('vauto', false);
-      let answered = false, offKeys = null, gen = 0;
+      let answered = false, offKeys = null, gen = 0, pre = null;   // pre: the next question's choices, made early so its photos can load while this one is answered
       const save = () => { if (persist) store.set(key, st); };
       const prevC = cleanup; cleanup = () => { offKeys && offKeys(); prevC && prevC(); };
       const leave = () => { gen++; offKeys && offKeys(); offKeys = null; meaningQuiz(ctx, box); };   // gen++: a pending "next question" timer must not redraw over the intro
@@ -3144,7 +3144,8 @@
         if (st.i >= total) return finish();
         save();
         const v = by.get(st.q[st.i]), mygen = gen;
-        const { list: opts, pics } = options(v, usePics(v));
+        const { list: opts, pics } = (pre && pre.fr === v.fr && pre.o) || options(v, usePics(v));
+        pre = null;
         answered = false;
         const optHTML = (o, k) => {
           if (!pics) return `<button class="opt" data-k="${k}"><span class="opt-n">${k + 1}</span><span class="opt-t">${mqLabel(o)}</span></button>`;
@@ -3161,6 +3162,8 @@
             <span class="kbd"><kbd>1</kbd>–<kbd>4</kbd> ${bi('选择', 'choose')} · <kbd>Enter</kbd> ${bi('下一个', 'next')}</span></div>
           <div id="fb"></div></div>`;
         if (auto) setTimeout(() => { if (gen === mygen && box.isConnected) TTS.say(forms(v.fr).say); }, 200);
+        const nv = by.get(st.q[st.i + 1]);
+        if (nv) { pre = { fr: nv.fr, o: options(nv, usePics(nv)) }; if (pre.o.pics) pre.o.list.forEach(o => { const im = new Image(); im.referrerPolicy = 'no-referrer'; im.src = mqPic(o).u; }); }
         const choose = k => {
           if (answered) return; answered = true;
           const good = opts[k] === v;
