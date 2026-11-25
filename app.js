@@ -2161,7 +2161,7 @@
   function loadDeep(bookId) {
     return Promise.all(deepNeeds(bookId).map(k => deepLoads[k] === true ? 0 : (deepLoads[k] = deepLoads[k] || new Promise(res => {
       const sc = document.createElement('script');
-      sc.src = `deep-nlf/${k}.js?v=${k.endsWith('-mem') ? 2 : 1}`;   // memory files were rebuilt without diagram-like pictures
+      sc.src = `deep-nlf/${k}.js?v=${k.endsWith('-mem') ? 3 : 1}`;   // memory files were rebuilt after the picture review
       sc.onload = () => { deepLoads[k] = true; res(); };
       sc.onerror = () => { deepLoads[k] = true; res(); };
       document.head.appendChild(sc);
@@ -3088,7 +3088,7 @@
     return wa.some(t => t.length > 3 && wb.includes(t));
   };
   const mqLabel = x => { const en = L() === 'zhen' ? (enFill(x).en || '') : ''; return esc(Gt(x)) + (en ? `<span class="en-gloss" lang="en">${esc(en)}</span>` : ''); };
-  const mqPic = w => { const m = window.MEM && MEM[w.fr]; return m && m.i && m.i.u ? m.i : null; };   // the Wikipedia photo of a word (A1 / A2 books), if it has one
+  const mqPic = w => { const m = window.MEM && MEM[w.fr]; return m && m.i && m.i.u && m.i.q !== 0 ? m.i : null; };   // a word's photo, if it is clear enough to be a quiz choice (q: 0 = memory card only)
   function meaningQuiz(ctx, box) {
     const { book, lecon } = ctx;
     const key = `mquiz:${book.id}:${lecon.n}`, lastKey = `mquiz-last:${book.id}:${lecon.n}`;
