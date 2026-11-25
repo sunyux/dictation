@@ -1,6 +1,6 @@
 // UI strings shown in 英法 mode. Each entry: [pattern matching a whole text fragment, English].
 const ZH_GROUPS = { '阳性名词': 'Masculine nouns', '阴性名词': 'Feminine nouns', '名词': 'Nouns (both genders)', '动词': 'Verbs', '形容词': 'Adjectives',
-  '代词': 'Pronouns', '副词': 'Adverbs', '介词、连词': 'Prepositions & conjunctions', '冠词、感叹词、短语': 'Articles, interjections & phrases', '地名': 'Place names' };
+  '代词': 'Pronouns', '副词': 'Adverbs', '介词、连词': 'Prepositions & conjunctions', '冠词、感叹词、短语': 'Articles, interjections & phrases', '地名': 'Place names', '其他词': 'Other words', '短语': 'Phrases' };
 window.ZH_EN = [
   [/^丝网印刷质感$/, 'Screen-print texture'],
   [/^PDF 生成失败.*$/, 'Could not make the PDF (network problem?). Use Print → Save as PDF instead.'],
@@ -25,8 +25,8 @@ window.ZH_EN = [
   [/^已同步 · (.+)$/, 'Synced · $1'], [/^立即同步$/, 'Sync now'], [/^退出登录$/, 'Sign out'],
   [/^每次练习后自动上传.*$/, 'Uploads after every exercise; downloads and merges whenever you open the site or come back to it.'], [/^登录失败：$/, 'Sign-in failed: '],
   [/^(.*?)(（现在时）)? · 变位$/, (m, a, p) => `${a}${p ? ' (present tense)' : ''} · conjugation`],
-  [/^(阳性名词|阴性名词|名词|动词|形容词|代词|副词|介词、连词|冠词、感叹词、短语|地名)$/, g => ZH_GROUPS[g]],
-  [/^(.*) · (阳性名词|阴性名词|名词|动词|形容词|代词|副词|介词、连词|冠词、感叹词、短语|地名)$/, (m, a, g) => `${a} · ${ZH_GROUPS[g]}`],
+  [/^(阳性名词|阴性名词|名词|动词|形容词|代词|副词|介词、连词|冠词、感叹词、短语|地名|其他词|短语)$/, g => ZH_GROUPS[g]],
+  [/^(.*) · (阳性名词|阴性名词|名词|动词|形容词|代词|副词|介词、连词|冠词、感叹词、短语|地名|其他词|短语)$/, (m, a, g) => `${a} · ${ZH_GROUPS[g]}`],
   // header, navigation
   [/^错题本$/, 'Mistakes'], [/^错题本 · 每日复习$/, 'Mistake book · daily review'], [/^我的打卡与邮册$/, 'My streak & stamps'],
   [/^朗读$/, 'Play'], [/^设置$/, 'Settings'], [/^朗读与判分设置$/, 'Audio & marking settings'],

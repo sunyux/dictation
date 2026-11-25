@@ -685,3 +685,9 @@ html.tw #j-text { font-family: "Special Elite", monospace !important; font-size:
 .mq-pk-fr { font: 600 clamp(21px, 5vw, 25px)/1.2 var(--display); display: inline-flex; align-items: center; gap: 8px; }
 .mq-pk-mean { font-size: 18px; color: var(--ink-2); }
 .feedback .mq-booked { margin: 10px 0 2px; color: var(--red); font-weight: 600; }
+
+/* ---------- TCF book (words only) ---------- */
+.vfreq { display: block; font-style: normal; font-size: 11px; opacity: .65; line-height: 1.3; white-space: nowrap; }
+.tabs[hidden] { display: none !important; }
+.sec-jump { margin: 6px 0 4px; }
+.unit[id^="unit-"] { scroll-margin-top: 76px; }

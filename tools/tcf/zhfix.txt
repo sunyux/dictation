@@ -1,0 +1,21 @@
+# Chinese meanings that did not fit the headword
+commerçant|商人；店主
+coup|一下；打击（du coup 所以）
+exception|例外
+permis|许可证；驾照
+secret|秘密
+thématique|主题
+poste|职位；岗位（la poste 邮局）
+coordonnée|联系方式（常用复数）
+quel|哪个；什么样的
+encontre|违背（à l'encontre de）
+lurette|很久（depuis belle lurette）
+# meanings of plural/singular pairs that are merged into one entry
+famille d'accueil|寄宿家庭；寄养家庭
+chambre d'hôte|民宿客房
+mot d'ordre|口号；行动准则
+idée reçue|成见；错误观念
+offre d'emploi|招聘信息
+ménager|爱惜；照顾好（se ménager 量力而行）
+héler|招呼；叫住
+tendre|温柔的；嫩的

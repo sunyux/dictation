@@ -1,0 +1,107 @@
+# TCF nouns: gender (checked by hand), and fixes for words the source list wrongly tags as nouns.
+# Format  code: word, word, ...
+# m / f / mf (both) / mp / fp (plural)  ·  v adj adv conj prép pron interj num = not a noun  ·  drop = leave out
+m: salut, habitant, internet, argent, horizon, propos, aliment, déchet, œil, tour, trouble, détail, doute, inconvénient, dommage
+m: invité, participant, travailleur, millier, utilisateur, arrivant, emballage, essor, résident, agriculteur, mai, pair, égard, agent
+m: copain, malentendu, océan, septembre, accomplissement, carbone, embouteillage, entourage, joueur, mars, pesticide, accessoire
+m: décembre, expert, habitat, participe, surcroît, août, apport, conducteur, désaccord, entrepreneur, extrait, humour, laboratoire
+m: acheteur, citadin, mail, solde, synonyme, éducateur, éloignement, appétit, auditeur, connecteur, engouement, ingrédient, lycéen, nutriment, usager
+m: élu, attachement, avancement, avènement, créateur, décor, engrais, interlocuteur, octobre, or, procédé, snack, tort, avril
+m: commentaire, discernement, dollar, enregistrement, fitness, formateur, novembre, paysan, prédateur, péril, siège
+m: encouragement, entraîneur, escalier, février, instructeur, panier, règlement, sacrifice, solo, élargissement, élevage
+m: abandon, abonné, algorithme, business, change, cousin, demandeur, dévouement, ennui, honneur, mets, miel, métrage, parfum, piège
+m: sable, toit, vestiaire, zéro, accroissement, adhérent, aidant, ancrage, artisanat, basket, bonnet, carnet, composant, débouché, défenseur
+m: historien, immigré, intellect, marié, mentor, métal, remerciement, soignant, vacancier, vœu, écolier
+m: absentéisme, abus, affrontement, ajustement, amont, appui, arôme, audio, autobus, cheveu, combustible, complément, conte, couturier
+m: dirigeant, décès, délégué, déracinement, effectif, embarquement, fondateur, format, fournisseur, gant, impôt, informaticien, kiosque
+m: militant, organisateur, oubli, ouvrier, pompier, protocole, questionnement, ralentissement, retraité, riverain, secours, sel, stock
+m: tram, traumatisme, téléspectateur, uniforme, zoom, éveil, académicien, activisme, alcool, alpinisme, altruisme, anglicisme, antivol
+m: arrangement, artifice, aspirateur, assistant, axe, bloc, bâtisseur, capteur, casier, chômeur, clavier, climatiseur, collégien, comble, concepteur
+m: congrès, constructeur, contraste, coureur, danseur, dessinateur, distributeur, donateur, drap, décorateur, défilé, détenteur
+m: emblème, explorateur, expéditeur, fichier, filtre, glacier, guillemet, gène, habillement, habit, implant, indice, individualisme, influenceur
+m: inventeur, investisseur, linge, liquide, malheur, meurtre, moustique, orphelin, palmier, pari, partisan, pharmacien, pionnier, plancher, planning
+m: projecteur, pré, quota, rail, rangement, rattrapage, relief, renouveau, répertoire, résidu, satellite, saumon, scandale, schéma, score
+m: sculpteur, skieur, tic, traducteur, traiteur, téléchargement, vandalisme, violon, voleur, échelon, électeur, évènement
+m: accompagnateur, accusé, accélérateur, acharnement, adjoint, admirateur, affichage, agrandissement, ajout, alentour, alignement, aléa
+m: analphabétisme, ange, anonymat, appareillage, apprenti, arbuste, assainissement, asthme, autoritarisme, aventurier, azur
+m: bambin, beignet, biberon, blogueur, blues, bonbon, boom, boomer, buffle, cacao, caddie, camp, champion, chasseur, cheminot, ciné
+m: comprimé, compteur, crayon, croisement, croquis, dicton, dragon, droitier, décalage, découragement, délice, déménageur, dénouement, député
+m: détachement, détracteur, effondrement, embryon, empereur, endormissement, enfer, ennemi, enquêteur, fantôme, favoritisme, festin
+m: feuilleton, fossé, fourneau, franc, gaucher, gendarme, genou, gluten, guerrier, guidage, hobby, hémisphère, index, jardinier, lectorat
+m: levant, licenciement, litige, look, machin, maillon, manchot, marcheur, marqueur, mensonge, mime, mouchoir, mécontentement, nageur
+m: naufrage, neurone, nuage, néologisme, observateur, optimisme, oranger, oxygène, ozone, panda, papillon, parrainage, patio, phoque, pli
+m: poison, praticien, prisonnier, proverbe, prélèvement, raffinement, recensement, recteur, recueil, regain, revêtement, rosier, réacteur
+m: régal, sapin, sauvetage, spa, spécimen, steak, stylo, surfeur, temple, tirage, tribunal, tube, vaccin, virus, voyagiste, éclat
+m: écouteur, écueil, éleveur
+f: origine, madame, avance, coutume, recommandation, installation, revanche, dépense, appartenance, anxiété, acquisition, attraction, donnée
+f: détente, imagination, institution, faveur, estime, humanité, infrastructure, nuance, aise, écologie, astuce, serre, empreinte, intelligence
+f: embauche, humeur, répercussion, circonstance, inquiétude, messagerie, édition, adoption, entraide, essence, facette, harmonie, racine
+f: cesse, immigration, annulation, insertion, précaution, suggestion, vis, adolescence, formalité, hygiène, modalité, notification
+f: orthographe, pousse, session, union, certification, habitation, inclusion, issue, logistique, modification, oreille, permanence
+f: subtilité, unité, alerte, attractivité, auberge, collation, céréale, festivité, instruction, modération, obtention, protéine
+f: ampleur, donne, excellence, herbe, hypertension, hôtellerie, intensité, interruption, introduction, pathologie, âme, émancipation
+f: équité, accumulation, aire, aisance, apparition, attaque, dent, exclusion, imitation, perturbation, prudence, salutation
+f: alternance, angoisse, appréhension, assimilation, automatisation, cabine, carence, dérive, expatriation, félicitation, graisse, info
+f: ingénierie, insuffisance, insécurité, opposition, pension, révision, simulation, sollicitation, tonne, touche, admiration, adéquation
+f: alliance, allocation, attirance, calorie, complication, coupe, enseignante, entente, escalade, espérance, fonctionnalité, hormone
+f: hypothèse, infirmière, instance, nouvelle, plainte, poche, prescription, prestation, rumeur, réticence, énigme, épargne, étiquette
+f: accusation, administration, agressivité, altitude, appellation, auto, boucle, branche, championne, colère, coordonnée, denrée
+f: discothèque, douane, détresse, effervescence, embûche, encontre, excitation, excuse, expérimentation, extension, figure, formatrice
+f: frite, générosité, honnêteté, horreur, huile, identification, impatience, individualité, intimité, intégrité, inventivité
+f: investigation, justesse, localisation, mémorisation, obsolescence, planche, pyramide, pâte, saturation, synthèse, transaction
+f: téléphonie, urbanisation, vertu, vibration, émergence, épice, adrénaline, affinité, agitation, aile, ambassade, amende, arme
+f: assistante, atteinte, audace, autrice, banquette, blanchisserie, bulle, cache, cellule, comptabilité, contradiction, contrée
+f: correction, courtoisie, créatrice, demeure, diplomatie, directive, disparité, dissertation, divergence, démotivation, dévalorisation
+f: encre, entrave, extraction, exécution, faille, fortune, fraude, grandeur, gratitude, habileté, hostilité, héroïne, idéologie
+f: illustration, impasse, inactivité, incapacité, infériorité, instauration, lacune, lisibilité, lucidité, mamie, métaphore
+f: narration, navette, optimisation, particule, paye, plaisanterie, plume, positivité, poussette, prière, pétition, remarque, retouche
+f: robotique, sauce, sucrerie, séquence, tache, terminale, toxicité, trajectoire, tribu, uniformisation, uniformité, usure, vedette
+f: vigueur, violation, vogue, élaboration, élue, élégance, émulation, épaule, épouse, abolition, absorption, académie, acuité
+f: affectation, agilité, algue, allure, amabilité, ambiguïté, appropriation, arrogance, artère, arène, astronomie, attache, aurore
+f: autosuffisance, baie, botte, bougie, bureautique, cacophonie, caissière, camaraderie, candidate, certitude, chaussée, climatologie
+f: colonne, compensation, confidence, consommatrice, contrepartie, coopérative, copropriété, couture, cruauté, demie, discrétion
+f: distorsion, documentation, dynamisation, défaillance, démonstration, dénonciation, dépêche, emprise, endorphine, endurance
+f: escroquerie, explosion, expo, exportation, fabrique, fermeté, fluctuation, foi, fondatrice, francisation, friche, futilité
+f: girafe, grille, gérante, haine, harmonisation, hypocrisie, hésitation, hôtesse, icône, ignorance, illusion, improvisation
+f: inconscience, industrialisation, insistance, intolérance, intoxication, inutilité, irrigation, ligue, lueur, lurette, lèvre
+f: maitrise, manette, marionnette, natalité, noix, obéissance, oisiveté, outrance, parcelle, patiente, persécution, pilule
+f: plénitude, poudre, prairie, princesse, productrice, proie, prothèse, pudeur, péremption, raréfaction, recrue, redéfinition
+f: représentante, retenue, revendication, rive, réinsertion, réintroduction, réplique, serveuse, sobriété, splendeur, team
+f: grâce, molécule, testostérone, tranche, universalité, variation, vidéoconférence, épingle, équivalence
+mf: collègue, journaliste, bénévole, camarade, locataire, colocataire, internaute, secrétaire, fan, écologiste, automobiliste, hôte, maire
+mf: vétérinaire, libraire, volontaire, adepte, archéologue, athlète, concierge, ado, adversaire, arbitre, aveugle, bibliothécaire
+mf: congénère, convive, environnementaliste, stagiaire, titulaire, économiste, botaniste, capitaine, compatriote, juge, juriste
+mf: pianiste, scénariste, utopiste, bénéficiaire
+mp: gens, environs, dépens
+fp: maths
+v: téléphoner, conclure, emménager, téléviser, mémoriser, héler, positiver, téléphoné, guérir, exécuter, militer, authentiquer, chauffer
+v: copiner, doucher, obéir, remédier, cartonner, créditer, démolir, déployer, exempter, foisonner, haïr, lasser, photocopier, planer
+v: salir, taper, traîner, tâtonner, vénérer
+adj: quel, commun, conséquent, anglais, inverse, issu, mathématique, drôle, différents, doux, acquis, retombé, aîné, chère, définitif
+adj: désolé, imaginaire, minéral, illimité, stéréotypé, écrit, gentil, parallèle, restant, solitaire, encourageant, joint, prévu
+adj: accru, bonne, conservateur, inconscient, motrice, précieuse, respectueuse, superbe, active, contemporaine, express, incitant
+adj: mince, mécontent, pareil, pire, mineur, live, obscur, théâtral, éco, épineux, acide, acoustique, antioxydant, audiovisuel
+adj: charmant, couvert, engageant, fleuri, gigantesque, honnête, identitaire, intéressé, marocain, marron, mauvaise, multimédia
+adj: méprisant, plate, professionnelle, protecteur, présentiel, rude, tenace, événementiel, basique, canadienne, chéri, clos
+adj: dépassé, entendu, exempt, gaulois, innovateur, majeure, maladroit, marine, néolithique, phonétique, pro, romain, rose, saxon
+adj: sportive, suspect, transformateur, turc, verte, épais
+adv: dedans, voire
+conj: lorsque, sinon, comme
+prép: contre, envers, devant
+pron: soi, mien, sien
+num: mille
+interj: merci, allô, ah, bravo, oh, coucou, bof, bonsoir, stop
+drop: un, bi, carrer
+# corrections to genders the source list already had
+mf: jeune, élève, artiste, spécialiste, partenaire, propriétaire, touriste, psychologue, peintre, photographe, philosophe, sociologue
+mf: prof, coach, destinataire, linguiste, cinéaste, designer, gestionnaire, nutritionniste, syndicaliste, styliste, trader
+mp: frais
+v: fausser
+adj: joli, pacifique, chouette, rétrospectif
+drop: baby
+# words the source tags with the wrong class (found by comparing with the English gloss)
+v: ménager, conjuguer, réapparaître, allier, industrialiser, concourir, hospitaliser, procéder, interpeler, émerveiller, équivaloir, défiler, incomber
+adj: fier, tendre, super, disciplinaire
+adv: hyper
+f: échappatoire
+drop: téléphoné

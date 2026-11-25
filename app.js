@@ -3,6 +3,8 @@
 (() => {
   'use strict';
   const BOOKS = window.BOOKS || [];
+  const LABEL = {};   // leçon number -> its own label (the TCF book: "B1 · 3")
+  for (const b of BOOKS) for (const u of b.units) for (const l of u.lecons) if (l.label) LABEL[l.n] = l.label;
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => [...r.querySelectorAll(s)];
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -271,7 +273,7 @@
       <image href="img/stamp-${kind}.webp" width="100" height="113" preserveAspectRatio="none"/>
       <g transform="translate(26 17) scale(.48)" class="st-glyph"><path d="${GLYPH[g]}"/></g>
       <text x="50" y="80" class="st-city">${esc(city)}</text>
-      <text x="50" y="88" class="st-sub">${kind === 'v' ? 'VOCABULAIRE' : 'TEXTE'} · ${n >= 100 ? 'U' + (n % 100) : n}</text>
+      <text x="50" y="88" class="st-sub">${kind === 'v' ? 'VOCABULAIRE' : 'TEXTE'} · ${LABEL[n] ? esc(LABEL[n]) : n >= 100 ? 'U' + (n % 100) : n}</text>
     </svg>`;
   }
   // called after mastery changes: award stamps when a part of a leçon is complete
@@ -484,11 +486,11 @@
     const cloze = (lecon.cloze || []).map(row => row.map(s => typeof s === 'string' ? esc(s) : `<span class="pw-blank">${blanks(s.b.length)}</span>`).join('')).join('<br>');
     const lines = lecon.text.filter(r => !r.h);
     area.innerHTML = `
-      <section class="pw-page"><h1>Leçon ${lecon.n} · ${esc(lecon.title)}</h1><p class="pw-sub">${esc(book.title)} · ${esc(lecon.zh)} · ${bi('姓名', 'Name')} ________ ${bi('日期', 'Date')} ________</p>
+      <section class="pw-page"><h1>${esc(LABEL[lecon.n] || 'Leçon ' + lecon.n)} · ${esc(lecon.title)}</h1><p class="pw-sub">${esc(book.title)} · ${esc(lecon.zh)} · ${bi('姓名', 'Name')} ________ ${bi('日期', 'Date')} ________</p>
         <h2>${bi('一、词汇默写', 'I. Vocabulary')}</h2>
         <table class="pw-table">${lecon.vocab.map((v, k) => `<tr><td>${k + 1}</td><td>${esc(v.zh)}</td><td>${esc(v.pos)}</td><td class="pw-line"></td></tr>`).join('')}</table></section>
       ${cloze ? `<section class="pw-page pw-break"><h2>${bi('二、课文填空', 'II. Fill the gaps')}</h2><div class="pw-cloze">${cloze}</div></section>` : ''}
-      <section class="pw-page pw-break"><h2>${bi('三、全文默写', 'III. Full dictation')}</h2>${lines.map(r => `<p class="pw-zh">${esc(r.zh)}</p><div class="pw-write"></div>`).join('')}</section>
+      ${lines.length ? `<section class="pw-page pw-break"><h2>${bi('三、全文默写', 'III. Full dictation')}</h2>${lines.map(r => `<p class="pw-zh">${esc(r.zh)}</p><div class="pw-write"></div>`).join('')}</section>` : ''}
       <section class="pw-page pw-break"><h2>${bi('答案', 'Answers')}</h2>
         <ol class="pw-ans">${lecon.vocab.map(v => `<li><b>${esc(v.fr)}</b> — ${esc(v.zh)}</li>`).join('')}</ol>
         ${lines.map(r => `<p class="pw-fr">${esc(r.fr)}</p>`).join('')}</section>`;
@@ -512,11 +514,12 @@
     pos = String(pos || '');
     return /(^|\W)n\.m\.|^m\./.test(pos) ? 'm' : /(^|\W)n\.f\.|^f\./.test(pos) ? 'f' : '';
   }
+  const H_ASPIRE = /^(hache|haie|haine|halle|hall|halte|hameau|hamburger|hanche|handball|handicap|hangar|hantise|harangue|harc[eè]lement|hareng|haricot|harnais|harpe|hasard|h[âa]te|hausse|haut|hauteur|havre|h[eê]tre|h[ée]ros|hi[ée]rarchie|hibou|hobby|hockey|homard|honte|hors|hotte|houblon|houx|hurlement|yacht|yaourt|yoga)s?(?![\p{L}])/iu;
   // colour class for a word: plural green, masculine blue, feminine magenta
   const gx = pos => /pl\./.test(String(pos || '')) ? ' gx-p' : gender(pos) === 'm' ? ' gx-m' : gender(pos) === 'f' ? ' gx-f' : '';
   function artHint(v) {
     const g = gender(v.pos); if (!g || (window.NLF_FORMS && window.NLF_FORMS[v.fr])) return '';
-    const pl = /pl\./.test(v.pos), vow = /^[aeiouyhâàéèêëîïôûœ]/i.test(v.fr);
+    const pl = /pl\./.test(v.pos), vow = /^[aeiouyhâàéèêëîïôûœ]/i.test(v.fr) && !H_ASPIRE.test(v.fr);
     const a = pl ? 'des · les' : g === 'm' ? (vow ? "un · l'" : 'un · le') : (vow ? "une · l'" : 'une · la');
     return `<span class="art-hint" aria-hidden="true">${a}</span>`;
   }
@@ -1428,8 +1431,13 @@
   function lookupIndex() {
     if (LOOKUP) return LOOKUP;
     const items = [], forms2inf = {};
-    for (const b of BOOKS) for (const u of b.units) for (const l of u.lecons) for (const v of l.vocab)
+    const bare = fr => loose(fr).replace(/\([^)]*\)/g, '').replace(/^(le |la |les |l'|un |une |des )/, '').trim();
+    const have = new Set();
+    for (const b of BOOKS) for (const u of b.units) for (const l of u.lecons) for (const v of l.vocab) {
+      if (b.wordsOnly && have.has(bare(v.fr))) continue;
+      have.add(bare(v.fr));
       items.push({ fr: v.fr, zh: v.zh, en: v.en, pos: v.pos, src: 'book', book: b.id, n: l.n, v });
+    }
     if (window.SOUNDS) for (const l of sLessons()) for (const it of sItems(l)) if (!items.some(x => x.fr === it.w)) items.push({ fr: it.w, zh: it.zh, en: it.en, src: 'sons', lesson: l.id });
     const D = window.VERBDICT;
     if (D) for (const k of D.list()) {
@@ -1454,10 +1462,10 @@
     if (conj.length) h += `<div class="lk-conj">${conj.map(c => `<a href="#/verbes/${encodeURIComponent(c.verb)}" class="lk-conj-row"><span lang="fr">${esc(raw)}</span> → <b lang="fr">${esc(c.verb)}</b>
       <small>${bi(TENSE_NAME[c.t][0], TENSE_NAME[c.t][1])}${c.i != null ? ' · ' + PERSON[c.i] : ''}</small></a>`).join('')}</div>`;
     h += hits.map(x => {
-      const tag = x.src === 'book' ? `<a class="v-tag book" href="#/${x.book}/${x.n}/vocab">L${x.n}</a>` : x.src === 'sons' ? `<a class="v-tag" href="#/sons/${x.lesson}">${bi('发音书', 'Sounds')}</a>` : `<a class="v-tag" href="#/verbes/${encodeURIComponent(x.verb)}">${bi('动词词典', 'Verbs')}</a>`;
+      const tag = x.src === 'book' ? `<a class="v-tag book" href="#/${x.book}/${x.n}/vocab">${LABEL[x.n] ? 'TCF ' + esc(LABEL[x.n]) : 'L' + x.n}</a>` : x.src === 'sons' ? `<a class="v-tag" href="#/sons/${x.lesson}">${bi('发音书', 'Sounds')}</a>` : `<a class="v-tag" href="#/verbes/${encodeURIComponent(x.verb)}">${bi('动词词典', 'Verbs')}</a>`;
       const tip = x.v ? wordTip(x.n, x.v) : '';
       const verbLink = x.pos && x.pos.startsWith('v') && window.VERBDICT ? (() => { const m = x.fr.match(/^(\S+)\s*\((se|s')\)$/); const key = m ? (/^[aeiouyhâéèêî]/i.test(m[1]) ? "s'" : 'se ') + m[1] : x.fr; return window.VERBDICT.get(key) && x.src !== 'verb' ? `<a class="v-tag" href="#/verbes/${encodeURIComponent(key)}">${bi('变位', 'conjugate')}</a>` : ''; })() : '';
-      return `<div class="lk-item${gx(x.pos)}"><div class="lk-head">${playBtn(forms(x.fr).say)}<b lang="fr">${esc(x.fr)}</b>${favBtn({ fr: x.fr, zh: x.zh, en: x.en, pos: x.pos, from: x.src === 'book' ? 'L' + x.n : x.src })}${x.pos ? `<span class="pos">${esc(x.pos)}</span>` : ''}${tag}${verbLink}</div>
+      return `<div class="lk-item${gx(x.pos)}"><div class="lk-head">${playBtn(forms(x.fr).say)}<b lang="fr">${esc(x.fr)}</b>${favBtn({ fr: x.fr, zh: x.zh, en: x.en, pos: x.pos, from: x.src === 'book' ? LABEL[x.n] ? 'TCF ' + LABEL[x.n] : 'L' + x.n : x.src })}${x.pos ? `<span class="pos">${esc(x.pos)}</span>` : ''}${tag}${verbLink}</div>
         <div class="lk-mean">${G(x)}</div>${tip ? `<div class="lk-tip">${tip}</div>` : ''}</div>`;
     }).join('');
     if (!hits.length && !conj.length) h += `<p class="hint-text" style="margin:8px 2px">${bi('网站的词库里没有找到。', 'Not in the site\'s word lists.')}</p>`;
@@ -1501,7 +1509,7 @@
     const lec = { n: 0, title: 'Mon carnet', zh: '生词本', vocab: MINE.all().map(w => ({ ...w, g: bi('我的生词', 'My words') })), text: [], cloze: null };
     return { book: { id: 'mine', title: bi('生词本', 'My words'), units: [{ n: 0, lecons: [lec] }] }, lecon: lec };
   };
-  const leconName = n => n === 0 ? bi('生词本', 'My words') : n >= 100 ? 'Unité ' + (n % 100) : 'Leçon ' + n;
+  const leconName = n => n === 0 ? bi('生词本', 'My words') : LABEL[n] ? LABEL[n] : n >= 100 ? 'Unité ' + (n % 100) : 'Leçon ' + n;
   const favBtn = w => `<button class="fav ${MINE.has(w.fr) ? 'on' : ''}" data-fav="${esc(JSON.stringify({ fr: w.fr, zh: w.zh || '', en: w.en || '', pos: w.pos || '', from: w.from || '' }))}" title="${bi('收藏到生词本', 'Save to my words')}" aria-label="${bi('收藏到生词本', 'Save to my words')}">${MINE.has(w.fr) ? '★' : '☆'}</button>`;
   document.addEventListener('click', e => {
     const b = e.target.closest('[data-fav]');
@@ -1934,6 +1942,7 @@
     const log = XP.log(), g = XP.goal(), got = store.get('stamps', {});
     const book = BOOKS[0], lecons = book.units.flatMap(u => u.lecons);
     const flatBooks = BOOKS.filter(b => b.flat), flatLecons = flatBooks.flatMap(b => b.units.flatMap(u => u.lecons.map(l => ({ b, l }))));
+    const albumLecons = flatLecons.filter(({ b, l }) => !b.wordsOnly || got[`${b.id}:${l.n}:v`]);
     // 12-week calendar
     const days = []; const d = new Date(); d.setDate(d.getDate() - 83 - ((d.getDay() + 6) % 7 === 6 ? 0 : 0));
     for (let i = 0; i < 84; i++) { days.push(dayStr(d)); d.setDate(d.getDate() + 1); }
@@ -1959,7 +1968,7 @@
       </section>
       <section class="unit"><div class="unit-title"><h2>邮册</h2><span>每课词汇通过、课文通过各得一枚</span></div>
         <div class="album">${lecons.map(l => `<div class="album-cell"><div class="pair">${stampSVG(l.n, 'v', got[`${book.id}:${l.n}:v`])}${stampSVG(l.n, 't', got[`${book.id}:${l.n}:t`])}</div><a href="#/${book.id}/${l.n}" lang="fr">Leçon ${l.n}</a></div>`).join('')}</div>
-        ${flatLecons.length ? `<div class="album nlf-album">${flatLecons.map(({ b, l }) => `<div class="album-cell"><div class="pair">${stampSVG(l.n, 'v', got[`${b.id}:${l.n}:v`])}</div><a href="#/${b.id}/${l.n}" lang="fr">Unité ${l.n % 100}</a></div>`).join('')}</div>` : ''}
+        ${albumLecons.length ? `<div class="album nlf-album">${albumLecons.map(({ b, l }) => `<div class="album-cell"><div class="pair">${stampSVG(l.n, 'v', got[`${b.id}:${l.n}:v`])}</div><a href="#/${b.id}/${l.n}" lang="fr">${l.label ? esc(l.label) : 'Unité ' + (l.n % 100)}</a></div>`).join('')}</div>` : ''}
       </section>
       <section class="unit"><div class="unit-title"><h2>云同步</h2><span>手机和电脑共用进度</span></div><div id="cloud"></div></section>
       <section class="unit" id="backup"><div class="unit-title"><h2>保存与恢复</h2></div>
@@ -2326,8 +2335,8 @@
   const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.random() * (i + 1) | 0; [a[i], a[j]] = [a[j], a[i]]; } return a; };
 
   function coverHTML(book, tag = 'a') {
-    if (book.flat) return `<${tag} class="cover sons nlf" ${tag === 'a' ? `href="#/${book.id}"` : ''} aria-label="${esc(book.title)}">
-      <div class="c-zh">${bi('通往<br>' + (book.level || 'A1'), 'Road<br>to ' + (book.level || 'A1'))}</div><div class="c-fr" lang="fr">${esc(book.fr)}</div><div class="c-num" lang="fr">${esc(book.level || 'A1')}</div>
+    if (book.flat) return `<${tag} class="cover sons nlf${book.wordsOnly ? ' tcf' : ''}" ${tag === 'a' ? `href="#/${book.id}"` : ''} aria-label="${esc(book.title)}">
+      <div class="c-zh">${book.wordsOnly ? bi('备考<br>' + book.level, 'Ready for<br>' + book.level) : bi('通往<br>' + (book.level || 'A1'), 'Road<br>to ' + (book.level || 'A1'))}</div><div class="c-fr" lang="fr">${esc(book.fr)}</div><div class="c-num" lang="fr">${esc(book.level || 'A1')}</div>
       <svg viewBox="0 0 200 90" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" aria-hidden="true">
         <path d="M0 86 Q60 70 100 78 T200 60"/><path d="M0 90 Q70 76 110 84 T200 70" stroke-width=".7"/>
         <path d="M40 74V40M40 40l-12 8M40 40l12 8M40 52l-9 7M40 52l9 7"/><path d="M120 70V30M120 30l-14 10M120 30l14 10M120 46l-11 9M120 46l11 9"/>
@@ -2405,7 +2414,8 @@
     const n = +parts[1].replace(/\D/g, '');
     const found = findLecon(book, n);
     if (!found) { location.hash = '#/' + book.id; return; }
-    crumbs.innerHTML = `<a href="#/${book.id}">${esc(book.title)}</a><span class="sep">›</span><a href="#/${book.id}">Unité ${found.unit.n}</a><span class="sep">›</span><span>Leçon ${n}</span>`;
+    crumbs.innerHTML = found.lecon.label ? `<a href="#/${book.id}">${esc(book.title)}</a><span class="sep">›</span><span>${esc(found.lecon.label)}</span>`
+      : `<a href="#/${book.id}">${esc(book.title)}</a><span class="sep">›</span><a href="#/${book.id}">Unité ${found.unit.n}</a><span class="sep">›</span><span>Leçon ${n}</span>`;
     viewLecon(book, found.unit, found.lecon, parts[2] || 'vocab');
   }
   window.addEventListener('hashchange', route);
@@ -2752,13 +2762,15 @@
     main.innerHTML = `
       <div class="book-head">${coverHTML(book, 'div')}<div><p class="kicker" lang="fr">${esc(book.fr)}</p><h1>${esc(L() === 'en' ? book.title : (book.zhTitle || book.title))}</h1></div></div>
       ${reviewBanner()}
+      ${book.wordsOnly ? `<p class="hint-text">${bi('按级别分区，每课 100 个，考题里出现得越多排得越前。「Écrit et oral」区是只在写作和口语里常见的词。', 'Grouped by level, 100 per leçon, most frequent in the exam first. “Écrit et oral” holds words common only in writing and speaking.')}</p>
+        <div class="modes sec-jump">${book.units.map(u => `<button class="mode" data-jump="${u.n}" lang="fr">${esc(u.label)}</button>`).join('')}</div>` : ''}
       ${book.units.map(u => `
-        <section class="unit">
-          <div class="unit-title"><h2 lang="fr">Unité ${u.n}</h2>${book.flat ? '' : `<span>Leçon ${u.lecons[0].n}–${u.lecons[u.lecons.length - 1].n}</span>`}</div>
+        <section class="unit" id="unit-${u.n}">
+          <div class="unit-title"><h2 lang="fr">${u.label ? esc(u.label) : 'Unité ' + u.n}</h2>${book.flat ? (u.label ? `<span>${bi(u.zh, u.en)}</span>` : '') : `<span>Leçon ${u.lecons[0].n}–${u.lecons[u.lecons.length - 1].n}</span>`}</div>
           <div class="lecons">${u.lecons.map(l => {
             const p = getProg(book.id, l.n);
             return `<a class="lecon-card" href="#/${book.id}/${l.n}">${lessonArt(l.n)}
-              <div class="n" lang="fr">${book.flat ? 'Unité ' + (l.n % 100) : 'Leçon ' + l.n}</div>
+              <div class="n" lang="fr">${l.label ? esc(l.label) : book.flat ? 'Unité ' + (l.n % 100) : 'Leçon ' + l.n}</div>
               <h3 lang="fr">${esc(l.title)}</h3>
               <div class="zh">${esc(l.zh)}</div>
               ${progHTML(book, l)}
@@ -2767,11 +2779,12 @@
         </section>`).join('')}
       <p class="footer-note">进度保存在这台设备的浏览器里。</p>
       <p class="credit">${bi('图片来源', 'Image credits')}${CL()}<a href="https://commons.wikimedia.org/wiki/File:ARCHITECTURE_ORDERS_Greeks_Etruscan_Roman_(Doric_Ionic_Corinthian_Tuscan_Composite)_by_Paolo_Villa_ENG_edition.pdf" target="_blank" rel="noopener">${bi('柱式', 'Architectural orders')} Paolo Villa, CC BY-SA 4.0</a> · <a href="https://commons.wikimedia.org/wiki/Category:Urania%27s_Mirror" target="_blank" rel="noopener">Urania's Mirror, Sidney Hall 1825 ${bi('（公有领域）', '(public domain)')}</a></p>`;
+      $$('[data-jump]', main).forEach(btn => btn.onclick = () => $('#unit-' + btn.dataset.jump, main).scrollIntoView({ behavior: 'smooth', block: 'start' }));
   }
 
   const ALLTABS = [['vocab', '词汇', 'Vocabulary'], ['phrases', '句子', 'Sentences'], ['full', '全文默写', 'Full dictation'], ['recite', '背诵', 'Recite']];
   function viewLecon(book, unit, lecon, tab) {
-    const TABS = book.flat ? ALLTABS.filter(t => t[0] === 'vocab' || t[0] === 'phrases') : ALLTABS;
+    const TABS = book.wordsOnly ? ALLTABS.filter(t => t[0] === 'vocab') : book.flat ? ALLTABS.filter(t => t[0] === 'vocab' || t[0] === 'phrases') : ALLTABS;
     if (!TABS.some(t => t[0] === tab)) tab = 'vocab';
     document.title = `${leconName(lecon.n)} · ${lecon.title}`;
     const all = book.units.flatMap(u => u.lecons);
@@ -2779,12 +2792,12 @@
     const prev = all[idx - 1], next = all[idx + 1];
     main.innerHTML = `
       <header class="lecon-head">
-        <p class="kicker" lang="fr">${book.flat ? 'Unité ' + unit.n : `Unité ${unit.n} · Leçon ${lecon.n}`}</p>
+        <p class="kicker" lang="fr">${lecon.label ? esc(book.title + ' · ' + lecon.label) : book.flat ? 'Unité ' + unit.n : `Unité ${unit.n} · Leçon ${lecon.n}`}</p>
         <h1 lang="fr">${esc(lecon.title)}</h1>
         <div class="zh">${esc(lecon.zh)}</div>
         ${progHTML(book, lecon, true)}
       </header>
-      <nav class="tabs" role="tablist">${TABS.map((t, i) => `<button class="tab" role="tab" aria-selected="${t[0] === tab}" data-tab="${t[0]}"><b>${i + 1}</b>${bi(t[1], t[2])}</button>`).join('')}</nav>
+      <nav class="tabs" role="tablist" ${TABS.length < 2 ? 'hidden' : ''}>${TABS.map((t, i) => `<button class="tab" role="tab" aria-selected="${t[0] === tab}" data-tab="${t[0]}"><b>${i + 1}</b>${bi(t[1], t[2])}</button>`).join('')}</nav>
       <section id="pane"></section>
       <div class="toolbar" style="margin-top:40px">
         ${prev ? `<a class="btn ghost small" href="#/${book.id}/${prev.n}">‹ ${leconName(prev.n)}</a>` : ''}
@@ -2875,8 +2888,9 @@
   function paneVocab(ctx, mode = store.get('vmode', 'list')) {
     if (mode === 'listen') { mode = 'write'; store.set('vauto', true); }
     const { lecon, pane } = ctx;
-    store.set('vmode', mode);
-    const head = modeBar([['list', bi('浏览', 'Browse')], ['learn', bi('先学一遍', 'Study first')], ['cards', bi('闪卡', 'Flashcards')], ['choose', bi('选意思', 'Meaning quiz')], ['test', bi('首测', 'First test')], ['write', bi('默写', 'Dictation')], ['conj', bi('动词变位', 'Conjugation')]], mode);
+    const noConj = !!ctx.book.wordsOnly;
+    if (!(noConj && mode === 'conj')) store.set('vmode', mode); else mode = 'list';
+    const head = modeBar([['list', bi('浏览', 'Browse')], ['learn', bi('先学一遍', 'Study first')], ['cards', bi('闪卡', 'Flashcards')], ['choose', bi('选意思', 'Meaning quiz')], ['test', bi('首测', 'First test')], ['write', bi('默写', 'Dictation')], ['conj', bi('动词变位', 'Conjugation')]].filter(m => !(noConj && m[0] === 'conj')), mode);
     if (mode === 'list') {
       const groups = [];
       orderedVocab(ctx.book.id, lecon).forEach(v => { let g = groups.find(x => x.g === v.g); if (!g) groups.push(g = { g: v.g, items: [] }); g.items.push(v); });
@@ -2887,13 +2901,13 @@
           <label class="kbd" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="vhide" ${hide ? 'checked' : ''}> ${bi('遮住法语', 'Hide French')}</label>
           <label class="kbd" style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="vtip" ${showTip ? 'checked' : ''}> ${bi('记忆提示', 'Memory tips')}</label>
           <button class="btn ghost small" id="vplay">${ICON.play} ${bi('全部朗读', 'Read all')}</button>`) +
-        `<p class="hint-text">${bi('按住左边的 ⠿ 拖动，可以在同一组里调整单词顺序。', 'Drag ⠿ on the left to reorder words within a group.')}${dysOn() ? ` <span class="dys-legend">${bi('灰色字母 = 不发音；点线字母 = 只让前面的元音变鼻音。', 'Grey letters are silent; dotted letters only nasalise the vowel before them.')}</span>` : ''}${custom ? ` <a href="#" id="vreset">${bi('恢复课本顺序', 'Restore book order')}</a>` : ''}</p>` +
+        `${ctx.book.wordsOnly ? `<p class="hint-text">${bi('词性下面的 ×数字 是它在 TCF 题目里出现的次数。', 'The ×number under the word class is how often it appears in the TCF material.')}</p>` : ''}<p class="hint-text">${bi('按住左边的 ⠿ 拖动，可以在同一组里调整单词顺序。', 'Drag ⠿ on the left to reorder words within a group.')}${dysOn() ? ` <span class="dys-legend">${bi('灰色字母 = 不发音；点线字母 = 只让前面的元音变鼻音。', 'Grey letters are silent; dotted letters only nasalise the vowel before them.')}</span>` : ''}${custom ? ` <a href="#" id="vreset">${bi('恢复课本顺序', 'Restore book order')}</a>` : ''}</p>` +
         groups.map(g => `<div class="vgroup" data-g="${esc(g.g || '')}"><h3>${esc(g.g || '')}</h3>${g.items.map(v => `
           <div class="vrow${gx(v.pos)} ${hide ? 'hidefr' : ''} ${mst.w[v.fr] ? 'mastered' : ''} ${gender(v.pos) ? 'g-' + gender(v.pos) : ''}" data-say="${esc(forms(v.fr).say)}" data-fr="${esc(v.fr)}">
             <span class="vdrag" title="${bi('拖动调整顺序', 'Drag to reorder')}" aria-label="${bi('拖动调整顺序', 'Drag to reorder')}">⠿</span>
             <span class="play">${ICON.play}</span>
             <span class="vfr" lang="fr">${artHint(v)}${frHTML(v.fr)}${hasDeep(v.fr) ? `<button class="deep-btn" data-deep="${esc(v.fr)}" lang="zh">${bi('详解', 'In depth')}</button>` : ''}${window.MEM && MEM[v.fr] ? `<button class="deep-btn mem-btn" data-mem lang="zh">${MEM[v.fr].i ? '🖼 ' : '💡 '}${bi('记忆', 'Memory')}</button>` : ''}</span>
-            <span class="pos">${esc(v.pos)}</span><span class="vzh">${G(v)}</span>
+            <span class="pos">${esc(v.pos)}${v.f != null ? `<i class="vfreq" title="${esc(bi('在 TCF 题目里出现的次数', 'Times it appears in TCF material'))}">×${v.f}</i>` : ''}</span><span class="vzh">${G(v)}</span>
             ${wordTip(lecon.n, v) ? `<span class="vtip" ${showTip ? '' : 'hidden'}>${wordTip(lecon.n, v)}</span>` : ''}${window.MEM && MEM[v.fr] ? `<span class="vtip vmem" hidden>${memBox(v)}</span>` : ''}${v.ex ? `<span class="vex" lang="fr">${esc(v.ex[0])}<small>${L() === 'en' ? esc(v.ex[2]) : L() === 'zhen' ? esc(v.ex[1]) + ' · ' + esc(v.ex[2]) : esc(v.ex[1])}</small></span>` : ''}</div>`).join('')}</div>`).join('');
       enableDrag(pane, () => { saveOrder(ctx.book.id, lecon.n, pane); if (!$('#vreset', pane)) paneVocab(ctx, 'list'); });
       const rs = $('#vreset', pane); if (rs) rs.onclick = e => { e.preventDefault(); store.set(orderKey(ctx.book.id, lecon.n), null); paneVocab(ctx, 'list'); };
@@ -3066,7 +3080,7 @@
         <div class="drill-actions" style="justify-content:center">
           ${wrong.length ? '<button class="btn" id="again-wrong">只练错的</button>' : ''}
           <button class="btn ghost" id="again">重新开始</button>${slipBtn('slip')}</div></div>`;
-      $('#slip', box).onclick = () => printSlip(`${ctx.lecon.n ? 'LEÇON ' + ctx.lecon.n : bi('生词本', 'MES MOTS')} · ${test ? bi('首测', 'PREMIER TEST') : bi('默写', 'DICTÉE')}`,
+      $('#slip', box).onclick = () => printSlip(`${ctx.lecon.label ? 'TCF ' + ctx.lecon.label.toUpperCase() : ctx.lecon.n ? 'LEÇON ' + ctx.lecon.n : bi('生词本', 'MES MOTS')} · ${test ? bi('首测', 'PREMIER TEST') : bi('默写', 'DICTÉE')}`,
         [pad(bi('题数', 'Mots'), queue.length), pad(bi('一次写对', 'Du premier coup'), firstTry), pad(bi('正确率', 'Score'), Math.round(score * 100) + ' %'), pad(bi('已掌握', 'Appris'), st.words + '/' + st.totalWords),
           ...(wrong.length ? ['', bi('要再看看：', 'À revoir :'), ...wrong.slice(0, 12).map(v => '  ' + v.fr)] : ['', bi('全部正确！', 'Sans faute !')])]);
       const w = wrong.slice();
@@ -3095,7 +3109,8 @@
     const items = lecon.vocab.filter((v, k, a) => Gt(v) && a.findIndex(x => x.fr === v.fr) === k);
     const by = new Map(items.map(v => [v.fr, v]));
     const allOf = bk => (bk.units || []).flatMap(u => u.lecons.flatMap(l => l.vocab.filter(v => Gt(v)).map(v => ({ ...v, n: l.n }))));
-    const pool = [...items.map(v => ({ ...v, n: lecon.n })), ...allOf(book).filter(v => !by.has(v.fr) || v.n !== lecon.n)];
+    const near = book.wordsOnly ? { units: book.units.filter(u => u.lecons.includes(lecon)) } : book;
+    const pool = [...items.map(v => ({ ...v, n: lecon.n })), ...allOf(near).filter(v => !by.has(v.fr) || v.n !== lecon.n)];
     let wide = null;   // every book: only when this one has too few different meanings
     const exQ = v => (!store.get('mqex', true) || !v.ex || !v.ex[0] ? '' : `<div class="q-ex" lang="fr">${playBtn(v.ex[0])} ${esc(v.ex[0])}</div>`);
 
@@ -3357,7 +3372,7 @@
     if (L() === 'en' && en) return fmt(en);
     if (L() === 'zhen' && zh && en) return fmt(zh) + `<span class="tip-en" lang="en">${fmt(en)}</span>`;
     if (zh) return fmt(zh);
-    return v.pos && v.pos.startsWith('v') && conjugate(v.fr) ? verbTip(v.fr) : '';
+    return v.pos && v.pos.startsWith('v') && !v.nc && conjugate(v.fr) ? verbTip(v.fr) : '';
   }
   // a mistake-book item only stores fr / zh / en / pos: look up the real vocabulary entry (own tip, example) for tips and memory aids
   const realV = e => {
